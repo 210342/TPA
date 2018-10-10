@@ -4,9 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GraphicalUserInterface"
+        xmlns:viewModel="clr-namespace:Library.Logic.ViewModel;assembly=Library"
+        xmlns:logic="clr-namespace:Library.Logic;assembly=Library"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <viewModel:ClassPresenter/>
+    </Window.DataContext>
     <Grid>
-        
+        <TreeView ItemsSource="{Binding ClassesList}" HorizontalAlignment="Left" Height="379" Margin="0,31,0,0" VerticalAlignment="Top" Width="792">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding ClassesList}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="{Binding ClassName}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+                  
+        <Button Content="Something" Command="{Binding ShowClassesList}" HorizontalAlignment="Left" Margin="19,4,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Show Details" HorizontalAlignment="Left" Margin="99,4,0,0" VerticalAlignment="Top" Width="75"/>
+
     </Grid>
 </Window>

@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,10 +43,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\IStandardDao.cs" />
+    <Compile Include="Logic\ClassRepresentation.cs" />
+    <Compile Include="Logic\ViewModel\ClassPresenter.cs" />
+    <Compile Include="Logic\ViewModel\RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Logic\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
