@@ -13,7 +13,9 @@ namespace Library.Logic.ViewModel
         private ClassRepresentation classSelected;
 
         private ClassRepresentation ClassToDisplay;
-        public ClassRepresentation ClassSelected {
+
+        public ClassRepresentation ClassSelected
+        {
             get
             {
                 return classSelected;
@@ -25,6 +27,7 @@ namespace Library.Logic.ViewModel
                 //Messenger.Default.Send(new SelectedChangedMessage(currentlySelected)); TODO MESSENGER PATTERN
             }
         }
+
         public ObservableCollection<ClassRepresentation> ClassesList { get; }
 
         public event PropertyChangedEventHandler PropertyChanged;

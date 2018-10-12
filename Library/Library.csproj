@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\IStandardDao.cs" />
+    <Compile Include="IGraphicalPresentation.cs" />
+    <Compile Include="ITextPresentation.cs" />
     <Compile Include="Logic\ClassRepresentation.cs" />
     <Compile Include="Logic\ViewModel\ClassPresenter.cs" />
     <Compile Include="Logic\ViewModel\RelayCommand.cs" />

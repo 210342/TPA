@@ -2,7 +2,7 @@
 
 namespace Library.Logic
 {
-    public class ClassRepresentation
+    public class ClassRepresentation : IGraphicalPresentation, ITextPresentation
     {
         public string ClassName { get; private set; }
         public List<string> ClassProperties { get; private set; }
@@ -19,6 +19,7 @@ namespace Library.Logic
             ClassProperties = classProp;
             ClassMethods = classMeth;
         }
+
         public ClassRepresentation()
         {
 
@@ -26,7 +27,9 @@ namespace Library.Logic
 
         public override string ToString()
         {
-            return ClassName;
+            string result = $"\t{ClassName}\n";
+            return result;
+            //TODO
         }
 
         public override bool Equals(object obj)
