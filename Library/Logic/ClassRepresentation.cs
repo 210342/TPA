@@ -9,6 +9,7 @@ namespace Library.Logic
         public List<string> ClassMethods { get; private set; }
         public List<string> ClassAttributes { get; private set; }
         public List<string> ClassFields { get; private set; }
+        public List<ClassRepresentation> OtherClassesReferences { get; private set; } = new List<ClassRepresentation>(); //RIGHT NOW JUST FOR TESTING
 
         public ClassRepresentation(string className, List<string> classProp, List<string> classAtt,
             List<string> classMeth, List<string> classFields)
@@ -18,6 +19,11 @@ namespace Library.Logic
             ClassFields = classFields;
             ClassProperties = classProp;
             ClassMethods = classMeth;
+        }
+
+        public void AddAReference(ClassRepresentation some) //RIGHT NOW JUST FOR TESTING
+        {
+            OtherClassesReferences.Add(some);
         }
 
         public ClassRepresentation()

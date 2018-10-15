@@ -25,9 +25,9 @@ namespace GraphicalUserInterface
             InitializeComponent();
         }
 
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-
+            SelectedItemHelper.Content = e.NewValue;
         }
     }
 }

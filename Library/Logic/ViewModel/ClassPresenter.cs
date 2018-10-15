@@ -23,7 +23,7 @@ namespace Library.Logic.ViewModel
             set
             {
                 classSelected = value;
-                OnPropertyChanged("SelectedClass");
+                OnPropertyChanged("ClassSelected");
                 //Messenger.Default.Send(new SelectedChangedMessage(currentlySelected)); TODO MESSENGER PATTERN
             }
         }
@@ -37,12 +37,20 @@ namespace Library.Logic.ViewModel
             ShowCurrentClass = new RelayCommand(ChangeClassToDisplay, () => ClassSelected != null);
             ShowClassesList = new RelayCommand(ReloadOrSetClassList, () => ClassesList == null);
             ClassesList = new ObservableCollection<ClassRepresentation>();
-            ClassesList.Add(new ClassRepresentation("xd", null, null, null, null));
-            ClassesList.Add(new ClassRepresentation("xd1", null, null, null, null));
-            ClassesList.Add(new ClassRepresentation("xd2", null, null, null, null));
+            var tmp = new ClassRepresentation("xd", null, null, null, null);
+            var tmp2 = new ClassRepresentation("xd2", null, null, null, null);
+            var tmp3 = new ClassRepresentation("xd3", null, null, null, null);
+
+            tmp.AddAReference(tmp2);
+            tmp.AddAReference(tmp3);
+            tmp.AddAReference(tmp);
+
+            ClassesList.Add(tmp2);
+            ClassesList.Add(tmp);
+            ClassesList.Add(tmp3);
         }
 
-        private void ChangeClassToDisplay()
+        public void ChangeClassToDisplay()
         {
             ClassToDisplay = ClassSelected;
         }

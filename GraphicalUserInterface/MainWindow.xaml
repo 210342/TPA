@@ -12,18 +12,24 @@
         <viewModel:ClassPresenter/>
     </Window.DataContext>
     <Grid>
-        <TreeView ItemsSource="{Binding ClassesList}" HorizontalAlignment="Left" Height="379" Margin="0,31,0,0" VerticalAlignment="Top" Width="792">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding ClassesList}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="{Binding ClassName}" />
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
-                  
-        <Button Content="Something" Command="{Binding ShowClassesList}" HorizontalAlignment="Left" Margin="19,4,0,0" VerticalAlignment="Top" Width="75"/>
+        <ContentControl x:Name="SelectedItemHelper" Content="{Binding ClassSelected, Mode=OneWayToSource}" Visibility="Collapsed"/>
+        <TreeView SelectedItemChanged="TreeView_SelectedItemChanged" ItemsSource="{Binding ClassesList}" HorizontalAlignment="Left" Height="379" Margin="0,31,0,0" VerticalAlignment="Top" Width="387">
+
+                <TreeView.ItemTemplate>
+
+                    <HierarchicalDataTemplate ItemsSource="{Binding OtherClassesReferences}">
+
+                        <TextBlock Text="{Binding Path=ClassName}" />
+
+                    </HierarchicalDataTemplate>
+
+                </TreeView.ItemTemplate>
+
+            </TreeView>
+
+            <Button Content="Something" Command="{Binding ShowClassesList}" HorizontalAlignment="Left" Margin="19,4,0,0" VerticalAlignment="Top" Width="75"/>
         <Button Content="Show Details" HorizontalAlignment="Left" Margin="99,4,0,0" VerticalAlignment="Top" Width="75"/>
+        <TextBlock HorizontalAlignment="Left" Margin="436,33,0,0" TextWrapping="Wrap" Text="{Binding Path=ClassSelected}" VerticalAlignment="Top" Height="304" Width="259"/>
 
     </Grid>
 </Window>
