@@ -29,7 +29,7 @@
 
             <Button Content="Something" Command="{Binding ShowClassesList}" HorizontalAlignment="Left" Margin="19,4,0,0" VerticalAlignment="Top" Width="75"/>
         <Button Content="Show Details" HorizontalAlignment="Left" Margin="99,4,0,0" VerticalAlignment="Top" Width="75"/>
-        <TextBlock HorizontalAlignment="Left" Margin="436,33,0,0" TextWrapping="Wrap" Text="{Binding Path=ClassSelected}" VerticalAlignment="Top" Height="304" Width="259"/>
+        <TextBlock HorizontalAlignment="Left" Margin="436,33,0,0" TextWrapping="Wrap" Text="{Binding Path=ClassSelected.ObjectInfo}" VerticalAlignment="Top" Height="304" Width="259"/>
 
     </Grid>
 </Window>

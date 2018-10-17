@@ -1,6 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows.Input;
 
 namespace Library.Logic.ViewModel
@@ -37,17 +39,29 @@ namespace Library.Logic.ViewModel
             ShowCurrentClass = new RelayCommand(ChangeClassToDisplay, () => ClassSelected != null);
             ShowClassesList = new RelayCommand(ReloadOrSetClassList, () => ClassesList == null);
             ClassesList = new ObservableCollection<ClassRepresentation>();
-            var tmp = new ClassRepresentation("xd", null, null, null, null);
-            var tmp2 = new ClassRepresentation("xd2", null, null, null, null);
-            var tmp3 = new ClassRepresentation("xd3", null, null, null, null);
 
-            tmp.AddAReference(tmp2);
-            tmp.AddAReference(tmp3);
-            tmp.AddAReference(tmp);
+            /*
+            string className, List< string > classProp, List<string> classAtt,
+              List< string > classMeth, List<string> classFields */
 
-            ClassesList.Add(tmp2);
-            ClassesList.Add(tmp);
-            ClassesList.Add(tmp3);
+
+
+            var human = 
+                new ClassRepresentation("Human",
+                new List<string>() {"Heart heart", "Kidney kidney", "Human loveInterest" },
+                new List<string>() { "private int size", "private int age" },
+                new List<string>() { "public void Walk()", "public void Run()" }, 
+                null);
+            var heart = new ClassRepresentation("Heart", null, null, null, null);
+            var kidney = new ClassRepresentation("Kidney", null, null, null, null);
+
+            human.AddAReference(heart);
+            human.AddAReference(kidney);
+            human.AddAReference(human);
+
+            ClassesList.Add(heart);
+            ClassesList.Add(human);
+            ClassesList.Add(kidney);
         }
 
         public void ChangeClassToDisplay()
@@ -60,10 +74,6 @@ namespace Library.Logic.ViewModel
             /* We will have to implement way to load classes into observable collection
              * but before that proper loading, so we won't have to reload every time
              */
-
-            ClassesList.Add(new ClassRepresentation("xd", null, null, null, null));
-            ClassesList.Add(new ClassRepresentation("xd1", null, null, null, null));
-            ClassesList.Add(new ClassRepresentation("xd2", null, null, null, null));
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

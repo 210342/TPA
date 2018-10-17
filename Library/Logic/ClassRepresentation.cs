@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace Library.Logic
 {
@@ -37,7 +38,20 @@ namespace Library.Logic
             return result;
             //TODO
         }
-
+        public string ObjectInfo
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Class name:\n").Append(ClassName).Append("\n")
+                    .Append("Properties:\n");
+                if (ClassProperties != null)
+                    ClassProperties.ForEach(n => sb.AppendLine(n));
+                else
+                    sb.AppendLine();
+                return sb.ToString();
+            }
+        }
         public override bool Equals(object obj)
         {
             if (obj.GetType().Equals(this.GetType()))
