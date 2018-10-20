@@ -4,7 +4,8 @@ namespace Library.Logic
 {
     public static class LoadedClassesReferences
     {
-        private static readonly Dictionary<Type, IEnumerable<Type>> Dictionary = new Dictionary<Type, IEnumerable<Type>>();
+        private static readonly Dictionary<Type, IEnumerable<Type>> Dictionary = 
+            new Dictionary<Type, IEnumerable<Type>>();
 
     }
 }

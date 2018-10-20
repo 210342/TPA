@@ -42,9 +42,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Enums\AbstractEnum.cs" />
+    <Compile Include="Data\Enums\AccessLevelEnum.cs" />
+    <Compile Include="Data\Enums\SealedEnum.cs" />
+    <Compile Include="Data\Enums\StaticEnum.cs" />
+    <Compile Include="Data\Enums\TypeKindEnum.cs" />
+    <Compile Include="Data\Enums\VirtualEnum.cs" />
+    <Compile Include="Data\ExtensionMethods.cs" />
+    <Compile Include="Data\IRepresantation.cs" />
     <Compile Include="Data\IStandardDao.cs" />
-    <Compile Include="IGraphicalPresentation.cs" />
-    <Compile Include="ITextPresentation.cs" />
+    <Compile Include="Data\Model\AssemblyRepresantation.cs" />
+    <Compile Include="Data\Model\MethodRepresantation.cs" />
+    <Compile Include="Data\Model\NamespaceRepresantation.cs" />
+    <Compile Include="Data\Model\ParameterRepresantation.cs" />
+    <Compile Include="Data\Model\PropertyRepresantation.cs" />
+    <Compile Include="Data\Model\TypeRepresantation.cs" />
+    <Compile Include="Data\ReadMetadata.cs" />
     <Compile Include="Logic\ClassReferences.cs" />
     <Compile Include="Logic\ClassRepresentation.cs" />
     <Compile Include="Logic\ViewModel\ClassPresenter.cs" />

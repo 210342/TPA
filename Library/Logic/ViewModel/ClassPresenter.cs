@@ -68,6 +68,7 @@ namespace Library.Logic.ViewModel
         {
             ClassToDisplay = ClassSelected;
         }
+
         private void ReloadOrSetClassList()
         {
             //ISSUE HERE:

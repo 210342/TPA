@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Library.Logic
 {
-    public class ClassRepresentation : IGraphicalPresentation, ITextPresentation
+    public class ClassRepresentation 
     {
         public string ClassName { get; private set; }
         public List<string> ClassProperties { get; private set; }
