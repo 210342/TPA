@@ -52,9 +52,47 @@ namespace Library.Data.Model
         }
         #endregion
 
-        public string Print()
+        public IEnumerable<string> Print()
         {
-            throw new NotImplementedException();
+            yield return $"NAME: {NamespaceName}.{Name}";
+            if(BaseType != null)
+            {
+                yield return $"Base type: {BaseType.NamespaceName}.{BaseType.Name}";
+            }
+            foreach(TypeRepresantation _interface in ImplementedInterfaces)
+            {
+                yield return $"Implements interface: {_interface.Name}";
+            }
+            yield return $"Modifiers: {Modifiers.ToString()}";
+            yield return $"Type: {TypeKind.ToString()}";
+            foreach(Attribute attribute in Attributes)
+            {
+                yield return $"Attribute: {attribute.ToString()}";
+            }
+            foreach(TypeRepresantation genericArgument in GenericArguments)
+            {
+                yield return $"Generic argument: {genericArgument.Name}";
+            }
+            foreach(TypeRepresantation nestedType in NestedTypes)
+            {
+                yield return $"Nested type: {nestedType.Name}";
+            }
+            foreach(PropertyRepresantation property in Properties)
+            {
+                yield return $"Property: {property.Name}";
+            }
+            foreach(MethodRepresantation constructor in Constructors)
+            {
+                yield return $"Constructor: {constructor.Name}{constructor.PrintParametersHumanReadable()}";
+            }
+            foreach (MethodRepresantation method in Methods)
+            {
+                yield return $"Method: {method.Name}{method.PrintParametersHumanReadable()}";
+            }
+            if (DeclaringType != null)
+            {
+                yield return $"Declaring type: {DeclaringType.NamespaceName}.{DeclaringType.Name}";
+            }
         }
     }
 }

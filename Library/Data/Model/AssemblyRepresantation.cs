@@ -18,9 +18,13 @@ namespace Library.Data.Model
 
         }
 
-        public string Print()
+        public IEnumerable<string> Print()
         {
-            throw new NotImplementedException();
+            yield return $"NAME: {Name}";
+            foreach(NamespaceRepresantation _namespace in Namespaces)
+            {
+                yield return $"Namespace: {_namespace.Name}";
+            }
         }
     }
 }

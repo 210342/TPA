@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Library.Data.Model
 {
@@ -30,9 +31,32 @@ namespace Library.Data.Model
         }
         #endregion
 
-        public string Print()
+        public string PrintParametersHumanReadable()
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder("(");
+            foreach(ParameterRepresantation parameter in Parameters)
+            {
+                sb.Append($"{parameter.Type.Name} {parameter.Name}, ");
+            }
+            sb.Remove(sb.Length - 2, 2); // remove last comma and space
+            sb.Append(")");
+            return sb.ToString();
+        }
+
+        public IEnumerable<string> Print()
+        {
+            yield return $"NAME: {Name}";
+            foreach (TypeRepresantation genericArgument in GenericArguments)
+            {
+                yield return $"Generic argument: {genericArgument.Name}";
+            }
+            foreach (ParameterRepresantation parameter in Parameters)
+            {
+                yield return $"Parameter: {parameter.Name}";
+            }
+            yield return $"Returned type: {ReturnType.Name}";
+            yield return $"Modifiers: {Modifiers.ToString()}";
+            yield return $"Is extension: {Extension.ToString()}";
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Library.Data.Model
+﻿using System.Collections.Generic;
+
+namespace Library.Data.Model
 {
     internal class ParameterRepresantation : IRepresantation
     {
@@ -11,9 +13,10 @@
             Type = type;
         }
 
-        public string Print()
+        IEnumerable<string> IRepresantation.Print()
         {
-            throw new System.NotImplementedException();
+            yield return $"NAME: {Name}";
+            yield return $"Type: {Type.Name}";
         }
     }
 }

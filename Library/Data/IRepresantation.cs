@@ -9,6 +9,6 @@ namespace Library.Data
     interface IRepresantation
     {
         string Name { get; }
-        string Print();
+        IEnumerable<string> Print();
     }
 }

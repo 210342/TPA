@@ -17,9 +17,13 @@ namespace Library.Data.Model
             Types = ReadMetadata.ReadTypes(types);
         }
 
-        public string Print()
+        public IEnumerable<string> Print()
         {
-            throw new NotImplementedException();
+            yield return $"NAME: {Name}";
+            foreach (TypeRepresantation _type in Types)
+            {
+                yield return $"Type: {_type.Name}";
+            }
         }
     }
 }
