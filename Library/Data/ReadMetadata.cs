@@ -10,12 +10,17 @@ namespace Library.Data
 {
     public static class ReadMetadata
     {
+        #region Dictionary
+        private static Dictionary<string, IRepresantation> AlreadyRead { get; } =
+                new Dictionary<string, IRepresantation>();
+        #endregion
+
         #region Method methods
-        internal static IEnumerable<MethodRepresantation> ReadMethods(IEnumerable<MethodBase> methods)
+        internal static IEnumerable<MethodRepresantation> ReadMethods(IEnumerable<MethodBase> methods, string typeName)
         {
             return from MethodBase currentMethod in methods
                    where currentMethod.GetVisible()
-                   select new MethodRepresantation(currentMethod);
+                   select new MethodRepresantation(currentMethod, typeName);
         }
 
         internal static Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> ReadModifiers(MethodBase method)
@@ -39,10 +44,10 @@ namespace Library.Data
             return new Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum>(access, _abstract, _static, _virtual);
         }
 
-        internal static IEnumerable<ParameterRepresantation> ReadParameters(IEnumerable<ParameterInfo> parameters)
+        internal static IEnumerable<ParameterRepresantation> ReadParameters(IEnumerable<ParameterInfo> parameters, string methodName)
         {
             return from parameter in parameters
-                   select new ParameterRepresantation(parameter.Name, ReadMetadata.ReadReference(parameter.ParameterType));
+                   select new ParameterRepresantation(parameter.Name, ReadMetadata.ReadReference(parameter.ParameterType), methodName);
         }
 
         internal static TypeRepresantation ReadReturnType(MethodBase method)
@@ -82,10 +87,26 @@ namespace Library.Data
 
         internal static TypeRepresantation ReadReference(Type type)
         {
-            if (!type.IsGenericType)
-                return new TypeRepresantation(type.Name, type.GetNamespace());
+            AlreadyRead.TryGetValue(type.Name, out IRepresantation reference);
+            if(reference != null)
+            {
+                return (TypeRepresantation)reference;
+            }
             else
-                return new TypeRepresantation(type.Name, type.GetNamespace(), ReadGenericArguments(type.GetGenericArguments()));
+            {
+                if (!type.IsGenericType)
+                {
+                    reference = new TypeRepresantation(type.Name, type.GetNamespace());
+                    AlreadyRead.Add(reference.FullName, reference);
+                    return (TypeRepresantation)reference;
+                }
+                else
+                {
+                    reference = new TypeRepresantation(type.Name, type.GetNamespace(), ReadGenericArguments(type.GetGenericArguments()));
+                    AlreadyRead.Add(reference.FullName, reference);
+                    return (TypeRepresantation)reference;
+                }
+            }
         }
 
 
@@ -101,11 +122,23 @@ namespace Library.Data
         {
             if (declaringType == null)
                 return null;
-            return ReadMetadata.ReadReference(declaringType);
+            AlreadyRead.TryGetValue(declaringType.FullName, out IRepresantation reference);
+            if (reference != null)
+            {
+                return (TypeRepresantation)reference;
+            }
+            else
+            {
+                return ReadMetadata.ReadReference(declaringType);
+            }
         }
 
         internal static IEnumerable<TypeRepresantation> ReadNestedTypes(IEnumerable<Type> nestedTypes)
         {
+            foreach(Type type in nestedTypes)
+            {
+                AlreadyRead.TryGetValue(type.FullName, out IRepresantation reference);
+            }
             return from type in nestedTypes
                    where type.GetVisible()
                    select new TypeRepresantation(type);
@@ -134,11 +167,11 @@ namespace Library.Data
         #endregion
 
         #region Property method
-        internal static IEnumerable<PropertyRepresantation> ReadProperties(IEnumerable<PropertyInfo> properties)
+        internal static IEnumerable<PropertyRepresantation> ReadProperties(IEnumerable<PropertyInfo> properties, string className)
         {
             return from property in properties
                    where property.GetGetMethod().GetVisible() || property.GetSetMethod().GetVisible()
-                   select new PropertyRepresantation(property.Name, ReadMetadata.ReadReference(property.PropertyType));
+                   select new PropertyRepresantation(property.Name, ReadMetadata.ReadReference(property.PropertyType), className);
         }
         #endregion
 

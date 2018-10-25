@@ -9,7 +9,7 @@ namespace Library.Data.Model
     {
         #region properties
         public string Name { get; private set; }
-        public string NamespaceName { get; private set; }
+        public string FullName { get; private set; }
         public TypeRepresantation BaseType { get; private set; }
         public IEnumerable<TypeRepresantation> ImplementedInterfaces { get; private set; }
         public Tuple<AccessLevelEnum, AbstractEnum, SealedEnum> Modifiers { get; private set; }
@@ -27,15 +27,16 @@ namespace Library.Data.Model
         internal TypeRepresantation(Type type)
         {
             Name = type.Name;
+            FullName = type.FullName;
             DeclaringType = ReadMetadata.ReadDeclaringType(type.DeclaringType);
-            Constructors = ReadMetadata.ReadMethods(type.GetConstructors());
-            Methods = ReadMetadata.ReadMethods(type.GetMethods());
+            Constructors = ReadMetadata.ReadMethods(type.GetConstructors(), FullName);
+            Methods = ReadMetadata.ReadMethods(type.GetMethods(), FullName);
             NestedTypes = ReadMetadata.ReadNestedTypes(type.GetNestedTypes());
             ImplementedInterfaces = ReadMetadata.ReadImplements(type.GetInterfaces());
             GenericArguments = ReadMetadata.ReadGenericArguments(type.GetGenericArguments());
             Modifiers = ReadMetadata.ReadModifiers(type);
             BaseType = ReadMetadata.ReadExtends(type.BaseType);
-            Properties = ReadMetadata.ReadProperties(type.GetProperties());
+            Properties = ReadMetadata.ReadProperties(type.GetProperties(), FullName);
             TypeKind = ReadMetadata.GetTypeKind(type);
             Attributes = type.GetCustomAttributes(inherit: true).Cast<Attribute>();
         }
@@ -43,7 +44,7 @@ namespace Library.Data.Model
         internal TypeRepresantation(string name, string namespaceName)
         {
             Name = name;
-            NamespaceName = namespaceName;
+            FullName = $"{namespaceName}.{name}";
         }
 
         internal TypeRepresantation(string typeName, string namespaceName, IEnumerable<TypeRepresantation> genericArguments) : this(typeName, namespaceName)
@@ -54,10 +55,10 @@ namespace Library.Data.Model
 
         public IEnumerable<string> Print()
         {
-            yield return $"NAME: {NamespaceName}.{Name}";
+            yield return $"NAME: {FullName}";
             if(BaseType != null)
             {
-                yield return $"Base type: {BaseType.NamespaceName}.{BaseType.Name}";
+                yield return $"Base type: {BaseType.FullName}";
             }
             foreach(TypeRepresantation _interface in ImplementedInterfaces)
             {
@@ -91,7 +92,7 @@ namespace Library.Data.Model
             }
             if (DeclaringType != null)
             {
-                yield return $"Declaring type: {DeclaringType.NamespaceName}.{DeclaringType.Name}";
+                yield return $"Declaring type: {DeclaringType.FullName}";
             }
         }
     }

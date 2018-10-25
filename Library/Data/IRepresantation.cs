@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Library.Data
 {
-    interface IRepresantation
+    public interface IRepresantation
     {
         string Name { get; }
+        string FullName { get; }
         IEnumerable<string> Print();
     }
 }

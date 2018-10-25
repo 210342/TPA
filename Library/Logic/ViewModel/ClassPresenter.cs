@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Library.Data;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -9,14 +10,17 @@ namespace Library.Logic.ViewModel
 {
     public class ClassPresenter : INotifyPropertyChanged
     {
+        #region Fields
+        private IRepresantation classSelected;
+
+        private IRepresantation ClassToDisplay;
+        #endregion
+
+        #region Properties
         public ICommand ShowCurrentClass { get; }
         public ICommand ShowClassesList { get; }
 
-        private ClassRepresentation classSelected;
-
-        private ClassRepresentation ClassToDisplay;
-
-        public ClassRepresentation ClassSelected
+        public IRepresantation ClassSelected
         {
             get
             {
@@ -30,7 +34,8 @@ namespace Library.Logic.ViewModel
             }
         }
 
-        public ObservableCollection<ClassRepresentation> ClassesList { get; }
+        public ObservableCollection<IRepresantation> ClassesList { get; }
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -38,14 +43,14 @@ namespace Library.Logic.ViewModel
         {
             ShowCurrentClass = new RelayCommand(ChangeClassToDisplay, () => ClassSelected != null);
             ShowClassesList = new RelayCommand(ReloadOrSetClassList, () => ClassesList == null);
-            ClassesList = new ObservableCollection<ClassRepresentation>();
+            ClassesList = new ObservableCollection<IRepresantation>();
 
             /*
             string className, List< string > classProp, List<string> classAtt,
               List< string > classMeth, List<string> classFields */
 
 
-
+            /*
             var human = 
                 new ClassRepresentation("Human",
                 new List<string>() {"Heart heart", "Kidney kidney", "Human loveInterest" },
@@ -62,6 +67,7 @@ namespace Library.Logic.ViewModel
             ClassesList.Add(heart);
             ClassesList.Add(human);
             ClassesList.Add(kidney);
+            */
         }
 
         public void ChangeClassToDisplay()

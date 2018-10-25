@@ -10,12 +10,13 @@ namespace Library.Data.Model
     internal class AssemblyRepresantation : IRepresantation
     {
         public string Name { get; private set; }
+        public string FullName { get; private set; }
         public IEnumerable<NamespaceRepresantation> Namespaces { get; private set; }
 
         public AssemblyRepresantation(Assembly assembly)
         {
             Name = assembly.ManifestModule.Name;
-
+            FullName = Name;
         }
 
         public IEnumerable<string> Print()

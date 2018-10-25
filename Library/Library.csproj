@@ -59,8 +59,6 @@
     <Compile Include="Data\Model\TypeRepresantation.cs" />
     <Compile Include="Data\ReadMetadata.cs" />
     <Compile Include="Data\Reflector.cs" />
-    <Compile Include="Logic\ClassReferences.cs" />
-    <Compile Include="Logic\ClassRepresentation.cs" />
     <Compile Include="Logic\ViewModel\ClassPresenter.cs" />
     <Compile Include="Logic\ViewModel\RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

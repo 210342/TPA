@@ -8,13 +8,15 @@ namespace Library.Data.Model
     {
         #region properties
         public string Name { get; private set; }
+        public string FullName { get; private set; }
         public TypeRepresantation Type { get; private set; }
         #endregion
 
         #region constructor
-        internal PropertyRepresantation(string propertyName, TypeRepresantation propertyType)
+        internal PropertyRepresantation(string propertyName, TypeRepresantation propertyType, string className)
         {
             Name = propertyName;
+            FullName = $"{className}.{propertyName}";
             Type = propertyType;
         }
         #endregion

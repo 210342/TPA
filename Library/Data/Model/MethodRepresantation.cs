@@ -12,6 +12,7 @@ namespace Library.Data.Model
     {
         #region properties
         public string Name { get; private set; }
+        public string FullName { get; private set; }
         public IEnumerable<TypeRepresantation> GenericArguments { get; private set; }
         public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; private set; }
         public TypeRepresantation ReturnType { get; private set; }
@@ -20,12 +21,13 @@ namespace Library.Data.Model
         #endregion
 
         #region constructor
-        internal MethodRepresantation(MethodBase method)
+        internal MethodRepresantation(MethodBase method, string className)
         {
             Name = method.Name;
             GenericArguments = ReadMetadata.ReadGenericArguments(method.GetGenericArguments());
             ReturnType = ReadMetadata.ReadReturnType(method);
-            Parameters = ReadMetadata.ReadParameters(method.GetParameters());
+            Parameters = ReadMetadata.ReadParameters(method.GetParameters(), Name);
+            FullName = $"{className}.{method.Name}{PrintParametersHumanReadable()}";
             Modifiers = ReadMetadata.ReadModifiers(method);
             Extension = ReadMetadata.ReadExtension(method);
         }
