@@ -60,8 +60,21 @@ namespace Library.Data
 
         internal static IEnumerable<ParameterRepresantation> ReadParameters(IEnumerable<ParameterInfo> parameters, string methodName)
         {
-            return from parameter in parameters
-                   select new ParameterRepresantation(parameter.Name, ReadReference(parameter.ParameterType), methodName);
+            foreach(ParameterInfo parameter in parameters)
+            {
+                string expectedName = $"{methodName}.{parameter.Name}";
+                if(AlreadyRead.TryGetValue(expectedName, out IRepresantation reference))
+                {
+                    yield return reference as ParameterRepresantation;
+                }
+                else
+                {
+                    ParameterRepresantation newParameter = new ParameterRepresantation
+                        (parameter.Name, ReadReference(parameter.ParameterType), methodName);
+                    AlreadyRead.Add(newParameter.FullName, newParameter);
+                    yield return newParameter;
+                }
+            }
         }
 
         internal static TypeRepresantation ReadReturnType(MethodBase method)
@@ -101,24 +114,24 @@ namespace Library.Data
 
         internal static TypeRepresantation ReadReference(Type type)
         {
-            AlreadyRead.TryGetValue(type.Name, out IRepresantation reference);
-            if(reference != null)
+            if(AlreadyRead.TryGetValue(type.Name, out IRepresantation reference))
             {
-                return (TypeRepresantation)reference;
+                return reference as TypeRepresantation;
             }
             else
             {
                 if (!type.IsGenericType)
                 {
-                    reference = new TypeRepresantation(type.Name, type.GetNamespace());
-                    AlreadyRead.Add(reference.FullName, reference);
-                    return (TypeRepresantation)reference;
+                    TypeRepresantation newType = new TypeRepresantation(type.Name, type.GetNamespace());
+                    AlreadyRead.Add(newType.FullName, newType);
+                    return newType;
                 }
                 else
                 {
-                    reference = new TypeRepresantation(type.Name, type.GetNamespace(), ReadGenericArguments(type.GetGenericArguments()));
-                    AlreadyRead.Add(reference.FullName, reference);
-                    return (TypeRepresantation)reference;
+                    TypeRepresantation newType = new TypeRepresantation
+                        (type.Name, type.GetNamespace(), ReadGenericArguments(type.GetGenericArguments()));
+                    AlreadyRead.Add(newType.FullName, newType);
+                    return newType as TypeRepresantation;
                 }
             }
         }
@@ -136,14 +149,13 @@ namespace Library.Data
         {
             if (declaringType == null)
                 return null;
-            AlreadyRead.TryGetValue(declaringType.FullName, out IRepresantation reference);
-            if (reference != null)
+            if (AlreadyRead.TryGetValue(declaringType.FullName, out IRepresantation reference))
             {
-                return (TypeRepresantation)reference;
+                return reference as TypeRepresantation;
             }
             else
             {
-                return ReadMetadata.ReadReference(declaringType);
+                return ReadReference(declaringType);
             }
         }
 
@@ -151,11 +163,20 @@ namespace Library.Data
         {
             foreach(Type type in nestedTypes)
             {
-                AlreadyRead.TryGetValue(type.FullName, out IRepresantation reference);
+                if (type.GetVisible())
+                {
+                    if (AlreadyRead.TryGetValue(type.FullName, out IRepresantation reference))
+                    {
+                        yield return reference as TypeRepresantation;
+                    }
+                    else
+                    {
+                        TypeRepresantation newType = new TypeRepresantation(type.Name, type.GetNamespace());
+                        AlreadyRead.Add(newType.FullName, newType);
+                        yield return newType;
+                    }
+                }
             }
-            return from type in nestedTypes
-                   where type.GetVisible()
-                   select new TypeRepresantation(type);
         }
 
         internal static IEnumerable<TypeRepresantation> ReadImplements(IEnumerable<Type> interfaces)
@@ -183,18 +204,39 @@ namespace Library.Data
         #region Property method
         internal static IEnumerable<PropertyRepresantation> ReadProperties(IEnumerable<PropertyInfo> properties, string className)
         {
-            return from property in properties
-                   where property.GetGetMethod().GetVisible() || property.GetSetMethod().GetVisible()
-                   select new PropertyRepresantation(property.Name, ReadMetadata.ReadReference(property.PropertyType), className);
+            foreach(PropertyInfo property in properties)
+            {
+                string expectedName = $"{className}.{property.Name}";
+                if(AlreadyRead.TryGetValue(expectedName, out IRepresantation reference))
+                {
+                    yield return reference as PropertyRepresantation;
+                }
+                else
+                {
+                    PropertyRepresantation newProperty = new PropertyRepresantation
+                        (property.Name, ReadReference(property.PropertyType), className);
+                    AlreadyRead.Add(newProperty.FullName, newProperty);
+                }
+            }
         }
         #endregion
 
         #region Namespace method
         internal static IEnumerable<TypeRepresantation> ReadTypes(IEnumerable<Type> types)
         {
-            return from type in types
-                   orderby type.Name
-                   select new TypeRepresantation(type);
+            foreach(Type type in types.OrderBy(n => n.Name))
+            {
+                if(AlreadyRead.TryGetValue(type.FullName, out IRepresantation reference))
+                {
+                    yield return reference as TypeRepresantation;
+                }
+                else
+                {
+                    TypeRepresantation newType = new TypeRepresantation(type);
+                    AlreadyRead.Add(newType.FullName, newType);
+                    yield return newType;
+                }
+            }
         }
         #endregion
 
