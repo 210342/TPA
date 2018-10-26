@@ -11,16 +11,30 @@ namespace Library.Data
     public static class ReadMetadata
     {
         #region Dictionary
-        private static Dictionary<string, IRepresantation> AlreadyRead { get; } =
+        public static Dictionary<string, IRepresantation> AlreadyRead { get; } =
                 new Dictionary<string, IRepresantation>();
         #endregion
 
         #region Method methods
         internal static IEnumerable<MethodRepresantation> ReadMethods(IEnumerable<MethodBase> methods, string typeName)
         {
-            return from MethodBase currentMethod in methods
-                   where currentMethod.GetVisible()
-                   select new MethodRepresantation(currentMethod, typeName);
+            foreach(MethodBase method in methods)
+            {
+                if(method.GetVisible())
+                {
+                    string expectedName = $"{typeName}.{ReadReturnType(method).Name} {method.Name}{ReadParameters(method.GetParameters(), method.Name)}";
+                    if (AlreadyRead.TryGetValue(expectedName, out IRepresantation reference))
+                    {
+                        yield return reference as MethodRepresantation;
+                    }
+                    else
+                    {
+                        MethodRepresantation newMethod = new MethodRepresantation(method, typeName);
+                        AlreadyRead.Add(newMethod.FullName, newMethod);
+                        yield return newMethod;
+                    }
+                }
+            }
         }
 
         internal static Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> ReadModifiers(MethodBase method)
@@ -47,7 +61,7 @@ namespace Library.Data
         internal static IEnumerable<ParameterRepresantation> ReadParameters(IEnumerable<ParameterInfo> parameters, string methodName)
         {
             return from parameter in parameters
-                   select new ParameterRepresantation(parameter.Name, ReadMetadata.ReadReference(parameter.ParameterType), methodName);
+                   select new ParameterRepresantation(parameter.Name, ReadReference(parameter.ParameterType), methodName);
         }
 
         internal static TypeRepresantation ReadReturnType(MethodBase method)

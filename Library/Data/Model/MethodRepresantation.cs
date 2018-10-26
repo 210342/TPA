@@ -27,12 +27,13 @@ namespace Library.Data.Model
             GenericArguments = ReadMetadata.ReadGenericArguments(method.GetGenericArguments());
             ReturnType = ReadMetadata.ReadReturnType(method);
             Parameters = ReadMetadata.ReadParameters(method.GetParameters(), Name);
-            FullName = $"{className}.{method.Name}{PrintParametersHumanReadable()}";
+            FullName = $"{className}.{ReturnType.Name} {method.Name}{PrintParametersHumanReadable()}";
             Modifiers = ReadMetadata.ReadModifiers(method);
             Extension = ReadMetadata.ReadExtension(method);
         }
         #endregion
 
+        #region Methods
         public string PrintParametersHumanReadable()
         {
             StringBuilder sb = new StringBuilder("(");
@@ -60,5 +61,6 @@ namespace Library.Data.Model
             yield return $"Modifiers: {Modifiers.ToString()}";
             yield return $"Is extension: {Extension.ToString()}";
         }
+        #endregion
     }
 }
