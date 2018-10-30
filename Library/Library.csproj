@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Library</RootNamespace>
     <AssemblyName>Library</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,16 +50,17 @@
     <Compile Include="Data\Enums\TypeKindEnum.cs" />
     <Compile Include="Data\Enums\VirtualEnum.cs" />
     <Compile Include="Data\ExtensionMethods.cs" />
-    <Compile Include="Data\IRepresantation.cs" />
+    <Compile Include="Data\IRepresentation.cs" />
     <Compile Include="Data\IStandardDao.cs" />
-    <Compile Include="Data\Model\AssemblyRepresantation.cs" />
-    <Compile Include="Data\Model\MethodRepresantation.cs" />
-    <Compile Include="Data\Model\NamespaceRepresantation.cs" />
-    <Compile Include="Data\Model\ParameterRepresantation.cs" />
-    <Compile Include="Data\Model\PropertyRepresantation.cs" />
-    <Compile Include="Data\Model\TypeRepresantation.cs" />
+    <Compile Include="Data\Model\AssemblyRepresentation.cs" />
+    <Compile Include="Data\Model\MethodRepresentation.cs" />
+    <Compile Include="Data\Model\NamespaceRepresentation.cs" />
+    <Compile Include="Data\Model\ParameterRepresentation.cs" />
+    <Compile Include="Data\Model\PropertyRepresentation.cs" />
+    <Compile Include="Data\Model\TypeRepresentation.cs" />
     <Compile Include="Data\ReadMetadata.cs" />
     <Compile Include="Data\Reflector.cs" />
+    <Compile Include="Logic\LoadDllTestsClass.cs" />
     <Compile Include="Logic\ViewModel\ClassPresenter.cs" />
     <Compile Include="Logic\ViewModel\RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

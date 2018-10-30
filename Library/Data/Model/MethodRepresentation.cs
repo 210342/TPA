@@ -8,20 +8,27 @@ using System.Text;
 
 namespace Library.Data.Model
 {
-    internal class MethodRepresantation : IRepresantation
+    internal class MethodRepresentation : IRepresentation
     {
         #region properties
         public string Name { get; private set; }
         public string FullName { get; private set; }
-        public IEnumerable<TypeRepresantation> GenericArguments { get; private set; }
+        public IEnumerable<TypeRepresentation> GenericArguments { get; private set; }
         public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; private set; }
-        public TypeRepresantation ReturnType { get; private set; }
+        public TypeRepresentation ReturnType { get; private set; }
         public bool Extension { get; private set; }
-        public IEnumerable<ParameterRepresantation> Parameters { get; private set; }
+        public IEnumerable<ParameterRepresentation> Parameters { get; private set; }
+        public IEnumerable<string> Children
+        {
+            get
+            {
+                return Print();
+            }
+        }
         #endregion
 
         #region constructor
-        internal MethodRepresantation(MethodBase method, string className)
+        internal MethodRepresentation(MethodBase method, string className)
         {
             Name = method.Name;
             GenericArguments = ReadMetadata.ReadGenericArguments(method.GetGenericArguments());
@@ -37,7 +44,7 @@ namespace Library.Data.Model
         public string PrintParametersHumanReadable()
         {
             StringBuilder sb = new StringBuilder("(");
-            foreach(ParameterRepresantation parameter in Parameters)
+            foreach(ParameterRepresentation parameter in Parameters)
             {
                 sb.Append($"{parameter.Type.Name} {parameter.Name}, ");
             }
@@ -49,11 +56,11 @@ namespace Library.Data.Model
         public IEnumerable<string> Print()
         {
             yield return $"NAME: {Name}";
-            foreach (TypeRepresantation genericArgument in GenericArguments)
+            foreach (TypeRepresentation genericArgument in GenericArguments)
             {
                 yield return $"Generic argument: {genericArgument.Name}";
             }
-            foreach (ParameterRepresantation parameter in Parameters)
+            foreach (ParameterRepresentation parameter in Parameters)
             {
                 yield return $"Parameter: {parameter.Name}";
             }

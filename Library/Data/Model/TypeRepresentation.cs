@@ -5,26 +5,33 @@ using System.Linq;
 
 namespace Library.Data.Model
 {
-    internal class TypeRepresantation : IRepresantation
+    internal class TypeRepresentation : IRepresentation
     {
         #region properties
         public string Name { get; private set; }
         public string FullName { get; private set; }
-        public TypeRepresantation BaseType { get; private set; }
-        public IEnumerable<TypeRepresantation> ImplementedInterfaces { get; private set; }
+        public TypeRepresentation BaseType { get; private set; }
+        public IEnumerable<TypeRepresentation> ImplementedInterfaces { get; private set; }
         public Tuple<AccessLevelEnum, AbstractEnum, SealedEnum> Modifiers { get; private set; }
-        public TypeRepresantation DeclaringType { get; private set; }
+        public TypeRepresentation DeclaringType { get; private set; }
         public TypeKindEnum TypeKind { get; private set; }
         public IEnumerable<Attribute> Attributes { get; private set; }
-        public IEnumerable<TypeRepresantation> GenericArguments { get; private set; }
-        public IEnumerable<TypeRepresantation> NestedTypes { get; private set; }
-        public IEnumerable<PropertyRepresantation> Properties { get; private set; }
-        public IEnumerable<MethodRepresantation> Methods { get; private set; }
-        public IEnumerable<MethodRepresantation> Constructors { get; private set; }
+        public IEnumerable<TypeRepresentation> GenericArguments { get; private set; }
+        public IEnumerable<TypeRepresentation> NestedTypes { get; private set; }
+        public IEnumerable<PropertyRepresentation> Properties { get; private set; }
+        public IEnumerable<MethodRepresentation> Methods { get; private set; }
+        public IEnumerable<MethodRepresentation> Constructors { get; private set; }
+        public IEnumerable<string> Children
+        {
+            get
+            {
+                return Print();
+            }
+        }
         #endregion
 
         #region constructors
-        internal TypeRepresantation(Type type)
+        internal TypeRepresentation(Type type)
         {
             Name = type.Name;
             FullName = type.FullName;
@@ -41,13 +48,13 @@ namespace Library.Data.Model
             Attributes = type.GetCustomAttributes(inherit: true).Cast<Attribute>();
         }
 
-        internal TypeRepresantation(string name, string namespaceName)
+        internal TypeRepresentation(string name, string namespaceName)
         {
             Name = name;
             FullName = $"{namespaceName}.{name}";
         }
 
-        internal TypeRepresantation(string typeName, string namespaceName, IEnumerable<TypeRepresantation> genericArguments) : this(typeName, namespaceName)
+        internal TypeRepresentation(string typeName, string namespaceName, IEnumerable<TypeRepresentation> genericArguments) : this(typeName, namespaceName)
         {
             GenericArguments = genericArguments;
         }
@@ -60,7 +67,7 @@ namespace Library.Data.Model
             {
                 yield return $"Base type: {BaseType.FullName}";
             }
-            foreach(TypeRepresantation _interface in ImplementedInterfaces)
+            foreach(TypeRepresentation _interface in ImplementedInterfaces)
             {
                 yield return $"Implements interface: {_interface.Name}";
             }
@@ -70,23 +77,23 @@ namespace Library.Data.Model
             {
                 yield return $"Attribute: {attribute.ToString()}";
             }
-            foreach(TypeRepresantation genericArgument in GenericArguments)
+            foreach(TypeRepresentation genericArgument in GenericArguments)
             {
                 yield return $"Generic argument: {genericArgument.Name}";
             }
-            foreach(TypeRepresantation nestedType in NestedTypes)
+            foreach(TypeRepresentation nestedType in NestedTypes)
             {
                 yield return $"Nested type: {nestedType.Name}";
             }
-            foreach(PropertyRepresantation property in Properties)
+            foreach(PropertyRepresentation property in Properties)
             {
                 yield return $"Property: {property.Name}";
             }
-            foreach(MethodRepresantation constructor in Constructors)
+            foreach(MethodRepresentation constructor in Constructors)
             {
                 yield return $"Constructor: {constructor.Name}{constructor.PrintParametersHumanReadable()}";
             }
-            foreach (MethodRepresantation method in Methods)
+            foreach (MethodRepresentation method in Methods)
             {
                 yield return $"Method: {method.Name}{method.PrintParametersHumanReadable()}";
             }

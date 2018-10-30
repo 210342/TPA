@@ -6,13 +6,20 @@ using System.Threading.Tasks;
 
 namespace Library.Data.Model
 {
-    internal class NamespaceRepresantation : IRepresantation
+    internal class NamespaceRepresentation : IRepresentation
     {
         public string Name { get; private set; }
         public string FullName { get; }
-        public IEnumerable<TypeRepresantation> Types { get; private set; }
+        public IEnumerable<TypeRepresentation> Types { get; private set; }
+        public IEnumerable<string> Children
+        {
+            get
+            {
+                return Print();
+            }
+        }
 
-        internal NamespaceRepresantation(string name, IEnumerable<Type> types)
+        internal NamespaceRepresentation(string name, IEnumerable<Type> types)
         {
             Name = name;
             FullName = name;
@@ -22,7 +29,7 @@ namespace Library.Data.Model
         public IEnumerable<string> Print()
         {
             yield return $"NAME: {Name}";
-            foreach (TypeRepresantation _type in Types)
+            foreach (TypeRepresentation _type in Types)
             {
                 yield return $"Type: {_type.Name}";
             }

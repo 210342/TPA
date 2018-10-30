@@ -11,25 +11,25 @@ namespace Library.Data
     public static class ReadMetadata
     {
         #region Dictionary
-        public static Dictionary<string, IRepresantation> AlreadyRead { get; } =
-                new Dictionary<string, IRepresantation>();
+        public static Dictionary<string, IRepresentation> AlreadyRead { get; } =
+                new Dictionary<string, IRepresentation>();
         #endregion
 
         #region Method methods
-        internal static IEnumerable<MethodRepresantation> ReadMethods(IEnumerable<MethodBase> methods, string typeName)
+        internal static IEnumerable<MethodRepresentation> ReadMethods(IEnumerable<MethodBase> methods, string typeName)
         {
             foreach(MethodBase method in methods)
             {
                 if(method.GetVisible())
                 {
                     string expectedName = $"{typeName}.{ReadReturnType(method).Name} {method.Name}{ReadParameters(method.GetParameters(), method.Name)}";
-                    if (AlreadyRead.TryGetValue(expectedName, out IRepresantation reference))
+                    if (AlreadyRead.TryGetValue(expectedName, out IRepresentation reference))
                     {
-                        yield return reference as MethodRepresantation;
+                        yield return reference as MethodRepresentation;
                     }
                     else
                     {
-                        MethodRepresantation newMethod = new MethodRepresantation(method, typeName);
+                        MethodRepresentation newMethod = new MethodRepresentation(method, typeName);
                         AlreadyRead.Add(newMethod.FullName, newMethod);
                         yield return newMethod;
                     }
@@ -58,18 +58,18 @@ namespace Library.Data
             return new Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum>(access, _abstract, _static, _virtual);
         }
 
-        internal static IEnumerable<ParameterRepresantation> ReadParameters(IEnumerable<ParameterInfo> parameters, string methodName)
+        internal static IEnumerable<ParameterRepresentation> ReadParameters(IEnumerable<ParameterInfo> parameters, string methodName)
         {
             foreach(ParameterInfo parameter in parameters)
             {
                 string expectedName = $"{methodName}.{parameter.Name}";
-                if(AlreadyRead.TryGetValue(expectedName, out IRepresantation reference))
+                if(AlreadyRead.TryGetValue(expectedName, out IRepresentation reference))
                 {
-                    yield return reference as ParameterRepresantation;
+                    yield return reference as ParameterRepresentation;
                 }
                 else
                 {
-                    ParameterRepresantation newParameter = new ParameterRepresantation
+                    ParameterRepresentation newParameter = new ParameterRepresentation
                         (parameter.Name, ReadReference(parameter.ParameterType), methodName);
                     AlreadyRead.Add(newParameter.FullName, newParameter);
                     yield return newParameter;
@@ -77,7 +77,7 @@ namespace Library.Data
             }
         }
 
-        internal static TypeRepresantation ReadReturnType(MethodBase method)
+        internal static TypeRepresentation ReadReturnType(MethodBase method)
         {
             MethodInfo methodInfo = method as MethodInfo;
             if (methodInfo == null)
@@ -112,32 +112,32 @@ namespace Library.Data
             return new Tuple<AccessLevelEnum, AbstractEnum, SealedEnum>(access, _abstract, _sealed);
         }
 
-        internal static TypeRepresantation ReadReference(Type type)
+        internal static TypeRepresentation ReadReference(Type type)
         {
-            if(AlreadyRead.TryGetValue(type.Name, out IRepresantation reference))
+            if(AlreadyRead.TryGetValue(type.Name, out IRepresentation reference))
             {
-                return reference as TypeRepresantation;
+                return reference as TypeRepresentation;
             }
             else
             {
                 if (!type.IsGenericType)
                 {
-                    TypeRepresantation newType = new TypeRepresantation(type.Name, type.GetNamespace());
+                    TypeRepresentation newType = new TypeRepresentation(type.Name, type.GetNamespace());
                     AlreadyRead.Add(newType.FullName, newType);
                     return newType;
                 }
                 else
                 {
-                    TypeRepresantation newType = new TypeRepresantation
+                    TypeRepresentation newType = new TypeRepresentation
                         (type.Name, type.GetNamespace(), ReadGenericArguments(type.GetGenericArguments()));
                     AlreadyRead.Add(newType.FullName, newType);
-                    return newType as TypeRepresantation;
+                    return newType as TypeRepresentation;
                 }
             }
         }
 
 
-        internal static IEnumerable<TypeRepresantation> ReadGenericArguments(IEnumerable<Type> arguments)
+        internal static IEnumerable<TypeRepresentation> ReadGenericArguments(IEnumerable<Type> arguments)
         {
             if (arguments.Any())
                 return from Type _argument in arguments select ReadReference(_argument);
@@ -145,13 +145,13 @@ namespace Library.Data
                 return null;
         }
 
-        internal static TypeRepresantation ReadDeclaringType(Type declaringType)
+        internal static TypeRepresentation ReadDeclaringType(Type declaringType)
         {
             if (declaringType == null)
                 return null;
-            if (AlreadyRead.TryGetValue(declaringType.FullName, out IRepresantation reference))
+            if (AlreadyRead.TryGetValue(declaringType.FullName, out IRepresentation reference))
             {
-                return reference as TypeRepresantation;
+                return reference as TypeRepresentation;
             }
             else
             {
@@ -159,19 +159,19 @@ namespace Library.Data
             }
         }
 
-        internal static IEnumerable<TypeRepresantation> ReadNestedTypes(IEnumerable<Type> nestedTypes)
+        internal static IEnumerable<TypeRepresentation> ReadNestedTypes(IEnumerable<Type> nestedTypes)
         {
             foreach(Type type in nestedTypes)
             {
                 if (type.GetVisible())
                 {
-                    if (AlreadyRead.TryGetValue(type.FullName, out IRepresantation reference))
+                    if (AlreadyRead.TryGetValue(type.FullName, out IRepresentation reference))
                     {
-                        yield return reference as TypeRepresantation;
+                        yield return reference as TypeRepresentation;
                     }
                     else
                     {
-                        TypeRepresantation newType = new TypeRepresantation(type.Name, type.GetNamespace());
+                        TypeRepresentation newType = new TypeRepresentation(type.Name, type.GetNamespace());
                         AlreadyRead.Add(newType.FullName, newType);
                         yield return newType;
                     }
@@ -179,7 +179,7 @@ namespace Library.Data
             }
         }
 
-        internal static IEnumerable<TypeRepresantation> ReadImplements(IEnumerable<Type> interfaces)
+        internal static IEnumerable<TypeRepresentation> ReadImplements(IEnumerable<Type> interfaces)
         {
             return from currentInterface in interfaces
                    select ReadMetadata.ReadReference(currentInterface);
@@ -193,7 +193,7 @@ namespace Library.Data
                    TypeKindEnum.ClassType;
         }
 
-        internal static TypeRepresantation ReadExtends(Type baseType)
+        internal static TypeRepresentation ReadExtends(Type baseType)
         {
             if (baseType == null || baseType == typeof(Object) || baseType == typeof(ValueType) || baseType == typeof(Enum))
                 return null;
@@ -202,18 +202,18 @@ namespace Library.Data
         #endregion
 
         #region Property method
-        internal static IEnumerable<PropertyRepresantation> ReadProperties(IEnumerable<PropertyInfo> properties, string className)
+        internal static IEnumerable<PropertyRepresentation> ReadProperties(IEnumerable<PropertyInfo> properties, string className)
         {
             foreach(PropertyInfo property in properties)
             {
                 string expectedName = $"{className}.{property.Name}";
-                if(AlreadyRead.TryGetValue(expectedName, out IRepresantation reference))
+                if(AlreadyRead.TryGetValue(expectedName, out IRepresentation reference))
                 {
-                    yield return reference as PropertyRepresantation;
+                    yield return reference as PropertyRepresentation;
                 }
                 else
                 {
-                    PropertyRepresantation newProperty = new PropertyRepresantation
+                    PropertyRepresentation newProperty = new PropertyRepresentation
                         (property.Name, ReadReference(property.PropertyType), className);
                     AlreadyRead.Add(newProperty.FullName, newProperty);
                 }
@@ -222,17 +222,17 @@ namespace Library.Data
         #endregion
 
         #region Namespace method
-        internal static IEnumerable<TypeRepresantation> ReadTypes(IEnumerable<Type> types)
+        internal static IEnumerable<TypeRepresentation> ReadTypes(IEnumerable<Type> types)
         {
             foreach(Type type in types.OrderBy(n => n.Name))
             {
-                if(AlreadyRead.TryGetValue(type.FullName, out IRepresantation reference))
+                if(AlreadyRead.TryGetValue(type.FullName, out IRepresentation reference))
                 {
-                    yield return reference as TypeRepresantation;
+                    yield return reference as TypeRepresentation;
                 }
                 else
                 {
-                    TypeRepresantation newType = new TypeRepresantation(type);
+                    TypeRepresentation newType = new TypeRepresentation(type);
                     AlreadyRead.Add(newType.FullName, newType);
                     yield return newType;
                 }
@@ -241,13 +241,13 @@ namespace Library.Data
         #endregion
 
         #region Assembly method
-        internal static IEnumerable<NamespaceRepresantation> ReadNamespaces(Assembly assembly)
+        internal static IEnumerable<NamespaceRepresentation> ReadNamespaces(Assembly assembly)
         {
             return from Type type in assembly.GetTypes()
                    where type.GetVisible()
                    group type by type.GetNamespace() into _group
                    orderby _group.Key
-                   select new NamespaceRepresantation(_group.Key, _group);
+                   select new NamespaceRepresentation(_group.Key, _group);
         }
         #endregion
     }

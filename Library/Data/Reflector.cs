@@ -10,19 +10,19 @@ namespace Library.Data
 {
     public class Reflector
     {
-        internal AssemblyRepresantation AssemblyModel { get; private set; }
+        internal AssemblyRepresentation AssemblyModel { get; private set; }
 
         public Reflector(string assemblyFile)
         {
             if (string.IsNullOrEmpty(assemblyFile))
                 throw new System.ArgumentNullException();
             Assembly assembly = Assembly.LoadFrom(assemblyFile);
-            AssemblyModel = new AssemblyRepresantation(assembly);
+            AssemblyModel = new AssemblyRepresentation(assembly);
         }
 
         public Reflector(Assembly assembly)
         {
-            AssemblyModel = new AssemblyRepresantation(assembly);
+            AssemblyModel = new AssemblyRepresentation(assembly);
         }
     }
 }

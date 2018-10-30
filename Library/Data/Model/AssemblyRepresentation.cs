@@ -7,13 +7,20 @@ using System.Threading.Tasks;
 
 namespace Library.Data.Model
 {
-    internal class AssemblyRepresantation : IRepresantation
+    internal class AssemblyRepresentation : IRepresentation
     {
         public string Name { get; private set; }
         public string FullName { get; private set; }
-        public IEnumerable<NamespaceRepresantation> Namespaces { get; private set; }
+        public IEnumerable<NamespaceRepresentation> Namespaces { get; private set; }
+        public IEnumerable<string> Children
+        {
+            get
+            {
+                return Print();
+            }
+        }
 
-        public AssemblyRepresantation(Assembly assembly)
+        public AssemblyRepresentation(Assembly assembly)
         {
             Name = assembly.ManifestModule.Name;
             FullName = Name;
@@ -23,7 +30,7 @@ namespace Library.Data.Model
         public IEnumerable<string> Print()
         {
             yield return $"NAME: {Name}";
-            foreach(NamespaceRepresantation _namespace in Namespaces)
+            foreach(NamespaceRepresentation _namespace in Namespaces)
             {
                 yield return $"Namespace: {_namespace.Name}";
             }

@@ -4,16 +4,23 @@ using System.Collections.Generic;
 
 namespace Library.Data.Model
 {
-    internal class PropertyRepresantation : IRepresantation
+    internal class PropertyRepresentation : IRepresentation
     {
         #region properties
         public string Name { get; private set; }
         public string FullName { get; private set; }
-        public TypeRepresantation Type { get; private set; }
+        public TypeRepresentation Type { get; private set; }
+        public IEnumerable<string> Children
+        {
+            get
+            {
+                return Print();
+            }
+        }
         #endregion
 
         #region constructor
-        internal PropertyRepresantation(string propertyName, TypeRepresantation propertyType, string className)
+        internal PropertyRepresentation(string propertyName, TypeRepresentation propertyType, string className)
         {
             Name = propertyName;
             FullName = $"{className}.{propertyName}";
@@ -21,7 +28,7 @@ namespace Library.Data.Model
         }
         #endregion
 
-        IEnumerable<string> IRepresantation.Print()
+        public IEnumerable<string> Print()
         {
             yield return $"NAME: {Name}";
             yield return $"Type: {Type.Name}";

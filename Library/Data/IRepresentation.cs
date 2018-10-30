@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Library.Data
 {
-    public interface IRepresantation
+    public interface IRepresentation
     {
         string Name { get; }
         string FullName { get; }
+        IEnumerable<string> Children { get; }
         IEnumerable<string> Print();
     }
 }
