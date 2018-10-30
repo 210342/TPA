@@ -11,11 +11,21 @@ namespace Library.Data.Model
         public string Name { get; private set; }
         public string FullName { get; }
         public IEnumerable<TypeRepresentation> Types { get; private set; }
-        public IEnumerable<string> Children
+        public IEnumerable<IRepresentation> Children
         {
             get
             {
-                return Print();
+                foreach(TypeRepresentation _type in Types)
+                {
+                    yield return _type;
+                }
+            }
+        }
+        public string ToStringProperty
+        {
+            get
+            {
+                return ToString();
             }
         }
 
@@ -33,6 +43,11 @@ namespace Library.Data.Model
             {
                 yield return $"Type: {_type.Name}";
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Join(Environment.NewLine, Print());
         }
     }
 }

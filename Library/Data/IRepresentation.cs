@@ -10,7 +10,9 @@ namespace Library.Data
     {
         string Name { get; }
         string FullName { get; }
-        IEnumerable<string> Children { get; }
+        string ToStringProperty { get; }
+        IEnumerable<IRepresentation> Children { get; }
         IEnumerable<string> Print();
+        string ToString();
     }
 }

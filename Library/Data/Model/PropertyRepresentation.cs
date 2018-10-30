@@ -1,6 +1,8 @@
 ﻿
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Library.Data.Model
 {
@@ -10,11 +12,18 @@ namespace Library.Data.Model
         public string Name { get; private set; }
         public string FullName { get; private set; }
         public TypeRepresentation Type { get; private set; }
-        public IEnumerable<string> Children
+        public IEnumerable<IRepresentation> Children
         {
             get
             {
-                return Print();
+                yield return Type;
+            }
+        }
+        public string ToStringProperty
+        {
+            get
+            {
+                return ToString();
             }
         }
         #endregion
@@ -32,6 +41,11 @@ namespace Library.Data.Model
         {
             yield return $"NAME: {Name}";
             yield return $"Type: {Type.Name}";
+        }
+
+        public override string ToString()
+        {
+            return string.Join(Environment.NewLine, Print());
         }
     }
 }

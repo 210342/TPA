@@ -12,11 +12,21 @@ namespace Library.Data.Model
         public string Name { get; private set; }
         public string FullName { get; private set; }
         public IEnumerable<NamespaceRepresentation> Namespaces { get; private set; }
-        public IEnumerable<string> Children
+        public IEnumerable<IRepresentation> Children
         {
             get
             {
-                return Print();
+                foreach(NamespaceRepresentation _namespace in Namespaces)
+                {
+                    yield return _namespace;
+                }
+            }
+        }
+        public string ToStringProperty
+        {
+            get
+            {
+                return ToString();
             }
         }
 
@@ -34,6 +44,11 @@ namespace Library.Data.Model
             {
                 yield return $"Namespace: {_namespace.Name}";
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Join(Environment.NewLine, Print());
         }
     }
 }

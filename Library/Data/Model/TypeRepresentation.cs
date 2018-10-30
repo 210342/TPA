@@ -21,11 +21,67 @@ namespace Library.Data.Model
         public IEnumerable<PropertyRepresentation> Properties { get; private set; }
         public IEnumerable<MethodRepresentation> Methods { get; private set; }
         public IEnumerable<MethodRepresentation> Constructors { get; private set; }
-        public IEnumerable<string> Children
+        public IEnumerable<IRepresentation> Children
         {
             get
             {
-                return Print();
+                if (BaseType != null)
+                {
+                    yield return BaseType;
+                }
+                if(ImplementedInterfaces != null)
+                {
+                    foreach (TypeRepresentation _interface in ImplementedInterfaces)
+                    {
+                        yield return _interface;
+                    }
+                }
+                if (GenericArguments != null)
+                {
+                    foreach (TypeRepresentation genericArgument in GenericArguments)
+                    {
+                        yield return genericArgument;
+                    }
+                }
+                if(NestedTypes != null)
+                {
+                    foreach (TypeRepresentation nestedType in NestedTypes)
+                    {
+                        yield return nestedType;
+                    }
+                }
+                if(Properties != null)
+                {
+                    foreach (PropertyRepresentation property in Properties)
+                    {
+                        yield return property;
+                    }
+                }
+                if(Constructors != null)
+                {
+                    foreach (MethodRepresentation constructor in Constructors)
+                    {
+                        yield return constructor;
+                    }
+                }
+                if(Methods != null)
+                {
+                    foreach (MethodRepresentation method in Methods)
+                    {
+                        yield return method;
+                    }
+                }
+                if (DeclaringType != null)
+                {
+                    yield return DeclaringType;
+                }
+            }
+        }
+        public string ToStringProperty
+        {
+            get
+            {
+                return ToString();
             }
         }
         #endregion
@@ -67,40 +123,66 @@ namespace Library.Data.Model
             {
                 yield return $"Base type: {BaseType.FullName}";
             }
-            foreach(TypeRepresentation _interface in ImplementedInterfaces)
+            if(ImplementedInterfaces != null)
             {
-                yield return $"Implements interface: {_interface.Name}";
+                foreach (TypeRepresentation _interface in ImplementedInterfaces)
+                {
+                    yield return $"Implements interface: {_interface.Name}";
+                }
             }
             yield return $"Modifiers: {Modifiers.ToString()}";
             yield return $"Type: {TypeKind.ToString()}";
-            foreach(Attribute attribute in Attributes)
+            if(Attributes != null)
             {
-                yield return $"Attribute: {attribute.ToString()}";
+                foreach (Attribute attribute in Attributes)
+                {
+                    yield return $"Attribute: {attribute.ToString()}";
+                }
             }
-            foreach(TypeRepresentation genericArgument in GenericArguments)
+            if(GenericArguments != null)
             {
-                yield return $"Generic argument: {genericArgument.Name}";
+                foreach (TypeRepresentation genericArgument in GenericArguments)
+                {
+                    yield return $"Generic argument: {genericArgument.Name}";
+                }
             }
-            foreach(TypeRepresentation nestedType in NestedTypes)
+            if(NestedTypes != null)
             {
-                yield return $"Nested type: {nestedType.Name}";
+                foreach (TypeRepresentation nestedType in NestedTypes)
+                {
+                    yield return $"Nested type: {nestedType.Name}";
+                }
             }
-            foreach(PropertyRepresentation property in Properties)
+            if(Properties != null)
             {
-                yield return $"Property: {property.Name}";
+                foreach (PropertyRepresentation property in Properties)
+                {
+                    yield return $"Property: {property.Name}";
+                }
             }
-            foreach(MethodRepresentation constructor in Constructors)
+            if(Constructors != null)
             {
-                yield return $"Constructor: {constructor.Name}{constructor.PrintParametersHumanReadable()}";
+                foreach (MethodRepresentation constructor in Constructors)
+                {
+                    yield return $"Constructor: {constructor.Name}";
+                }
             }
-            foreach (MethodRepresentation method in Methods)
+            if(Methods != null)
             {
-                yield return $"Method: {method.Name}{method.PrintParametersHumanReadable()}";
+                foreach (MethodRepresentation method in Methods)
+                {
+                    yield return $"Method: {method.Name}";
+                }
             }
             if (DeclaringType != null)
             {
                 yield return $"Declaring type: {DeclaringType.FullName}";
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Join(Environment.NewLine, Print());
         }
     }
 }

@@ -45,19 +45,13 @@ namespace Library.Logic.ViewModel
             ClassesList = new ObservableCollection<IRepresentation>() { null };
             string tmp = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\test.dll";
             LoadDllTestsClass.LoadAssembly(tmp);
-            var types = LoadDllTestsClass.MemberTypes();
-            foreach (var type in types)
-                ClassesList.Add(type);
+            Reflector reflector = new Reflector(tmp);
+            ClassesList.Add(reflector.AssemblyModel);
         }
 
         public void ChangeClassToDisplay()
         {
             ClassToDisplay = ClassSelected;
-        }
-
-        private void PopulateChildren(string FullName)
-        {
-
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

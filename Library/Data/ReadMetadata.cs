@@ -22,7 +22,9 @@ namespace Library.Data
             {
                 if(method.GetVisible())
                 {
-                    string expectedName = $"{typeName}.{ReadReturnType(method).Name} {method.Name}{ReadParameters(method.GetParameters(), method.Name)}";
+                    string returnedTypeName = ReadReturnType(method) == null ? "" : ReadReturnType(method).Name;
+                    string expectedName = $"{typeName}.{returnedTypeName} {method.Name}" +
+                        $"{ParameterRepresentation.PrintParametersHumanReadable(ReadParameters(method.GetParameters(), method.Name))}";
                     if (AlreadyRead.TryGetValue(expectedName, out IRepresentation reference))
                     {
                         yield return reference as MethodRepresentation;
@@ -114,7 +116,7 @@ namespace Library.Data
 
         internal static TypeRepresentation ReadReference(Type type)
         {
-            if(AlreadyRead.TryGetValue(type.Name, out IRepresentation reference))
+            if(AlreadyRead.TryGetValue(type.FullName, out IRepresentation reference))
             {
                 return reference as TypeRepresentation;
             }
@@ -182,7 +184,7 @@ namespace Library.Data
         internal static IEnumerable<TypeRepresentation> ReadImplements(IEnumerable<Type> interfaces)
         {
             return from currentInterface in interfaces
-                   select ReadMetadata.ReadReference(currentInterface);
+                   select ReadReference(currentInterface);
         }
 
         internal static TypeKindEnum GetTypeKind(Type type)
@@ -216,6 +218,7 @@ namespace Library.Data
                     PropertyRepresentation newProperty = new PropertyRepresentation
                         (property.Name, ReadReference(property.PropertyType), className);
                     AlreadyRead.Add(newProperty.FullName, newProperty);
+                    yield return newProperty;
                 }
             }
         }
@@ -243,11 +246,23 @@ namespace Library.Data
         #region Assembly method
         internal static IEnumerable<NamespaceRepresentation> ReadNamespaces(Assembly assembly)
         {
-            return from Type type in assembly.GetTypes()
-                   where type.GetVisible()
-                   group type by type.GetNamespace() into _group
-                   orderby _group.Key
-                   select new NamespaceRepresentation(_group.Key, _group);
+            IEnumerable<IGrouping<string, Type>> namespaces = from Type type in assembly.GetTypes()
+                                                              //where type.GetVisible()
+                                                              group type by type.GetNamespace() into _group
+                                                              select _group;
+            foreach (IGrouping<string, Type> _namespace in namespaces)
+            {
+                if (AlreadyRead.TryGetValue(_namespace.Key, out IRepresentation reference))
+                {
+                    yield return reference as NamespaceRepresentation;
+                }
+                else
+                {
+                    NamespaceRepresentation newNamespace = new NamespaceRepresentation(_namespace.Key, _namespace);
+                    AlreadyRead.Add(newNamespace.FullName, newNamespace);
+                    yield return newNamespace;
+                }
+            }
         }
         #endregion
     }
