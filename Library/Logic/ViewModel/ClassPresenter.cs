@@ -1,4 +1,5 @@
 ﻿using Library.Data;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -19,6 +20,7 @@ namespace Library.Logic.ViewModel
 
         #region Properties
         public ICommand ShowCurrentClass { get; }
+        public ICommand ReloadAssemblyCommand { get; }
 
         public IRepresentation ClassSelected
         {
@@ -34,6 +36,9 @@ namespace Library.Logic.ViewModel
             }
         }
 
+        public string LoadedAssembly { get; set; }
+        public IRepresentation LoadedAssemblyRepresentation { get; private set; }
+
         public ObservableCollection<IRepresentation> ClassesList { get; }
         #endregion
 
@@ -43,10 +48,21 @@ namespace Library.Logic.ViewModel
         {
             ShowCurrentClass = new RelayCommand(ChangeClassToDisplay, () => ClassSelected != null);
             ClassesList = new ObservableCollection<IRepresentation>() { null };
-            string tmp = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\test.dll";
-            LoadDllTestsClass.LoadAssembly(tmp);
-            Reflector reflector = new Reflector(tmp);
-            ClassesList.Add(reflector.AssemblyModel);
+            ReloadAssemblyCommand = new RelayCommand(RelodAssembly);
+        }
+
+        private void LoadAssembly()
+        {
+            Reflector reflector = new Reflector(LoadedAssembly);
+            this.LoadedAssemblyRepresentation = reflector.AssemblyModel;
+        }
+
+        private void RelodAssembly()
+        {
+            LoadAssembly();
+            this.ClassesList.Clear();
+            if(this.LoadedAssemblyRepresentation != null)
+                this.ClassesList.Add(this.LoadedAssemblyRepresentation);
         }
 
         public void ChangeClassToDisplay()

@@ -19,17 +19,18 @@
         </Grid.ColumnDefinitions>
         <ContentControl x:Name="SelectedItemHelper" Content="{Binding ClassSelected, Mode=OneWayToSource}" Visibility="Collapsed" Grid.ColumnSpan="2"/>
         <TreeView SelectedItemChanged="TreeView_SelectedItemChanged" ItemsSource="{Binding ClassesList}" 
-                    Margin="0,31,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0">
+                    Margin="0,31,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" RenderTransformOrigin="0.583,1.25">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                     <TextBlock Text="{Binding Path=Name}" />
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        
-        
+
+
         <TextBlock HorizontalAlignment="Left" Margin="32, 32, 32, 32" TextWrapping="Wrap" Text="{Binding Path=ClassSelected.ToStringProperty}" 
                    VerticalAlignment="Top" Grid.Column="1" FontSize="15"/>
-
+        <TextBox Text="{Binding Path=LoadedAssembly, Mode=TwoWay}"  x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="0,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="701" Grid.ColumnSpan="2"/>
+        <Button Command="{Binding ReloadAssemblyCommand}" x:Name="button" Content="Load" HorizontalAlignment="Left" Margin="330,4,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1"/>
     </Grid>
 </Window>
