@@ -1,5 +1,6 @@
 ﻿using Library.Data;
-using System.Collections.Generic;
+using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
@@ -28,13 +29,16 @@ namespace Library.Logic.ViewModel
             }
             set
             {
+                PreviousSelection = classSelected;
                 classSelected = value;
                 OnPropertyChanged("ClassSelected");
                 //Messenger.Default.Send(new SelectedChangedMessage(currentlySelected)); TODO MESSENGER PATTERN
             }
         }
 
-        public ObservableCollection<IRepresentation> ClassesList { get; }
+        public IRepresentation PreviousSelection { get; private set; }
+
+        public ObservableCollection<IRepresentation> ObjectsList { get; }
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -42,11 +46,12 @@ namespace Library.Logic.ViewModel
         public ClassPresenter()
         {
             ShowCurrentClass = new RelayCommand(ChangeClassToDisplay, () => ClassSelected != null);
-            ClassesList = new ObservableCollection<IRepresentation>() { null };
+            ObjectsList = new ObservableCollection<IRepresentation>() { null };
             string tmp = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\test.dll";
-            LoadDllTestsClass.LoadAssembly(tmp);
             Reflector reflector = new Reflector(tmp);
-            ClassesList.Add(reflector.AssemblyModel);
+            ObjectsList.Add(reflector.AssemblyModel);
+            ObjectsList.Remove(null);
+            ClassSelected = ObjectsList[0];
         }
 
         public void ChangeClassToDisplay()
@@ -59,5 +64,56 @@ namespace Library.Logic.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public void InteractWithTreeItem(IRepresentation item)
+        {
+            if (item != null)
+            {
+                if (ObjectsList.Contains(item))
+                {
+                    if(item.Children.Count() != 0)
+                    {
+                        if (ObjectsList.Contains(item.Children.First()))
+                        {
+                            CloseTreeItem(item);
+                        }
+                        else
+                        {
+                            OpenTreeItem(item);
+                        }
+                    }
+                }
+                else
+                {
+                    throw new ArgumentException("This item isn't on the list");
+                }
+            }
+            else
+            {
+                throw new ArgumentNullException("Item cannot be null");
+            }
+        }
+
+        private void OpenTreeItem(IRepresentation item)
+        {
+            foreach (IRepresentation kid in item.Children)
+            {
+                ObjectsList.Add(kid);
+            }
+        }
+
+        private void CloseTreeItem(IRepresentation item)
+        {
+            foreach(IRepresentation kid in item.Children)
+            {
+                if(kid.Children.Count() != 0) // if kid has children
+                {
+                    if(ObjectsList.Contains(kid.Children.First())) // check if his children are on the list
+                    {
+                        CloseTreeItem(kid); // close children recursively if opened
+                    }
+                }
+                ObjectsList.Remove(kid);
+            }
+        }
     }
 }

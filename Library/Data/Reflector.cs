@@ -15,7 +15,7 @@ namespace Library.Data
         public Reflector(string assemblyFile)
         {
             if (string.IsNullOrEmpty(assemblyFile))
-                throw new System.ArgumentNullException();
+                throw new ArgumentNullException();
             Assembly assembly = Assembly.LoadFrom(assemblyFile);
             AssemblyModel = new AssemblyRepresentation(assembly);
         }

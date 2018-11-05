@@ -107,7 +107,7 @@ namespace Library.Data.Model
         internal TypeRepresentation(string name, string namespaceName)
         {
             Name = name;
-            FullName = $"{namespaceName}.{name}";
+            FullName = ExpectedFullName(namespaceName, name);
         }
 
         internal TypeRepresentation(string typeName, string namespaceName, IEnumerable<TypeRepresentation> genericArguments) : this(typeName, namespaceName)
@@ -115,6 +115,12 @@ namespace Library.Data.Model
             GenericArguments = genericArguments;
         }
         #endregion
+
+        #region Methods
+        public static string ExpectedFullName(string namespaceName, string name)
+        {
+            return $"{namespaceName}.{name}";
+        }
 
         public IEnumerable<string> Print()
         {
@@ -130,7 +136,10 @@ namespace Library.Data.Model
                     yield return $"Implements interface: {_interface.Name}";
                 }
             }
-            yield return $"Modifiers: {Modifiers.ToString()}";
+            if(Modifiers != null)
+            {
+                yield return $"Modifiers: {Modifiers.ToString()}";
+            }
             yield return $"Type: {TypeKind.ToString()}";
             if(Attributes != null)
             {
@@ -184,5 +193,6 @@ namespace Library.Data.Model
         {
             return string.Join(Environment.NewLine, Print());
         }
+        #endregion
     }
 }

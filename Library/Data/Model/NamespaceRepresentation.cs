@@ -36,6 +36,8 @@ namespace Library.Data.Model
             Types = ReadMetadata.ReadTypes(types);
         }
 
+        #region Methods
+
         public IEnumerable<string> Print()
         {
             yield return $"NAME: {Name}";
@@ -49,5 +51,6 @@ namespace Library.Data.Model
         {
             return string.Join(Environment.NewLine, Print());
         }
+        #endregion
     }
 }

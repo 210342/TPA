@@ -60,7 +60,6 @@
     <Compile Include="Data\Model\TypeRepresentation.cs" />
     <Compile Include="Data\ReadMetadata.cs" />
     <Compile Include="Data\Reflector.cs" />
-    <Compile Include="Logic\LoadDllTestsClass.cs" />
     <Compile Include="Logic\ViewModel\ClassPresenter.cs" />
     <Compile Include="Logic\ViewModel\RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

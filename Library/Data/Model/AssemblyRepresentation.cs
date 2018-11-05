@@ -34,7 +34,7 @@ namespace Library.Data.Model
         {
             Name = assembly.ManifestModule.Name;
             FullName = Name;
-            Namespaces = ReadMetadata.ReadNamespaces(assembly);
+            Namespaces = ReadMetadata.ReadNamespaces(assembly, this);
         }
 
         public IEnumerable<string> Print()

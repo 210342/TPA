@@ -9,43 +9,20 @@ namespace CommandLineInterface
 {
     class Startup
     {
-        private readonly string _filename;
         static void Main(string[] args)
         {
+            CommandLineInterface cli = new CommandLineInterface();
+            cli.Start("");
+            /*
             if(args.Count() > 0)
             {
-                FileStream fileStream = null;
-                try
-                {
-                    fileStream = File.OpenRead(args[0]);
-                }
-                catch(FileNotFoundException)
-                {
-                    Console.WriteLine("File with given path doesn't exist");
-                }
-                catch (DirectoryNotFoundException e)
-                {
-                    Console.WriteLine("Couldn't find a directory \n{0}", e.Message);
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    Console.WriteLine("Insufficient access rights to read the file");
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine("Unknown problem occured. \n{0}", e.Message);
-                }
-                finally
-                {
-                    if(fileStream != null)
-                        fileStream.Close();
-                }
+                CommandLineInterface cli = new CommandLineInterface();
+                cli.Start(args[0]); // args[0] is supposed to be a .dll path
             }
             else
             {
                 Console.WriteLine("Please give a correct path to a .dll");
-            }
-            Console.ReadKey();
+            }*/
         }
     }
 }

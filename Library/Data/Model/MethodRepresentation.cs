@@ -76,6 +76,18 @@ namespace Library.Data.Model
         #endregion
 
         #region Methods
+        public static string ExpectedFullName(string className, TypeRepresentation returnType, MethodBase method, IEnumerable<ParameterRepresentation> parameters)
+        {
+            if(returnType != null)
+            {
+                return $"{className}.{returnType.Name} {method.Name}{ParameterRepresentation.PrintParametersHumanReadable(parameters)}";
+            }
+            else
+            {
+                return $"{className}. {method.Name}{ParameterRepresentation.PrintParametersHumanReadable(parameters)}";
+            }
+        }
+
         public IEnumerable<string> Print()
         {
             yield return $"NAME: {Name}";

@@ -23,8 +23,8 @@ namespace Library.Data
                 if(method.GetVisible())
                 {
                     string returnedTypeName = ReadReturnType(method) == null ? "" : ReadReturnType(method).Name;
-                    string expectedName = $"{typeName}.{returnedTypeName} {method.Name}" +
-                        $"{ParameterRepresentation.PrintParametersHumanReadable(ReadParameters(method.GetParameters(), method.Name))}";
+                    string expectedName = MethodRepresentation.ExpectedFullName(typeName, ReadReturnType(method),
+                        method, ReadParameters(method.GetParameters(), method.Name));
                     if (AlreadyRead.TryGetValue(expectedName, out IRepresentation reference))
                     {
                         yield return reference as MethodRepresentation;
@@ -64,15 +64,15 @@ namespace Library.Data
         {
             foreach(ParameterInfo parameter in parameters)
             {
-                string expectedName = $"{methodName}.{parameter.Name}";
-                if(AlreadyRead.TryGetValue(expectedName, out IRepresentation reference))
+                string expectedName = ParameterRepresentation.ExpectedFullName(methodName, parameter);
+                if (AlreadyRead.TryGetValue(expectedName, out IRepresentation reference))
                 {
                     yield return reference as ParameterRepresentation;
                 }
                 else
                 {
                     ParameterRepresentation newParameter = new ParameterRepresentation
-                        (parameter.Name, ReadReference(parameter.ParameterType), methodName);
+                        (ReadReference(parameter.ParameterType), methodName, parameter);
                     AlreadyRead.Add(newParameter.FullName, newParameter);
                     yield return newParameter;
                 }
@@ -208,7 +208,7 @@ namespace Library.Data
         {
             foreach(PropertyInfo property in properties)
             {
-                string expectedName = $"{className}.{property.Name}";
+                string expectedName = PropertyRepresentation.ExpectedFullName(className, property);
                 if(AlreadyRead.TryGetValue(expectedName, out IRepresentation reference))
                 {
                     yield return reference as PropertyRepresentation;
@@ -216,7 +216,7 @@ namespace Library.Data
                 else
                 {
                     PropertyRepresentation newProperty = new PropertyRepresentation
-                        (property.Name, ReadReference(property.PropertyType), className);
+                        (property.Name, ReadReference(property.PropertyType), className, property);
                     AlreadyRead.Add(newProperty.FullName, newProperty);
                     yield return newProperty;
                 }
@@ -224,7 +224,7 @@ namespace Library.Data
         }
         #endregion
 
-        #region Namespace method
+        #region Namespace methods
         internal static IEnumerable<TypeRepresentation> ReadTypes(IEnumerable<Type> types)
         {
             foreach(Type type in types.OrderBy(n => n.Name))
@@ -244,7 +244,7 @@ namespace Library.Data
         #endregion
 
         #region Assembly method
-        internal static IEnumerable<NamespaceRepresentation> ReadNamespaces(Assembly assembly)
+        internal static IEnumerable<NamespaceRepresentation> ReadNamespaces(Assembly assembly, IRepresentation parent)
         {
             IEnumerable<IGrouping<string, Type>> namespaces = from Type type in assembly.GetTypes()
                                                               //where type.GetVisible()

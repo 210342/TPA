@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Library.Data.Model
 {
@@ -29,13 +30,19 @@ namespace Library.Data.Model
         #endregion
 
         #region constructor
-        internal PropertyRepresentation(string propertyName, TypeRepresentation propertyType, string className)
+        internal PropertyRepresentation(string propertyName, TypeRepresentation propertyType, string className, PropertyInfo property)
         {
             Name = propertyName;
-            FullName = $"{className}.{propertyName}";
+            FullName = ExpectedFullName(className, property);
             Type = propertyType;
         }
         #endregion
+
+        #region Methods
+        public static string ExpectedFullName(string className, PropertyInfo property)
+        {
+            return $"{className}.{property.Name}";
+        }
 
         public IEnumerable<string> Print()
         {
@@ -47,5 +54,6 @@ namespace Library.Data.Model
         {
             return string.Join(Environment.NewLine, Print());
         }
+        #endregion
     }
 }

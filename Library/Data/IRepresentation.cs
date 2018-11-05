@@ -13,6 +13,5 @@ namespace Library.Data
         string ToStringProperty { get; }
         IEnumerable<IRepresentation> Children { get; }
         IEnumerable<string> Print();
-        string ToString();
     }
 }

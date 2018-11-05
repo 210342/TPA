@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Library.Data.Model
@@ -26,6 +27,19 @@ namespace Library.Data.Model
             }
         }
         #endregion
+        
+        public ParameterRepresentation(TypeRepresentation type, string methodName, ParameterInfo parameter)
+        {
+            Name = parameter.Name;
+            FullName = ExpectedFullName(methodName, parameter);
+            Type = type;
+        }
+
+        #region Methods
+        public static string ExpectedFullName(string methodName, ParameterInfo parameter)
+        {
+            return $"{methodName}.{parameter.Name}";
+        }
 
         public static string PrintParametersHumanReadable(IEnumerable<ParameterRepresentation> parameters)
         {
@@ -46,13 +60,6 @@ namespace Library.Data.Model
             }
         }
 
-        public ParameterRepresentation(string name, TypeRepresentation type, string methodName)
-        {
-            Name = name;
-            FullName = $"{methodName}.{name}";
-            Type = type;
-        }
-
         public IEnumerable<string> Print()
         {
             yield return $"NAME: {Name}";
@@ -63,5 +70,6 @@ namespace Library.Data.Model
         {
             return string.Join(Environment.NewLine, Print());
         }
+        #endregion
     }
 }
