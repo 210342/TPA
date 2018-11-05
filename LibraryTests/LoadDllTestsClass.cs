@@ -21,7 +21,7 @@ namespace Library.Logic
         internal static TypeRepresentation[] MemberTypes()
         {
             IEnumerable<Type> types = currentAssembly.GetTypes();
-            IEnumerable<TypeRepresentation> tmp = ReadMetadata.ReadTypes(types, null);
+            IEnumerable<TypeRepresentation> tmp = ReadMetadata.ReadTypes(types);
             return tmp.ToArray();
         }
 

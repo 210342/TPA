@@ -1,6 +1,6 @@
 ﻿using Library.Data;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
@@ -20,6 +20,7 @@ namespace Library.Logic.ViewModel
 
         #region Properties
         public ICommand ShowCurrentClass { get; }
+        public ICommand ReloadAssemblyCommand { get; }
 
         public IRepresentation ClassSelected
         {
@@ -36,9 +37,10 @@ namespace Library.Logic.ViewModel
             }
         }
 
-        public IRepresentation PreviousSelection { get; private set; }
+        public string LoadedAssembly { get; set; }
+        public IRepresentation LoadedAssemblyRepresentation { get; private set; }
 
-        public ObservableCollection<IRepresentation> ObjectsList { get; }
+        public ObservableCollection<IRepresentation> ClassesList { get; }
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -46,12 +48,22 @@ namespace Library.Logic.ViewModel
         public ClassPresenter()
         {
             ShowCurrentClass = new RelayCommand(ChangeClassToDisplay, () => ClassSelected != null);
-            ObjectsList = new ObservableCollection<IRepresentation>() { null };
-            string tmp = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\test.dll";
-            Reflector reflector = new Reflector(tmp);
-            ObjectsList.Add(reflector.AssemblyModel);
-            ObjectsList.Remove(null);
-            ClassSelected = ObjectsList[0];
+            ClassesList = new ObservableCollection<IRepresentation>() { null };
+            ReloadAssemblyCommand = new RelayCommand(RelodAssembly);
+        }
+
+        private void LoadAssembly()
+        {
+            Reflector reflector = new Reflector(LoadedAssembly);
+            this.LoadedAssemblyRepresentation = reflector.AssemblyModel;
+        }
+
+        private void RelodAssembly()
+        {
+            LoadAssembly();
+            this.ClassesList.Clear();
+            if(this.LoadedAssemblyRepresentation != null)
+                this.ClassesList.Add(this.LoadedAssemblyRepresentation);
         }
 
         public void ChangeClassToDisplay()
