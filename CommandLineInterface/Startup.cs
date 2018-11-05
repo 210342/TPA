@@ -11,9 +11,6 @@ namespace CommandLineInterface
     {
         static void Main(string[] args)
         {
-            CommandLineInterface cli = new CommandLineInterface();
-            cli.Start("");
-            /*
             if(args.Count() > 0)
             {
                 CommandLineInterface cli = new CommandLineInterface();
@@ -22,7 +19,7 @@ namespace CommandLineInterface
             else
             {
                 Console.WriteLine("Please give a correct path to a .dll");
-            }*/
+            }
         }
     }
 }

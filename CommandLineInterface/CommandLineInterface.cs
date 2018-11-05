@@ -7,13 +7,14 @@ namespace CommandLineInterface
 {
     public class CommandLineInterface
     {
-        private ClassPresenter dataContext;
+        private ClassPresenter dataContext = new ClassPresenter();
 
         public void Start(string dllPath)
         {
             try
             {
-                dataContext = new ClassPresenter();
+                dataContext.LoadedAssembly = dllPath;
+                dataContext.ReloadAssemblyCommand.Execute(null);
             }
             catch (FileNotFoundException e)
             {
@@ -46,7 +47,7 @@ namespace CommandLineInterface
                     Console.WriteLine(dataContext.ObjectsList.ElementAt(i).FullName);
                     Console.WriteLine();
                 }
-                Console.WriteLine(dataContext.ClassSelected.ToString()); // print detailed info
+                Console.WriteLine(dataContext.ObjectSelected.ToString()); // print detailed info
                 bool isIncorrectInput = true; // flag used to control application's flow
                 do
                 {
@@ -56,25 +57,25 @@ namespace CommandLineInterface
                         Console.Write("Your selection (type \"quit\" to leave application): ");
                         selection = Console.ReadLine();
                         int index = int.Parse(selection); // try to read chosen index
-                        dataContext.ClassSelected = dataContext.ObjectsList.ElementAt(index); // get an item under input index
-                        dataContext.InteractWithTreeItem(dataContext.ClassSelected); // interact with that item
+                        dataContext.ObjectSelected = dataContext.ObjectsList.ElementAt(index); // get an item under input index
+                        dataContext.InteractWithTreeItem(dataContext.ObjectSelected); // interact with that item
                         isIncorrectInput = false; // get out of the loop
                     }
                     catch(FormatException)
                     {
                         Console.WriteLine("Incorrect option \nPossible options: \n-> indexes written above objects \n-> parent \n-> quit");
-                        dataContext.ClassSelected = dataContext.PreviousSelection; // retrieve previous selection
+                        dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
 
                     }
                     catch(ArgumentOutOfRangeException)
                     {
                         Console.WriteLine("Incorrect option \nUndefined index");
-                        dataContext.ClassSelected = dataContext.PreviousSelection; // retrieve previous selection
+                        dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
                     }
                     catch(ArgumentNullException)
                     {
                         Console.WriteLine("This object doesn't have a parent");
-                        dataContext.ClassSelected = dataContext.PreviousSelection; // retrieve previous selection
+                        dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
                     }
                 }
                 while (isIncorrectInput && !Quit(selection));

@@ -1,7 +1,10 @@
 ﻿using Library.Data;
 using System;
+<<<<<<< HEAD
 using System.Linq;
+=======
 using System.Collections.Generic;
+>>>>>>> a2527a8198b0ea4759f9ed9e72055f50bc67bc7b
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
@@ -14,65 +17,77 @@ namespace Library.Logic.ViewModel
     public class ClassPresenter : INotifyPropertyChanged
     {
         #region Fields
-        private IRepresentation objectSelected;
+        private IRepresentation classSelected;
 
-        private IRepresentation ObjectToDisplay;
+        private IRepresentation ClassToDisplay;
         #endregion
 
         #region Properties
-        public ICommand ShowCurrentObject { get; }
+        public ICommand ShowCurrentClass { get; }
         public ICommand ReloadAssemblyCommand { get; }
 
-
-        public ObservableCollection<IRepresentation> ObjectsList { get; }
-        public IRepresentation ObjectSelected
+        public IRepresentation ClassSelected
         {
             get
             {
-                return objectSelected;
+                return classSelected;
             }
             set
             {
-                PreviousSelection = objectSelected;
-                objectSelected = value;
-                OnPropertyChanged("ObjectSelected");
+                PreviousSelection = classSelected;
+                classSelected = value;
+                OnPropertyChanged("ClassSelected");
                 //Messenger.Default.Send(new SelectedChangedMessage(currentlySelected)); TODO MESSENGER PATTERN
             }
         }
+
+<<<<<<< HEAD
         public IRepresentation PreviousSelection { get; private set; }
+
+        public ObservableCollection<IRepresentation> ObjectsList { get; }
+=======
         public string LoadedAssembly { get; set; }
         public IRepresentation LoadedAssemblyRepresentation { get; private set; }
+
+        public ObservableCollection<IRepresentation> ClassesList { get; }
+>>>>>>> a2527a8198b0ea4759f9ed9e72055f50bc67bc7b
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ClassPresenter()
         {
-            ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
+            ShowCurrentClass = new RelayCommand(ChangeClassToDisplay, () => ClassSelected != null);
+<<<<<<< HEAD
             ObjectsList = new ObservableCollection<IRepresentation>() { null };
-            ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
+            string tmp = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\test.dll";
+            Reflector reflector = new Reflector(tmp);
+            ObjectsList.Add(reflector.AssemblyModel);
+            ObjectsList.Remove(null);
+            ClassSelected = ObjectsList[0];
+=======
+            ClassesList = new ObservableCollection<IRepresentation>() { null };
+            ReloadAssemblyCommand = new RelayCommand(RelodAssembly);
         }
 
         private void LoadAssembly()
         {
             Reflector reflector = new Reflector(LoadedAssembly);
-            LoadedAssemblyRepresentation = reflector.AssemblyModel;
+            this.LoadedAssemblyRepresentation = reflector.AssemblyModel;
         }
 
-        private void ReloadAssembly()
+        private void RelodAssembly()
         {
             LoadAssembly();
-            ObjectsList.Clear();
-            if(LoadedAssemblyRepresentation != null)
-            {
-                ObjectsList.Add(LoadedAssemblyRepresentation);
-                ObjectSelected = LoadedAssemblyRepresentation;
-            }
+            this.ClassesList.Clear();
+            if(this.LoadedAssemblyRepresentation != null)
+                this.ClassesList.Add(this.LoadedAssemblyRepresentation);
+>>>>>>> a2527a8198b0ea4759f9ed9e72055f50bc67bc7b
         }
 
         public void ChangeClassToDisplay()
         {
-            ObjectToDisplay = ObjectSelected;
+            ClassToDisplay = ClassSelected;
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

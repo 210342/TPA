@@ -1,7 +1,6 @@
 ﻿using Library.Data;
 using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
@@ -14,65 +13,50 @@ namespace Library.Logic.ViewModel
     public class ClassPresenter : INotifyPropertyChanged
     {
         #region Fields
-        private IRepresentation objectSelected;
+        private IRepresentation classSelected;
 
-        private IRepresentation ObjectToDisplay;
+        private IRepresentation ClassToDisplay;
         #endregion
 
         #region Properties
-        public ICommand ShowCurrentObject { get; }
-        public ICommand ReloadAssemblyCommand { get; }
+        public ICommand ShowCurrentClass { get; }
 
-
-        public ObservableCollection<IRepresentation> ObjectsList { get; }
-        public IRepresentation ObjectSelected
+        public IRepresentation ClassSelected
         {
             get
             {
-                return objectSelected;
+                return classSelected;
             }
             set
             {
-                PreviousSelection = objectSelected;
-                objectSelected = value;
-                OnPropertyChanged("ObjectSelected");
+                PreviousSelection = classSelected;
+                classSelected = value;
+                OnPropertyChanged("ClassSelected");
                 //Messenger.Default.Send(new SelectedChangedMessage(currentlySelected)); TODO MESSENGER PATTERN
             }
         }
+
         public IRepresentation PreviousSelection { get; private set; }
-        public string LoadedAssembly { get; set; }
-        public IRepresentation LoadedAssemblyRepresentation { get; private set; }
+
+        public ObservableCollection<IRepresentation> ObjectsList { get; }
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ClassPresenter()
         {
-            ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
+            ShowCurrentClass = new RelayCommand(ChangeClassToDisplay, () => ClassSelected != null);
             ObjectsList = new ObservableCollection<IRepresentation>() { null };
-            ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
-        }
-
-        private void LoadAssembly()
-        {
-            Reflector reflector = new Reflector(LoadedAssembly);
-            LoadedAssemblyRepresentation = reflector.AssemblyModel;
-        }
-
-        private void ReloadAssembly()
-        {
-            LoadAssembly();
-            ObjectsList.Clear();
-            if(LoadedAssemblyRepresentation != null)
-            {
-                ObjectsList.Add(LoadedAssemblyRepresentation);
-                ObjectSelected = LoadedAssemblyRepresentation;
-            }
+            string tmp = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\test.dll";
+            Reflector reflector = new Reflector(tmp);
+            ObjectsList.Add(reflector.AssemblyModel);
+            ObjectsList.Remove(null);
+            ClassSelected = ObjectsList[0];
         }
 
         public void ChangeClassToDisplay()
         {
-            ObjectToDisplay = ObjectSelected;
+            ClassToDisplay = ClassSelected;
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
