@@ -12,10 +12,7 @@ namespace Tracing
         private string recordName;
         private readonly StringBuilder messageBuilder = new StringBuilder();
         private readonly StringBuilder queriesBuilder = new StringBuilder();
-
-        SqlConnection connection;
-        SqlCommand sqlCommand;
-        SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+        DatabaseHandling.IDatabaseWriter databaseWriter;
 
         public DbTraceListener() { }
         public DbTraceListener(string xmlDocPath)
@@ -56,6 +53,7 @@ namespace Tracing
             }
             if (readCounter < 3)
                 throw new XmlException("Could not read xml file");
+            databaseWriter = new DatabaseHandling.DatabaseWriter(connectionString);
         }
         public override void Write(string message)
         {
@@ -71,27 +69,11 @@ namespace Tracing
             if(messageBuilder.Length > 0)
             {
                 string sqlQuery = $"Insert into {tableName}({recordName}) values('{messageBuilder.ToString()}');";
-                using (connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-                    using (sqlCommand = new SqlCommand(sqlQuery, connection))
-                    {
-                        sqlAdapter.InsertCommand = sqlCommand;
-                        sqlAdapter.InsertCommand.ExecuteNonQuery();
-                    }
-                }
+                databaseWriter.Write(sqlQuery);
             }
             if(queriesBuilder.Length > 0)
             {
-                using (connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-                    using (sqlCommand = new SqlCommand(queriesBuilder.ToString(), connection))
-                    {
-                        sqlAdapter.InsertCommand = sqlCommand;
-                        sqlAdapter.InsertCommand.ExecuteNonQuery();
-                    }
-                }
+                databaseWriter.Write(queriesBuilder.ToString());
             }
         }
     }
