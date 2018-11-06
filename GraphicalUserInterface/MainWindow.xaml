@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GraphicalUserInterface"
         xmlns:viewModel="clr-namespace:Library.Logic.ViewModel;assembly=Library"
-        xmlns:logic="clr-namespace:Library.Logic;assembly=Library"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
@@ -30,11 +29,11 @@
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
-
-
+        
+        
         <TextBlock HorizontalAlignment="Left" Margin="32, 32, 32, 32" TextWrapping="Wrap" Text="{Binding Path=ObjectSelected.ToStringProperty}" 
                    VerticalAlignment="Top" Grid.Column="1" FontSize="15"/>
-        <TextBox Text="{Binding Path=LoadedAssembly, Mode=TwoWay}"  x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="0,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="701" Grid.ColumnSpan="2"/>
-        <Button Command="{Binding ReloadAssemblyCommand}" x:Name="button" Content="Load" HorizontalAlignment="Left" Margin="330,4,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1"/>
+        <TextBox IsEnabled="false" Text="{Binding Path=LoadedAssembly, Mode=OneWay}"  x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="0,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="701" Grid.ColumnSpan="2"/>
+        <Button Click="FileDialog"  x:Name="button" Content="Load" HorizontalAlignment="Left" Margin="330,4,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1"/>
     </Grid>
 </Window>

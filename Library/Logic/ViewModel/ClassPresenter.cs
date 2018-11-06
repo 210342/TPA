@@ -1,12 +1,6 @@
-﻿using Library.Data;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows.Input;
 using TP.GraphicalData.TreeView;
 using TPA.Reflection;
@@ -43,7 +37,19 @@ namespace Library.Logic.ViewModel
             }
         }
         public TreeViewItem PreviousSelection { get; private set; }
-        public string LoadedAssembly { get; set; }
+        private string _loadedAssembly;
+        public string LoadedAssembly
+        {
+            get
+            {
+                return _loadedAssembly;
+            }
+            set
+            {
+                _loadedAssembly = value;
+                OnPropertyChanged();
+            }
+        }
         public AssemblyMetadata LoadedAssemblyRepresentation { get; private set; }
         #endregion
 
@@ -66,7 +72,7 @@ namespace Library.Logic.ViewModel
         {
             LoadAssembly();
             ObjectsList.Clear();
-            if(LoadedAssemblyRepresentation != null)
+            if (LoadedAssemblyRepresentation != null)
             {
                 TreeViewItem item = new TreeViewItem(LoadedAssemblyRepresentation);
                 ObjectsList.Add(item);
