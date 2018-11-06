@@ -31,14 +31,19 @@ namespace GraphicalUserInterface
         {
             SelectedItemHelper.Content = e.NewValue;
         }
+
         private void FilePick(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                RestoreDirectory = true,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                DefaultExt = "dll",
+                Filter = "Dynamically linked library (*.dll)|*.dll|All Files (*.*)|*.*"
+            };
             if(openFileDialog.ShowDialog().Value)
             {
-                var viewModel = DataContext as ClassPresenter;
-                viewModel.LoadedAssembly = openFileDialog.FileName;
-                viewModel.ReloadAssemblyCommand.Execute(null);
+                (DataContext as ClassPresenter).LoadedAssembly = openFileDialog.FileName;
             }
         }
     }

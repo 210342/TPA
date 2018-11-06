@@ -16,7 +16,7 @@ namespace Library.Data.Model
         {
             get
             {
-                return Enumerable.Empty<IRepresentation>();
+                yield return Type;
             }
         }
         public string ToStringProperty

@@ -57,8 +57,7 @@ namespace CommandLineInterface
                         Console.Write("Your selection (type \"quit\" to leave application): ");
                         selection = Console.ReadLine();
                         int index = int.Parse(selection); // try to read chosen index
-                        dataContext.ObjectSelected = dataContext.ObjectsList.ElementAt(index); // get an item under input index
-                        dataContext.InteractWithTreeItem(dataContext.ObjectSelected); // interact with that item
+                        dataContext.InteractWithTreeItem(index); // interact with that item
                         isIncorrectInput = false; // get out of the loop
                     }
                     catch(FormatException)
@@ -72,7 +71,12 @@ namespace CommandLineInterface
                         Console.WriteLine("Incorrect option \nUndefined index");
                         dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
                     }
-                    catch(ArgumentNullException)
+                    catch (IndexOutOfRangeException)
+                    {
+                        Console.WriteLine("Incorrect option \nUndefined index");
+                        dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
+                    }
+                    catch (ArgumentNullException)
                     {
                         Console.WriteLine("This object doesn't have a parent");
                         dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
