@@ -8,15 +8,18 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
+using TP.GraphicalData.TreeView;
+using TPA.Reflection;
+using TPA.Reflection.Model;
 
 namespace Library.Logic.ViewModel
 {
     public class ClassPresenter : INotifyPropertyChanged
     {
         #region Fields
-        private IRepresentation objectSelected;
+        private TreeViewItem objectSelected;
 
-        private IRepresentation ObjectToDisplay;
+        private TreeViewItem ObjectToDisplay;
         #endregion
 
         #region Properties
@@ -24,8 +27,8 @@ namespace Library.Logic.ViewModel
         public ICommand ReloadAssemblyCommand { get; }
 
 
-        public ObservableCollection<IRepresentation> ObjectsList { get; }
-        public IRepresentation ObjectSelected
+        public ObservableCollection<TreeViewItem> ObjectsList { get; }
+        public TreeViewItem ObjectSelected
         {
             get
             {
@@ -39,9 +42,9 @@ namespace Library.Logic.ViewModel
                 //Messenger.Default.Send(new SelectedChangedMessage(currentlySelected)); TODO MESSENGER PATTERN
             }
         }
-        public IRepresentation PreviousSelection { get; private set; }
+        public TreeViewItem PreviousSelection { get; private set; }
         public string LoadedAssembly { get; set; }
-        public IRepresentation LoadedAssemblyRepresentation { get; private set; }
+        public AssemblyMetadata LoadedAssemblyRepresentation { get; private set; }
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -49,14 +52,14 @@ namespace Library.Logic.ViewModel
         public ClassPresenter()
         {
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
-            ObjectsList = new ObservableCollection<IRepresentation>() { null };
+            ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
         }
 
         private void LoadAssembly()
         {
             Reflector reflector = new Reflector(LoadedAssembly);
-            LoadedAssemblyRepresentation = reflector.AssemblyModel;
+            LoadedAssemblyRepresentation = reflector.m_AssemblyModel;
         }
 
         private void ReloadAssembly()
@@ -65,8 +68,9 @@ namespace Library.Logic.ViewModel
             ObjectsList.Clear();
             if(LoadedAssemblyRepresentation != null)
             {
-                ObjectsList.Add(LoadedAssemblyRepresentation);
-                ObjectSelected = LoadedAssemblyRepresentation;
+                TreeViewItem item = new TreeViewItem(LoadedAssemblyRepresentation);
+                ObjectsList.Add(item);
+                ObjectSelected = item;
             }
         }
 
@@ -80,7 +84,7 @@ namespace Library.Logic.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void InteractWithTreeItem(IRepresentation item)
+        /*public void InteractWithTreeItem(IRepresentation item)
         {
             if (item != null)
             {
@@ -116,7 +120,6 @@ namespace Library.Logic.ViewModel
                 ObjectsList.Add(kid);
             }
         }
-
         private void CloseTreeItem(IRepresentation item)
         {
             foreach(IRepresentation kid in item.Children)
@@ -130,6 +133,6 @@ namespace Library.Logic.ViewModel
                 }
                 ObjectsList.Remove(kid);
             }
-        }
+        */
     }
 }

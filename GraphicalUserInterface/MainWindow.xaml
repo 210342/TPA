@@ -18,13 +18,17 @@
             <ColumnDefinition Width="415*"/>
         </Grid.ColumnDefinitions>
         <ContentControl x:Name="SelectedItemHelper" Content="{Binding ObjectSelected, Mode=OneWayToSource}" Visibility="Collapsed" Grid.ColumnSpan="2"/>
-        <TreeView SelectedItemChanged="TreeView_SelectedItemChanged" ItemsSource="{Binding ObjectsList}" 
-                    Margin="0,31,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" RenderTransformOrigin="0.583,1.25">
+        <TreeView Name="TreeView" Margin="10,19,0,23" RenderTransformOrigin="0.5,0.5" ItemsSource="{Binding ObjectsList}">
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <TextBlock Text="{Binding Path=Name}" />
+                <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
+                    <TextBlock Text="{Binding}" Margin="0,0,4,0" />
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                </Style>
+            </TreeView.ItemContainerStyle>
         </TreeView>
 
 
