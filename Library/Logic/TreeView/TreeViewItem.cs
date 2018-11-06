@@ -90,7 +90,7 @@ namespace TP.GraphicalData.TreeView
         }
         public override string ToString()
         {
-            return rootItem.Name;
+            return rootItem.ToString();
         }
     }
 }

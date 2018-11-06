@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace TPA.Reflection.Model
 {
@@ -108,6 +109,21 @@ namespace TPA.Reflection.Model
             }
             else
                 return false;
+        }
+        public override string ToString()
+        {
+            StringBuilder paramsString = new StringBuilder();
+            int paramsQuantity = m_Parameters.Count();
+            int counter = 0;
+            foreach (ParameterMetadata pm in m_Parameters)
+            {
+                paramsString.Append(pm);
+                if(counter != paramsQuantity - 1)
+                    paramsString.Append(",");
+                ++counter;
+            }
+            return m_Name + "(" + paramsString.ToString() + ")" + 
+                (m_ReturnType != null ? " : " + m_ReturnType.Name: "");
         }
     }
 }

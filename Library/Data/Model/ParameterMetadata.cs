@@ -40,5 +40,9 @@ namespace TPA.Reflection.Model
             }
             return false;
         }
+        public override string ToString()
+        {
+            return m_Name + ": " + m_TypeMetadata.Name;
+        }
     }
 }

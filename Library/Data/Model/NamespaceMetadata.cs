@@ -38,5 +38,9 @@ namespace TPA.Reflection.Model
             else
                 return false;
         }
+        public override string ToString()
+        {
+            return m_NamespaceName;
+        }
     }
 }

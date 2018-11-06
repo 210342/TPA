@@ -31,5 +31,9 @@ namespace Library.Data.Model
             else
                 return false;
         }
+        public override string ToString()
+        {
+            return "[" + m_Name + "]";
+        }
     }
 }
