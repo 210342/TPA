@@ -52,7 +52,7 @@ namespace TPA.Reflection.Model
         }
         public override string ToString()
         {
-            return m_Name + " : " + m_TypeMetadata.Name + "(Property)";
+            return m_Name + " : " + m_TypeMetadata.Name + "<Property>";
         }
     }
 }

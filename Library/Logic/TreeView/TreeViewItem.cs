@@ -23,7 +23,6 @@ namespace TP.GraphicalData.TreeView
         public TreeViewItem(IMetadata metadata) : base()
         {
             this.rootItem = metadata;
-            DataLoadedDictionary.Items.Add(rootItem, this);
         }
         public string Name { get; set; }
         private ObservableCollection<TreeViewItem> _children = 
@@ -32,10 +31,6 @@ namespace TP.GraphicalData.TreeView
         {
             get
             {
-                if (this._children == null && IsExpanded && !m_WasBuilt)
-                {
-                    BuildMyself();
-                }
                 return this._children;
             }
             set
@@ -75,13 +70,15 @@ namespace TP.GraphicalData.TreeView
                     {
                         if (DataLoadedDictionary.Items.TryGetValue(elem, out TreeViewItem returnValue))
                         {
-                            //yield return returnValue;
+                            yield return returnValue;
                             //yield return null;
-                            break;
+                            //break;
                         }
                         else
                         {
-                            yield return new TreeViewItem(elem);
+                            var obj = new TreeViewItem(elem);
+                            DataLoadedDictionary.Items.Add(elem, obj);
+                            yield return obj;
                         }
                     }
                 }
