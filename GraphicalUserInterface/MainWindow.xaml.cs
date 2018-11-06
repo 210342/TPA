@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Library.Logic.ViewModel;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +30,16 @@ namespace GraphicalUserInterface
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             SelectedItemHelper.Content = e.NewValue;
+        }
+        private void FilePick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if(openFileDialog.ShowDialog().Value)
+            {
+                var viewModel = DataContext as ClassPresenter;
+                viewModel.LoadedAssembly = openFileDialog.FileName;
+                viewModel.ReloadAssemblyCommand.Execute(null);
+            }
         }
     }
 }

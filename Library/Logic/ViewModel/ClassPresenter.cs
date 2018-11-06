@@ -35,12 +35,22 @@ namespace Library.Logic.ViewModel
             {
                 PreviousSelection = objectSelected;
                 objectSelected = value;
-                OnPropertyChanged("ObjectSelected");
+                OnPropertyChanged();
                 //Messenger.Default.Send(new SelectedChangedMessage(currentlySelected)); TODO MESSENGER PATTERN
             }
         }
         public IRepresentation PreviousSelection { get; private set; }
-        public string LoadedAssembly { get; set; }
+        private string _loadedAssembly;
+        public string LoadedAssembly { get
+            {
+                return _loadedAssembly;
+            }
+            set
+            {
+                _loadedAssembly = value;
+                OnPropertyChanged();
+            }
+        }
         public IRepresentation LoadedAssemblyRepresentation { get; private set; }
         #endregion
 
@@ -69,7 +79,6 @@ namespace Library.Logic.ViewModel
                 ObjectSelected = LoadedAssemblyRepresentation;
             }
         }
-
         public void ChangeClassToDisplay()
         {
             ObjectToDisplay = ObjectSelected;
