@@ -1,10 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using TP.GraphicalData.TreeView;
 using TPA.Reflection;
 using TPA.Reflection.Model;
+using Tracing;
 
 namespace Library.Logic.ViewModel
 {
@@ -32,6 +34,8 @@ namespace Library.Logic.ViewModel
             {
                 PreviousSelection = objectSelected;
                 objectSelected = value;
+                Trace.TraceInformation("ObjectSelected changed.");
+                Trace.Flush();
                 OnPropertyChanged("ObjectSelected");
                 //Messenger.Default.Send(new SelectedChangedMessage(currentlySelected)); TODO MESSENGER PATTERN
             }
@@ -57,6 +61,8 @@ namespace Library.Logic.ViewModel
 
         public ClassPresenter()
         {
+            Trace.Listeners.Add(new DbTraceListener(@".\connConfig.xml"));
+            Trace.Flush();
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
@@ -64,6 +70,8 @@ namespace Library.Logic.ViewModel
 
         private void LoadAssembly()
         {
+            Trace.TraceInformation("Assembly loading.");
+            Trace.Flush();
             Reflector reflector = new Reflector(LoadedAssembly);
             LoadedAssemblyRepresentation = reflector.m_AssemblyModel;
         }
@@ -78,6 +86,8 @@ namespace Library.Logic.ViewModel
                 ObjectsList.Add(item);
                 ObjectSelected = item;
             }
+            Trace.TraceInformation("Assembly reloaded.");
+            Trace.Flush();
         }
 
         public void ChangeClassToDisplay()

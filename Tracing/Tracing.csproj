@@ -65,6 +65,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatabaseHandling\DatabaseWriter.cs" />
+    <Compile Include="DatabaseHandling\IDatabaseWriter.cs" />
     <Compile Include="DbTraceListener.cs" />
     <Compile Include="FileTraceListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
