@@ -48,7 +48,7 @@ namespace CommandLineInterface
                     Console.WriteLine();
                 }
                 Console.WriteLine(dataContext.ObjectSelected.ToString()); // print detailed info
-                bool isIncorrectInput = true; // flag used to control application's flow
+                bool isIncorrectInput = false; // flag used to control application's flow
                 do
                 {
                     try
@@ -56,33 +56,39 @@ namespace CommandLineInterface
                         Console.WriteLine("___________________________________________________");
                         Console.Write("Your selection (type \"quit\" to leave application): ");
                         selection = Console.ReadLine();
-                        int index = int.Parse(selection); // try to read chosen index
-                        dataContext.InteractWithTreeItem(index); // interact with that item
-                        isIncorrectInput = false; // get out of the loop
+                        if(!Quit(selection))
+                        {
+                            int index = int.Parse(selection); // try to read chosen index
+                            dataContext.InteractWithTreeItem(index); // interact with that item
+                            isIncorrectInput = false; // get out of the loop
+                        }
                     }
                     catch(FormatException)
                     {
-                        Console.WriteLine("Incorrect option \nPossible options: \n-> indexes written above objects \n-> parent \n-> quit");
+                        Console.WriteLine("Incorrect option \nPossible options: \n-> indexes written above objects \n-> quit");
                         dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
-
+                        isIncorrectInput = true;
                     }
                     catch(ArgumentOutOfRangeException)
                     {
                         Console.WriteLine("Incorrect option \nUndefined index");
                         dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
+                        isIncorrectInput = true;
                     }
                     catch (IndexOutOfRangeException)
                     {
                         Console.WriteLine("Incorrect option \nUndefined index");
                         dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
+                        isIncorrectInput = true;
                     }
                     catch (ArgumentNullException)
                     {
                         Console.WriteLine("This object doesn't have a parent");
                         dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
+                        isIncorrectInput = true;
                     }
                 }
-                while (isIncorrectInput && !Quit(selection));
+                while (isIncorrectInput );
             }
             while(!Quit(selection));
         }

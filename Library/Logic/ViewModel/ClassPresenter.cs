@@ -38,7 +38,6 @@ namespace Library.Logic.ViewModel
                 PreviousSelection = objectSelected;
                 objectSelected = value;
                 OnPropertyChanged();
-                //Messenger.Default.Send(new SelectedChangedMessage(currentlySelected)); TODO MESSENGER PATTERN
             }
         }
         public IRepresentation PreviousSelection { get; private set; }
@@ -60,9 +59,11 @@ namespace Library.Logic.ViewModel
 
         public ClassPresenter()
         {
+            /*
             Trace.Listeners.Add(new DbTraceListener(
                 System.IO.Path.GetDirectoryName(
                     Assembly.GetAssembly(typeof(DbTraceListener)).Location) + @"\connConfig.xml"));
+                    */
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<IRepresentation>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly, () => !string.IsNullOrEmpty(LoadedAssembly));
@@ -105,9 +106,11 @@ namespace Library.Logic.ViewModel
                 IRepresentation item = ObjectsList.ElementAt(index);
                 if (item.Children.Count() != 0)
                 {
-                    if (ObjectsList.Contains(item.Children.First()))
+                    List<IRepresentation> laterItems = ObjectsList.Skip(index + 1)
+                        .Take(ObjectsList.Count() - index - 1).ToList();
+                    if (laterItems.Contains(item.Children.First()))
                     {
-                        CloseTreeItem(item, index);
+                        CloseTreeItem(item, index, laterItems);
                     }
                     else
                     {
@@ -125,16 +128,14 @@ namespace Library.Logic.ViewModel
             }
         }
 
-        private void CloseTreeItem(IRepresentation item, int index)
+        private void CloseTreeItem(IRepresentation item, int index, List<IRepresentation> laterItems)
         {
-            List<IRepresentation> laterItems = ObjectsList.Skip(index + 1).Take(ObjectsList.Count() - index - 1).ToList();
             foreach (IRepresentation kid in item.Children)
             {
                 if (laterItems.Contains(kid))
                 {
                     int kidIndex = laterItems.IndexOf(kid);
-                    int absoluteIndex = index + kidIndex + 1;
-                    CloseTreeItem(kid, absoluteIndex); // take absolute index
+                    CloseTreeItem(kid, index + 1, laterItems);
                     ObjectsList.RemoveAt(index + 1); // one after the parent
                 }
             }

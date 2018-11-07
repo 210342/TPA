@@ -62,10 +62,6 @@
       <Project>{df4c29a8-dc9d-4abc-8b61-229495dd2c37}</Project>
       <Name>Library</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tracing\Tracing.csproj">
-      <Project>{552a1500-eafa-4239-a91a-e3d62593378c}</Project>
-      <Name>Tracing</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

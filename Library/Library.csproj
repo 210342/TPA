@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tracing\Tracing.csproj">
-      <Project>{552a1500-eafa-4239-a91a-e3d62593378c}</Project>
+      <Project>{e91fb4f1-9505-40aa-97e8-960bbf405a26}</Project>
       <Name>Tracing</Name>
     </ProjectReference>
   </ItemGroup>
