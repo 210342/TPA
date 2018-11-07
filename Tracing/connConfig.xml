@@ -4,6 +4,4 @@
     Initial Catalog=AppTracing;User ID=Script-PC\Script;
     Integrated Security=True
   </ConnectionString>
-	<TableName>dbo.Tracing</TableName>
-	<RecordName>log_message</RecordName>
 </Configuration>
