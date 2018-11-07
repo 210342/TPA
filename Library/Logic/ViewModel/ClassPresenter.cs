@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
+using System.Diagnostics;
+using Tracing;
 
 namespace Library.Logic.ViewModel
 {
@@ -58,6 +60,9 @@ namespace Library.Logic.ViewModel
 
         public ClassPresenter()
         {
+            Trace.Listeners.Add(new DbTraceListener(
+                System.IO.Path.GetDirectoryName(
+                    Assembly.GetAssembly(typeof(DbTraceListener)).Location) + @"\connConfig.xml"));
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<IRepresentation>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);

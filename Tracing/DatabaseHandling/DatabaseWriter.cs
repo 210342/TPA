@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tracing.DatabaseHandling
 {
@@ -30,6 +27,51 @@ namespace Tracing.DatabaseHandling
                     sqlAdapter.InsertCommand.ExecuteNonQuery();
                 }
             }
+        }
+        public bool TableExists(string SQLTableName)
+        {
+            int result = 0;
+            using (connection = new SqlConnection(connectionString))
+            {
+                using (sqlCommand = new SqlCommand("select COUNT(*) from INFORMATION_SCHEMA.TABLES where " +
+                    "TABLE_SCHEMA = 'dbo' AND TABLE_NAME = @tableName;", connection))
+                {
+                    sqlCommand.Parameters.Add("@tableName", SqlDbType.VarChar);
+                    sqlCommand.Parameters["@tableName"].Value = SQLTableName;
+                    try
+                    {
+                        connection.Open();
+                        result = Convert.ToInt32(sqlCommand.ExecuteScalar());
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
+            }
+            return (result > 0 ? true : false);
+        }
+        public bool ColumnExists(string dbName, string SQLTableName, string SQLColumn)
+        {
+            string sqlQuery = $"use {dbName}; select COL_LENGTH('{SQLTableName}', '{SQLColumn}');";
+            int result = 0;
+            using (connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (sqlCommand = new SqlCommand($"use {dbName}; select COL_LENGTH(@tableName, " +
+                    "@columnName);", connection))
+                {
+                    sqlCommand.Parameters.Add("@tableName", SqlDbType.VarChar);
+                    sqlCommand.Parameters.Add("@columnName", SqlDbType.VarChar);
+                    sqlCommand.Parameters["@tableName"].Value = SQLTableName;
+                    sqlCommand.Parameters["@columnName"].Value = SQLColumn;
+
+                    Console.WriteLine(sqlCommand.ExecuteScalar());
+                    result = Convert.ToInt32(sqlCommand.ExecuteScalar());
+                    Console.WriteLine((result > 0 ? true : false));
+                }
+            }
+            return (result > 0 ? true : false);
         }
     }
 }

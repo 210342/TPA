@@ -64,6 +64,11 @@
     <Compile Include="Logic\ViewModel\RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Tracing\Tracing.csproj">
+      <Project>{552a1500-eafa-4239-a91a-e3d62593378c}</Project>
+      <Name>Tracing</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

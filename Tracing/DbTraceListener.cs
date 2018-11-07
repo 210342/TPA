@@ -1,4 +1,6 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Text;
 using System.Xml;
@@ -8,11 +10,13 @@ namespace Tracing
     public class DbTraceListener : TraceListener
     {
         private string connectionString;
-        private string tableName;
-        private string recordName;
-        private readonly StringBuilder messageBuilder = new StringBuilder();
         private readonly StringBuilder queriesBuilder = new StringBuilder();
         DatabaseHandling.IDatabaseWriter databaseWriter;
+
+        private readonly Dictionary<string, string> acceptedFields = 
+            new Dictionary<string, string>() { { "messageField", "log_message" }, { "time", "log_time" } };
+        private readonly string tableName = "tracing_logs";
+        private readonly string dbName = "AppTracing";
 
         public DbTraceListener() { }
         public DbTraceListener(string xmlDocPath)
@@ -21,56 +25,46 @@ namespace Tracing
             using (XmlReader reader = XmlReader.Create(xmlDocPath))
             {
                 while (reader.Read())
-                {
                     if (reader.IsStartElement())
-                    {
-                        switch (reader.Name)
-                        {
-                            case "ConnectionString":
+                        if (reader.Name == "ConnectionString")
                                 if (reader.Read())
                                 {
                                     connectionString = reader.Value;
                                     readCounter++;
                                 }
-                                break;
-                            case "TableName":
-                                if(reader.Read())
-                                {
-                                    tableName = reader.Value;
-                                    readCounter++;
-                                }
-                                break;
-                            case "RecordName":
-                                if (reader.Read())
-                                {
-                                    recordName = reader.Value;
-                                    readCounter++;
-                                }
-                                break;
-                        }
-                    }
-                }
             }
-            if (readCounter < 3)
+            if (readCounter < 1)
                 throw new XmlException("Could not read xml file");
             databaseWriter = new DatabaseHandling.DatabaseWriter(connectionString);
+            if (!databaseWriter.TableExists(tableName))
+            {
+                throw new NotSupportedException($"No table {tableName} in database.");
+            }
+                
+            foreach(var kv in acceptedFields)
+            {
+                if(!databaseWriter.ColumnExists(dbName, tableName, kv.Value))
+                {
+                    Console.WriteLine(kv.Value);
+                    throw new NotSupportedException($"No column {kv.Value} in database.");
+                }
+                    
+            }
         }
         public override void Write(string message)
         {
-            messageBuilder.Append(message);
+            WriteLine(message);
         }
 
         public override void WriteLine(string message)
         {
-            queriesBuilder.Append($"Insert into {tableName}({recordName}) values('{message}'); ");
+            queriesBuilder.Append($"Insert into {tableName}({acceptedFields["messageField"]}, " +
+                $"{acceptedFields["time"]}) " +
+                $"values('{message}', '{DateTime.Now}');");
+            Console.WriteLine(queriesBuilder.ToString());
         }
         public override void Flush()
         {
-            if(messageBuilder.Length > 0)
-            {
-                string sqlQuery = $"Insert into {tableName}({recordName}) values('{messageBuilder.ToString()}');";
-                databaseWriter.Write(sqlQuery);
-            }
             if(queriesBuilder.Length > 0)
             {
                 databaseWriter.Write(queriesBuilder.ToString());
