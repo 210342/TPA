@@ -65,7 +65,7 @@ namespace Library.Logic.ViewModel
                     Assembly.GetAssembly(typeof(DbTraceListener)).Location) + @"\connConfig.xml"));
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<IRepresentation>() { null };
-            ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
+            ReloadAssemblyCommand = new RelayCommand(ReloadAssembly, () => !string.IsNullOrEmpty(LoadedAssembly));
         }
 
         private void LoadAssembly()
@@ -94,55 +94,49 @@ namespace Library.Logic.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void InteractWithTreeItem(IRepresentation item)
+        public void InteractWithTreeItem(int index)
         {
-            if (item != null)
+            if (index < 0 || index >= ObjectsList.Count())
             {
-                if (ObjectsList.Contains(item))
+                throw new IndexOutOfRangeException(nameof(index));
+            }
+            else 
+            {
+                IRepresentation item = ObjectsList.ElementAt(index);
+                if (item.Children.Count() != 0)
                 {
-                    if(item.Children.Count() != 0)
+                    if (ObjectsList.Contains(item.Children.First()))
                     {
-                        if (ObjectsList.Contains(item.Children.First()))
-                        {
-                            CloseTreeItem(item);
-                        }
-                        else
-                        {
-                            OpenTreeItem(item);
-                        }
+                        CloseTreeItem(item, index);
+                    }
+                    else
+                    {
+                        OpenTreeItem(item, index);
                     }
                 }
-                else
-                {
-                    throw new ArgumentException("This item isn't on the list");
-                }
-            }
-            else
-            {
-                throw new ArgumentNullException("Item cannot be null");
             }
         }
 
-        private void OpenTreeItem(IRepresentation item)
+        private void OpenTreeItem(IRepresentation item, int index)
         {
             foreach (IRepresentation kid in item.Children)
             {
-                ObjectsList.Add(kid);
+                ObjectsList.Insert(++index, kid);
             }
         }
 
-        private void CloseTreeItem(IRepresentation item)
+        private void CloseTreeItem(IRepresentation item, int index)
         {
-            foreach(IRepresentation kid in item.Children)
+            List<IRepresentation> laterItems = ObjectsList.Skip(index + 1).Take(ObjectsList.Count() - index - 1).ToList();
+            foreach (IRepresentation kid in item.Children)
             {
-                if(kid.Children.Count() != 0) // if kid has children
+                if (laterItems.Contains(kid))
                 {
-                    if(ObjectsList.Contains(kid.Children.First())) // check if his children are on the list
-                    {
-                        CloseTreeItem(kid); // close children recursively if opened
-                    }
+                    int kidIndex = laterItems.IndexOf(kid);
+                    int absoluteIndex = index + kidIndex + 1;
+                    CloseTreeItem(kid, absoluteIndex); // take absolute index
+                    ObjectsList.RemoveAt(index + 1); // one after the parent
                 }
-                ObjectsList.Remove(kid);
             }
         }
     }
