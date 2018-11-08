@@ -1,7 +1,7 @@
 ﻿<Configuration>
 	<ConnectionString>
-    Data Source=ADAM-KOMPUTER\SQLEXPRESS;
-    Initial Catalog=AppTracing;User ID=ADAM-KOMPUTER\Adam;
+    Data Source=SCRIPT-PC\SQLEXPRESS;
+    Initial Catalog=AppTracing;User ID=SCRIPT-PC\Script;
     Integrated Security=True
   </ConnectionString>
 </Configuration>

@@ -16,9 +16,8 @@ namespace Library.Logic.ViewModel
         private TreeViewItem objectSelected;
         private string _loadedAssembly;
         private TreeViewItem _objectToDisplay;
-
         #endregion
-
+        TraceSource traceSource = new TraceSource("ViewModel");
         #region Properties
         public ICommand ShowCurrentObject { get; }
         public ICommand ReloadAssemblyCommand { get; }
@@ -35,7 +34,7 @@ namespace Library.Logic.ViewModel
                 PreviousSelection = objectSelected;
                 objectSelected = value;
                 Trace.TraceInformation("ObjectSelected changed.");
-                //Trace.Flush();
+                Trace.Flush();
                 OnPropertyChanged();
             }
         }
@@ -50,7 +49,7 @@ namespace Library.Logic.ViewModel
                 this._objectToDisplay = value;
                 OnPropertyChanged();
                 Trace.TraceInformation("ObjectToDisplay changed.");
-                //Trace.Flush();
+                Trace.Flush();
             }
         }
         public TreeViewItem PreviousSelection { get; private set; }
@@ -74,10 +73,13 @@ namespace Library.Logic.ViewModel
 
         public ViewModel()
         {
-            /*string traceListenersAssemblyLocation = 
+            string traceListenersAssemblyLocation = 
                 System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(DbTraceListener)).Location);
-            Trace.Listeners.Add(new DbTraceListener(traceListenersAssemblyLocation + @"\connConfig.xml"));*/
-            //Trace.Flush();
+            Trace.Listeners.Add(new DbTraceListener(traceListenersAssemblyLocation + @"\connConfig.xml"));
+
+            Trace.Listeners.Add(new FileTraceListener("file.log"));
+
+            Trace.Flush();
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
@@ -86,7 +88,6 @@ namespace Library.Logic.ViewModel
         private void LoadAssembly()
         {
             Trace.TraceInformation("Assembly loading.");
-            //Trace.Flush();
             Reflector reflector = new Reflector(LoadedAssembly);
             LoadedAssemblyRepresentation = reflector.m_AssemblyModel;
         }
@@ -102,7 +103,7 @@ namespace Library.Logic.ViewModel
                 ObjectSelected = item;
             }
             Trace.TraceInformation("Assembly reloaded.");
-            //Trace.Flush();
+            Trace.Flush();
         }
 
         public void ChangeClassToDisplay()

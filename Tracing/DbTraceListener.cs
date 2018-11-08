@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Text;
 using System.Xml;
@@ -75,7 +76,6 @@ namespace Tracing
                 {
                     throw new NotSupportedException($"No column {kv.Value} in database.");
                 }
-                    
             }
         }
         public override void Write(string message)
@@ -89,7 +89,7 @@ namespace Tracing
 
             queriesBuilt.Add($"Insert into {TableName}({acceptedFields["messageField"]}, " +
                 $"{acceptedFields["time"]}) " +
-                $"values('{message}', '{DateTime.Now}');");
+                $"values('[{callerMethod}] {message}', '{DateTime.Now}');");
         }
         public override void Flush()
         {
