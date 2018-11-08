@@ -11,7 +11,7 @@ namespace CommandLineInterface
     {
         private ViewModel dataContext = new ViewModel();
         private TreeViewItem root;
-        private readonly string tab = "  ";
+        private readonly string tab = "   ";
         private readonly int startIndex = 0;
         private int maxIndex = 0;
         private int selectionIndex = 0; // used to iterate through items
@@ -60,66 +60,40 @@ namespace CommandLineInterface
                     selection = Console.ReadLine();
                     try
                     {
-<<<<<<< HEAD
-                        Console.WriteLine("___________________________________________________");
-                        Console.Write("Your selection (type \"quit\" to leave application): ");
-                        selection = Console.ReadLine();
                         if(!Quit(selection))
                         {
                             int index = int.Parse(selection); // try to read chosen index
-                            dataContext.InteractWithTreeItem(index); // interact with that item
+                            isIncorrectInput = false; // get out of the loop
+                            selectionIndex = 0; // reset index before selection
+                            dataContext.ObjectSelected = SelectItem(root, index); // get an item under input index
+                            if (dataContext.ObjectSelected == null)
+                            {
+                                throw new IndexOutOfRangeException(nameof(index));
+                            }
+                            dataContext.ObjectSelected.IsExpanded = !dataContext.ObjectSelected.IsExpanded;
                             isIncorrectInput = false; // get out of the loop
                         }
-=======
-                        int index = int.Parse(selection); // try to read chosen index
-                        selectionIndex = 0; // reset index before selection
-                        dataContext.ObjectSelected = SelectItem(root, index); // get an item under input index
-                        if(dataContext.ObjectSelected == null)
-                        {
-                            throw new IndexOutOfRangeException(nameof(index));
-                        }
-                        dataContext.ObjectSelected.IsExpanded = !dataContext.ObjectSelected.IsExpanded;
-                        isIncorrectInput = false; // get out of the loop
->>>>>>> remotes/origin/master-reworked
                     }
                     catch(FormatException)
                     {
                         Console.WriteLine("Incorrect option \nPossible options: \n-> indexes written above objects \n-> quit");
                         dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
-<<<<<<< HEAD
-                        isIncorrectInput = true;
-=======
                         isIncorrectInput = true; // stay in the loop
->>>>>>> remotes/origin/master-reworked
                     }
                     catch(IndexOutOfRangeException)
                     {
                         Console.WriteLine("Incorrect option \nUndefined index");
                         dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
-<<<<<<< HEAD
                         isIncorrectInput = true;
-                    }
-                    catch (IndexOutOfRangeException)
-                    {
-                        Console.WriteLine("Incorrect option \nUndefined index");
-                        dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
-                        isIncorrectInput = true;
-=======
-                        isIncorrectInput = true; // stay in the loop
->>>>>>> remotes/origin/master-reworked
                     }
                     catch (ArgumentNullException)
                     {
                         Console.WriteLine("This object doesn't have a parent");
                         dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
-<<<<<<< HEAD
-                        isIncorrectInput = true;
-=======
                         isIncorrectInput = true; // stay in the loop
->>>>>>> remotes/origin/master-reworked
                     }
                 }
-                while (isIncorrectInput );
+                while (isIncorrectInput);
             }
             while(!Quit(selection));
         }
@@ -136,6 +110,7 @@ namespace CommandLineInterface
             {
                 sb.Append(tab);
             }
+            Console.WriteLine();
             Console.WriteLine($"{sb.ToString()}INDEX: {maxIndex++}");
             Console.WriteLine($"{sb.ToString()}{item.Name}");
             if (item.IsExpanded)
