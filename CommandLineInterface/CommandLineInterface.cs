@@ -14,6 +14,7 @@ namespace CommandLineInterface
         private readonly string tab = "  ";
         private readonly int startIndex = 0;
         private int maxIndex = 0;
+        private int selectionIndex = 0; // used to iterate through items
 
         public void Start(string dllPath)
         {
@@ -54,13 +55,14 @@ namespace CommandLineInterface
                 bool isIncorrectInput = false; // flag used to control application's flow
                 do
                 {
+                    Console.WriteLine("___________________________________________________");
+                    Console.Write("Your selection (type \"quit\" to leave application): ");
+                    selection = Console.ReadLine();
                     try
                     {
-                        Console.WriteLine("___________________________________________________");
-                        Console.Write("Your selection (type \"quit\" to leave application): ");
-                        selection = Console.ReadLine();
                         int index = int.Parse(selection); // try to read chosen index
-                        dataContext.ObjectSelected = SelectItem(root, index, startIndex); // get an item under input index
+                        selectionIndex = 0; // reset index before selection
+                        dataContext.ObjectSelected = SelectItem(root, index); // get an item under input index
                         if(dataContext.ObjectSelected == null)
                         {
                             throw new IndexOutOfRangeException(nameof(index));
@@ -70,7 +72,7 @@ namespace CommandLineInterface
                     }
                     catch(FormatException)
                     {
-                        Console.WriteLine("Incorrect option \nPossible options: \n-> indexes written above objects \n-> parent \n-> quit");
+                        Console.WriteLine("Incorrect option \nPossible options: \n-> indexes written above objects \n-> quit");
                         dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
                         isIncorrectInput = true; // stay in the loop
                     }
@@ -115,23 +117,32 @@ namespace CommandLineInterface
             }
         }
 
-        private TreeViewItem SelectItem(TreeViewItem selected, int index, int currentIndex)
+        private TreeViewItem SelectItem(TreeViewItem selected, int index)
         {
-            while(currentIndex < index)
+            TreeViewItem tmp = selected;
+            if(selectionIndex++ == index)
             {
-                if (selected.IsExpanded)
+                return selected;
+            }
+            else
+            {
+                if(selected.IsExpanded)
                 {
-                    foreach (TreeViewItem kid in selected.Children)
+                    foreach(TreeViewItem kid in selected.Children)
                     {
-                        selected = SelectItem(kid, index, ++currentIndex);
+                        tmp = SelectItem(kid, index);
+                        if(tmp != null)
+                        {
+                            return tmp;
+                        }
                     }
+                    return null;
                 }
                 else
                 {
                     return null;
                 }
             }
-            return selected;
         }
     }
 }
