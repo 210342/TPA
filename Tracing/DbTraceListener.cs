@@ -45,7 +45,6 @@ namespace Tracing
             {
                 if(!databaseWriter.ColumnExists(dbName, tableName, kv.Value))
                 {
-                    Console.WriteLine(kv.Value);
                     throw new NotSupportedException($"No column {kv.Value} in database.");
                 }
                     
@@ -61,7 +60,6 @@ namespace Tracing
             queriesBuilder.Append($"Insert into {tableName}({acceptedFields["messageField"]}, " +
                 $"{acceptedFields["time"]}) " +
                 $"values('{message}', '{DateTime.Now}');");
-            Console.WriteLine(queriesBuilder.ToString());
         }
         public override void Flush()
         {

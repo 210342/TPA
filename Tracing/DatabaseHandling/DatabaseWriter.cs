@@ -66,9 +66,7 @@ namespace Tracing.DatabaseHandling
                     sqlCommand.Parameters["@tableName"].Value = SQLTableName;
                     sqlCommand.Parameters["@columnName"].Value = SQLColumn;
 
-                    Console.WriteLine(sqlCommand.ExecuteScalar());
                     result = Convert.ToInt32(sqlCommand.ExecuteScalar());
-                    Console.WriteLine((result > 0 ? true : false));
                 }
             }
             return (result > 0 ? true : false);

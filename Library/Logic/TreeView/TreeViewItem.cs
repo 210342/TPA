@@ -24,7 +24,13 @@ namespace TP.GraphicalData.TreeView
         {
             this.rootItem = metadata;
         }
-        public string Name { get; set; }
+        public string Name
+        {
+            get
+            {
+                return rootItem.Name;
+            }
+        }
         private ObservableCollection<TreeViewItem> _children = 
             new ObservableCollection<TreeViewItem>() { null };
         public ObservableCollection<TreeViewItem> Children
@@ -87,7 +93,7 @@ namespace TP.GraphicalData.TreeView
         }
         public override string ToString()
         {
-            return rootItem.ToString();
+            return Name;
         }
     }
 }
