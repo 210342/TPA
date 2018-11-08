@@ -17,7 +17,6 @@ namespace Library.Logic.ViewModel
         private string _loadedAssembly;
         private TreeViewItem _objectToDisplay;
         #endregion
-        TraceSource traceSource = new TraceSource("ViewModel");
         #region Properties
         public ICommand ShowCurrentObject { get; }
         public ICommand ReloadAssemblyCommand { get; }
