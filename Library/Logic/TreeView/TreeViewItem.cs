@@ -15,6 +15,14 @@ namespace Library.Logic.TreeView
     public class TreeViewItem
     {
         IMetadata rootItem;
+
+        public string Details {
+            get
+            {
+                return rootItem.Details;
+            }
+        }
+
         public TreeViewItem()
         {
             //Children = new ObservableCollection<TreeViewItem>() { null };

@@ -8,6 +8,23 @@ namespace TPA.Reflection.Model
 {
     internal class TypeMetadata : IMetadata
     {
+        public string Details
+        {
+            get
+            {
+                var ret = $"Type: {m_typeName}{(m_BaseType != null ? ",extends " + m_BaseType.Name : string.Empty)}";
+                if (m_ImplementedInterfaces.Count() > 0)
+                {
+                    ret += ",implements ";
+                    foreach (var intf in m_ImplementedInterfaces)
+                        ret += $"{intf.Name}, ";
+                }
+                ret += $"\nType Kind: {m_TypeKind.ToString()}\n";
+                ret += $"Modifiers: {m_Modifiers.Item1.ToString()}," +
+                    $"{m_Modifiers.Item2.ToString()},{m_Modifiers.Item3.ToString()}.";
+                return ret;
+            }
+        }
 
         #region constructors
         internal TypeMetadata(Type type)
@@ -38,7 +55,7 @@ namespace TPA.Reflection.Model
             elems.AddRange(m_Constructors);
             elems.AddRange(m_Methods);
             elems.AddRange(m_NestedTypes);
-            if(m_GenericArguments != null)
+            if (m_GenericArguments != null)
                 elems.AddRange(m_GenericArguments);
             Children = elems;
         }
@@ -147,7 +164,7 @@ namespace TPA.Reflection.Model
             return EmitReference(baseType);
         }
         #endregion
-        
+
         public override int GetHashCode()
         {
             //return savedHash;

@@ -49,7 +49,7 @@ namespace Library.Logic.ViewModel
             {
                 this._objectToDisplay = value;
                 OnPropertyChanged();
-                Trace.TraceInformation("ObjectSelected changed.");
+                Trace.TraceInformation("ObjectToDisplay changed.");
                 //Trace.Flush();
             }
         }

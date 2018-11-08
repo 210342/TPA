@@ -11,7 +11,21 @@ namespace TPA.Reflection.Model
 {
     internal class MethodMetadata : IMetadata
     {
-
+        public string Details
+        {
+            get
+            {
+                var ret =  $"{(m_ReturnType.Name != null ? "Method: " + m_ReturnType.Name : "Constructor: ")} {m_Name}(";
+                foreach(var param in m_Parameters)
+                {
+                    ret += $"{param.Details}, ";
+                }
+                ret = ret.Remove(ret.Length - 2, 1) + ")\n";
+                ret += $"Modifiers: {m_Modifiers.Item1.ToString()}, " +
+                    $"{m_Modifiers.Item2.ToString()}, {m_Modifiers.Item3.ToString()}, {m_Modifiers.Item4.ToString()}.";
+                return ret;
+            }
+        }
         internal static IEnumerable<MethodMetadata> EmitMethods(IEnumerable<MethodBase> methods)
         {
             return from MethodBase _currentMethod in methods

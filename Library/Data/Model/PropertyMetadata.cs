@@ -9,7 +9,13 @@ namespace TPA.Reflection.Model
 {
     internal class PropertyMetadata : IMetadata
     {
-
+        public string Details
+        {
+            get
+            {
+                return $"Property: {m_Name} : {m_TypeMetadata.Name}";
+            }
+        }
         internal static IEnumerable<PropertyMetadata> EmitProperties(IEnumerable<PropertyInfo> props)
         {
             return from prop in props

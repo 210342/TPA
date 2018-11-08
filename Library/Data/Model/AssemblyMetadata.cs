@@ -28,7 +28,12 @@ namespace TPA.Reflection.Model
         private IEnumerable<NamespaceMetadata> m_Namespaces;
 
         public string Name => m_Name;
-
+        public string Details {
+            get
+            {
+                return $"Assembly name: {m_Name}, has {m_Namespaces.Count()} namespaces."; 
+            }
+        }
         public IEnumerable<IMetadata> Children => m_Namespaces;
         private int savedHash;
 

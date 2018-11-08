@@ -17,7 +17,13 @@ namespace Library.Data.Model
         }
         private string m_Name;
         public string Name => m_Name;
-
+        public string Details
+        {
+            get
+            {
+                return $"Attribute name: {m_Name}.";
+            }
+        }
         public IEnumerable<IMetadata> Children => null;
         private int savedHash;
         public override int GetHashCode()

@@ -8,6 +8,13 @@ namespace TPA.Reflection.Model
     internal class ParameterMetadata : IMetadata
     {
 
+        public string Details
+        {
+            get
+            {
+                return $"Parameter: {m_Name} : {m_TypeMetadata.Name}";
+            }
+        }
         public ParameterMetadata(string name, TypeMetadata typeMetadata)
         {
             if (name == null || typeMetadata == null)

@@ -8,6 +8,13 @@ namespace TPA.Reflection.Model
 {
     internal class NamespaceMetadata : IMetadata
     {
+        public string Details
+        {
+            get
+            {
+                return $"Namespace {m_NamespaceName}, contains {m_Types.Count()} types";
+            }
+        }
 
         internal NamespaceMetadata(string name, IEnumerable<Type> types)
         {
