@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using Library.Data.Model;
 
@@ -9,6 +10,8 @@ namespace TPA.Reflection.Model
 
         public ParameterMetadata(string name, TypeMetadata typeMetadata)
         {
+            if (name == null || typeMetadata == null)
+                throw new ArgumentNullException("Neither name or TypeMetadata can be null.");
             this.m_Name = name;
             this.m_TypeMetadata = typeMetadata;
             savedHash = 17;

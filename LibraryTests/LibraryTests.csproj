@@ -50,7 +50,14 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="Data\Model\AttributeMetadataTests.cs" />
+    <Compile Include="Data\Model\ExtensionMethodsTests.cs" />
+    <Compile Include="Data\Model\MethodMetadataTests.cs" />
+    <Compile Include="Data\Model\NamespaceMetadataTests.cs" />
+    <Compile Include="Data\Model\ParameterMetadataTests.cs" />
+    <Compile Include="Data\Model\PropertyMetadataTests.cs" />
+    <Compile Include="Data\Model\TypeMetadataTests.cs" />
+    <Compile Include="Data\Model\AssemblyMetadataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

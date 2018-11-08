@@ -39,7 +39,7 @@ namespace GraphicalUserInterface
             dialog.Filter = "Dynamically linked library (*dll)|*dll|All Files(*.*)|*.*";
             if(dialog.ShowDialog().Value)
             {
-                var viewModel = DataContext as ClassPresenter;
+                var viewModel = DataContext as ViewModel;
                 viewModel.LoadedAssembly = dialog.FileName;
                 viewModel.ReloadAssemblyCommand.Execute(null);
             }

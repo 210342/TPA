@@ -10,6 +10,8 @@ namespace Library.Data.Model
     {
         internal AttributeMetadata(Attribute attribute)
         {
+            if (attribute == null)
+                throw new ArgumentNullException("Attribute can't be null.");
             m_Name = attribute.GetType().Name;
             savedHash = attribute.GetHashCode();
         }

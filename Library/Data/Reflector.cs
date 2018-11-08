@@ -11,7 +11,8 @@ namespace TPA.Reflection
     {
       if (string.IsNullOrEmpty(assemblyFile))
         throw new System.ArgumentNullException();
-      Assembly assembly = Assembly.LoadFrom(assemblyFile);
+      
+      Assembly assembly = Assembly.UnsafeLoadFrom(assemblyFile);
       m_AssemblyModel = new AssemblyMetadata(assembly);
     }
     public Reflector(Assembly assembly)

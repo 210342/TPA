@@ -3,14 +3,14 @@
 //  Copyright (C) 2018, Mariusz Postol LODZ POLAND.
 //
 //  To be in touch join the community at GITTER: https://gitter.im/mpostol/TP
+//  Modified for custom needs by Adrian Fijalkowski.
 //____________________________________________________________________________
 
 using Library.Data.Model;
-using Library.Logic.TreeView;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace TP.GraphicalData.TreeView
+namespace Library.Logic.TreeView
 {
     public class TreeViewItem
     {
@@ -74,22 +74,18 @@ namespace TP.GraphicalData.TreeView
                 {
                     if (elem != null)
                     {
-                        if (DataLoadedDictionary.Items.TryGetValue(elem, out TreeViewItem returnValue))
-                        {
-                            yield return returnValue;
-                            //yield return null;
-                            //break;
-                        }
+                        TreeViewItem tvi = null;
+                        if (DataLoadedDictionary.Items.TryGetValue(elem.GetHashCode(), out IMetadata returnValue))
+                            tvi = new TreeViewItem(returnValue);
                         else
                         {
-                            var obj = new TreeViewItem(elem);
-                            DataLoadedDictionary.Items.Add(elem, obj);
-                            yield return obj;
+                            tvi = new TreeViewItem(elem);
+                            DataLoadedDictionary.Items.Add(elem.GetHashCode(), elem);
                         }
+                        yield return tvi;
                     }
                 }
             }
-            
         }
         public override string ToString()
         {

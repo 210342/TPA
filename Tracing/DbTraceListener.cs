@@ -57,6 +57,8 @@ namespace Tracing
 
         public override void WriteLine(string message)
         {
+            string callerMethod = new StackTrace().GetFrame(4).GetMethod().Name;
+
             queriesBuilder.Append($"Insert into {tableName}({acceptedFields["messageField"]}, " +
                 $"{acceptedFields["time"]}) " +
                 $"values('{message}', '{DateTime.Now}');");

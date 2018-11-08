@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using Library.Data.Model;
+using System;
 
 namespace TPA.Reflection.Model
 {
@@ -26,6 +27,8 @@ namespace TPA.Reflection.Model
 
         private PropertyMetadata(string propertyName, TypeMetadata propertyType)
         {
+            if (propertyName == null || propertyType == null)
+                throw new ArgumentNullException("Neither propertyName or TypeMetadata can be null.");
             m_Name = propertyName;
             m_TypeMetadata = propertyType;
             savedHash = 23;

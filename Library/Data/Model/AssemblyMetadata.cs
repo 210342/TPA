@@ -12,6 +12,8 @@ namespace TPA.Reflection.Model
 
         internal AssemblyMetadata(Assembly assembly)
         {
+            if (assembly == null)
+                throw new ArgumentNullException("Assembly can't be null");
             m_Name = assembly.ManifestModule.Name;
             m_Namespaces = from Type _type in assembly.GetTypes()
                            where _type.GetVisible()
