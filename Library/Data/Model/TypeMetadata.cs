@@ -12,6 +12,8 @@ namespace TPA.Reflection.Model
         #region constructors
         internal TypeMetadata(Type type)
         {
+            if (type == null)
+                throw new ArgumentNullException("Type can't be null.");
             m_typeName = type.Name;
             m_DeclaringType = EmitDeclaringType(type.DeclaringType);
             m_Constructors = MethodMetadata.EmitMethods(type.GetConstructors());
@@ -83,6 +85,8 @@ namespace TPA.Reflection.Model
         //constructors
         private TypeMetadata(string typeName, string namespaceName)
         {
+            if (typeName == null || namespaceName == null)
+                throw new ArgumentNullException("Type can't be null.");
             m_typeName = typeName;
             m_NamespaceName = namespaceName;
         }
