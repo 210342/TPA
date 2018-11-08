@@ -23,10 +23,12 @@ namespace TPA.Reflection.Model
         private string m_Name;
         private TypeMetadata m_TypeMetadata;
 
+        public TypeMetadata Type { get { return m_TypeMetadata; } }
         public string Name => m_Name;
 
         public IEnumerable<IMetadata> Children => new[] { m_TypeMetadata };
         private int savedHash;
+
         public override int GetHashCode()
         {
             return savedHash;

@@ -112,18 +112,22 @@ namespace TPA.Reflection.Model
         }
         public override string ToString()
         {
-            StringBuilder paramsString = new StringBuilder();
-            int paramsQuantity = m_Parameters.Count();
-            int counter = 0;
-            foreach (ParameterMetadata pm in m_Parameters)
+            StringBuilder paramsString = new StringBuilder("(");
+            if (m_Parameters.Count() != 0)
             {
-                paramsString.Append(pm);
-                if(counter != paramsQuantity - 1)
-                    paramsString.Append(",");
-                ++counter;
+
+                foreach (ParameterMetadata parameter in m_Parameters)
+                {
+                    paramsString.Append($"{parameter.Type.Name} {parameter.Name}, ");
+                }
+                paramsString.Remove(paramsString.Length - 2, 2); // remove last comma and space
+                paramsString.Append(")");
             }
-            return m_Name + "(" + paramsString.ToString() + ")" + 
-                (m_ReturnType != null ? " : " + m_ReturnType.Name: "");
+            else
+            {
+                paramsString.Append(")");
+            }
+            return $"{(m_ReturnType != null ? "" + m_ReturnType.Name : "")} {m_Name}{paramsString.ToString()}";
         }
     }
 }

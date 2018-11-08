@@ -91,7 +91,7 @@ namespace Library.Logic.TreeView
         }
         public override string ToString()
         {
-            return Name;
+            return rootItem.ToString();
         }
     }
 }

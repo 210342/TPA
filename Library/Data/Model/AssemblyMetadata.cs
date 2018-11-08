@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace TPA.Reflection.Model
 {
@@ -30,10 +31,12 @@ namespace TPA.Reflection.Model
 
         public IEnumerable<IMetadata> Children => m_Namespaces;
         private int savedHash;
+
         public override int GetHashCode()
         {
             return savedHash;
         }
+
         public override bool Equals(object obj)
         {
             if (this.GetType() != obj.GetType())
@@ -43,9 +46,10 @@ namespace TPA.Reflection.Model
             else
                 return false;
         }
+
         public override string ToString()
         {
-            return m_Name;
+            return Name;
         }
     }
 

@@ -14,7 +14,6 @@ namespace TPA.Reflection.Model
         {
             if (type == null)
                 throw new ArgumentNullException("Type can't be null.");
-            m_typeName = type.Name;
             m_DeclaringType = EmitDeclaringType(type.DeclaringType);
             m_Constructors = MethodMetadata.EmitMethods(type.GetConstructors());
             m_Methods = MethodMetadata.EmitMethods(type.GetMethods());
@@ -28,18 +27,19 @@ namespace TPA.Reflection.Model
             m_Attributes = type.GetCustomAttributes(false).Cast<Attribute>();
             List<AttributeMetadata> amList = new List<AttributeMetadata>();
             amList.AddRange(m_Attributes.Select(n => new AttributeMetadata(n)));
+            m_typeName = type.Name;
 
             List<IMetadata> elems = new List<IMetadata>();
+            elems.AddRange(amList);
+            elems.AddRange(m_ImplementedInterfaces);
+            elems.Add(m_BaseType);
             elems.Add(m_DeclaringType);
+            elems.AddRange(m_Properties);
             elems.AddRange(m_Constructors);
             elems.AddRange(m_Methods);
             elems.AddRange(m_NestedTypes);
-            elems.AddRange(m_ImplementedInterfaces);
             if(m_GenericArguments != null)
                 elems.AddRange(m_GenericArguments);
-            elems.Add(m_BaseType);
-            elems.AddRange(m_Properties);
-            elems.AddRange(amList);
             Children = elems;
         }
         #endregion
@@ -147,7 +147,7 @@ namespace TPA.Reflection.Model
             return EmitReference(baseType);
         }
         #endregion
-        private int savedHash;
+        
         public override int GetHashCode()
         {
             //return savedHash;
@@ -155,8 +155,8 @@ namespace TPA.Reflection.Model
             hash *= 17 + m_typeName.GetHashCode();
             //hash *= 17 + m_NamespaceName.GetHashCode();
             return hash;
-
         }
+
         public override bool Equals(object obj)
         {
             if (this.GetType() != obj.GetType())
@@ -169,6 +169,7 @@ namespace TPA.Reflection.Model
             }
             return false;
         }
+
         public override string ToString()
         {
             return m_typeName;
