@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using Library.Logic.TreeView;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TPA.Reflection.Model;
+using Library.Logic.TreeView;
+using Library.Data.Model;
 
 namespace LibraryTests.Logic.TreeView
 {

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using TPA.Reflection.Model;
+using Library.Data.Model;
 
 namespace LibraryTests.Data.Model
 {

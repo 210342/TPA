@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TPA.Reflection.Model;
+using Library.Data.Model;
 
 namespace LibraryTests.Data.Model
 {

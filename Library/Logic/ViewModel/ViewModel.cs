@@ -20,7 +20,7 @@ namespace Library.Logic.ViewModel
         #region Properties
         public ICommand ShowCurrentObject { get; }
         public ICommand ReloadAssemblyCommand { get; }
-
+        public bool Tracing { get; set; }
         public ObservableCollection<TreeViewItem> ObjectsList { get; }
         public TreeViewItem ObjectSelected
         {
@@ -32,8 +32,11 @@ namespace Library.Logic.ViewModel
             {
                 PreviousSelection = objectSelected;
                 objectSelected = value;
-                Trace.TraceInformation("ObjectSelected changed.");
-                Trace.Flush();
+                if (Tracing)
+                {
+                    Trace.TraceInformation("ObjectSelected changed.");
+                    Trace.Flush();
+                }
                 OnPropertyChanged();
             }
         }
@@ -47,8 +50,12 @@ namespace Library.Logic.ViewModel
             {
                 this._objectToDisplay = value;
                 OnPropertyChanged();
-                Trace.TraceInformation("ObjectToDisplay changed.");
-                Trace.Flush();
+                if(Tracing)
+                {
+                    Trace.TraceInformation("ObjectToDisplay changed.");
+                    Trace.Flush();
+                }
+                
             }
         }
         public TreeViewItem PreviousSelection { get; private set; }
@@ -78,15 +85,32 @@ namespace Library.Logic.ViewModel
 
             Trace.Listeners.Add(new FileTraceListener("file.log"));
 
-            Trace.Flush();
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
         }
+        public ViewModel(bool tracing)
+        {
+            Tracing = tracing;
+            if (Tracing)
+            {
+                string traceListenersAssemblyLocation =
+                    System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(DbTraceListener)).Location);
+                Trace.Listeners.Add(new DbTraceListener(traceListenersAssemblyLocation + @"\connConfig.xml"));
 
+                Trace.Listeners.Add(new FileTraceListener("file.log"));
+            }
+            ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
+            ObjectsList = new ObservableCollection<TreeViewItem>() { null };
+            ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
+        }
         private void LoadAssembly()
         {
-            Trace.TraceInformation("Assembly loading.");
+            if (Tracing)
+            {
+                Trace.TraceInformation("Assembly loading.");
+                Trace.Flush();
+            }
             Reflector reflector = new Reflector(LoadedAssembly);
             LoadedAssemblyRepresentation = reflector.m_AssemblyModel;
         }
@@ -101,8 +125,11 @@ namespace Library.Logic.ViewModel
                 ObjectsList.Add(item);
                 ObjectSelected = item;
             }
-            Trace.TraceInformation("Assembly reloaded.");
-            Trace.Flush();
+            if (Tracing)
+            {
+                Trace.TraceInformation("Assembly reloaded.");
+                Trace.Flush();
+            }
         }
 
         public void ChangeClassToDisplay()
