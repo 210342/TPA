@@ -1,12 +1,9 @@
-﻿
-using Library.Data.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
-namespace TPA.Reflection.Model
+namespace Library.Data.Model
 {
     internal class AssemblyMetadata : IMetadata
     {

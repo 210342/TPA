@@ -1,8 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Reflection;
 
-namespace TPA.Reflection.Model
+namespace Library.Data.Model
 {
     internal static class ExtensionMethods
     {

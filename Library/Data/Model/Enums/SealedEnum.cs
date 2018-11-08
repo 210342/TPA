@@ -1,5 +1,4 @@
-﻿
-namespace TPA.Reflection.Model
+﻿namespace Library.Data.Mode.Enums
 {
     internal enum SealedEnum
     {

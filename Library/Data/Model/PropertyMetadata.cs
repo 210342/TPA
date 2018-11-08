@@ -1,11 +1,9 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
-using Library.Data.Model;
 using System;
 
-namespace TPA.Reflection.Model
+namespace Library.Data.Model
 {
     internal class PropertyMetadata : IMetadata
     {

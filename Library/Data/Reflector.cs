@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Library.Data.Model;
+using System;
 using System.Reflection;
-using TPA.Reflection.Model;
 
-namespace TPA.Reflection
+namespace Library.Data
 {
     //TODO add UT - testing data is required
     public class Reflector

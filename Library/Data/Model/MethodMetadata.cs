@@ -1,5 +1,4 @@
-﻿
-using Library.Data.Model;
+﻿using Library.Data.Mode.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +6,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace TPA.Reflection.Model
+namespace Library.Data.Model
 {
     internal class MethodMetadata : IMetadata
     {

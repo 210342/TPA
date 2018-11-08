@@ -1,9 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Library.Data.Model;
 
-namespace TPA.Reflection.Model
+namespace Library.Data.Model
 {
     internal class ParameterMetadata : IMetadata
     {

@@ -1,11 +1,11 @@
-﻿using Library.Data.Model;
+﻿using Library.Data;
+using Library.Data.Model;
 using Library.Logic.TreeView;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using TPA.Reflection;
 using Tracing;
 
 namespace Library.Logic.ViewModel

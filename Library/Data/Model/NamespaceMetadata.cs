@@ -1,10 +1,8 @@
-﻿
-using Library.Data.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TPA.Reflection.Model
+namespace Library.Data.Model
 {
     internal class NamespaceMetadata : IMetadata
     {
