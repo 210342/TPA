@@ -58,6 +58,9 @@
     <Compile Include="Data\Model\PropertyMetadataTests.cs" />
     <Compile Include="Data\Model\TypeMetadataTests.cs" />
     <Compile Include="Data\Model\AssemblyMetadataTests.cs" />
+    <Compile Include="Data\ReflectorTests.cs" />
+    <Compile Include="Logic\TreeView\TreeViewItemTests.cs" />
+    <Compile Include="Logic\ViewModel\ViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace TPA.Reflection.Model
 {
-    public class AssemblyMetadata : IMetadata
+    internal class AssemblyMetadata : IMetadata
     {
 
         internal AssemblyMetadata(Assembly assembly)

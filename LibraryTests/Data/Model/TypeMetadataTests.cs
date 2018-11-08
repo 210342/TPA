@@ -2,11 +2,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using TPA.Reflection.Model;
 
 namespace LibraryTests.Data.Model
 {
+    [ExcludeFromCodeCoverage]
     [TestClass]
     public class TypeMetadataTests
     {

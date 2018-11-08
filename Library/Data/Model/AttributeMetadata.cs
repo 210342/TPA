@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.Data.Model
 {
-    class AttributeMetadata : IMetadata
+    internal class AttributeMetadata : IMetadata
     {
         internal AttributeMetadata(Attribute attribute)
         {

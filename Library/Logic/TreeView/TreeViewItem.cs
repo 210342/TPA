@@ -22,6 +22,8 @@ namespace Library.Logic.TreeView
         }
         public TreeViewItem(IMetadata metadata) : base()
         {
+            if (metadata == null)
+                throw new System.ArgumentNullException("Metadata node can't be null");
             this.rootItem = metadata;
         }
         public string Name { get; set; }

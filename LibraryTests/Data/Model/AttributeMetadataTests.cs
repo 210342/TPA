@@ -3,9 +3,11 @@
 using Library.Data.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LibraryTests.Data.Model
 {
+    [ExcludeFromCodeCoverage]
     [TestClass]
     public class AttributeMetadataTests
     {

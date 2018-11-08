@@ -1,11 +1,11 @@
-﻿using Library.Logic.TreeView;
+﻿using Library.Data.Model;
+using Library.Logic.TreeView;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using TPA.Reflection;
-using TPA.Reflection.Model;
 using Tracing;
 
 namespace Library.Logic.ViewModel
@@ -54,7 +54,7 @@ namespace Library.Logic.ViewModel
                 OnPropertyChanged();
             }
         }
-        public AssemblyMetadata LoadedAssemblyRepresentation { get; private set; }
+        public IMetadata LoadedAssemblyRepresentation { get; private set; }
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -62,7 +62,7 @@ namespace Library.Logic.ViewModel
         public ViewModel()
         {
             Trace.Listeners.Add(new DbTraceListener(@".\connConfig.xml"));
-            Trace.Flush();
+            //Trace.Flush();
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
@@ -71,7 +71,7 @@ namespace Library.Logic.ViewModel
         private void LoadAssembly()
         {
             Trace.TraceInformation("Assembly loading.");
-            Trace.Flush();
+            //Trace.Flush();
             Reflector reflector = new Reflector(LoadedAssembly);
             LoadedAssemblyRepresentation = reflector.m_AssemblyModel;
         }
@@ -87,7 +87,7 @@ namespace Library.Logic.ViewModel
                 ObjectSelected = item;
             }
             Trace.TraceInformation("Assembly reloaded.");
-            Trace.Flush();
+            //Trace.Flush();
         }
 
         public void ChangeClassToDisplay()
