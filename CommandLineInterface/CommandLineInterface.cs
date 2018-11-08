@@ -1,13 +1,19 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Library.Logic.ViewModel;
+using TP.GraphicalData.TreeView;
 
 namespace CommandLineInterface
 {
     public class CommandLineInterface
     {
         private ClassPresenter dataContext = new ClassPresenter();
+        private TreeViewItem root;
+        private readonly string tab = "  ";
+        private readonly int startIndex = 0;
+        private int maxIndex = 0;
 
         public void Start(string dllPath)
         {
@@ -32,6 +38,7 @@ namespace CommandLineInterface
             {
                 Console.WriteLine("Unknown problem occured. \n{0}", e.Message);
             }
+            root = dataContext.ObjectsList.First();
             Menu();
         }
 
@@ -40,15 +47,11 @@ namespace CommandLineInterface
             string selection = "";
             do
             {
-                for(int i = 0; i < dataContext.ObjectsList.Count(); ++i) // print children
-                {
-                    Console.WriteLine($"INDEX: {i}");
-                    Console.WriteLine(dataContext.ObjectsList.ElementAt(i).GetType().ToString().Split('.').Last().Replace("Representation", ""));
-                    Console.WriteLine(dataContext.ObjectsList.ElementAt(i).FullName);
-                    Console.WriteLine();
-                }
+                maxIndex = 0; // reset index before each printout
+                Print(root, startIndex);
+                Console.WriteLine();
                 Console.WriteLine(dataContext.ObjectSelected.ToString()); // print detailed info
-                bool isIncorrectInput = true; // flag used to control application's flow
+                bool isIncorrectInput = false; // flag used to control application's flow
                 do
                 {
                     try
@@ -57,25 +60,31 @@ namespace CommandLineInterface
                         Console.Write("Your selection (type \"quit\" to leave application): ");
                         selection = Console.ReadLine();
                         int index = int.Parse(selection); // try to read chosen index
-                        dataContext.ObjectSelected = dataContext.ObjectsList.ElementAt(index); // get an item under input index
-                        dataContext.InteractWithTreeItem(dataContext.ObjectSelected); // interact with that item
+                        dataContext.ObjectSelected = SelectItem(root, index, startIndex); // get an item under input index
+                        if(dataContext.ObjectSelected == null)
+                        {
+                            throw new IndexOutOfRangeException(nameof(index));
+                        }
+                        dataContext.ObjectSelected.IsExpanded = !dataContext.ObjectSelected.IsExpanded;
                         isIncorrectInput = false; // get out of the loop
                     }
                     catch(FormatException)
                     {
                         Console.WriteLine("Incorrect option \nPossible options: \n-> indexes written above objects \n-> parent \n-> quit");
                         dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
-
+                        isIncorrectInput = true; // stay in the loop
                     }
-                    catch(ArgumentOutOfRangeException)
+                    catch(IndexOutOfRangeException)
                     {
                         Console.WriteLine("Incorrect option \nUndefined index");
                         dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
+                        isIncorrectInput = true; // stay in the loop
                     }
                     catch(ArgumentNullException)
                     {
                         Console.WriteLine("This object doesn't have a parent");
                         dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
+                        isIncorrectInput = true; // stay in the loop
                     }
                 }
                 while (isIncorrectInput && !Quit(selection));
@@ -86,6 +95,43 @@ namespace CommandLineInterface
         private bool Quit(string input)
         {
             return input.ToLower() == "quit" || input.ToLower() == "q";
+        }
+
+        private void Print(TreeViewItem item, int depth)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < depth; ++i)
+            {
+                sb.Append(tab);
+            }
+            Console.WriteLine($"{sb.ToString()}INDEX: {maxIndex++}");
+            Console.WriteLine($"{sb.ToString()}{item.Name}");
+            if (item.IsExpanded)
+            {
+                foreach(TreeViewItem kid in item.Children)
+                {
+                    Print(kid, depth + 1);
+                }
+            }
+        }
+
+        private TreeViewItem SelectItem(TreeViewItem selected, int index, int currentIndex)
+        {
+            while(currentIndex < index)
+            {
+                if (selected.IsExpanded)
+                {
+                    foreach (TreeViewItem kid in selected.Children)
+                    {
+                        selected = SelectItem(kid, index, ++currentIndex);
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return selected;
         }
     }
 }

@@ -37,7 +37,6 @@ namespace Library.Logic.ViewModel
                 Trace.TraceInformation("ObjectSelected changed.");
                 Trace.Flush();
                 OnPropertyChanged("ObjectSelected");
-                //Messenger.Default.Send(new SelectedChangedMessage(currentlySelected)); TODO MESSENGER PATTERN
             }
         }
         public TreeViewItem PreviousSelection { get; private set; }
