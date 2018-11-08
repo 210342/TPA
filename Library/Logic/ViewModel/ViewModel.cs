@@ -99,56 +99,5 @@ namespace Library.Logic.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        /*public void InteractWithTreeItem(IRepresentation item)
-        {
-            if (item != null)
-            {
-                if (ObjectsList.Contains(item))
-                {
-                    if(item.Children.Count() != 0)
-                    {
-                        if (ObjectsList.Contains(item.Children.First()))
-                        {
-                            CloseTreeItem(item);
-                        }
-                        else
-                        {
-                            OpenTreeItem(item);
-                        }
-                    }
-                }
-                else
-                {
-                    throw new ArgumentException("This item isn't on the list");
-                }
-            }
-            else
-            {
-                throw new ArgumentNullException("Item cannot be null");
-            }
-        }
-
-        private void OpenTreeItem(IRepresentation item)
-        {
-            foreach (IRepresentation kid in item.Children)
-            {
-                ObjectsList.Add(kid);
-            }
-        }
-        private void CloseTreeItem(IRepresentation item)
-        {
-            foreach(IRepresentation kid in item.Children)
-            {
-                if(kid.Children.Count() != 0) // if kid has children
-                {
-                    if(ObjectsList.Contains(kid.Children.First())) // check if his children are on the list
-                    {
-                        CloseTreeItem(kid); // close children recursively if opened
-                    }
-                }
-                ObjectsList.Remove(kid);
-            }
-        */
     }
 }
