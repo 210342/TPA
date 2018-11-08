@@ -39,7 +39,6 @@ namespace TPA.Reflection.Model
             elems.AddRange(m_Properties);
             elems.AddRange(amList);
             Children = elems;
-            savedHash = type.GetHashCode();
         }
         #endregion
 
@@ -147,7 +146,12 @@ namespace TPA.Reflection.Model
         private int savedHash;
         public override int GetHashCode()
         {
-            return savedHash;
+            //return savedHash;
+            var hash = 37;
+            hash *= 17 + m_typeName.GetHashCode();
+            //hash *= 17 + m_NamespaceName.GetHashCode();
+            return hash;
+
         }
         public override bool Equals(object obj)
         {

@@ -68,8 +68,10 @@ namespace TP.GraphicalData.TreeView
                 {
                     if (elem != null)
                     {
-                        if (DataLoadedDictionary.Items.TryGetValue(elem, out TreeViewItem returnValue))
+                        if (DataLoadedDictionary.Items.TryGetValue(elem.GetHashCode(), out TreeViewItem returnValue))
                         {
+                            returnValue.m_IsExpanded = false;
+                            returnValue.m_WasBuilt = false;
                             yield return returnValue;
                             //yield return null;
                             //break;
@@ -77,7 +79,7 @@ namespace TP.GraphicalData.TreeView
                         else
                         {
                             var obj = new TreeViewItem(elem);
-                            DataLoadedDictionary.Items.Add(elem, obj);
+                            DataLoadedDictionary.Items.Add(elem.GetHashCode(), obj);
                             yield return obj;
                         }
                     }

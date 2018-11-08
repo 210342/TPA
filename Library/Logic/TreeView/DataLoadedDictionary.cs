@@ -10,7 +10,7 @@ namespace Library.Logic.TreeView
 {
     public static  class DataLoadedDictionary
     {
-        public static readonly Dictionary<IMetadata, TreeViewItem> Items = 
-            new Dictionary<IMetadata, TreeViewItem>();
+        public static readonly Dictionary<int, TreeViewItem> Items = 
+            new Dictionary<int, TreeViewItem>();
     }
 }
