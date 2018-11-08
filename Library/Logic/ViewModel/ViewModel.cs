@@ -14,14 +14,14 @@ namespace Library.Logic.ViewModel
     {
         #region Fields
         private TreeViewItem objectSelected;
+        private string _loadedAssembly;
+        private TreeViewItem _objectToDisplay;
 
-        private TreeViewItem ObjectToDisplay;
         #endregion
 
         #region Properties
         public ICommand ShowCurrentObject { get; }
         public ICommand ReloadAssemblyCommand { get; }
-
 
         public ObservableCollection<TreeViewItem> ObjectsList { get; }
         public TreeViewItem ObjectSelected
@@ -35,12 +35,26 @@ namespace Library.Logic.ViewModel
                 PreviousSelection = objectSelected;
                 objectSelected = value;
                 Trace.TraceInformation("ObjectSelected changed.");
-                Trace.Flush();
-                OnPropertyChanged("ObjectSelected");
+                //Trace.Flush();
+                OnPropertyChanged();
+            }
+        }
+        public TreeViewItem ObjectToDisplay
+        {
+            get
+            {
+                return _objectToDisplay;
+            }
+            set
+            {
+                this._objectToDisplay = value;
+                OnPropertyChanged();
+                Trace.TraceInformation("ObjectSelected changed.");
+                //Trace.Flush();
             }
         }
         public TreeViewItem PreviousSelection { get; private set; }
-        private string _loadedAssembly;
+
         public string LoadedAssembly
         {
             get
@@ -60,7 +74,9 @@ namespace Library.Logic.ViewModel
 
         public ViewModel()
         {
-            Trace.Listeners.Add(new DbTraceListener(@".\connConfig.xml"));
+            /*string traceListenersAssemblyLocation = 
+                System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(DbTraceListener)).Location);
+            Trace.Listeners.Add(new DbTraceListener(traceListenersAssemblyLocation + @"\connConfig.xml"));*/
             //Trace.Flush();
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };

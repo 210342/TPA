@@ -16,7 +16,7 @@ namespace Tracing.DatabaseHandling
             this.connectionString = connectionString;
         }
 
-        public void Write(string data)
+        public void WriteQuery(string data)
         {
             using (connection = new SqlConnection(connectionString))
             {

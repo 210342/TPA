@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Text;
 using System.Xml;
@@ -10,15 +9,43 @@ namespace Tracing
     public class DbTraceListener : TraceListener
     {
         private string connectionString;
-        private readonly StringBuilder queriesBuilder = new StringBuilder();
+        private List<string> queriesBuilt = new List<string>();
         DatabaseHandling.IDatabaseWriter databaseWriter;
 
         private readonly Dictionary<string, string> acceptedFields = 
             new Dictionary<string, string>() { { "messageField", "log_message" }, { "time", "log_time" } };
-        private readonly string tableName = "tracing_logs";
-        private readonly string dbName = "AppTracing";
 
-        public DbTraceListener() { }
+        public string LogField
+        {
+            get
+            {
+                return acceptedFields["messageField"];
+            }
+            set
+            {
+
+                acceptedFields["messageField"] = value;
+            }
+        }
+        public string TimeField
+        {
+            get
+            {
+                return acceptedFields["time"];
+            }
+            set
+            {
+
+                acceptedFields["time"] = value;
+            }
+        }
+        public string TableName { get; set; } = "tracing_logs";
+        public string DatabaseName { get; set; } = "AppTracing";
+
+        public DbTraceListener(DatabaseHandling.IDatabaseWriter dbWriter)
+        {
+            this.databaseWriter = dbWriter;
+        }
         public DbTraceListener(string xmlDocPath)
         {
             int readCounter = 0;
@@ -36,14 +63,14 @@ namespace Tracing
             if (readCounter < 1)
                 throw new XmlException("Could not read xml file");
             databaseWriter = new DatabaseHandling.DatabaseWriter(connectionString);
-            if (!databaseWriter.TableExists(tableName))
+            if (!databaseWriter.TableExists(TableName))
             {
-                throw new NotSupportedException($"No table {tableName} in database.");
+                throw new NotSupportedException($"No table {TableName} in database.");
             }
                 
             foreach(var kv in acceptedFields)
             {
-                if(!databaseWriter.ColumnExists(dbName, tableName, kv.Value))
+                if(!databaseWriter.ColumnExists(DatabaseName, TableName, kv.Value))
                 {
                     throw new NotSupportedException($"No column {kv.Value} in database.");
                 }
@@ -59,15 +86,17 @@ namespace Tracing
         {
             string callerMethod = new StackTrace().GetFrame(4).GetMethod().Name;
 
-            queriesBuilder.Append($"Insert into {tableName}({acceptedFields["messageField"]}, " +
+            queriesBuilt.Add($"Insert into {TableName}({acceptedFields["messageField"]}, " +
                 $"{acceptedFields["time"]}) " +
                 $"values('{message}', '{DateTime.Now}');");
         }
         public override void Flush()
         {
-            if(queriesBuilder.Length > 0)
+            if(queriesBuilt.Count > 0)
             {
-                databaseWriter.Write(queriesBuilder.ToString());
+                foreach(string query in queriesBuilt)
+                    databaseWriter.WriteQuery(query);
+                queriesBuilt.Clear();
             }
         }
     }
