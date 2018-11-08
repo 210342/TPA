@@ -8,7 +8,7 @@ namespace Tracing.DatabaseHandling
 {
     public interface IDatabaseWriter
     {
-        void Write(string data);
+        void WriteQuery(string data);
         bool TableExists(string SQLTableName);
         bool ColumnExists(string dbName, string SQLTableName, string SQLColumn);
     }

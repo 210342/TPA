@@ -9,8 +9,12 @@ namespace Tracing
         private TextWriterTraceListener wrappedListener;
         public FileTraceListener(string fileName)
         {
-            this.file = File.Create("fileName");
+            this.file = File.Create(fileName);
             wrappedListener = new TextWriterTraceListener(file);
+        }
+        public FileTraceListener(Stream stream)
+        {
+            wrappedListener = new TextWriterTraceListener(stream);
         }
         public override void Write(string message)
         {
@@ -20,6 +24,10 @@ namespace Tracing
         public override void WriteLine(string message)
         {
             wrappedListener.WriteLine(message);
+        }
+        public override void Flush()
+        {
+            wrappedListener.Flush();
         }
     }
 }
