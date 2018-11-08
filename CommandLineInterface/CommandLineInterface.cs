@@ -2,14 +2,14 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using Library.Logic.TreeView;
 using Library.Logic.ViewModel;
-using TP.GraphicalData.TreeView;
 
 namespace CommandLineInterface
 {
     public class CommandLineInterface
     {
-        private ClassPresenter dataContext = new ClassPresenter();
+        private ViewModel dataContext = new ViewModel();
         private TreeViewItem root;
         private readonly string tab = "  ";
         private readonly int startIndex = 0;
