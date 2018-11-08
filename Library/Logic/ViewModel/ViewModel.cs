@@ -1,16 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿using Library.Logic.TreeView;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using TP.GraphicalData.TreeView;
 using TPA.Reflection;
 using TPA.Reflection.Model;
 using Tracing;
 
 namespace Library.Logic.ViewModel
 {
-    public class ClassPresenter : INotifyPropertyChanged
+    public class ViewModel : INotifyPropertyChanged
     {
         #region Fields
         private TreeViewItem objectSelected;
@@ -59,7 +59,7 @@ namespace Library.Logic.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ClassPresenter()
+        public ViewModel()
         {
             Trace.Listeners.Add(new DbTraceListener(@".\connConfig.xml"));
             Trace.Flush();

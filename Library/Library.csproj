@@ -60,7 +60,7 @@
     <Compile Include="Data\Reflector.cs" />
     <Compile Include="Logic\TreeView\DataLoadedDictionary.cs" />
     <Compile Include="Logic\TreeView\TreeViewItem.cs" />
-    <Compile Include="Logic\ViewModel\ClassPresenter.cs" />
+    <Compile Include="Logic\ViewModel\ViewModel.cs" />
     <Compile Include="Logic\ViewModel\RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
