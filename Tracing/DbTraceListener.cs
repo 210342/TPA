@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Text;
 using System.Xml;
@@ -13,11 +12,11 @@ namespace Tracing
         private readonly Dictionary<string, string> acceptedFields = 
             new Dictionary<string, string>() { { "messageField", "log_message" }, { "time", "log_time" } };
         private string connectionString;
-        private readonly StringBuilder queriesBuilder = new StringBuilder();
-        private DatabaseHandling.IDatabaseWriter databaseWriter;
+        private List<string> queriesBuilt = new List<string>();
+        DatabaseHandling.IDatabaseWriter databaseWriter;
+
         #endregion
-        #region properties
-        public string MessageField
+        public string LogField
         {
             get
             {
@@ -25,6 +24,7 @@ namespace Tracing
             }
             set
             {
+
                 acceptedFields["messageField"] = value;
             }
         }
@@ -36,15 +36,17 @@ namespace Tracing
             }
             set
             {
+
                 acceptedFields["time"] = value;
             }
         }
+        public string TableName { get; set; } = "tracing_logs";
         public string DatabaseName { get; set; } = "AppTracing";
 
-        public string TableName { get; set; } = "tracing_logs";
-
-        #endregion
-        public DbTraceListener() { }
+        public DbTraceListener(DatabaseHandling.IDatabaseWriter dbWriter)
+        {
+            this.databaseWriter = dbWriter;
+        }
         public DbTraceListener(string xmlDocPath)
         {
             int readCounter = 0;
@@ -71,7 +73,6 @@ namespace Tracing
             {
                 if(!databaseWriter.ColumnExists(DatabaseName, TableName, kv.Value))
                 {
-                    Console.WriteLine(kv.Value);
                     throw new NotSupportedException($"No column {kv.Value} in database.");
                 }
                     
@@ -84,16 +85,19 @@ namespace Tracing
 
         public override void WriteLine(string message)
         {
-            queriesBuilder.Append($"Insert into {TableName}({acceptedFields["messageField"]}, " +
+            string callerMethod = new StackTrace().GetFrame(4).GetMethod().Name;
+
+            queriesBuilt.Add($"Insert into {TableName}({acceptedFields["messageField"]}, " +
                 $"{acceptedFields["time"]}) " +
                 $"values('{message}', '{DateTime.Now}');");
-            Console.WriteLine(queriesBuilder.ToString());
         }
         public override void Flush()
         {
-            if(queriesBuilder.Length > 0)
+            if(queriesBuilt.Count > 0)
             {
-                databaseWriter.Write(queriesBuilder.ToString());
+                foreach(string query in queriesBuilt)
+                    databaseWriter.WriteQuery(query);
+                queriesBuilt.Clear();
             }
         }
     }

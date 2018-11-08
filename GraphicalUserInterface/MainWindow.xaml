@@ -5,13 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GraphicalUserInterface"
         xmlns:viewModel="clr-namespace:Library.Logic.ViewModel;assembly=Library"
-        xmlns:logic="clr-namespace:Library.Logic;assembly=Library"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    
+        Title="Dissasemblers: Age of Adaptive Programming" Height="467" Width="800">
     <Window.DataContext>
-        <viewModel:ClassPresenter/>
+        <viewModel:ViewModel/>
     </Window.DataContext>
 
     <Grid>
@@ -20,20 +17,22 @@
             <ColumnDefinition Width="415*"/>
         </Grid.ColumnDefinitions>
         <ContentControl x:Name="SelectedItemHelper" Content="{Binding ObjectSelected, Mode=OneWayToSource}" Visibility="Collapsed" Grid.ColumnSpan="2"/>
-        <TreeView SelectedItemChanged="TreeView_SelectedItemChanged" ItemsSource="{Binding ObjectsList}" 
-                    Margin="0,31,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" RenderTransformOrigin="0.583,1.25" Height="379" Width="377">
+        <TreeView SelectedItemChanged="TreeView_SelectedItemChanged" Name="TreeView" Margin="10,31,0,32" RenderTransformOrigin="0.5,0.5" ItemsSource="{Binding ObjectsList}">
+
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <TextBlock Text="{Binding Path=Name}" />
+                <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
+                    <TextBlock Text="{Binding}" Margin="0,0,4,0" />
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                </Style>
+            </TreeView.ItemContainerStyle>
         </TreeView>
-
-
-        <TextBlock HorizontalAlignment="Left" Margin="32, 32, 32, 32" TextWrapping="Wrap" Text="{Binding Path=ObjectSelected.ToStringProperty}" 
-                   VerticalAlignment="Top" Grid.Column="1" FontSize="15"/>
-        <TextBox IsEnabled="false" Text="{Binding Path=LoadedAssembly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="0,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="584" Grid.ColumnSpan="2"/>
-        <Button Click="FilePick" x:Name="button" Content="Load" HorizontalAlignment="Left" Margin="226,6,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1"/>
-        <Button x:Name="start" Command="{Binding ReloadAssemblyCommand}" Content="Start" HorizontalAlignment="Left" Margin="330,6,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1"/>
+        <TextBox IsEnabled="false" Text="{Binding Path=LoadedAssembly, Mode=OneWay}"  x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="0,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="701" Grid.ColumnSpan="2"/>
+        <Button Click="FileDialog"  x:Name="button" Content="Load" HorizontalAlignment="Left" Margin="330,4,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1"/>
+        <TextBlock x:Name="textBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" Text="{Binding Path=ObjectToDisplay.Details}" VerticalAlignment="Top" Height="356" Width="395"/>
+        <Button x:Name="details" Command="{Binding ShowCurrentObject}" Content="Show details" HorizontalAlignment="Left" Margin="10,405,0,0" VerticalAlignment="Top" Width="75"/>
     </Grid>
 </Window>

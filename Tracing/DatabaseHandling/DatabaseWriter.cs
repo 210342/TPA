@@ -16,7 +16,7 @@ namespace Tracing.DatabaseHandling
             this.connectionString = connectionString;
         }
 
-        public void Write(string data)
+        public void WriteQuery(string data)
         {
             using (connection = new SqlConnection(connectionString))
             {
@@ -66,9 +66,7 @@ namespace Tracing.DatabaseHandling
                     sqlCommand.Parameters["@tableName"].Value = SQLTableName;
                     sqlCommand.Parameters["@columnName"].Value = SQLColumn;
 
-                    Console.WriteLine(sqlCommand.ExecuteScalar());
                     result = Convert.ToInt32(sqlCommand.ExecuteScalar());
-                    Console.WriteLine((result > 0 ? true : false));
                 }
             }
             return (result > 0 ? true : false);

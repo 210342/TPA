@@ -11,7 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "Library\Library.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryTests", "LibraryTests\LibraryTests.csproj", "{55E14E36-1993-4C19-AE2A-FC500E5E7CD5}"
 EndProject
+<<<<<<< HEAD
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing", "Tracing\Tracing.csproj", "{E91FB4F1-9505-40AA-97E8-960BBF405A26}"
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TracingTests", "TracingTests\TracingTests.csproj", "{42E88CDE-3140-49B7-BAA3-5D7394C31B13}"
+>>>>>>> remotes/origin/master-reworked
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +39,17 @@ Global
 		{55E14E36-1993-4C19-AE2A-FC500E5E7CD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55E14E36-1993-4C19-AE2A-FC500E5E7CD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55E14E36-1993-4C19-AE2A-FC500E5E7CD5}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{E91FB4F1-9505-40AA-97E8-960BBF405A26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E91FB4F1-9505-40AA-97E8-960BBF405A26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E91FB4F1-9505-40AA-97E8-960BBF405A26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E91FB4F1-9505-40AA-97E8-960BBF405A26}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{42E88CDE-3140-49B7-BAA3-5D7394C31B13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42E88CDE-3140-49B7-BAA3-5D7394C31B13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42E88CDE-3140-49B7-BAA3-5D7394C31B13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42E88CDE-3140-49B7-BAA3-5D7394C31B13}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> remotes/origin/master-reworked
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

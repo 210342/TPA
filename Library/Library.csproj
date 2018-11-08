@@ -44,30 +44,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Enums\AbstractEnum.cs" />
-    <Compile Include="Data\Enums\AccessLevelEnum.cs" />
-    <Compile Include="Data\Enums\SealedEnum.cs" />
-    <Compile Include="Data\Enums\StaticEnum.cs" />
-    <Compile Include="Data\Enums\TypeKindEnum.cs" />
-    <Compile Include="Data\Enums\VirtualEnum.cs" />
-    <Compile Include="Data\ExtensionMethods.cs" />
-    <Compile Include="Data\IRepresentation.cs" />
-    <Compile Include="Data\IStandardDao.cs" />
-    <Compile Include="Data\Model\AssemblyRepresentation.cs" />
-    <Compile Include="Data\Model\MethodRepresentation.cs" />
-    <Compile Include="Data\Model\NamespaceRepresentation.cs" />
-    <Compile Include="Data\Model\ParameterRepresentation.cs" />
-    <Compile Include="Data\Model\PropertyRepresentation.cs" />
-    <Compile Include="Data\Model\TypeRepresentation.cs" />
-    <Compile Include="Data\ReadMetadata.cs" />
+    <Compile Include="Data\Model\AttributeMetadata.cs" />
+    <Compile Include="Data\Model\Enums\AbstractENum.cs" />
+    <Compile Include="Data\Model\Enums\AccessLevel.cs" />
+    <Compile Include="Data\Model\AssemblyMetadata.cs" />
+    <Compile Include="Data\Model\ExtensionMethods.cs" />
+    <Compile Include="Data\Model\IMetadata.cs" />
+    <Compile Include="Data\Model\MethodMetadata.cs" />
+    <Compile Include="Data\Model\NamespaceMetadata.cs" />
+    <Compile Include="Data\Model\ParameterMetadata.cs" />
+    <Compile Include="Data\Model\PropertyMetadata.cs" />
+    <Compile Include="Data\Model\Enums\SealedEnum.cs" />
+    <Compile Include="Data\Model\Enums\StaticEnum.cs" />
+    <Compile Include="Data\Model\TypeMetadata.cs" />
+    <Compile Include="Data\Model\Enums\VirtualEnum.cs" />
     <Compile Include="Data\Reflector.cs" />
-    <Compile Include="Logic\ViewModel\ClassPresenter.cs" />
+    <Compile Include="Logic\TreeView\DataLoadedDictionary.cs" />
+    <Compile Include="Logic\TreeView\TreeViewItem.cs" />
+    <Compile Include="Logic\ViewModel\ViewModel.cs" />
     <Compile Include="Logic\ViewModel\RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tracing\Tracing.csproj">
-      <Project>{e91fb4f1-9505-40aa-97e8-960bbf405a26}</Project>
+      <Project>{552a1500-eafa-4239-a91a-e3d62593378c}</Project>
       <Name>Tracing</Name>
     </ProjectReference>
   </ItemGroup>

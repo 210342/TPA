@@ -1,28 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Library.Data.Model;
+using TPA.Reflection.Model;
 
-namespace Library.Data
+namespace TPA.Reflection
 {
+    //TODO add UT - testing data is required
     public class Reflector
     {
-        internal AssemblyRepresentation AssemblyModel { get; private set; }
-
         public Reflector(string assemblyFile)
         {
             if (string.IsNullOrEmpty(assemblyFile))
-                throw new ArgumentNullException();
-            Assembly assembly = Assembly.LoadFrom(assemblyFile);
-            AssemblyModel = new AssemblyRepresentation(assembly);
-        }
+                throw new ArgumentNullException("Assembly path can't be null or empty");
 
+            Assembly assembly = Assembly.UnsafeLoadFrom(assemblyFile);
+            m_AssemblyModel = new AssemblyMetadata(assembly);
+        }
         public Reflector(Assembly assembly)
         {
-            AssemblyModel = new AssemblyRepresentation(assembly);
+            if (assembly == null)
+                throw new ArgumentNullException("Assembly path can't be null or empty");
+            m_AssemblyModel = new AssemblyMetadata(assembly);
         }
+        internal AssemblyMetadata m_AssemblyModel { get; private set; }
+
     }
 }

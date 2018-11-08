@@ -1,19 +1,6 @@
 ﻿using Library.Logic.ViewModel;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace GraphicalUserInterface
 {
@@ -32,18 +19,16 @@ namespace GraphicalUserInterface
             SelectedItemHelper.Content = e.NewValue;
         }
 
-        private void FilePick(object sender, RoutedEventArgs e)
+        private void FileDialog(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog()
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.DefaultExt = "dll";
+            dialog.Filter = "Dynamically linked library (*dll)|*dll|All Files(*.*)|*.*";
+            if(dialog.ShowDialog().Value)
             {
-                RestoreDirectory = true,
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                DefaultExt = "dll",
-                Filter = "Dynamically linked library (*.dll)|*.dll|All Files (*.*)|*.*"
-            };
-            if(openFileDialog.ShowDialog().Value)
-            {
-                (DataContext as ClassPresenter).LoadedAssembly = openFileDialog.FileName;
+                var viewModel = DataContext as ViewModel;
+                viewModel.LoadedAssembly = dialog.FileName;
+                viewModel.ReloadAssemblyCommand.Execute(null);
             }
         }
     }
