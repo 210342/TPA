@@ -1,7 +1,0 @@
-﻿<Configuration>
-	<ConnectionString>
-    Data Source=SCRIPT-PC\SQLEXPRESS;
-    Initial Catalog=AppTracing;User ID=SCRIPT-PC\Script;
-    Integrated Security=True
-  </ConnectionString>
-</Configuration>

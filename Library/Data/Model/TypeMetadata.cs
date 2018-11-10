@@ -66,7 +66,7 @@ namespace Library.Data.Model
             EnumType, StructType, InterfaceType, ClassType
         }
         internal static TypeMetadata EmitReference(Type type)
-        {
+        {           
             if (!type.IsGenericType)
                 return new TypeMetadata(type.Name, type.GetNamespace());
             else

@@ -3,19 +3,29 @@ using Library.Data.Model;
 using Library.Logic.TreeView;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Tracing;
 
+
 namespace Library.Logic.ViewModel
 {
+    
     public class ViewModel : INotifyPropertyChanged
     {
         #region Fields
+        [Import(typeof(TraceListener))]
+        private TraceListener importedTraceListener;
+
+        private CompositionContainer _container;
+
         private TreeViewItem objectSelected;
         private string _loadedAssembly;
         private TreeViewItem _objectToDisplay;
+        
         #endregion
         #region Properties
         public ICommand ShowCurrentObject { get; }
@@ -77,28 +87,15 @@ namespace Library.Logic.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ViewModel()
+        public ViewModel() : this(true)
         {
-            string traceListenersAssemblyLocation = 
-                System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(DbTraceListener)).Location);
-            Trace.Listeners.Add(new DbTraceListener(traceListenersAssemblyLocation + @"\connConfig.xml"));
-
-            Trace.Listeners.Add(new FileTraceListener("file.log"));
-
-            ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
-            ObjectsList = new ObservableCollection<TreeViewItem>() { null };
-            ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
         }
         public ViewModel(bool tracing)
         {
             Tracing = tracing;
             if (Tracing)
             {
-                string traceListenersAssemblyLocation =
-                    System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(DbTraceListener)).Location);
-                Trace.Listeners.Add(new DbTraceListener(traceListenersAssemblyLocation + @"\connConfig.xml"));
-
-                Trace.Listeners.Add(new FileTraceListener("file.log"));
+                ImportTraceListener();
             }
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
@@ -140,6 +137,25 @@ namespace Library.Logic.ViewModel
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private void ImportTraceListener()
+        {
+            var catalog = new AggregateCatalog();
+            System.Reflection.Assembly loadedTracingAssembly =
+            System.Reflection.Assembly.UnsafeLoadFrom(@".\Tracing.dll");
+
+            catalog.Catalogs.Add(new AssemblyCatalog(loadedTracingAssembly));
+            _container = new CompositionContainer(catalog);
+            try
+            {
+                this._container.ComposeParts(this);
+            }
+            catch (CompositionException compositionException)
+            {
+                Trace.TraceError("External TraceListener import failed. " + 
+                compositionException.Message);
+            }
+            Trace.Listeners.Add(this.importedTraceListener);
         }
     }
 }

@@ -1,12 +1,18 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel.Composition;
+using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 
 namespace Tracing
 {
+    [Export(typeof(TraceListener))]
     public class FileTraceListener : TraceListener
     {
         private Stream file;
         private TextWriterTraceListener wrappedListener;
+        public FileTraceListener() : this(ConfigurationManager.AppSettings["FileName"])
+        {
+        }
         public FileTraceListener(string fileName)
         {
             this.file = File.Create(fileName);

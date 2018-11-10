@@ -48,22 +48,9 @@ namespace Tracing
         {
             this.databaseWriter = dbWriter;
         }
-        public DbTraceListener(string xmlDocPath)
+        public DbTraceListener()
         {
-            int readCounter = 0;
-            using (XmlReader reader = XmlReader.Create(xmlDocPath))
-            {
-                while (reader.Read())
-                    if (reader.IsStartElement())
-                        if (reader.Name == "ConnectionString")
-                                if (reader.Read())
-                                {
-                                    connectionString = reader.Value;
-                                    readCounter++;
-                                }
-            }
-            if (readCounter < 1)
-                throw new XmlException("Could not read xml file");
+            this.connectionString = ConfigurationManager.AppSettings["ConnectionString"];
             databaseWriter = new DatabaseHandling.DatabaseWriter(connectionString);
             if (!databaseWriter.TableExists(TableName))
             {
