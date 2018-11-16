@@ -163,6 +163,8 @@ namespace Library.Logic.ViewModel
 
         private void OpenFile(ISourceProvider sourceProvider)
         {
+            if (sourceProvider == null)
+                throw new System.ArgumentNullException("SourceProvider can't be null.");
             if (sourceProvider.GetAccess())
             {
                 LoadedAssembly = sourceProvider.GetFilePath();

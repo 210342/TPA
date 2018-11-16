@@ -18,10 +18,10 @@ namespace CommandLineInterface
 
         public void Start(string dllPath)
         {
+            dataContext.FileSourceProvider = new TextFileSourceProvider(dllPath); //source provider
             try
             {
-                dataContext.LoadedAssembly = dllPath;
-                dataContext.ReloadAssemblyCommand.Execute(null);
+                dataContext.OpenFileCommand.Execute(null);
             }
             catch (FileNotFoundException e)
             {
