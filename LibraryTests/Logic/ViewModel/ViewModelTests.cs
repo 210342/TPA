@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VM = Library.Logic.ViewModel;
 using Library.Data.Model;
 using Library.Logic.TreeView;
+using Library.Logic.TreeView.Items;
 
 namespace LibraryTests.Logic.ViewModel
 {
@@ -33,7 +34,7 @@ namespace LibraryTests.Logic.ViewModel
         public void ObjectToDisplayChanges()
         {
             VM.ViewModel vm = new VM.ViewModel(false);
-            vm.ObjectSelected = new TreeViewItem(new TypeMetadata(typeof(Type)));
+            vm.ObjectSelected = new TypeItem(new TypeMetadata(typeof(Type)));
             vm.ShowCurrentObject.Execute(null);
             Assert.AreEqual(vm.ObjectSelected, vm.ObjectToDisplay);
         }

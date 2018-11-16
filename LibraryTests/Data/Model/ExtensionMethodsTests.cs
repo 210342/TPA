@@ -10,6 +10,8 @@ namespace LibraryTests.Data.Model
     [TestClass]
     public class ExtensionMethodsTests
     {
+        private class PrivateTestType {}
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void GetVisibleForTypeThrowsExceptionOnNull()
@@ -24,7 +26,7 @@ namespace LibraryTests.Data.Model
         [TestMethod]
         public void GetVisibleForTypeReturnFalse()
         {
-            Assert.AreEqual(false, ExtensionMethods.GetVisible(typeof(TypeMetadata)));
+            Assert.AreEqual(false, ExtensionMethods.GetVisible(typeof(PrivateTestType)));
         }
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
