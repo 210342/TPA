@@ -14,21 +14,22 @@ namespace Library.Logic.ViewModel
             _execute = execute ?? throw new ArgumentNullException();
             _canExecute = canExecute;
         }
-
+        /*
         public event EventHandler CanExecuteChanged
         {
             add
             {
                 if (_canExecute != null)
-                    CommandManager.RequerySuggested += value;
+
+                    //CommandManager.RequerySuggested += value;
             }
             remove
             {
                 if (_canExecute != null)
-                    CommandManager.RequerySuggested -= value;
+                    //CommandManager.RequerySuggested -= value;
             }
         }
-
+        */
         public bool CanExecute(object parameter)
         {
             return _canExecute();
@@ -41,5 +42,7 @@ namespace Library.Logic.ViewModel
 
         private Action _execute;
         private Func<bool> _canExecute;
+
+        public event EventHandler CanExecuteChanged;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Library.Data;
 using Library.Data.Model;
 using Library.Logic.TreeView;
+using Library.Logic.TreeView.Items;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -77,17 +78,9 @@ namespace Library.Logic.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ViewModel()
+        public ViewModel() : this(false)
         {
-            string traceListenersAssemblyLocation = 
-                System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(DbTraceListener)).Location);
-            Trace.Listeners.Add(new DbTraceListener(traceListenersAssemblyLocation + @"\connConfig.xml"));
-
-            Trace.Listeners.Add(new FileTraceListener("file.log"));
-
-            ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
-            ObjectsList = new ObservableCollection<TreeViewItem>() { null };
-            ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
+            
         }
         public ViewModel(bool tracing)
         {
@@ -121,7 +114,7 @@ namespace Library.Logic.ViewModel
             ObjectsList.Clear();
             if (LoadedAssemblyRepresentation != null)
             {
-                TreeViewItem item = new TreeViewItem(LoadedAssemblyRepresentation);
+                TreeViewItem item = new AssemblyItem((AssemblyMetadata)LoadedAssemblyRepresentation);
                 ObjectsList.Add(item);
                 ObjectSelected = item;
             }

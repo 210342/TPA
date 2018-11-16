@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Library.Data.Model
 {
-    internal class NamespaceMetadata : IMetadata
+    public class NamespaceMetadata : IMetadata
     {
         public string Details
         {

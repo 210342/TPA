@@ -8,13 +8,13 @@ using System.Text;
 
 namespace Library.Data.Model
 {
-    internal class MethodMetadata : IMetadata
+    public class MethodMetadata : IMetadata
     {
         public string Details
         {
             get
             {
-                var ret =  $"{(m_ReturnType.Name != null ? "Method: " + m_ReturnType.Name : "Constructor: ")} {m_Name}(";
+                var ret =  $"{(m_ReturnType?.Name != null ? "Method: " + m_ReturnType.Name : "Constructor: ")} {m_Name}(";
                 foreach(var param in m_Parameters)
                 {
                     ret += $"{param.Details}, ";

@@ -5,7 +5,7 @@ using System;
 
 namespace Library.Data.Model
 {
-    internal class PropertyMetadata : IMetadata
+    public class PropertyMetadata : IMetadata
     {
         public string Details
         {

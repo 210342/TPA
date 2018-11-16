@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Library.Data.Model
 {
-    internal class ParameterMetadata : IMetadata
+    public class ParameterMetadata : IMetadata
     {
 
         public string Details
