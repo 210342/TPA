@@ -5,6 +5,7 @@ using VM = Library.Logic.ViewModel;
 using Library.Data.Model;
 using Library.Logic.TreeView;
 using Library.Logic.TreeView.Items;
+using Library.Logic.ViewModel;
 
 namespace LibraryTests.Logic.ViewModel
 {
@@ -12,6 +13,20 @@ namespace LibraryTests.Logic.ViewModel
     [TestClass]
     public class ViewModelTests
     {
+        class TestClass : ISourceProvider
+        {
+            public bool GetAccess()
+            {
+                return true;
+            }
+
+            public string GetFilePath()
+            {
+                return System.Reflection.Assembly.GetAssembly(this.GetType()).Location;
+            }
+        }
+
+        VM.ViewModel vm = new VM.ViewModel(false);
         [TestMethod]
         public void ReloadAssemblyChangesAssembly()
         {
@@ -37,6 +52,14 @@ namespace LibraryTests.Logic.ViewModel
             vm.ObjectSelected = new TypeItem(new TypeMetadata(typeof(Type)));
             vm.ShowCurrentObject.Execute(null);
             Assert.AreEqual(vm.ObjectSelected, vm.ObjectToDisplay);
+        }
+        [TestMethod]
+        public void OpenFileWorks()
+        {
+            VM.ViewModel vm = new VM.ViewModel(false);
+            vm.FileSourceProvider = new TestClass();
+            vm.OpenFileCommand.Execute(null);
+            Assert.IsNotNull(vm.LoadedAssembly);
         }
     }
 }
