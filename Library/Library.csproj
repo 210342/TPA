@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -68,6 +69,7 @@
     <Compile Include="Logic\TreeView\Items\TreeViewItemFactory.cs" />
     <Compile Include="Logic\TreeView\Items\TypeItem.cs" />
     <Compile Include="Logic\TreeView\TreeViewItem.cs" />
+    <Compile Include="Logic\ViewModel\ISourceProvider.cs" />
     <Compile Include="Logic\ViewModel\ViewModel.cs" />
     <Compile Include="Logic\ViewModel\RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

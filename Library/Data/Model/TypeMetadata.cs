@@ -183,29 +183,18 @@ namespace Library.Data.Model
 
         public override bool Equals(object obj)
         {
-            if (this.GetType() != obj.GetType())
+            if (GetType() != obj.GetType())
                 return false;
             TypeMetadata tm = ((TypeMetadata)obj);
-            if (this.m_typeName == tm.m_typeName)
+            if (m_typeName == tm.m_typeName)
             {
+                if (m_NamespaceName != tm.m_NamespaceName)
+                    return false;
                 return true;
             }
             return false;
         }
-        /*
-        public override bool Equals(object obj)
-        {
-            if (this.GetType() != obj.GetType())
-                return false;
-            TypeMetadata tm = ((TypeMetadata)obj);
-            if (this.m_typeName == tm.m_typeName)
-            {
-                if (m_NamespaceName != tm.m_NamespaceName)
-                    return false;
-            }
-            return false;
-        }
-        */
+
         public override string ToString()
         {
             return m_typeName;
