@@ -36,6 +36,7 @@ namespace LibraryTests.Logic.ViewModel
             IMetadata reloadedAssemblyRepr = vm.LoadedAssemblyRepresentation;
             Assert.AreNotEqual(loadedAssemblyRepr, reloadedAssemblyRepr);
         }
+
         [TestMethod]
         public void ReloadAsseblyListPopulated()
         {
@@ -44,6 +45,7 @@ namespace LibraryTests.Logic.ViewModel
             vm.ReloadAssemblyCommand.Execute(null);
             Assert.AreNotEqual(0, vm.ObjectsList.Count);
         }
+
         [TestMethod]
         public void ObjectToDisplayChanges()
         {
@@ -52,6 +54,7 @@ namespace LibraryTests.Logic.ViewModel
             vm.ShowCurrentObject.Execute(null);
             Assert.AreEqual(vm.ObjectSelected, vm.ObjectToDisplay);
         }
+
         [TestMethod]
         public void OpenFileWorks()
         {

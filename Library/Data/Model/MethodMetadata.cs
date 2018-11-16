@@ -14,12 +14,20 @@ namespace Library.Data.Model
         {
             get
             {
-                var ret =  $"{(m_ReturnType?.Name != null ? "Method: " + m_ReturnType.Name : "Constructor: ")} {m_Name}(";
-                foreach(var param in m_Parameters)
+                var ret =  $"{(m_ReturnType?.Name != null ? "Method: " + m_ReturnType.Name : "Constructor: ")} {m_Name}";
+                if(m_Parameters.Count() == 0)
                 {
-                    ret += $"{param.Details}, ";
+                    ret += $"() {Environment.NewLine}";
                 }
-                ret = ret.Remove(ret.Length - 2, 1) + ")\n";
+                else
+                {
+                    foreach (var param in m_Parameters)
+                    {
+                        ret += $"{param.Details}, ";
+                    }
+                    ret = ret.Remove(ret.Length - 2, 1) + ")\n";
+                }
+                
                 ret += $"Modifiers: {m_Modifiers.Item1.ToString()}, " +
                     $"{m_Modifiers.Item2.ToString()}, {m_Modifiers.Item3.ToString()}, {m_Modifiers.Item4.ToString()}.";
                 return ret;
