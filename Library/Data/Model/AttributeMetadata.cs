@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 namespace Library.Data.Model
 {
-    internal class AttributeMetadata : IMetadata
+    public class AttributeMetadata : IMetadata
     {
         internal AttributeMetadata(Attribute attribute)
         {

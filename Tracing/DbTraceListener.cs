@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Configuration;
 using System.Diagnostics;
-using System.Text;
-using System.Xml;
 
 namespace Tracing
 {
+    [Export(typeof(TraceListener))]
     public class DbTraceListener : TraceListener
     {
         #region private fields

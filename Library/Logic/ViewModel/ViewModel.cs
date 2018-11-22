@@ -1,6 +1,7 @@
 ﻿using Library.Data;
 using Library.Data.Model;
 using Library.Logic.TreeView;
+using Library.Logic.TreeView.Items;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
@@ -8,7 +9,6 @@ using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Tracing;
 
 
 namespace Library.Logic.ViewModel
@@ -17,11 +17,11 @@ namespace Library.Logic.ViewModel
     public class ViewModel : INotifyPropertyChanged
     {
         #region Fields
-        [Import(typeof(TraceListener))]
-        private TraceListener importedTraceListener;
+        [ImportMany(typeof(TraceListener))]
+        private System.Collections.Generic.IEnumerable<TraceListener> 
+            importedTraceListener = null;
 
         private CompositionContainer _container;
-
         private TreeViewItem objectSelected;
         private string _loadedAssembly;
         private TreeViewItem _objectToDisplay;
@@ -30,6 +30,8 @@ namespace Library.Logic.ViewModel
         #region Properties
         public ICommand ShowCurrentObject { get; }
         public ICommand ReloadAssemblyCommand { get; }
+        public ICommand OpenFileCommand { get; }
+        public ISourceProvider FileSourceProvider { get; set; }
         public bool Tracing { get; set; }
         public ObservableCollection<TreeViewItem> ObjectsList { get; }
         public TreeViewItem ObjectSelected
@@ -87,7 +89,7 @@ namespace Library.Logic.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ViewModel() : this(true)
+        public ViewModel() : this(false)
         {
         }
         public ViewModel(bool tracing)
@@ -100,6 +102,7 @@ namespace Library.Logic.ViewModel
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
+            OpenFileCommand = new RelayCommand(() => OpenFile(FileSourceProvider));
         }
         private void LoadAssembly()
         {
@@ -118,7 +121,7 @@ namespace Library.Logic.ViewModel
             ObjectsList.Clear();
             if (LoadedAssemblyRepresentation != null)
             {
-                TreeViewItem item = new TreeViewItem(LoadedAssemblyRepresentation);
+                TreeViewItem item = new AssemblyItem((AssemblyMetadata)LoadedAssemblyRepresentation);
                 ObjectsList.Add(item);
                 ObjectSelected = item;
             }
@@ -152,10 +155,23 @@ namespace Library.Logic.ViewModel
             }
             catch (CompositionException compositionException)
             {
-                Trace.TraceError("External TraceListener import failed. " + 
+                Trace.TraceError("External TraceListener import failed. " +
                 compositionException.Message);
             }
-            Trace.Listeners.Add(this.importedTraceListener);
+            if(importedTraceListener != null)
+                foreach(TraceListener listener in importedTraceListener)
+                    Trace.Listeners.Add(listener);
+        }
+
+        private void OpenFile(ISourceProvider sourceProvider)
+        {
+            if (sourceProvider == null)
+                throw new System.ArgumentNullException("SourceProvider can't be null.");
+            if (sourceProvider.GetAccess())
+            {
+                LoadedAssembly = sourceProvider.GetFilePath();
+                ReloadAssemblyCommand.Execute(null);
+            }
         }
     }
 }

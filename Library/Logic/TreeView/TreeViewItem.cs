@@ -8,52 +8,19 @@
 
 using Library.Data.Model;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace Library.Logic.TreeView
 {
-    public class TreeViewItem
+    public abstract class TreeViewItem
     {
-        IMetadata rootItem;
+        private bool m_WasBuilt;
+        private bool m_IsExpanded;
 
-        public string Details {
-            get
-            {
-                return rootItem.Details;
-            }
-        }
-
-        public TreeViewItem()
-        {
-            //Children = new ObservableCollection<TreeViewItem>() { null };
-            this.m_WasBuilt = false;
-        }
-        public TreeViewItem(IMetadata metadata) : base()
-        {
-            if (metadata == null)
-                throw new System.ArgumentNullException("Metadata node can't be null");
-            this.rootItem = metadata;
-        }
-        public string Name
-        {
-            get
-            {
-                return rootItem.Name;
-            }
-        }
-        private ObservableCollection<TreeViewItem> _children = 
-            new ObservableCollection<TreeViewItem>() { null };
-        public ObservableCollection<TreeViewItem> Children
-        {
-            get
-            {
-                return this._children;
-            }
-            set
-            {
-                this._children = value;
-            }
-        }
+        public string Type => this.GetType().ToString();
+        public string Name { get; protected set; }
+        public string Details { get; protected set; }
+        protected IMetadata Metadata { get; set; }
+        public List<TreeViewItem> Children { get; protected set; } = new List<TreeViewItem>() { null };
         public bool IsExpanded
         {
             get { return m_IsExpanded; }
@@ -69,37 +36,45 @@ namespace Library.Logic.TreeView
             }
         }
 
-        private bool m_WasBuilt;
-        private bool m_IsExpanded;
+        private TreeViewItem()
+        {
+            this.m_WasBuilt = false;
+        }
+        public TreeViewItem(IMetadata metadata) : base()
+        {
+            if (metadata == null)
+                throw new System.ArgumentNullException("Metadata node can't be null");
+            this.Name = metadata.Name;
+            this.Details = metadata.Details;
+            this.Metadata = metadata;
+        }
+
         private void BuildMyself()
         {
-            var list = new List<TreeViewItem>(enumerateRootChildren());
+            var list = new List<TreeViewItem>(EnumerateRootChildren());
             list.ForEach(n => Children.Add(n));
         }
-        private IEnumerable<TreeViewItem> enumerateRootChildren()
+
+        private IEnumerable<TreeViewItem> EnumerateRootChildren()
         {
-            if(rootItem.Children != null)
+            if(Metadata.Children != null)
             {
-                foreach (IMetadata elem in rootItem.Children)
+                foreach (IMetadata elem in Metadata.Children)
                 {
                     if (elem != null)
                     {
-                        TreeViewItem tvi = null;
-                        if (DataLoadedDictionary.Items.TryGetValue(elem.GetHashCode(), out IMetadata returnValue))
-                            tvi = new TreeViewItem(returnValue);
-                        else
-                        {
-                            tvi = new TreeViewItem(elem);
-                            DataLoadedDictionary.Items.Add(elem.GetHashCode(), elem);
-                        }
+                        TreeViewItem tvi = GetTreeItem(elem);
+                        
                         yield return tvi;
                     }
                 }
             }
         }
+        protected abstract TreeViewItem GetTreeItem(IMetadata elem);
+
         public override string ToString()
         {
-            return rootItem.ToString();
+            return Name;
         }
     }
 }

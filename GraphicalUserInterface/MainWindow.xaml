@@ -31,8 +31,7 @@
             </TreeView.ItemContainerStyle>
         </TreeView>
         <TextBox IsEnabled="false" Text="{Binding Path=LoadedAssembly, Mode=OneWay}"  x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="0,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="701" Grid.ColumnSpan="2"/>
-        <Button Click="FileDialog"  x:Name="button" Content="Load" HorizontalAlignment="Left" Margin="330,4,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1"/>
-        <TextBlock x:Name="textBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" Text="{Binding Path=ObjectToDisplay.Details}" VerticalAlignment="Top" Height="356" Width="395"/>
-        <Button x:Name="details" Command="{Binding ShowCurrentObject}" Content="Show details" HorizontalAlignment="Left" Margin="10,405,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Command="{Binding Path=OpenFileCommand}"  x:Name="button" Content="Load" HorizontalAlignment="Left" Margin="330,4,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1"/>
+        <TextBlock x:Name="textBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" Text="{Binding Path=ObjectSelected.Details}" VerticalAlignment="Top" Height="356" Width="395"/>
     </Grid>
 </Window>

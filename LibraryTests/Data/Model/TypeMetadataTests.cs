@@ -36,8 +36,8 @@ namespace LibraryTests.Data.Model
         {
             ConstructorInfo ctor = typeof(TypeMetadata).GetConstructor(
                  BindingFlags.Instance | BindingFlags.NonPublic,
-                 null, new Type[] { typeof(string), typeof(string) }, null);
-            ctor.Invoke(new object[] { null, null });
+                 null, new Type[] { typeof(string), typeof(string), typeof(int) }, null);
+            ctor.Invoke(new object[] { null, null, null });
         }
         [TestMethod]
         [ExpectedException(typeof(TargetInvocationException))]
@@ -45,8 +45,9 @@ namespace LibraryTests.Data.Model
         {
             ConstructorInfo ctor = typeof(TypeMetadata).GetConstructor(
                  BindingFlags.Instance | BindingFlags.NonPublic,
-                 null, new Type[] { typeof(string), typeof(string), typeof(IEnumerable<TypeMetadata>) },null);
-            ctor.Invoke(new object[] { null, null, null });
+                 null, new Type[] { typeof(string), typeof(string), typeof(IEnumerable<TypeMetadata>),
+                     typeof(int) },null);
+            ctor.Invoke(new object[] { null, null, null, null });
         }
 
         [TestMethod]

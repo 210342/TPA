@@ -8,23 +8,26 @@ using System.Text;
 
 namespace Library.Data.Model
 {
-    internal class MethodMetadata : IMetadata
+    public class MethodMetadata : IMetadata
     {
         public string Details
         {
             get
             {
-                var ret =  $"{(m_ReturnType.Name != null ? "Method: " + m_ReturnType.Name : "Constructor: ")} {m_Name}(";
-                foreach(var param in m_Parameters)
+                var ret =  $"{(m_ReturnType?.Name != null ? "Method: " + m_ReturnType.Name : "Constructor: ")} {m_Name}";
+                if(m_Parameters.Count() == 0)
                 {
-                    ret += $"{param.Details}, ";
+                    ret += $"() {Environment.NewLine}";
                 }
-                if (ret[ret.Length - 2] == ',')
+                else
                 {
-                    ret = ret.Remove(ret.Length - 2, 1);
+                    ret += $"(";
+                    foreach (var param in m_Parameters)
+                    {
+                        ret += $"{param.Details}, ";
+                    }
+                    ret = ret.Remove(ret.Length - 2, 1) + ")\n";
                 }
-                ret += $")\n";
-
                 ret += $"Modifiers: {m_Modifiers.Item1.ToString()}, " +
                     $"{m_Modifiers.Item2.ToString()}, {m_Modifiers.Item3.ToString()}, {m_Modifiers.Item4.ToString()}.";
                 return ret;

@@ -32,8 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
@@ -61,8 +59,17 @@
     <Compile Include="Data\Model\TypeMetadata.cs" />
     <Compile Include="Data\Model\Enums\VirtualEnum.cs" />
     <Compile Include="Data\Reflector.cs" />
-    <Compile Include="Logic\TreeView\DataLoadedDictionary.cs" />
+    <Compile Include="Data\DataLoadedDictionary.cs" />
+    <Compile Include="Logic\TreeView\Items\PropertyItem.cs" />
+    <Compile Include="Logic\TreeView\Items\ParameterItem.cs" />
+    <Compile Include="Logic\TreeView\Items\MethodItem.cs" />
+    <Compile Include="Logic\TreeView\Items\NamespaceItem.cs" />
+    <Compile Include="Logic\TreeView\Items\AssemblyItem.cs" />
+    <Compile Include="Logic\TreeView\Items\AttributeItem.cs" />
+    <Compile Include="Logic\TreeView\Items\TreeViewItemFactory.cs" />
+    <Compile Include="Logic\TreeView\Items\TypeItem.cs" />
     <Compile Include="Logic\TreeView\TreeViewItem.cs" />
+    <Compile Include="Logic\ViewModel\ISourceProvider.cs" />
     <Compile Include="Logic\ViewModel\ViewModel.cs" />
     <Compile Include="Logic\ViewModel\RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

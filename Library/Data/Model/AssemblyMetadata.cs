@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Library.Data.Model
 {
-    internal class AssemblyMetadata : IMetadata
+    public class AssemblyMetadata : IMetadata
     {
 
         internal AssemblyMetadata(Assembly assembly)

@@ -5,24 +5,28 @@ using System.Linq;
 
 namespace Library.Data.Model
 {
-    internal class TypeMetadata : IMetadata
+    public class TypeMetadata : IMetadata
     {
         public string Details
         {
             get
             {
                 var ret = $"Type: {m_typeName}{(m_BaseType != null ? ",extends " + m_BaseType.Name : string.Empty)}";
-                if (m_ImplementedInterfaces.Count() > 0)
+                if (m_ImplementedInterfaces != null)
                 {
                     ret += ",implements ";
                     foreach (var intf in m_ImplementedInterfaces)
                         ret += $"{intf.Name}, ";
                 }
                 ret += $"\nType Kind: {m_TypeKind.ToString()}\n";
-                ret += $"Modifiers: {m_Modifiers.Item1.ToString()}," +
-                    $"{m_Modifiers.Item2.ToString()},{m_Modifiers.Item3.ToString()}.";
+                ret += $"Modifiers: {m_Modifiers?.Item1.ToString()}," +
+                    $"{m_Modifiers?.Item2.ToString()},{m_Modifiers?.Item3.ToString()}.";
                 return ret;
             }
+        }
+        public void Build()
+        {
+
         }
 
         #region constructors
@@ -57,20 +61,23 @@ namespace Library.Data.Model
             if (m_GenericArguments != null)
                 elems.AddRange(m_GenericArguments);
             Children = elems;
+            _cachedHash = type.GetHashCode();
         }
         #endregion
 
         #region API
         internal enum TypeKind
         {
-            EnumType, StructType, InterfaceType, ClassType
+            Reference, EnumType, StructType, InterfaceType, ClassType
         }
         internal static TypeMetadata EmitReference(Type type)
         {           
             if (!type.IsGenericType)
-                return new TypeMetadata(type.Name, type.GetNamespace());
+                return new TypeMetadata(type.Name, type.GetNamespace(), 
+                    type.GetHashCode());
             else
-                return new TypeMetadata(type.Name, type.GetNamespace(), EmitGenericArguments(type.GetGenericArguments()));
+                return new TypeMetadata(type.Name, type.GetNamespace(), EmitGenericArguments(type.GetGenericArguments()),
+                    type.GetHashCode());
         }
         internal static IEnumerable<TypeMetadata> EmitGenericArguments(IEnumerable<Type> arguments)
         {
@@ -99,17 +106,20 @@ namespace Library.Data.Model
         public IEnumerable<IMetadata> Children { get; }
 
         //constructors
-        private TypeMetadata(string typeName, string namespaceName)
+        private TypeMetadata(string typeName, string namespaceName, int hash)
         {
             if (typeName == null || namespaceName == null)
                 throw new ArgumentNullException("Type can't be null.");
             m_typeName = typeName;
             m_NamespaceName = namespaceName;
+            _cachedHash = hash;
         }
-        private TypeMetadata(string typeName, string namespaceName, IEnumerable<TypeMetadata> genericArguments) : this(typeName, namespaceName)
+        private TypeMetadata(string typeName, string namespaceName, IEnumerable<TypeMetadata> genericArguments, int hash) 
+            : this(typeName, namespaceName, hash)
         {
             m_GenericArguments = genericArguments;
         }
+
         //methods
         private TypeMetadata EmitDeclaringType(Type declaringType)
         {
@@ -164,24 +174,23 @@ namespace Library.Data.Model
         }
         #endregion
 
+        private int _cachedHash = 0;
+
         public override int GetHashCode()
         {
-            //return savedHash;
-            var hash = 37;
-            hash *= 17 + m_typeName.GetHashCode();
-            //hash *= 17 + m_NamespaceName.GetHashCode();
-            return hash;
+            return _cachedHash;
         }
 
         public override bool Equals(object obj)
         {
-            if (this.GetType() != obj.GetType())
+            if (GetType() != obj.GetType())
                 return false;
             TypeMetadata tm = ((TypeMetadata)obj);
-            if (this.m_typeName == tm.m_typeName)
+            if (m_typeName == tm.m_typeName)
             {
                 if (m_NamespaceName != tm.m_NamespaceName)
                     return false;
+                return true;
             }
             return false;
         }
