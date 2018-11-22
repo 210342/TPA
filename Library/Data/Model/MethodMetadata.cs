@@ -21,13 +21,13 @@ namespace Library.Data.Model
                 }
                 else
                 {
+                    ret += $"(";
                     foreach (var param in m_Parameters)
                     {
                         ret += $"{param.Details}, ";
                     }
                     ret = ret.Remove(ret.Length - 2, 1) + ")\n";
                 }
-                
                 ret += $"Modifiers: {m_Modifiers.Item1.ToString()}, " +
                     $"{m_Modifiers.Item2.ToString()}, {m_Modifiers.Item3.ToString()}, {m_Modifiers.Item4.ToString()}.";
                 return ret;

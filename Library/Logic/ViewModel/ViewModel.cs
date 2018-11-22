@@ -10,8 +10,10 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
+
 namespace Library.Logic.ViewModel
 {
+    
     public class ViewModel : INotifyPropertyChanged
     {
         #region Fields
@@ -23,6 +25,7 @@ namespace Library.Logic.ViewModel
         private TreeViewItem objectSelected;
         private string _loadedAssembly;
         private TreeViewItem _objectToDisplay;
+        
         #endregion
         #region Properties
         public ICommand ShowCurrentObject { get; }
@@ -88,7 +91,6 @@ namespace Library.Logic.ViewModel
 
         public ViewModel() : this(false)
         {
-            
         }
         public ViewModel(bool tracing)
         {
