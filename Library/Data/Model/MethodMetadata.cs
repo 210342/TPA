@@ -19,7 +19,12 @@ namespace Library.Data.Model
                 {
                     ret += $"{param.Details}, ";
                 }
-                ret = ret.Remove(ret.Length - 2, 1) + ")\n";
+                if (ret[ret.Length - 2] == ',')
+                {
+                    ret = ret.Remove(ret.Length - 2, 1);
+                }
+                ret += $")\n";
+
                 ret += $"Modifiers: {m_Modifiers.Item1.ToString()}, " +
                     $"{m_Modifiers.Item2.ToString()}, {m_Modifiers.Item3.ToString()}, {m_Modifiers.Item4.ToString()}.";
                 return ret;
