@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Library.Data.Model
 {
+    [DataContract(Name = "Parameter")]
     public class ParameterMetadata : IMetadata
     {
 
@@ -25,13 +27,31 @@ namespace Library.Data.Model
         }
 
         //private vars
+        [DataMember(Name = "Name")]
         private string m_Name;
+        [DataMember(Name = "Type")]
         private TypeMetadata m_TypeMetadata;
 
         public TypeMetadata Type { get { return m_TypeMetadata; } }
         public string Name => m_Name;
 
-        public IEnumerable<IMetadata> Children => new[] { m_TypeMetadata };
+        [DataMember(Name = "Children")]
+        public IEnumerable<IMetadata> Children {
+
+            get
+            {
+                return new[] { m_TypeMetadata };
+            }
+            set
+            {
+                foreach(var elem in value)
+                {
+                    this.m_TypeMetadata = (TypeMetadata)elem;
+                    break;
+                }
+            }
+        }
+        [DataMember(Name = "SavedHash")]
         private int savedHash;
 
         public override int GetHashCode()

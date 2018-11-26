@@ -10,6 +10,6 @@ namespace Library.Data.Model
     {
         string Name { get; }
         string Details { get; }
-        IEnumerable<IMetadata> Children { get; }
+        IEnumerable<IMetadata> Children { get; set; }
     }
 }

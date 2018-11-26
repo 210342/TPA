@@ -2,9 +2,11 @@
 using System.Reflection;
 using System.Linq;
 using System;
+using System.Runtime.Serialization;
 
 namespace Library.Data.Model
 {
+    [DataContract(Name = "Property")]
     public class PropertyMetadata : IMetadata
     {
         public string Details
@@ -22,12 +24,31 @@ namespace Library.Data.Model
         }
 
         #region private
+        [DataMember(Name = "Name")]
         private string m_Name;
+        [DataMember(Name = "Type")]
         private TypeMetadata m_TypeMetadata;
 
         public string Name => m_Name;
 
-        public IEnumerable<IMetadata> Children => new[] { m_TypeMetadata };
+        [DataMember(Name = "Children")]
+        public IEnumerable<IMetadata> Children
+            {
+        
+            get
+            {
+                return new[] { m_TypeMetadata
+    };
+}
+set
+            {
+                foreach(var elem in value)
+                {
+                    this.m_TypeMetadata = (TypeMetadata)elem;
+                    break;
+                }
+            }
+        }
 
         private PropertyMetadata(string propertyName, TypeMetadata propertyType)
         {
@@ -40,6 +61,7 @@ namespace Library.Data.Model
             savedHash *= 31 + m_TypeMetadata.GetHashCode();
         }
         #endregion
+        [DataMember(Name = "SavedHash")]
         private int savedHash;
         public override int GetHashCode()
         {

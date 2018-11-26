@@ -2,11 +2,14 @@
 using Library.Data.Model;
 using Library.Logic.TreeView;
 using Library.Logic.TreeView.Items;
+using Serializing;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -20,6 +23,8 @@ namespace Library.Logic.ViewModel
         [ImportMany(typeof(TraceListener))]
         private System.Collections.Generic.IEnumerable<TraceListener> 
             importedTraceListener = null;
+        [Import]
+        private IPersister persister;
 
         private CompositionContainer _container;
         private TreeViewItem objectSelected;
@@ -31,6 +36,7 @@ namespace Library.Logic.ViewModel
         public ICommand ShowCurrentObject { get; }
         public ICommand ReloadAssemblyCommand { get; }
         public ICommand OpenFileCommand { get; }
+        public ICommand SaveModel { get; }
         public ISourceProvider FileSourceProvider { get; set; }
         public bool Tracing { get; set; }
         public ObservableCollection<TreeViewItem> ObjectsList { get; }
@@ -99,11 +105,26 @@ namespace Library.Logic.ViewModel
             {
                 ImportTraceListener();
             }
+            ImportPersister();
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
             OpenFileCommand = new RelayCommand(() => OpenFile(FileSourceProvider));
+
+            SaveModel = new RelayCommand(() =>
+            {
+                /* TESTING SERIALIZATION */
+                System.Collections.Generic.List<System.Type> types = new System.Collections.Generic.List<System.Type>();
+                types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
+                XmlModelSerializer serializer = 
+                new XmlModelSerializer(types, typeof(System.Collections.Generic.Dictionary<int, IMetadata>));
+
+                //serializer.Save(ObjectsList[0].ModelObject);
+                serializer.Save(DataLoadedDictionary.Items);
+                DataLoadedDictionary.Items = (System.Collections.Generic.Dictionary<int, IMetadata>)serializer.Load(null);
+            });
         }
+
         private void LoadAssembly()
         {
             if (Tracing)
@@ -161,6 +182,10 @@ namespace Library.Logic.ViewModel
             if(importedTraceListener != null)
                 foreach(TraceListener listener in importedTraceListener)
                     Trace.Listeners.Add(listener);
+        }
+        private void ImportPersister()
+        {
+            return; //TODO
         }
 
         private void OpenFile(ISourceProvider sourceProvider)

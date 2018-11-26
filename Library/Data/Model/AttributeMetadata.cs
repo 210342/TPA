@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+
 namespace Library.Data.Model
 {
+    [DataContract(Name = "Attribute")]
     public class AttributeMetadata : IMetadata
     {
         internal AttributeMetadata(Attribute attribute)
@@ -11,6 +14,7 @@ namespace Library.Data.Model
             m_Name = attribute.GetType().Name;
             savedHash = attribute.GetHashCode();
         }
+        [DataMember(Name = "Name")]
         private string m_Name;
         public string Name => m_Name;
         public string Details
@@ -20,7 +24,9 @@ namespace Library.Data.Model
                 return $"Attribute name: {m_Name}.";
             }
         }
-        public IEnumerable<IMetadata> Children => null;
+        [DataMember(Name = "Children")]
+        public IEnumerable<IMetadata> Children { get; set; }
+        [DataMember(Name = "SavedHash")]
         private int savedHash;
         public override int GetHashCode()
         {

@@ -36,6 +36,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -75,6 +76,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Serializing\Serializing.csproj">
+      <Project>{d3f316a5-6f7d-42ec-b332-e6451ebcf704}</Project>
+      <Name>Serializing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tracing\Tracing.csproj">
       <Project>{552a1500-eafa-4239-a91a-e3d62593378c}</Project>
       <Name>Tracing</Name>

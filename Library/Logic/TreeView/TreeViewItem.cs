@@ -17,6 +17,7 @@ namespace Library.Logic.TreeView
         private bool m_IsExpanded;
 
         public string Type => this.GetType().ToString();
+        public IMetadata ModelObject => Metadata;
         public string Name { get; protected set; }
         public string Details { get; protected set; }
         protected IMetadata Metadata { get; set; }
