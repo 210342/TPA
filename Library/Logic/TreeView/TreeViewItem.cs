@@ -60,18 +60,14 @@ namespace Library.Logic.TreeView
         {
             if (Metadata.Children != null)
             {
-                List<TreeViewItem> tmp = new List<TreeViewItem>();
                 foreach (IMetadata elem in Metadata.Children)
                 {
                     if (elem != null)
                     {
-                        //yield return GetTreeItem(elem);
-                        tmp.Add(GetTreeItem(elem));
+                        yield return GetTreeItem(elem);
                     }
                 }
-                return tmp;
             }
-            else return null;
         }
         protected abstract TreeViewItem GetTreeItem(IMetadata elem);
 

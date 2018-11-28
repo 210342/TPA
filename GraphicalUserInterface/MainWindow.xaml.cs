@@ -12,7 +12,10 @@ namespace GraphicalUserInterface
         {
             InitializeComponent();
             if (DataContext is ViewModel)
-                ((ViewModel)DataContext).FileSourceProvider = new FileDialogProvider();
+            {
+                ((ViewModel)DataContext).OpenFileSourceProvider = new OpenFileDialogProvider();
+                ((ViewModel)DataContext).SaveFileSourceProvider = new SaveFileDialogProvider();
+            }
         }
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

@@ -31,6 +31,7 @@ namespace Library.Logic.ViewModel
         private TreeViewItem objectSelected;
         private string _loadedAssembly;
         private TreeViewItem _objectToDisplay;
+        private bool isSerializationChecked;
         
         #endregion
         #region Properties
@@ -39,10 +40,28 @@ namespace Library.Logic.ViewModel
         public ICommand OpenFileCommand { get; }
         public ICommand SaveModel { get; }
         public ICommand LoadModel { get; }
-        public ICommand RepositorySelectionChanged { get; }
-        public ISourceProvider FileSourceProvider { get; set; }
+        public ISourceProvider OpenFileSourceProvider { get; set; }
+        public ISourceProvider SaveFileSourceProvider { get; set; }
         public bool Tracing { get; set; }
         public ObservableCollection<TreeViewItem> ObjectsList { get; }
+        public bool IsSerializationChecked
+        {
+            get
+            {
+                return isSerializationChecked;
+            }
+            set
+            {
+                isSerializationChecked = value;
+                ImportPersister();
+                OnPropertyChanged();
+                if(Tracing)
+                {
+                    Trace.TraceInformation("Repository changed.");
+                    Trace.Flush();
+                }
+            }
+        }
         public TreeViewItem ObjectSelected
         {
             get
@@ -93,7 +112,7 @@ namespace Library.Logic.ViewModel
                 OnPropertyChanged();
             }
         }
-        public IMetadata LoadedAssemblyRepresentation { get; private set; } 
+        public IMetadata LoadedAssemblyRepresentation { get; private set; } = new AssemblyMetadata();
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -113,49 +132,9 @@ namespace Library.Logic.ViewModel
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
-            OpenFileCommand = new RelayCommand(() => OpenFile(FileSourceProvider));
-
-            SaveModel = new RelayCommand(() =>
-            {
-                /* TESTING SERIALIZATION */
-                List<Type> types = new List<Type>();
-                types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
-                types.Add(typeof(List<IMetadata>));
-                XmlModelSerializer serializer = 
-                new XmlModelSerializer(types, typeof(Dictionary<int, IMetadata>));
-
-                IEnumerable<IMetadata> objects = from TreeViewItem item in ObjectsList as IEnumerable<TreeViewItem>
-                                                 select item.ModelObject;
-
-                //serializer.Save(ObjectsList[0].ModelObject);
-                serializer.Save(objects.ToList());
-                // DataLoadedDictionary.Items = (System.Collections.Generic.Dictionary<int, IMetadata>)serializer.Load(null);
-            });
-
-            LoadModel = new RelayCommand(() =>
-            {
-                ObjectsList.Clear();
-                List<Type> types = new List<Type>();
-                types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
-                types.Add(typeof(List<IMetadata>));
-                XmlModelSerializer serializer =
-                new XmlModelSerializer(types, typeof(Dictionary<int, IMetadata>));
-                object result = serializer.Load("");
-                if(result is IEnumerable<IMetadata>)
-                {
-                    IEnumerable<IMetadata> objectsRead = result as IEnumerable<IMetadata>;
-                    foreach(IMetadata item in objectsRead)
-                    {
-                        ObjectsList.Add(new AssemblyItem(item as AssemblyMetadata));
-                    }
-                }
-                else if(result is IMetadata)
-                {
-                    AssemblyMetadata assembly = result as AssemblyMetadata;
-                    TreeViewItem item = new AssemblyItem(assembly);
-                    ObjectsList.Add(item);
-                }
-            });
+            OpenFileCommand = new RelayCommand(() => OpenFile(OpenFileSourceProvider));
+            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider), () => true);
+            LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => true);
         }
 
         private void LoadAssembly()
@@ -195,6 +174,7 @@ namespace Library.Logic.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
         private void ImportTraceListener()
         {
             var catalog = new AggregateCatalog();
@@ -217,9 +197,52 @@ namespace Library.Logic.ViewModel
                     Trace.Listeners.Add(listener);
         }
 
-        private void ImportPersister()
+        private void ImportPersister() //TODO
         {
-            return; //TODO
+            if(IsSerializationChecked)
+            {
+                List<Type> types = new List<Type>();
+                types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
+                types.Add(typeof(List<IMetadata>));
+                persister = new XmlModelSerializer(types, typeof(Dictionary<int, IMetadata>));
+            }
+            else
+            {
+
+            }
+        }
+
+        private void Save(ISourceProvider filePathProvider)
+        {
+            if (filePathProvider == null)
+                throw new System.ArgumentNullException("SourceProvider can't be null.");
+            if (filePathProvider.GetAccess())
+            {
+                persister.SourceName = filePathProvider.GetFilePath();
+                IEnumerable<IMetadata> objects = from TreeViewItem item in ObjectsList as IEnumerable<TreeViewItem>
+                                                 select item.ModelObject;
+                persister.Save(objects.ToList());
+            }
+        }
+
+        private void Load(ISourceProvider filePathProvider)
+        {
+            if (filePathProvider == null)
+                throw new System.ArgumentNullException("SourceProvider can't be null.");
+            if (filePathProvider.GetAccess())
+            {
+                persister.SourceName = filePathProvider.GetFilePath();
+                object result = persister.Load();
+                if (result is IEnumerable<IMetadata>)
+                {
+                    ObjectsList.Clear();
+                    IEnumerable<IMetadata> objectsRead = result as IEnumerable<IMetadata>;
+                    foreach (IMetadata item in objectsRead)
+                    {
+                        ObjectsList.Add(new AssemblyItem(item as AssemblyMetadata));
+                    }
+                }
+            }
         }
 
         private void OpenFile(ISourceProvider sourceProvider)

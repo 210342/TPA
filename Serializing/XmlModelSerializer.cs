@@ -10,6 +10,8 @@ namespace Serializing
     public class XmlModelSerializer : IPersister
     {
         DataContractSerializer dcs; 
+        public string SourceName { get; set; }
+
         public XmlModelSerializer(List<Type> knownTypes, Type nodeType)
         {
             dcs = new DataContractSerializer(nodeType, knownTypes, 100000, false, true, null);
@@ -17,21 +19,17 @@ namespace Serializing
         public void Save(object toSave)
         {
             var settings = new System.Xml.XmlWriterSettings { Indent = true };
-            using (var w = System.Xml.XmlWriter.Create("test.xml", settings))
+            using (var w = System.Xml.XmlWriter.Create(SourceName, settings))
             {
                 dcs.WriteObject(w, toSave);
             }
                 
         }
-        public object Read()
-        {
-            return null;
-        }
 
-        public object Load(string path)
+        public object Load()
         {
             object read = null;
-            using (var r = System.Xml.XmlReader.Create("test.xml"))
+            using (var r = System.Xml.XmlReader.Create(SourceName))
                 read = dcs.ReadObject(r);
             return read;
         }

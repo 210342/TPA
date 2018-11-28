@@ -59,7 +59,7 @@ namespace LibraryTests.Logic.ViewModel
         public void OpenFileWorks()
         {
             VM.ViewModel vm = new VM.ViewModel(false);
-            vm.FileSourceProvider = new TestClass();
+            vm.OpenFileSourceProvider = new TestClass();
             vm.OpenFileCommand.Execute(null);
             Assert.IsNotNull(vm.LoadedAssembly);
         }

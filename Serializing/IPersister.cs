@@ -8,7 +8,9 @@ namespace Serializing
 {
     public interface IPersister
     {
+        string SourceName { get; set; }
+
         void Save(object obj);
-        object Load(string path);
+        object Load();
     }
 }

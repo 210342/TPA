@@ -10,6 +10,10 @@ namespace Library.Data.Model
     [Serializable]
     public class AssemblyMetadata : IMetadata
     {
+        internal AssemblyMetadata()
+        {
+            // for view model initialization (actually more for serializers)
+        }
 
         internal AssemblyMetadata(Assembly assembly)
         {
