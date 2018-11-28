@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 namespace Library.Data.Model
 {
     [DataContract(Name = "Namespace")]
+    [Serializable]
     public class NamespaceMetadata : IMetadata
     {
         public string Details
@@ -24,11 +25,10 @@ namespace Library.Data.Model
         }
 
         private string m_NamespaceName;
-        object dummy;
         [DataMember(Name = "Types")]
         private IEnumerable<TypeMetadata> m_Types;
-        public IEnumerable<IMetadata> Children { get => m_Types; set => dummy = value; }
-        //public IEnumerable<IMetadata> Children => m_Types;
+        //public IEnumerable<IMetadata> Children { get; set; }
+        public IEnumerable<IMetadata> Children => m_Types;
         [DataMember(Name = "Name")]
         public string Name
         {

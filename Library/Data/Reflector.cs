@@ -4,7 +4,6 @@ using System.Reflection;
 
 namespace Library.Data
 {
-    //TODO add UT - testing data is required
     public class Reflector
     {
         public Reflector(string assemblyFile)

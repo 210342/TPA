@@ -9,6 +9,6 @@ namespace Serializing
     public interface IPersister
     {
         void Save(object obj);
-        object Load(String path);
+        object Load(string path);
     }
 }

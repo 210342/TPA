@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 namespace Library.Data.Model
 {
     [DataContract(Name = "Type")]
+    [Serializable]
     public class TypeMetadata : IMetadata
     {
         public string Details
@@ -216,6 +217,7 @@ namespace Library.Data.Model
         }
         #endregion
 
+        [DataMember(Name = "Hash")]
         private int _cachedHash = 0;
 
         public override int GetHashCode()

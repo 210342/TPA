@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 namespace Library.Data.Model
 {
     [DataContract(Name = "Assembly")]
+    [Serializable]
     public class AssemblyMetadata : IMetadata
     {
 
@@ -24,6 +25,7 @@ namespace Library.Data.Model
         }
 
         private string m_Name;
+        [DataMember(Name = "m_namespaces")]
         private IEnumerable<NamespaceMetadata> m_Namespaces;
 
         [DataMember(Name = "Name")]
@@ -45,7 +47,7 @@ namespace Library.Data.Model
                 return $"Assembly name: {m_Name}, has {m_Namespaces.Count()} namespaces."; 
             }
         }
-        [DataMember(Name = "Children")]
+        //[DataMember(Name = "Children")]
         public IEnumerable<IMetadata> Children
         {
             get

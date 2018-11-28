@@ -10,6 +10,7 @@ using System.Text;
 namespace Library.Data.Model
 {
     [DataContract(Name = "Method")]
+    [Serializable]
     public class MethodMetadata : IMetadata
     {
         public string Details
@@ -59,7 +60,7 @@ namespace Library.Data.Model
 
         public string Name => m_Name;
 
-        [DataMember(Name = "Children")]
+        //[DataMember(Name = "Children")]
         public IEnumerable<IMetadata> Children { get; set; }
 
         //constructor
@@ -122,6 +123,7 @@ namespace Library.Data.Model
             return new Tuple<AccessLevel, AbstractENum, StaticEnum, VirtualEnum>(_access, _abstract, _static, _virtual);
         }
         #endregion
+        [DataMember(Name = "Hash")]
         private int savedHash;
         public override int GetHashCode()
         {

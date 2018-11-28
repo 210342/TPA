@@ -4,12 +4,13 @@ using Library.Logic.TreeView;
 using Library.Logic.TreeView.Items;
 using Serializing;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -23,7 +24,7 @@ namespace Library.Logic.ViewModel
         [ImportMany(typeof(TraceListener))]
         private System.Collections.Generic.IEnumerable<TraceListener> 
             importedTraceListener = null;
-        [Import]
+        [Import(typeof(IPersister))]
         private IPersister persister;
 
         private CompositionContainer _container;
@@ -37,6 +38,8 @@ namespace Library.Logic.ViewModel
         public ICommand ReloadAssemblyCommand { get; }
         public ICommand OpenFileCommand { get; }
         public ICommand SaveModel { get; }
+        public ICommand LoadModel { get; }
+        public ICommand RepositorySelectionChanged { get; }
         public ISourceProvider FileSourceProvider { get; set; }
         public bool Tracing { get; set; }
         public ObservableCollection<TreeViewItem> ObjectsList { get; }
@@ -90,7 +93,7 @@ namespace Library.Logic.ViewModel
                 OnPropertyChanged();
             }
         }
-        public IMetadata LoadedAssemblyRepresentation { get; private set; }
+        public IMetadata LoadedAssemblyRepresentation { get; private set; } 
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -106,6 +109,7 @@ namespace Library.Logic.ViewModel
                 ImportTraceListener();
             }
             ImportPersister();
+            LoadedAssemblyRepresentation = new AssemblyMetadata(System.Reflection.Assembly.GetAssembly(this.GetType()));
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
@@ -114,14 +118,43 @@ namespace Library.Logic.ViewModel
             SaveModel = new RelayCommand(() =>
             {
                 /* TESTING SERIALIZATION */
-                System.Collections.Generic.List<System.Type> types = new System.Collections.Generic.List<System.Type>();
+                List<Type> types = new List<Type>();
                 types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
+                types.Add(typeof(List<IMetadata>));
                 XmlModelSerializer serializer = 
-                new XmlModelSerializer(types, typeof(System.Collections.Generic.Dictionary<int, IMetadata>));
+                new XmlModelSerializer(types, typeof(Dictionary<int, IMetadata>));
+
+                IEnumerable<IMetadata> objects = from TreeViewItem item in ObjectsList as IEnumerable<TreeViewItem>
+                                                 select item.ModelObject;
 
                 //serializer.Save(ObjectsList[0].ModelObject);
-                serializer.Save(DataLoadedDictionary.Items);
-                DataLoadedDictionary.Items = (System.Collections.Generic.Dictionary<int, IMetadata>)serializer.Load(null);
+                serializer.Save(objects.ToList());
+                // DataLoadedDictionary.Items = (System.Collections.Generic.Dictionary<int, IMetadata>)serializer.Load(null);
+            });
+
+            LoadModel = new RelayCommand(() =>
+            {
+                ObjectsList.Clear();
+                List<Type> types = new List<Type>();
+                types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
+                types.Add(typeof(List<IMetadata>));
+                XmlModelSerializer serializer =
+                new XmlModelSerializer(types, typeof(Dictionary<int, IMetadata>));
+                object result = serializer.Load("");
+                if(result is IEnumerable<IMetadata>)
+                {
+                    IEnumerable<IMetadata> objectsRead = result as IEnumerable<IMetadata>;
+                    foreach(IMetadata item in objectsRead)
+                    {
+                        ObjectsList.Add(new AssemblyItem(item as AssemblyMetadata));
+                    }
+                }
+                else if(result is IMetadata)
+                {
+                    AssemblyMetadata assembly = result as AssemblyMetadata;
+                    TreeViewItem item = new AssemblyItem(assembly);
+                    ObjectsList.Add(item);
+                }
             });
         }
 
@@ -183,6 +216,7 @@ namespace Library.Logic.ViewModel
                 foreach(TraceListener listener in importedTraceListener)
                     Trace.Listeners.Add(listener);
         }
+
         private void ImportPersister()
         {
             return; //TODO

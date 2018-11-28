@@ -58,18 +58,20 @@ namespace Library.Logic.TreeView
 
         private IEnumerable<TreeViewItem> EnumerateRootChildren()
         {
-            if(Metadata.Children != null)
+            if (Metadata.Children != null)
             {
+                List<TreeViewItem> tmp = new List<TreeViewItem>();
                 foreach (IMetadata elem in Metadata.Children)
                 {
                     if (elem != null)
                     {
-                        TreeViewItem tvi = GetTreeItem(elem);
-                        
-                        yield return tvi;
+                        //yield return GetTreeItem(elem);
+                        tmp.Add(GetTreeItem(elem));
                     }
                 }
+                return tmp;
             }
+            else return null;
         }
         protected abstract TreeViewItem GetTreeItem(IMetadata elem);
 

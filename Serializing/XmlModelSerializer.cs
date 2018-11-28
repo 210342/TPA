@@ -9,13 +9,6 @@ namespace Serializing
     [Export(typeof(IPersister))]
     public class XmlModelSerializer : IPersister
     {
-        public class item<KType, VType>
-        {
-            [XmlAttribute]
-            public KType id;
-            [XmlAttribute]
-            public VType value;
-        }
         DataContractSerializer dcs; 
         public XmlModelSerializer(List<Type> knownTypes, Type nodeType)
         {
@@ -25,7 +18,10 @@ namespace Serializing
         {
             var settings = new System.Xml.XmlWriterSettings { Indent = true };
             using (var w = System.Xml.XmlWriter.Create("test.xml", settings))
+            {
                 dcs.WriteObject(w, toSave);
+            }
+                
         }
         public object Read()
         {

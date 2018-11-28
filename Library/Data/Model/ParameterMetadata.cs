@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 namespace Library.Data.Model
 {
     [DataContract(Name = "Parameter")]
+    [Serializable]
     public class ParameterMetadata : IMetadata
     {
 
@@ -35,7 +36,7 @@ namespace Library.Data.Model
         public TypeMetadata Type { get { return m_TypeMetadata; } }
         public string Name => m_Name;
 
-        [DataMember(Name = "Children")]
+        //[DataMember(Name = "Children")]
         public IEnumerable<IMetadata> Children {
 
             get

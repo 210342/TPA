@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 namespace Library.Data.Model
 {
     [DataContract(Name = "Property")]
+    [Serializable]
     public class PropertyMetadata : IMetadata
     {
         public string Details

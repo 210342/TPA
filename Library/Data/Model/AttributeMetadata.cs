@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 namespace Library.Data.Model
 {
     [DataContract(Name = "Attribute")]
+    [Serializable]
     public class AttributeMetadata : IMetadata
     {
         internal AttributeMetadata(Attribute attribute)
@@ -24,7 +25,6 @@ namespace Library.Data.Model
                 return $"Attribute name: {m_Name}.";
             }
         }
-        [DataMember(Name = "Children")]
         public IEnumerable<IMetadata> Children { get; set; }
         [DataMember(Name = "SavedHash")]
         private int savedHash;
