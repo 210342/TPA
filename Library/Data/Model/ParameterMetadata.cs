@@ -26,7 +26,9 @@ namespace Library.Data.Model
             savedHash *= 31 + m_Name.GetHashCode();
             savedHash *= 31 + m_TypeMetadata.GetHashCode();
         }
-
+        internal ParameterMetadata()
+        {
+        }
         //private vars
         [DataMember(Name = "Name")]
         private string m_Name;

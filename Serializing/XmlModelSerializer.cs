@@ -49,6 +49,7 @@ namespace Serializing
                 {
                     dcs.WriteObject(writer, toSave);
                 }
+                SerializationStream.FlushAsync();
             }
         }
 

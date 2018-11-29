@@ -15,6 +15,7 @@ namespace Library.Data.Model
             m_Name = attribute.GetType().Name;
             savedHash = attribute.GetHashCode();
         }
+        internal AttributeMetadata() { }
         [DataMember(Name = "Name")]
         private string m_Name;
         public string Name => m_Name;
@@ -25,7 +26,7 @@ namespace Library.Data.Model
                 return $"Attribute name: {m_Name}.";
             }
         }
-        public IEnumerable<IMetadata> Children { get; set; }
+        public IEnumerable<IMetadata> Children => null;
         [DataMember(Name = "SavedHash")]
         private int savedHash;
         public override int GetHashCode()

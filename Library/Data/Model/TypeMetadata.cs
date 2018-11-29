@@ -47,12 +47,19 @@ namespace Library.Data.Model
             m_BaseType = EmitExtends(type.BaseType);
             m_Properties = PropertyMetadata.EmitProperties(type.GetProperties());
             m_TypeKind = GetTypeKind(type);
-            m_Attributes = type.GetCustomAttributes(false).Cast<Attribute>();
+            
+            m_Attributes = new List<AttributeMetadata>();
+            type.GetCustomAttributes(false).Cast<Attribute>().ToList().ForEach( n => 
+                        ((List < AttributeMetadata >) m_Attributes).Add(new AttributeMetadata(n)));
             m_typeName = type.Name;
             //FILL CHILDREN
             FillChildren(new StreamingContext { });
             
             _cachedHash = type.GetHashCode();
+        }
+
+        internal TypeMetadata()
+        {
         }
         #endregion
 
@@ -62,7 +69,7 @@ namespace Library.Data.Model
         {
             List<AttributeMetadata> amList = new List<AttributeMetadata>();
             if(m_Attributes != null)
-                amList.AddRange(m_Attributes.Select(n => new AttributeMetadata(n)));
+                amList.AddRange(m_Attributes.Select(n => n));
             List<IMetadata> elems = new List<IMetadata>();
             elems.AddRange(amList);
             if(m_ImplementedInterfaces != null)
@@ -119,7 +126,7 @@ namespace Library.Data.Model
         [DataMember(Name = "TypeKind")]
         private TypeKind m_TypeKind;
         [DataMember(Name = "Attributes")]
-        private IEnumerable<Attribute> m_Attributes;
+        private IEnumerable<AttributeMetadata> m_Attributes;
         [DataMember(Name = "ImplementedInterfaces")]
         private IEnumerable<TypeMetadata> m_ImplementedInterfaces;
         [DataMember(Name = "NestedTypes")]

@@ -34,16 +34,16 @@ namespace Library.Data.Model
 
         [DataMember(Name = "Children")]
         public IEnumerable<IMetadata> Children
-            {
-        
+        {
+
             get
             {
                 return new[] { m_TypeMetadata
     };
-}
-set
+            }
+            set
             {
-                foreach(var elem in value)
+                foreach (var elem in value)
                 {
                     this.m_TypeMetadata = (TypeMetadata)elem;
                     break;
@@ -60,6 +60,9 @@ set
             savedHash = 23;
             savedHash *= 31 + m_Name.GetHashCode();
             savedHash *= 31 + m_TypeMetadata.GetHashCode();
+        }
+        internal PropertyMetadata()
+        {
         }
         #endregion
         [DataMember(Name = "SavedHash")]

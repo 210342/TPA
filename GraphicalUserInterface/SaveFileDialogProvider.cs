@@ -9,16 +9,17 @@ namespace GraphicalUserInterface
 {
     internal class SaveFileDialogProvider : ISourceProvider
     {
-        Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+        //Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+        System.Windows.Forms.SaveFileDialog dialog = new System.Windows.Forms.SaveFileDialog();
         internal SaveFileDialogProvider()
         {
-            dialog.DefaultExt = "dll";
-            dialog.Filter = "Dynamically linked library (*dll)|*dll|All Files(*.*)|*.*";
+            dialog.DefaultExt = "xml";
+            dialog.Filter = "Dynamically linked library (*xml)|*xml|All Files(*.*)|*.*";
         }
 
         public bool GetAccess()
         {
-            return dialog.ShowDialog().Value;
+            return dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK;
         }
 
         public string GetFilePath()

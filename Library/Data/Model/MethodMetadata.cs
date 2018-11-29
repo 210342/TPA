@@ -75,6 +75,7 @@ namespace Library.Data.Model
             FillChildren(new StreamingContext { });
             savedHash = method.GetHashCode();
         }
+        internal MethodMetadata() { }
 
         [OnDeserialized]
         private void FillChildren(StreamingContext context)

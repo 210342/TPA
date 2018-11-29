@@ -23,7 +23,9 @@ namespace Library.Data.Model
             m_Types = from type in types orderby type.Name select new TypeMetadata(type);
             savedHash = name.GetHashCode();
         }
-
+        internal NamespaceMetadata()
+        {
+        }
         private string m_NamespaceName;
         [DataMember(Name = "Types")]
         private IEnumerable<TypeMetadata> m_Types;
