@@ -227,7 +227,11 @@ namespace Library.Logic.ViewModel
                     persister.SourceName = filePathProvider.GetFilePath();
                     IEnumerable<IMetadata> objects = from TreeViewItem item in ObjectsList
                                                      select item.ModelObject;
-                    Task.Run(() => persister.Save(objects.ToList()));
+                    Task.Run(() =>
+                    {
+                        persister.Save(objects.ToList());
+                        (persister as XmlModelSerializer).SerializationStream.Close();
+                    });
                 }
                 catch(IOException ex)
                 {
@@ -252,6 +256,7 @@ namespace Library.Logic.ViewModel
                     Dispatcher.CurrentDispatcher.BeginInvoke((Action)delegate ()
                     {
                         object result = persister.Load();
+                        (persister as XmlModelSerializer).SerializationStream.Close();
                         if (result is IEnumerable<IMetadata>)
                         {
                             ObjectsList.Clear();
