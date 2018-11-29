@@ -50,6 +50,7 @@ namespace Serializing
                     dcs.WriteObject(writer, toSave);
                 }
                 SerializationStream.FlushAsync();
+                SerializationStream.Close();
             }
         }
 
@@ -63,6 +64,7 @@ namespace Serializing
                 {
                     read = dcs.ReadObject(reader);
                 }
+                SerializationStream.Close();
             }
             return read;
         }
