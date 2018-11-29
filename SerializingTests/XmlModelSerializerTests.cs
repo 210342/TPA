@@ -1,14 +1,10 @@
 ﻿using Library.Data;
 using Library.Data.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Serializing;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Serializing.Tests
 {
@@ -41,7 +37,7 @@ namespace Serializing.Tests
         [TestMethod()]
         public void StreamSaveTest()
         {
-            Reflector reflector = new Reflector("Test.dll");
+            Reflector reflector = new Reflector(System.Reflection.Assembly.GetAssembly(this.GetType()));
             object original = reflector.m_AssemblyModel;
             _sut.Save(original);
             Assert.AreNotEqual(0, _serializationStream.Length);
@@ -50,7 +46,7 @@ namespace Serializing.Tests
         [TestMethod()]
         public void StreamLoadTest()
         {
-            Reflector reflector = new Reflector("Test.dll");
+            Reflector reflector = new Reflector(System.Reflection.Assembly.GetAssembly(this.GetType()));
             object original = reflector.m_AssemblyModel;
             _sut.Save(original);
             object loaded = _sut.Load();
