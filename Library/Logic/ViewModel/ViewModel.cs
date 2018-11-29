@@ -13,7 +13,8 @@ using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-
+using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace Library.Logic.ViewModel
 {
@@ -219,9 +220,9 @@ namespace Library.Logic.ViewModel
             if (filePathProvider.GetAccess())
             {
                 persister.SourceName = filePathProvider.GetFilePath();
-                IEnumerable<IMetadata> objects = from TreeViewItem item in ObjectsList as IEnumerable<TreeViewItem>
+                IEnumerable<IMetadata> objects = from TreeViewItem item in ObjectsList
                                                  select item.ModelObject;
-                persister.Save(objects.ToList());
+                Task.Run(() => persister.Save(objects.ToList()));
             }
         }
 
@@ -232,16 +233,19 @@ namespace Library.Logic.ViewModel
             if (filePathProvider.GetAccess())
             {
                 persister.SourceName = filePathProvider.GetFilePath();
-                object result = persister.Load();
-                if (result is IEnumerable<IMetadata>)
+                Dispatcher.CurrentDispatcher.BeginInvoke((Action)delegate()
                 {
-                    ObjectsList.Clear();
-                    IEnumerable<IMetadata> objectsRead = result as IEnumerable<IMetadata>;
-                    foreach (IMetadata item in objectsRead)
+                    object result = persister.Load();
+                    if (result is IEnumerable<IMetadata>)
                     {
-                        ObjectsList.Add(new AssemblyItem(item as AssemblyMetadata));
+                        ObjectsList.Clear();
+                        IEnumerable<IMetadata> objectsRead = result as IEnumerable<IMetadata>;
+                        foreach (IMetadata item in objectsRead)
+                        {
+                            ObjectsList.Add(new AssemblyItem(item as AssemblyMetadata));
+                        }
                     }
-                }
+                });
             }
         }
 
