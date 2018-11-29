@@ -113,7 +113,7 @@ namespace Library.Logic.ViewModel
                 OnPropertyChanged();
             }
         }
-        public IMetadata LoadedAssemblyRepresentation { get; private set; } = new AssemblyMetadata();
+        public IMetadata LoadedAssemblyRepresentation { get; private set; }
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;

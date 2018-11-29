@@ -24,10 +24,7 @@ namespace Serializing
             set
             {
                 sourceName = value;
-                if(SerializationStream == null)
-                {
-                    SerializationStream = new FileStream(SourceName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                }
+                SerializationStream = new FileStream(SourceName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             }
         }
 
@@ -53,13 +50,6 @@ namespace Serializing
                     dcs.WriteObject(writer, toSave);
                 }
             }
-            else
-            {
-                using (XmlWriter writer = XmlWriter.Create(SourceName, settings))
-                {
-                    dcs.WriteObject(writer, toSave);
-                }
-            }
         }
 
         public object Load()
@@ -69,13 +59,6 @@ namespace Serializing
             {
                 SerializationStream.Position = 0;
                 using (XmlReader reader = XmlReader.Create(SerializationStream))
-                {
-                    read = dcs.ReadObject(reader);
-                }
-            }
-            else
-            {
-                using (XmlReader reader = XmlReader.Create(SourceName))
                 {
                     read = dcs.ReadObject(reader);
                 }

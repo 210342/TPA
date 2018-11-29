@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Serializing;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Serializing.Tests
 {
+    [ExcludeFromCodeCoverage]
     [TestClass()]
     public class XmlModelSerializerTests
     {
@@ -37,7 +39,7 @@ namespace Serializing.Tests
         }
 
         [TestMethod()]
-        public void SaveTest()
+        public void StreamSaveTest()
         {
             Reflector reflector = new Reflector("Test.dll");
             object original = reflector.m_AssemblyModel;
@@ -46,7 +48,7 @@ namespace Serializing.Tests
         }
 
         [TestMethod()]
-        public void LoadTest()
+        public void StreamLoadTest()
         {
             Reflector reflector = new Reflector("Test.dll");
             object original = reflector.m_AssemblyModel;
@@ -54,6 +56,15 @@ namespace Serializing.Tests
             object loaded = _sut.Load();
             Assert.IsTrue(loaded is AssemblyMetadata);
             Assert.IsFalse((loaded as AssemblyMetadata).Children == null);
+        }
+
+        [TestMethod]
+        public void SourceNameSetter()
+        {
+            _sut.SourceName = "testing.txt";
+            Assert.IsFalse(string.IsNullOrEmpty(_sut.SourceName));
+            Assert.IsNotNull(_sut.SerializationStream);
+            Assert.IsTrue(_sut.SerializationStream is FileStream);
         }
     }
 }
