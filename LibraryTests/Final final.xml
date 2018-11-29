@@ -2,14 +2,14 @@
 <z:anyType xmlns:i="http://www.w3.org/2001/XMLSchema-instance" z:Id="1" xmlns:d1p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" i:type="d1p1:ArrayOfanyType" z:Size="1" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/">
   <d1p1:anyType z:Id="2" xmlns:d2p1="http://schemas.datacontract.org/2004/07/Library.Data.Model" i:type="d2p1:Assembly">
     <d2p1:Name z:Id="3">Test.dll</d2p1:Name>
-    <d2p1:SavedHash>48266778</d2p1:SavedHash>
+    <d2p1:SavedHash>21436848</d2p1:SavedHash>
     <d2p1:m_namespaces z:Id="4">
       <d2p1:Namespace z:Id="5">
         <d2p1:Name z:Id="6">Test.Creatures</d2p1:Name>
         <d2p1:SavedHash>893968344</d2p1:SavedHash>
         <d2p1:Types z:Id="7">
           <d2p1:Type z:Id="8">
-            <d2p1:Attributes xmlns:d7p1="http://schemas.datacontract.org/2004/07/System" z:Id="9" />
+            <d2p1:Attributes z:Id="9" />
             <d2p1:BaseType i:nil="true" />
             <d2p1:Constructors z:Id="10" />
             <d2p1:DeclaringType i:nil="true" />
@@ -17,7 +17,7 @@
             <d2p1:Hash>9040679</d2p1:Hash>
             <d2p1:ImplementedInterfaces z:Id="11">
               <d2p1:Type z:Id="12">
-                <d2p1:Attributes xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                <d2p1:Attributes i:nil="true" />
                 <d2p1:BaseType i:nil="true" />
                 <d2p1:Constructors i:nil="true" />
                 <d2p1:DeclaringType i:nil="true" />
@@ -33,7 +33,7 @@
                 <d2p1:TypeKind>Reference</d2p1:TypeKind>
               </d2p1:Type>
               <d2p1:Type z:Id="15">
-                <d2p1:Attributes xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                <d2p1:Attributes i:nil="true" />
                 <d2p1:BaseType i:nil="true" />
                 <d2p1:Constructors i:nil="true" />
                 <d2p1:DeclaringType i:nil="true" />
@@ -49,7 +49,7 @@
                 <d2p1:TypeKind>Reference</d2p1:TypeKind>
               </d2p1:Type>
               <d2p1:Type z:Id="18">
-                <d2p1:Attributes xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                <d2p1:Attributes i:nil="true" />
                 <d2p1:BaseType i:nil="true" />
                 <d2p1:Constructors i:nil="true" />
                 <d2p1:DeclaringType i:nil="true" />
@@ -82,7 +82,7 @@
                     <d2p1:Name z:Id="27">obj</d2p1:Name>
                     <d2p1:SavedHash>575604184</d2p1:SavedHash>
                     <d2p1:Type z:Id="28">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -100,7 +100,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="31">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -129,7 +129,7 @@
                 <d2p1:Name z:Id="36">GetHashCode</d2p1:Name>
                 <d2p1:Parameters z:Id="37" />
                 <d2p1:ReturnType z:Id="38">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -158,7 +158,7 @@
                 <d2p1:Name z:Id="43">ToString</d2p1:Name>
                 <d2p1:Parameters z:Id="44" />
                 <d2p1:ReturnType z:Id="45">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -190,7 +190,7 @@
                     <d2p1:Name z:Id="53">format</d2p1:Name>
                     <d2p1:SavedHash>1954515884</d2p1:SavedHash>
                     <d2p1:Type z:Id="54">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -210,7 +210,7 @@
                     <d2p1:Name z:Id="56">provider</d2p1:Name>
                     <d2p1:SavedHash>610966572</d2p1:SavedHash>
                     <d2p1:Type z:Id="57">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -228,7 +228,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="60">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -260,7 +260,7 @@
                     <d2p1:Name z:Id="66">target</d2p1:Name>
                     <d2p1:SavedHash>1277861148</d2p1:SavedHash>
                     <d2p1:Type z:Id="67">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -278,7 +278,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="68">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -310,7 +310,7 @@
                     <d2p1:Name z:Id="74">format</d2p1:Name>
                     <d2p1:SavedHash>1954515884</d2p1:SavedHash>
                     <d2p1:Type z:Id="75">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -328,7 +328,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="76">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -360,7 +360,7 @@
                     <d2p1:Name z:Id="82">provider</d2p1:Name>
                     <d2p1:SavedHash>610966572</d2p1:SavedHash>
                     <d2p1:Type z:Id="83">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -378,7 +378,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="84">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -410,7 +410,7 @@
                     <d2p1:Name z:Id="90">flag</d2p1:Name>
                     <d2p1:SavedHash>1549911638</d2p1:SavedHash>
                     <d2p1:Type z:Id="91">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -428,7 +428,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="94">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -457,7 +457,7 @@
                 <d2p1:Name z:Id="97">GetTypeCode</d2p1:Name>
                 <d2p1:Parameters z:Id="98" />
                 <d2p1:ReturnType z:Id="99">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -486,12 +486,12 @@
                 <d2p1:Name z:Id="104">GetType</d2p1:Name>
                 <d2p1:Parameters z:Id="105" />
                 <d2p1:ReturnType z:Id="106">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
                   <d2p1:GenericArguments i:nil="true" />
-                  <d2p1:Hash>31291646</d2p1:Hash>
+                  <d2p1:Hash>32057793</d2p1:Hash>
                   <d2p1:ImplementedInterfaces i:nil="true" />
                   <d2p1:Methods i:nil="true" />
                   <d2p1:Modifiers xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
@@ -515,9 +515,9 @@
             <d2p1:TypeKind>EnumType</d2p1:TypeKind>
           </d2p1:Type>
           <d2p1:Type z:Id="113">
-            <d2p1:Attributes xmlns:d7p1="http://schemas.datacontract.org/2004/07/System" z:Id="114" />
+            <d2p1:Attributes z:Id="114" />
             <d2p1:BaseType z:Id="115">
-              <d2p1:Attributes xmlns:d8p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+              <d2p1:Attributes i:nil="true" />
               <d2p1:BaseType i:nil="true" />
               <d2p1:Constructors i:nil="true" />
               <d2p1:DeclaringType i:nil="true" />
@@ -553,7 +553,7 @@
             <d2p1:Hash>65453502</d2p1:Hash>
             <d2p1:ImplementedInterfaces z:Id="123">
               <d2p1:Type z:Id="124">
-                <d2p1:Attributes xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                <d2p1:Attributes i:nil="true" />
                 <d2p1:BaseType i:nil="true" />
                 <d2p1:Constructors i:nil="true" />
                 <d2p1:DeclaringType i:nil="true" />
@@ -583,7 +583,7 @@
                 <d2p1:Name z:Id="130">get_Age</d2p1:Name>
                 <d2p1:Parameters z:Id="131" />
                 <d2p1:ReturnType z:Id="132">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -612,7 +612,7 @@
                 <d2p1:Name z:Id="135">get_Slave</d2p1:Name>
                 <d2p1:Parameters z:Id="136" />
                 <d2p1:ReturnType z:Id="137">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -641,7 +641,7 @@
                 <d2p1:Name z:Id="142">Meow</d2p1:Name>
                 <d2p1:Parameters z:Id="143" />
                 <d2p1:ReturnType z:Id="144">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -670,7 +670,7 @@
                 <d2p1:Name z:Id="149">Purr</d2p1:Name>
                 <d2p1:Parameters z:Id="150" />
                 <d2p1:ReturnType z:Id="151">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -702,7 +702,7 @@
                     <d2p1:Name z:Id="157">target</d2p1:Name>
                     <d2p1:SavedHash>1277861148</d2p1:SavedHash>
                     <d2p1:Type z:Id="158">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -720,7 +720,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="159">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -749,7 +749,7 @@
                 <d2p1:Name z:Id="162">Live</d2p1:Name>
                 <d2p1:Parameters z:Id="163" />
                 <d2p1:ReturnType z:Id="164">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -778,7 +778,7 @@
                 <d2p1:Name z:Id="167">get_Age</d2p1:Name>
                 <d2p1:Parameters z:Id="168" />
                 <d2p1:ReturnType z:Id="169">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -807,7 +807,7 @@
                 <d2p1:Name z:Id="172">Live</d2p1:Name>
                 <d2p1:Parameters z:Id="173" />
                 <d2p1:ReturnType z:Id="174">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -836,7 +836,7 @@
                 <d2p1:Name z:Id="177">ToString</d2p1:Name>
                 <d2p1:Parameters z:Id="178" />
                 <d2p1:ReturnType z:Id="179">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -868,7 +868,7 @@
                     <d2p1:Name z:Id="185">obj</d2p1:Name>
                     <d2p1:SavedHash>575604184</d2p1:SavedHash>
                     <d2p1:Type z:Id="186">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -886,7 +886,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="187">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -915,7 +915,7 @@
                 <d2p1:Name z:Id="190">GetHashCode</d2p1:Name>
                 <d2p1:Parameters z:Id="191" />
                 <d2p1:ReturnType z:Id="192">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -944,12 +944,12 @@
                 <d2p1:Name z:Id="195">GetType</d2p1:Name>
                 <d2p1:Parameters z:Id="196" />
                 <d2p1:ReturnType z:Id="197">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
                   <d2p1:GenericArguments i:nil="true" />
-                  <d2p1:Hash>31291646</d2p1:Hash>
+                  <d2p1:Hash>32057793</d2p1:Hash>
                   <d2p1:ImplementedInterfaces i:nil="true" />
                   <d2p1:Methods i:nil="true" />
                   <d2p1:Modifiers xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
@@ -973,7 +973,7 @@
               <d2p1:Property z:Id="202">
                 <d2p1:Children z:Id="203">
                   <d1p1:anyType z:Id="204" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -996,7 +996,7 @@
               <d2p1:Property z:Id="206">
                 <d2p1:Children z:Id="207">
                   <d1p1:anyType z:Id="208" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -1020,9 +1020,9 @@
             <d2p1:TypeKind>ClassType</d2p1:TypeKind>
           </d2p1:Type>
           <d2p1:Type z:Id="210">
-            <d2p1:Attributes xmlns:d7p1="http://schemas.datacontract.org/2004/07/System" z:Id="211" />
+            <d2p1:Attributes z:Id="211" />
             <d2p1:BaseType z:Id="212">
-              <d2p1:Attributes xmlns:d8p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+              <d2p1:Attributes i:nil="true" />
               <d2p1:BaseType i:nil="true" />
               <d2p1:Constructors i:nil="true" />
               <d2p1:DeclaringType i:nil="true" />
@@ -1058,7 +1058,7 @@
             <d2p1:Hash>17063877</d2p1:Hash>
             <d2p1:ImplementedInterfaces z:Id="218">
               <d2p1:Type z:Id="219">
-                <d2p1:Attributes xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                <d2p1:Attributes i:nil="true" />
                 <d2p1:BaseType i:nil="true" />
                 <d2p1:Constructors i:nil="true" />
                 <d2p1:DeclaringType i:nil="true" />
@@ -1088,7 +1088,7 @@
                 <d2p1:Name z:Id="223">get_Age</d2p1:Name>
                 <d2p1:Parameters z:Id="224" />
                 <d2p1:ReturnType z:Id="225">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1117,7 +1117,7 @@
                 <d2p1:Name z:Id="228">get_Friend</d2p1:Name>
                 <d2p1:Parameters z:Id="229" />
                 <d2p1:ReturnType z:Id="230">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1149,7 +1149,7 @@
                     <d2p1:Name z:Id="236">target</d2p1:Name>
                     <d2p1:SavedHash>1989700236</d2p1:SavedHash>
                     <d2p1:Type z:Id="237">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -1167,7 +1167,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="238">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1199,7 +1199,7 @@
                     <d2p1:Name z:Id="244">For</d2p1:Name>
                     <d2p1:SavedHash>-1182105929</d2p1:SavedHash>
                     <d2p1:Type z:Id="245">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -1217,7 +1217,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="246">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1246,7 +1246,7 @@
                 <d2p1:Name z:Id="249">Live</d2p1:Name>
                 <d2p1:Parameters z:Id="250" />
                 <d2p1:ReturnType z:Id="251">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1275,7 +1275,7 @@
                 <d2p1:Name z:Id="254">get_Age</d2p1:Name>
                 <d2p1:Parameters z:Id="255" />
                 <d2p1:ReturnType z:Id="256">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1304,7 +1304,7 @@
                 <d2p1:Name z:Id="259">Live</d2p1:Name>
                 <d2p1:Parameters z:Id="260" />
                 <d2p1:ReturnType z:Id="261">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1333,7 +1333,7 @@
                 <d2p1:Name z:Id="264">ToString</d2p1:Name>
                 <d2p1:Parameters z:Id="265" />
                 <d2p1:ReturnType z:Id="266">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1365,7 +1365,7 @@
                     <d2p1:Name z:Id="272">obj</d2p1:Name>
                     <d2p1:SavedHash>575604184</d2p1:SavedHash>
                     <d2p1:Type z:Id="273">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -1383,7 +1383,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="274">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1412,7 +1412,7 @@
                 <d2p1:Name z:Id="277">GetHashCode</d2p1:Name>
                 <d2p1:Parameters z:Id="278" />
                 <d2p1:ReturnType z:Id="279">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1441,12 +1441,12 @@
                 <d2p1:Name z:Id="282">GetType</d2p1:Name>
                 <d2p1:Parameters z:Id="283" />
                 <d2p1:ReturnType z:Id="284">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
                   <d2p1:GenericArguments i:nil="true" />
-                  <d2p1:Hash>31291646</d2p1:Hash>
+                  <d2p1:Hash>32057793</d2p1:Hash>
                   <d2p1:ImplementedInterfaces i:nil="true" />
                   <d2p1:Methods i:nil="true" />
                   <d2p1:Modifiers xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
@@ -1470,7 +1470,7 @@
               <d2p1:Property z:Id="289">
                 <d2p1:Children z:Id="290">
                   <d1p1:anyType z:Id="291" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -1493,7 +1493,7 @@
               <d2p1:Property z:Id="293">
                 <d2p1:Children z:Id="294">
                   <d1p1:anyType z:Id="295" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -1517,7 +1517,7 @@
             <d2p1:TypeKind>ClassType</d2p1:TypeKind>
           </d2p1:Type>
           <d2p1:Type z:Id="297">
-            <d2p1:Attributes xmlns:d7p1="http://schemas.datacontract.org/2004/07/System" z:Id="298" />
+            <d2p1:Attributes z:Id="298" />
             <d2p1:BaseType i:nil="true" />
             <d2p1:Constructors z:Id="299">
               <d2p1:Method z:Id="300">
@@ -1540,7 +1540,7 @@
             <d2p1:Hash>10551481</d2p1:Hash>
             <d2p1:ImplementedInterfaces z:Id="304">
               <d2p1:Type z:Id="305">
-                <d2p1:Attributes xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                <d2p1:Attributes i:nil="true" />
                 <d2p1:BaseType i:nil="true" />
                 <d2p1:Constructors i:nil="true" />
                 <d2p1:DeclaringType i:nil="true" />
@@ -1570,7 +1570,7 @@
                 <d2p1:Name z:Id="309">get_Age</d2p1:Name>
                 <d2p1:Parameters z:Id="310" />
                 <d2p1:ReturnType z:Id="311">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1599,7 +1599,7 @@
                 <d2p1:Name z:Id="314">get_Friend</d2p1:Name>
                 <d2p1:Parameters z:Id="315" />
                 <d2p1:ReturnType z:Id="316">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1628,7 +1628,7 @@
                 <d2p1:Name z:Id="319">get_Pet</d2p1:Name>
                 <d2p1:Parameters z:Id="320" />
                 <d2p1:ReturnType z:Id="321">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1657,7 +1657,7 @@
                 <d2p1:Name z:Id="324">Live</d2p1:Name>
                 <d2p1:Parameters z:Id="325" />
                 <d2p1:ReturnType z:Id="326">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1686,7 +1686,7 @@
                 <d2p1:Name z:Id="329">PetYoutPet</d2p1:Name>
                 <d2p1:Parameters z:Id="330" />
                 <d2p1:ReturnType z:Id="331">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1718,7 +1718,7 @@
                     <d2p1:Name z:Id="337">pet</d2p1:Name>
                     <d2p1:SavedHash>99995098</d2p1:SavedHash>
                     <d2p1:Type z:Id="338">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -1736,7 +1736,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="339">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1765,7 +1765,7 @@
                 <d2p1:Name z:Id="342">ToString</d2p1:Name>
                 <d2p1:Parameters z:Id="343" />
                 <d2p1:ReturnType z:Id="344">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1797,7 +1797,7 @@
                     <d2p1:Name z:Id="350">obj</d2p1:Name>
                     <d2p1:SavedHash>575604184</d2p1:SavedHash>
                     <d2p1:Type z:Id="351">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -1815,7 +1815,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="352">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1844,7 +1844,7 @@
                 <d2p1:Name z:Id="355">GetHashCode</d2p1:Name>
                 <d2p1:Parameters z:Id="356" />
                 <d2p1:ReturnType z:Id="357">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -1873,12 +1873,12 @@
                 <d2p1:Name z:Id="360">GetType</d2p1:Name>
                 <d2p1:Parameters z:Id="361" />
                 <d2p1:ReturnType z:Id="362">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
                   <d2p1:GenericArguments i:nil="true" />
-                  <d2p1:Hash>31291646</d2p1:Hash>
+                  <d2p1:Hash>32057793</d2p1:Hash>
                   <d2p1:ImplementedInterfaces i:nil="true" />
                   <d2p1:Methods i:nil="true" />
                   <d2p1:Modifiers xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
@@ -1902,7 +1902,7 @@
               <d2p1:Property z:Id="366">
                 <d2p1:Children z:Id="367">
                   <d1p1:anyType z:Id="368" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -1925,7 +1925,7 @@
               <d2p1:Property z:Id="370">
                 <d2p1:Children z:Id="371">
                   <d1p1:anyType z:Id="372" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -1948,7 +1948,7 @@
               <d2p1:Property z:Id="374">
                 <d2p1:Children z:Id="375">
                   <d1p1:anyType z:Id="376" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -1972,7 +1972,7 @@
             <d2p1:TypeKind>ClassType</d2p1:TypeKind>
           </d2p1:Type>
           <d2p1:Type z:Id="378">
-            <d2p1:Attributes xmlns:d7p1="http://schemas.datacontract.org/2004/07/System" z:Id="379" />
+            <d2p1:Attributes z:Id="379" />
             <d2p1:BaseType i:nil="true" />
             <d2p1:Constructors z:Id="380" />
             <d2p1:DeclaringType i:nil="true" />
@@ -1993,7 +1993,7 @@
                 <d2p1:Name z:Id="385">get_Age</d2p1:Name>
                 <d2p1:Parameters z:Id="386" />
                 <d2p1:ReturnType z:Id="387">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2022,7 +2022,7 @@
                 <d2p1:Name z:Id="390">Live</d2p1:Name>
                 <d2p1:Parameters z:Id="391" />
                 <d2p1:ReturnType z:Id="392">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2051,7 +2051,7 @@
               <d2p1:Property z:Id="396">
                 <d2p1:Children z:Id="397">
                   <d1p1:anyType z:Id="398" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -2075,7 +2075,7 @@
             <d2p1:TypeKind>InterfaceType</d2p1:TypeKind>
           </d2p1:Type>
           <d2p1:Type z:Id="400">
-            <d2p1:Attributes xmlns:d7p1="http://schemas.datacontract.org/2004/07/System" z:Id="401" />
+            <d2p1:Attributes z:Id="401" />
             <d2p1:BaseType i:nil="true" />
             <d2p1:Constructors z:Id="402" />
             <d2p1:DeclaringType i:nil="true" />
@@ -2083,7 +2083,7 @@
             <d2p1:Hash>9092723</d2p1:Hash>
             <d2p1:ImplementedInterfaces z:Id="403">
               <d2p1:Type z:Id="404">
-                <d2p1:Attributes xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                <d2p1:Attributes i:nil="true" />
                 <d2p1:BaseType i:nil="true" />
                 <d2p1:Constructors i:nil="true" />
                 <d2p1:DeclaringType i:nil="true" />
@@ -2113,7 +2113,7 @@
                 <d2p1:Name z:Id="408">get_Age</d2p1:Name>
                 <d2p1:Parameters z:Id="409" />
                 <d2p1:ReturnType z:Id="410">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2142,7 +2142,7 @@
                 <d2p1:Name z:Id="413">Live</d2p1:Name>
                 <d2p1:Parameters z:Id="414" />
                 <d2p1:ReturnType z:Id="415">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2171,7 +2171,7 @@
                 <d2p1:Name z:Id="418">ToString</d2p1:Name>
                 <d2p1:Parameters z:Id="419" />
                 <d2p1:ReturnType z:Id="420">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2203,7 +2203,7 @@
                     <d2p1:Name z:Id="426">obj</d2p1:Name>
                     <d2p1:SavedHash>575604184</d2p1:SavedHash>
                     <d2p1:Type z:Id="427">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -2221,7 +2221,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="428">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2250,7 +2250,7 @@
                 <d2p1:Name z:Id="431">GetHashCode</d2p1:Name>
                 <d2p1:Parameters z:Id="432" />
                 <d2p1:ReturnType z:Id="433">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2279,12 +2279,12 @@
                 <d2p1:Name z:Id="436">GetType</d2p1:Name>
                 <d2p1:Parameters z:Id="437" />
                 <d2p1:ReturnType z:Id="438">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
                   <d2p1:GenericArguments i:nil="true" />
-                  <d2p1:Hash>31291646</d2p1:Hash>
+                  <d2p1:Hash>32057793</d2p1:Hash>
                   <d2p1:ImplementedInterfaces i:nil="true" />
                   <d2p1:Methods i:nil="true" />
                   <d2p1:Modifiers xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
@@ -2308,7 +2308,7 @@
               <d2p1:Property z:Id="442">
                 <d2p1:Children z:Id="443">
                   <d1p1:anyType z:Id="444" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -2338,7 +2338,7 @@
         <d2p1:SavedHash>-183328411</d2p1:SavedHash>
         <d2p1:Types z:Id="448">
           <d2p1:Type z:Id="449">
-            <d2p1:Attributes xmlns:d7p1="http://schemas.datacontract.org/2004/07/System" z:Id="450" />
+            <d2p1:Attributes z:Id="450" />
             <d2p1:BaseType i:nil="true" />
             <d2p1:Constructors z:Id="451" />
             <d2p1:DeclaringType i:nil="true" />
@@ -2346,7 +2346,7 @@
             <d2p1:Hash>11270739</d2p1:Hash>
             <d2p1:ImplementedInterfaces z:Id="452">
               <d2p1:Type z:Id="453">
-                <d2p1:Attributes xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                <d2p1:Attributes i:nil="true" />
                 <d2p1:BaseType i:nil="true" />
                 <d2p1:Constructors i:nil="true" />
                 <d2p1:DeclaringType i:nil="true" />
@@ -2362,7 +2362,7 @@
                 <d2p1:TypeKind>Reference</d2p1:TypeKind>
               </d2p1:Type>
               <d2p1:Type z:Id="454">
-                <d2p1:Attributes xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                <d2p1:Attributes i:nil="true" />
                 <d2p1:BaseType i:nil="true" />
                 <d2p1:Constructors i:nil="true" />
                 <d2p1:DeclaringType i:nil="true" />
@@ -2378,7 +2378,7 @@
                 <d2p1:TypeKind>Reference</d2p1:TypeKind>
               </d2p1:Type>
               <d2p1:Type z:Id="455">
-                <d2p1:Attributes xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                <d2p1:Attributes i:nil="true" />
                 <d2p1:BaseType i:nil="true" />
                 <d2p1:Constructors i:nil="true" />
                 <d2p1:DeclaringType i:nil="true" />
@@ -2411,7 +2411,7 @@
                     <d2p1:Name z:Id="462">obj</d2p1:Name>
                     <d2p1:SavedHash>575604184</d2p1:SavedHash>
                     <d2p1:Type z:Id="463">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -2429,7 +2429,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="464">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2458,7 +2458,7 @@
                 <d2p1:Name z:Id="467">GetHashCode</d2p1:Name>
                 <d2p1:Parameters z:Id="468" />
                 <d2p1:ReturnType z:Id="469">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2487,7 +2487,7 @@
                 <d2p1:Name z:Id="472">ToString</d2p1:Name>
                 <d2p1:Parameters z:Id="473" />
                 <d2p1:ReturnType z:Id="474">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2519,7 +2519,7 @@
                     <d2p1:Name z:Id="480">format</d2p1:Name>
                     <d2p1:SavedHash>1954515884</d2p1:SavedHash>
                     <d2p1:Type z:Id="481">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -2539,7 +2539,7 @@
                     <d2p1:Name z:Id="483">provider</d2p1:Name>
                     <d2p1:SavedHash>610966572</d2p1:SavedHash>
                     <d2p1:Type z:Id="484">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -2557,7 +2557,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="485">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2589,7 +2589,7 @@
                     <d2p1:Name z:Id="491">target</d2p1:Name>
                     <d2p1:SavedHash>1277861148</d2p1:SavedHash>
                     <d2p1:Type z:Id="492">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -2607,7 +2607,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="493">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2639,7 +2639,7 @@
                     <d2p1:Name z:Id="499">format</d2p1:Name>
                     <d2p1:SavedHash>1954515884</d2p1:SavedHash>
                     <d2p1:Type z:Id="500">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -2657,7 +2657,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="501">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2689,7 +2689,7 @@
                     <d2p1:Name z:Id="507">provider</d2p1:Name>
                     <d2p1:SavedHash>610966572</d2p1:SavedHash>
                     <d2p1:Type z:Id="508">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -2707,7 +2707,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="509">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2739,7 +2739,7 @@
                     <d2p1:Name z:Id="515">flag</d2p1:Name>
                     <d2p1:SavedHash>1549911638</d2p1:SavedHash>
                     <d2p1:Type z:Id="516">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -2757,7 +2757,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="517">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2786,7 +2786,7 @@
                 <d2p1:Name z:Id="520">GetTypeCode</d2p1:Name>
                 <d2p1:Parameters z:Id="521" />
                 <d2p1:ReturnType z:Id="522">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -2815,12 +2815,12 @@
                 <d2p1:Name z:Id="525">GetType</d2p1:Name>
                 <d2p1:Parameters z:Id="526" />
                 <d2p1:ReturnType z:Id="527">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
                   <d2p1:GenericArguments i:nil="true" />
-                  <d2p1:Hash>31291646</d2p1:Hash>
+                  <d2p1:Hash>32057793</d2p1:Hash>
                   <d2p1:ImplementedInterfaces i:nil="true" />
                   <d2p1:Methods i:nil="true" />
                   <d2p1:Modifiers xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
@@ -2844,7 +2844,7 @@
             <d2p1:TypeKind>EnumType</d2p1:TypeKind>
           </d2p1:Type>
           <d2p1:Type z:Id="532">
-            <d2p1:Attributes xmlns:d7p1="http://schemas.datacontract.org/2004/07/System" z:Id="533" />
+            <d2p1:Attributes z:Id="533" />
             <d2p1:BaseType i:nil="true" />
             <d2p1:Constructors z:Id="534">
               <d2p1:Method z:Id="535">
@@ -2863,7 +2863,7 @@
                     <d2p1:Name z:Id="540">radius</d2p1:Name>
                     <d2p1:SavedHash>-1791532976</d2p1:SavedHash>
                     <d2p1:Type z:Id="541">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -2883,7 +2883,7 @@
                     <d2p1:Name z:Id="543">centerX</d2p1:Name>
                     <d2p1:SavedHash>-242406724</d2p1:SavedHash>
                     <d2p1:Type z:Id="544">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -2903,7 +2903,7 @@
                     <d2p1:Name z:Id="546">centerY</d2p1:Name>
                     <d2p1:SavedHash>-373988464</d2p1:SavedHash>
                     <d2p1:Type z:Id="547">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -2938,7 +2938,7 @@
                     <d2p1:Name z:Id="553">radius</d2p1:Name>
                     <d2p1:SavedHash>-1791532976</d2p1:SavedHash>
                     <d2p1:Type z:Id="554">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -2958,7 +2958,7 @@
                     <d2p1:Name z:Id="556">center</d2p1:Name>
                     <d2p1:SavedHash>-344180012</d2p1:SavedHash>
                     <d2p1:Type z:Id="557">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -2996,7 +2996,7 @@
                 <d2p1:Name z:Id="564">get_Radius</d2p1:Name>
                 <d2p1:Parameters z:Id="565" />
                 <d2p1:ReturnType z:Id="566">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3025,7 +3025,7 @@
                 <d2p1:Name z:Id="569">ToString</d2p1:Name>
                 <d2p1:Parameters z:Id="570" />
                 <d2p1:ReturnType z:Id="571">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3057,7 +3057,7 @@
                     <d2p1:Name z:Id="577">obj</d2p1:Name>
                     <d2p1:SavedHash>575604184</d2p1:SavedHash>
                     <d2p1:Type z:Id="578">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -3075,7 +3075,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="579">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3104,7 +3104,7 @@
                 <d2p1:Name z:Id="582">GetHashCode</d2p1:Name>
                 <d2p1:Parameters z:Id="583" />
                 <d2p1:ReturnType z:Id="584">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3133,12 +3133,12 @@
                 <d2p1:Name z:Id="587">GetType</d2p1:Name>
                 <d2p1:Parameters z:Id="588" />
                 <d2p1:ReturnType z:Id="589">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
                   <d2p1:GenericArguments i:nil="true" />
-                  <d2p1:Hash>31291646</d2p1:Hash>
+                  <d2p1:Hash>32057793</d2p1:Hash>
                   <d2p1:ImplementedInterfaces i:nil="true" />
                   <d2p1:Methods i:nil="true" />
                   <d2p1:Modifiers xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
@@ -3162,7 +3162,7 @@
               <d2p1:Property z:Id="594">
                 <d2p1:Children z:Id="595">
                   <d1p1:anyType z:Id="596" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -3186,7 +3186,7 @@
             <d2p1:TypeKind>ClassType</d2p1:TypeKind>
           </d2p1:Type>
           <d2p1:Type z:Id="598">
-            <d2p1:Attributes xmlns:d7p1="http://schemas.datacontract.org/2004/07/System" z:Id="599" />
+            <d2p1:Attributes z:Id="599" />
             <d2p1:BaseType i:nil="true" />
             <d2p1:Constructors z:Id="600" />
             <d2p1:DeclaringType i:nil="true" />
@@ -3194,7 +3194,7 @@
             <d2p1:Hash>39907734</d2p1:Hash>
             <d2p1:ImplementedInterfaces z:Id="601">
               <d2p1:Type z:Id="602">
-                <d2p1:Attributes xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                <d2p1:Attributes i:nil="true" />
                 <d2p1:BaseType i:nil="true" />
                 <d2p1:Constructors i:nil="true" />
                 <d2p1:DeclaringType i:nil="true" />
@@ -3210,7 +3210,7 @@
                 <d2p1:TypeKind>Reference</d2p1:TypeKind>
               </d2p1:Type>
               <d2p1:Type z:Id="603">
-                <d2p1:Attributes xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                <d2p1:Attributes i:nil="true" />
                 <d2p1:BaseType i:nil="true" />
                 <d2p1:Constructors i:nil="true" />
                 <d2p1:DeclaringType i:nil="true" />
@@ -3226,7 +3226,7 @@
                 <d2p1:TypeKind>Reference</d2p1:TypeKind>
               </d2p1:Type>
               <d2p1:Type z:Id="604">
-                <d2p1:Attributes xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                <d2p1:Attributes i:nil="true" />
                 <d2p1:BaseType i:nil="true" />
                 <d2p1:Constructors i:nil="true" />
                 <d2p1:DeclaringType i:nil="true" />
@@ -3259,7 +3259,7 @@
                     <d2p1:Name z:Id="611">obj</d2p1:Name>
                     <d2p1:SavedHash>575604184</d2p1:SavedHash>
                     <d2p1:Type z:Id="612">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -3277,7 +3277,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="613">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3306,7 +3306,7 @@
                 <d2p1:Name z:Id="616">GetHashCode</d2p1:Name>
                 <d2p1:Parameters z:Id="617" />
                 <d2p1:ReturnType z:Id="618">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3335,7 +3335,7 @@
                 <d2p1:Name z:Id="621">ToString</d2p1:Name>
                 <d2p1:Parameters z:Id="622" />
                 <d2p1:ReturnType z:Id="623">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3367,7 +3367,7 @@
                     <d2p1:Name z:Id="629">format</d2p1:Name>
                     <d2p1:SavedHash>1954515884</d2p1:SavedHash>
                     <d2p1:Type z:Id="630">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -3387,7 +3387,7 @@
                     <d2p1:Name z:Id="632">provider</d2p1:Name>
                     <d2p1:SavedHash>610966572</d2p1:SavedHash>
                     <d2p1:Type z:Id="633">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -3405,7 +3405,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="634">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3437,7 +3437,7 @@
                     <d2p1:Name z:Id="640">target</d2p1:Name>
                     <d2p1:SavedHash>1277861148</d2p1:SavedHash>
                     <d2p1:Type z:Id="641">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -3455,7 +3455,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="642">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3487,7 +3487,7 @@
                     <d2p1:Name z:Id="648">format</d2p1:Name>
                     <d2p1:SavedHash>1954515884</d2p1:SavedHash>
                     <d2p1:Type z:Id="649">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -3505,7 +3505,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="650">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3537,7 +3537,7 @@
                     <d2p1:Name z:Id="656">provider</d2p1:Name>
                     <d2p1:SavedHash>610966572</d2p1:SavedHash>
                     <d2p1:Type z:Id="657">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -3555,7 +3555,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="658">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3587,7 +3587,7 @@
                     <d2p1:Name z:Id="664">flag</d2p1:Name>
                     <d2p1:SavedHash>1549911638</d2p1:SavedHash>
                     <d2p1:Type z:Id="665">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -3605,7 +3605,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="666">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3634,7 +3634,7 @@
                 <d2p1:Name z:Id="669">GetTypeCode</d2p1:Name>
                 <d2p1:Parameters z:Id="670" />
                 <d2p1:ReturnType z:Id="671">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3663,12 +3663,12 @@
                 <d2p1:Name z:Id="674">GetType</d2p1:Name>
                 <d2p1:Parameters z:Id="675" />
                 <d2p1:ReturnType z:Id="676">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
                   <d2p1:GenericArguments i:nil="true" />
-                  <d2p1:Hash>31291646</d2p1:Hash>
+                  <d2p1:Hash>32057793</d2p1:Hash>
                   <d2p1:ImplementedInterfaces i:nil="true" />
                   <d2p1:Methods i:nil="true" />
                   <d2p1:Modifiers xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
@@ -3692,7 +3692,7 @@
             <d2p1:TypeKind>EnumType</d2p1:TypeKind>
           </d2p1:Type>
           <d2p1:Type z:Id="681">
-            <d2p1:Attributes xmlns:d7p1="http://schemas.datacontract.org/2004/07/System" z:Id="682" />
+            <d2p1:Attributes z:Id="682" />
             <d2p1:BaseType i:nil="true" />
             <d2p1:Constructors z:Id="683">
               <d2p1:Method z:Id="684">
@@ -3711,7 +3711,7 @@
                     <d2p1:Name z:Id="689">x</d2p1:Name>
                     <d2p1:SavedHash>1110555748</d2p1:SavedHash>
                     <d2p1:Type z:Id="690">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -3731,7 +3731,7 @@
                     <d2p1:Name z:Id="692">y</d2p1:Name>
                     <d2p1:SavedHash>1000998568</d2p1:SavedHash>
                     <d2p1:Type z:Id="693">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -3769,7 +3769,7 @@
                 <d2p1:Name z:Id="698">get_x</d2p1:Name>
                 <d2p1:Parameters z:Id="699" />
                 <d2p1:ReturnType z:Id="700">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3798,7 +3798,7 @@
                 <d2p1:Name z:Id="703">get_y</d2p1:Name>
                 <d2p1:Parameters z:Id="704" />
                 <d2p1:ReturnType z:Id="705">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3827,7 +3827,7 @@
                 <d2p1:Name z:Id="708">ToString</d2p1:Name>
                 <d2p1:Parameters z:Id="709" />
                 <d2p1:ReturnType z:Id="710">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3859,7 +3859,7 @@
                     <d2p1:Name z:Id="716">obj</d2p1:Name>
                     <d2p1:SavedHash>575604184</d2p1:SavedHash>
                     <d2p1:Type z:Id="717">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -3877,7 +3877,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="718">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3906,7 +3906,7 @@
                 <d2p1:Name z:Id="721">GetHashCode</d2p1:Name>
                 <d2p1:Parameters z:Id="722" />
                 <d2p1:ReturnType z:Id="723">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -3935,12 +3935,12 @@
                 <d2p1:Name z:Id="726">GetType</d2p1:Name>
                 <d2p1:Parameters z:Id="727" />
                 <d2p1:ReturnType z:Id="728">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
                   <d2p1:GenericArguments i:nil="true" />
-                  <d2p1:Hash>31291646</d2p1:Hash>
+                  <d2p1:Hash>32057793</d2p1:Hash>
                   <d2p1:ImplementedInterfaces i:nil="true" />
                   <d2p1:Methods i:nil="true" />
                   <d2p1:Modifiers xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
@@ -3964,7 +3964,7 @@
               <d2p1:Property z:Id="732">
                 <d2p1:Children z:Id="733">
                   <d1p1:anyType z:Id="734" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -3987,7 +3987,7 @@
               <d2p1:Property z:Id="736">
                 <d2p1:Children z:Id="737">
                   <d1p1:anyType z:Id="738" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -4011,7 +4011,7 @@
             <d2p1:TypeKind>ClassType</d2p1:TypeKind>
           </d2p1:Type>
           <d2p1:Type z:Id="740">
-            <d2p1:Attributes xmlns:d7p1="http://schemas.datacontract.org/2004/07/System" z:Id="741" />
+            <d2p1:Attributes z:Id="741" />
             <d2p1:BaseType i:nil="true" />
             <d2p1:Constructors z:Id="742">
               <d2p1:Method z:Id="743">
@@ -4030,7 +4030,7 @@
                     <d2p1:Name z:Id="748">x1</d2p1:Name>
                     <d2p1:SavedHash>817216612</d2p1:SavedHash>
                     <d2p1:Type z:Id="749">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4050,7 +4050,7 @@
                     <d2p1:Name z:Id="751">x2</d2p1:Name>
                     <d2p1:SavedHash>2063187044</d2p1:SavedHash>
                     <d2p1:Type z:Id="752">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4070,7 +4070,7 @@
                     <d2p1:Name z:Id="754">y1</d2p1:Name>
                     <d2p1:SavedHash>707659432</d2p1:SavedHash>
                     <d2p1:Type z:Id="755">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4090,7 +4090,7 @@
                     <d2p1:Name z:Id="757">y2</d2p1:Name>
                     <d2p1:SavedHash>1953629864</d2p1:SavedHash>
                     <d2p1:Type z:Id="758">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4125,7 +4125,7 @@
                     <d2p1:Name z:Id="764">pointA</d2p1:Name>
                     <d2p1:SavedHash>-1999134968</d2p1:SavedHash>
                     <d2p1:Type z:Id="765">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4145,7 +4145,7 @@
                     <d2p1:Name z:Id="767">pointB</d2p1:Name>
                     <d2p1:SavedHash>-1562665208</d2p1:SavedHash>
                     <d2p1:Type z:Id="768">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4183,7 +4183,7 @@
                 <d2p1:Name z:Id="773">get_StartPoint</d2p1:Name>
                 <d2p1:Parameters z:Id="774" />
                 <d2p1:ReturnType z:Id="775">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -4212,7 +4212,7 @@
                 <d2p1:Name z:Id="778">get_EndPoint</d2p1:Name>
                 <d2p1:Parameters z:Id="779" />
                 <d2p1:ReturnType z:Id="780">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -4241,7 +4241,7 @@
                 <d2p1:Name z:Id="783">get_Length</d2p1:Name>
                 <d2p1:Parameters z:Id="784" />
                 <d2p1:ReturnType z:Id="785">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -4273,7 +4273,7 @@
                     <d2p1:Name z:Id="793">obj</d2p1:Name>
                     <d2p1:SavedHash>-1886794368</d2p1:SavedHash>
                     <d2p1:Type z:Id="794">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4291,7 +4291,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="797">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -4320,7 +4320,7 @@
                 <d2p1:Name z:Id="800">ToString</d2p1:Name>
                 <d2p1:Parameters z:Id="801" />
                 <d2p1:ReturnType z:Id="802">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -4352,7 +4352,7 @@
                     <d2p1:Name z:Id="808">obj</d2p1:Name>
                     <d2p1:SavedHash>575604184</d2p1:SavedHash>
                     <d2p1:Type z:Id="809">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4370,7 +4370,7 @@
                   </d2p1:Parameter>
                 </d2p1:Parameters>
                 <d2p1:ReturnType z:Id="810">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -4399,7 +4399,7 @@
                 <d2p1:Name z:Id="813">GetHashCode</d2p1:Name>
                 <d2p1:Parameters z:Id="814" />
                 <d2p1:ReturnType z:Id="815">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -4428,12 +4428,12 @@
                 <d2p1:Name z:Id="818">GetType</d2p1:Name>
                 <d2p1:Parameters z:Id="819" />
                 <d2p1:ReturnType z:Id="820">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
                   <d2p1:GenericArguments i:nil="true" />
-                  <d2p1:Hash>31291646</d2p1:Hash>
+                  <d2p1:Hash>32057793</d2p1:Hash>
                   <d2p1:ImplementedInterfaces i:nil="true" />
                   <d2p1:Methods i:nil="true" />
                   <d2p1:Modifiers xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
@@ -4457,7 +4457,7 @@
               <d2p1:Property z:Id="824">
                 <d2p1:Children z:Id="825">
                   <d1p1:anyType z:Id="826" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -4480,7 +4480,7 @@
               <d2p1:Property z:Id="828">
                 <d2p1:Children z:Id="829">
                   <d1p1:anyType z:Id="830" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -4503,7 +4503,7 @@
               <d2p1:Property z:Id="832">
                 <d2p1:Children z:Id="833">
                   <d1p1:anyType z:Id="834" i:type="d2p1:Type">
-                    <d2p1:Attributes xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Attributes i:nil="true" />
                     <d2p1:BaseType i:nil="true" />
                     <d2p1:Constructors i:nil="true" />
                     <d2p1:DeclaringType i:nil="true" />
@@ -4527,7 +4527,7 @@
             <d2p1:TypeKind>ClassType</d2p1:TypeKind>
           </d2p1:Type>
           <d2p1:Type z:Id="836">
-            <d2p1:Attributes xmlns:d7p1="http://schemas.datacontract.org/2004/07/System" z:Id="837" />
+            <d2p1:Attributes z:Id="837" />
             <d2p1:BaseType i:nil="true" />
             <d2p1:Constructors z:Id="838">
               <d2p1:Method z:Id="839">
@@ -4546,7 +4546,7 @@
                     <d2p1:Name z:Id="844">a</d2p1:Name>
                     <d2p1:SavedHash>938513544</d2p1:SavedHash>
                     <d2p1:Type z:Id="845">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4566,7 +4566,7 @@
                     <d2p1:Name z:Id="847">b</d2p1:Name>
                     <d2p1:SavedHash>546614924</d2p1:SavedHash>
                     <d2p1:Type z:Id="848">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4586,7 +4586,7 @@
                     <d2p1:Name z:Id="850">c</d2p1:Name>
                     <d2p1:SavedHash>154716304</d2p1:SavedHash>
                     <d2p1:Type z:Id="851">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4606,7 +4606,7 @@
                     <d2p1:Name z:Id="853">d</d2p1:Name>
                     <d2p1:SavedHash>-237182316</d2p1:SavedHash>
                     <d2p1:Type z:Id="854">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4644,13 +4644,13 @@
                 <d2p1:Name z:Id="859">get_Sides</d2p1:Name>
                 <d2p1:Parameters z:Id="860" />
                 <d2p1:ReturnType z:Id="861">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
                   <d2p1:GenericArguments z:Id="862">
                     <d2p1:Type z:Id="863">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4690,13 +4690,13 @@
                 <d2p1:Name z:Id="868">get_Vertexes</d2p1:Name>
                 <d2p1:Parameters z:Id="869" />
                 <d2p1:ReturnType z:Id="870">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
                   <d2p1:GenericArguments z:Id="871">
                     <d2p1:Type z:Id="872">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
@@ -4736,7 +4736,7 @@
                 <d2p1:Name z:Id="877">get_Area</d2p1:Name>
                 <d2p1:Parameters z:Id="878" />
                 <d2p1:ReturnType z:Id="879">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -4765,7 +4765,7 @@
                 <d2p1:Name z:Id="882">ToString</d2p1:Name>
                 <d2p1:Parameters z:Id="883" />
                 <d2p1:ReturnType z:Id="884">
-                  <d2p1:Attributes xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Attributes i:nil="true" />
                   <d2p1:BaseType i:nil="true" />
                   <d2p1:Constructors i:nil="true" />
                   <d2p1:DeclaringType i:nil="true" />
@@ -4797,13 +4797,219 @@
                     <d2p1:Name z:Id="890">obj</d2p1:Name>
                     <d2p1:SavedHash>575604184</d2p1:SavedHash>
                     <d2p1:Type z:Id="891">
-                      <d2p1:Attributes xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Attributes i:nil="true" />
                       <d2p1:BaseType i:nil="true" />
                       <d2p1:Constructors i:nil="true" />
                       <d2p1:DeclaringType i:nil="true" />
                       <d2p1:GenericArguments i:nil="true" />
                       <d2p1:Hash>41962596</d2p1:Hash>
                       <d2p1:ImplementedInterfaces i:nil="true" />
+                      <d2p1:Methods i:nil="true" />
+                      <d2p1:Modifiers xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                      <d2p1:Name z:Ref="29" i:nil="true" />
+                      <d2p1:Namespace z:Ref="30" i:nil="true" />
+                      <d2p1:NestedTypes i:nil="true" />
+                      <d2p1:Properties i:nil="true" />
+                      <d2p1:TypeKind>Reference</d2p1:TypeKind>
+                    </d2p1:Type>
+                  </d2p1:Parameter>
+                </d2p1:Parameters>
+                <d2p1:ReturnType z:Id="892">
+                  <d2p1:Attributes i:nil="true" />
+                  <d2p1:BaseType i:nil="true" />
+                  <d2p1:Constructors i:nil="true" />
+                  <d2p1:DeclaringType i:nil="true" />
+                  <d2p1:GenericArguments i:nil="true" />
+                  <d2p1:Hash>56680499</d2p1:Hash>
+                  <d2p1:ImplementedInterfaces i:nil="true" />
+                  <d2p1:Methods i:nil="true" />
+                  <d2p1:Modifiers xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Name z:Ref="32" i:nil="true" />
+                  <d2p1:Namespace z:Ref="33" i:nil="true" />
+                  <d2p1:NestedTypes i:nil="true" />
+                  <d2p1:Properties i:nil="true" />
+                  <d2p1:TypeKind>Reference</d2p1:TypeKind>
+                </d2p1:ReturnType>
+              </d2p1:Method>
+              <d2p1:Method z:Id="893">
+                <d2p1:GenericArguments i:nil="true" />
+                <d2p1:Hash>44509380</d2p1:Hash>
+                <d2p1:IsExtensionMethod>false</d2p1:IsExtensionMethod>
+                <d2p1:Modifiers xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" z:Id="894">
+                  <d9p1:m_Item1>IsPublic</d9p1:m_Item1>
+                  <d9p1:m_Item2>NotAbstract</d9p1:m_Item2>
+                  <d9p1:m_Item3>NotStatic</d9p1:m_Item3>
+                  <d9p1:m_Item4>Virtual</d9p1:m_Item4>
+                </d2p1:Modifiers>
+                <d2p1:Name z:Id="895">GetHashCode</d2p1:Name>
+                <d2p1:Parameters z:Id="896" />
+                <d2p1:ReturnType z:Id="897">
+                  <d2p1:Attributes i:nil="true" />
+                  <d2p1:BaseType i:nil="true" />
+                  <d2p1:Constructors i:nil="true" />
+                  <d2p1:DeclaringType i:nil="true" />
+                  <d2p1:GenericArguments i:nil="true" />
+                  <d2p1:Hash>6444509</d2p1:Hash>
+                  <d2p1:ImplementedInterfaces i:nil="true" />
+                  <d2p1:Methods i:nil="true" />
+                  <d2p1:Modifiers xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Name z:Ref="39" i:nil="true" />
+                  <d2p1:Namespace z:Ref="40" i:nil="true" />
+                  <d2p1:NestedTypes i:nil="true" />
+                  <d2p1:Properties i:nil="true" />
+                  <d2p1:TypeKind>Reference</d2p1:TypeKind>
+                </d2p1:ReturnType>
+              </d2p1:Method>
+              <d2p1:Method z:Id="898">
+                <d2p1:GenericArguments i:nil="true" />
+                <d2p1:Hash>18461960</d2p1:Hash>
+                <d2p1:IsExtensionMethod>false</d2p1:IsExtensionMethod>
+                <d2p1:Modifiers xmlns:d9p1="http://schemas.datacontract.org/2004/07/System" z:Id="899">
+                  <d9p1:m_Item1>IsPublic</d9p1:m_Item1>
+                  <d9p1:m_Item2>NotAbstract</d9p1:m_Item2>
+                  <d9p1:m_Item3>NotStatic</d9p1:m_Item3>
+                  <d9p1:m_Item4>NotVirtual</d9p1:m_Item4>
+                </d2p1:Modifiers>
+                <d2p1:Name z:Id="900">GetType</d2p1:Name>
+                <d2p1:Parameters z:Id="901" />
+                <d2p1:ReturnType z:Id="902">
+                  <d2p1:Attributes i:nil="true" />
+                  <d2p1:BaseType i:nil="true" />
+                  <d2p1:Constructors i:nil="true" />
+                  <d2p1:DeclaringType i:nil="true" />
+                  <d2p1:GenericArguments i:nil="true" />
+                  <d2p1:Hash>32057793</d2p1:Hash>
+                  <d2p1:ImplementedInterfaces i:nil="true" />
+                  <d2p1:Methods i:nil="true" />
+                  <d2p1:Modifiers xmlns:d10p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                  <d2p1:Name z:Ref="107" i:nil="true" />
+                  <d2p1:Namespace z:Ref="108" i:nil="true" />
+                  <d2p1:NestedTypes i:nil="true" />
+                  <d2p1:Properties i:nil="true" />
+                  <d2p1:TypeKind>Reference</d2p1:TypeKind>
+                </d2p1:ReturnType>
+              </d2p1:Method>
+            </d2p1:Methods>
+            <d2p1:Modifiers xmlns:d7p1="http://schemas.datacontract.org/2004/07/System" z:Id="903">
+              <d7p1:m_Item1>IsPublic</d7p1:m_Item1>
+              <d7p1:m_Item2>NotSealed</d7p1:m_Item2>
+              <d7p1:m_Item3>NotAbstract</d7p1:m_Item3>
+            </d2p1:Modifiers>
+            <d2p1:Name z:Id="904">Square</d2p1:Name>
+            <d2p1:Namespace i:nil="true" />
+            <d2p1:NestedTypes z:Id="905" />
+            <d2p1:Properties z:Id="906">
+              <d2p1:Property z:Id="907">
+                <d2p1:Children z:Id="908">
+                  <d1p1:anyType z:Id="909" i:type="d2p1:Type">
+                    <d2p1:Attributes i:nil="true" />
+                    <d2p1:BaseType i:nil="true" />
+                    <d2p1:Constructors i:nil="true" />
+                    <d2p1:DeclaringType i:nil="true" />
+                    <d2p1:GenericArguments z:Id="910">
+                      <d2p1:Type z:Id="911">
+                        <d2p1:Attributes i:nil="true" />
+                        <d2p1:BaseType i:nil="true" />
+                        <d2p1:Constructors i:nil="true" />
+                        <d2p1:DeclaringType i:nil="true" />
+                        <d2p1:GenericArguments i:nil="true" />
+                        <d2p1:Hash>38979089</d2p1:Hash>
+                        <d2p1:ImplementedInterfaces i:nil="true" />
+                        <d2p1:Methods i:nil="true" />
+                        <d2p1:Modifiers xmlns:d13p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                        <d2p1:Name z:Ref="795" i:nil="true" />
+                        <d2p1:Namespace z:Ref="796" i:nil="true" />
+                        <d2p1:NestedTypes i:nil="true" />
+                        <d2p1:Properties i:nil="true" />
+                        <d2p1:TypeKind>Reference</d2p1:TypeKind>
+                      </d2p1:Type>
+                    </d2p1:GenericArguments>
+                    <d2p1:Hash>59245929</d2p1:Hash>
+                    <d2p1:ImplementedInterfaces i:nil="true" />
+                    <d2p1:Methods i:nil="true" />
+                    <d2p1:Modifiers xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Name z:Ref="864" i:nil="true" />
+                    <d2p1:Namespace z:Ref="865" i:nil="true" />
+                    <d2p1:NestedTypes i:nil="true" />
+                    <d2p1:Properties i:nil="true" />
+                    <d2p1:TypeKind>Reference</d2p1:TypeKind>
+                  </d1p1:anyType>
+                </d2p1:Children>
+                <d2p1:Name z:Id="912">Sides</d2p1:Name>
+                <d2p1:SavedHash>663931272</d2p1:SavedHash>
+                <d2p1:Type z:Ref="909" i:nil="true" />
+              </d2p1:Property>
+              <d2p1:Property z:Id="913">
+                <d2p1:Children z:Id="914">
+                  <d1p1:anyType z:Id="915" i:type="d2p1:Type">
+                    <d2p1:Attributes i:nil="true" />
+                    <d2p1:BaseType i:nil="true" />
+                    <d2p1:Constructors i:nil="true" />
+                    <d2p1:DeclaringType i:nil="true" />
+                    <d2p1:GenericArguments z:Id="916">
+                      <d2p1:Type z:Id="917">
+                        <d2p1:Attributes i:nil="true" />
+                        <d2p1:BaseType i:nil="true" />
+                        <d2p1:Constructors i:nil="true" />
+                        <d2p1:DeclaringType i:nil="true" />
+                        <d2p1:GenericArguments i:nil="true" />
+                        <d2p1:Hash>23052829</d2p1:Hash>
+                        <d2p1:ImplementedInterfaces i:nil="true" />
+                        <d2p1:Methods i:nil="true" />
+                        <d2p1:Modifiers xmlns:d13p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                        <d2p1:Name z:Ref="558" i:nil="true" />
+                        <d2p1:Namespace z:Ref="559" i:nil="true" />
+                        <d2p1:NestedTypes i:nil="true" />
+                        <d2p1:Properties i:nil="true" />
+                        <d2p1:TypeKind>Reference</d2p1:TypeKind>
+                      </d2p1:Type>
+                    </d2p1:GenericArguments>
+                    <d2p1:Hash>547835</d2p1:Hash>
+                    <d2p1:ImplementedInterfaces i:nil="true" />
+                    <d2p1:Methods i:nil="true" />
+                    <d2p1:Modifiers xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Name z:Ref="873" i:nil="true" />
+                    <d2p1:Namespace z:Ref="874" i:nil="true" />
+                    <d2p1:NestedTypes i:nil="true" />
+                    <d2p1:Properties i:nil="true" />
+                    <d2p1:TypeKind>Reference</d2p1:TypeKind>
+                  </d1p1:anyType>
+                </d2p1:Children>
+                <d2p1:Name z:Id="918">Vertexes</d2p1:Name>
+                <d2p1:SavedHash>-1447246758</d2p1:SavedHash>
+                <d2p1:Type z:Ref="915" i:nil="true" />
+              </d2p1:Property>
+              <d2p1:Property z:Id="919">
+                <d2p1:Children z:Id="920">
+                  <d1p1:anyType z:Id="921" i:type="d2p1:Type">
+                    <d2p1:Attributes i:nil="true" />
+                    <d2p1:BaseType i:nil="true" />
+                    <d2p1:Constructors i:nil="true" />
+                    <d2p1:DeclaringType i:nil="true" />
+                    <d2p1:GenericArguments i:nil="true" />
+                    <d2p1:Hash>30542218</d2p1:Hash>
+                    <d2p1:ImplementedInterfaces i:nil="true" />
+                    <d2p1:Methods i:nil="true" />
+                    <d2p1:Modifiers xmlns:d11p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
+                    <d2p1:Name z:Ref="786" i:nil="true" />
+                    <d2p1:Namespace z:Ref="787" i:nil="true" />
+                    <d2p1:NestedTypes i:nil="true" />
+                    <d2p1:Properties i:nil="true" />
+                    <d2p1:TypeKind>Reference</d2p1:TypeKind>
+                  </d1p1:anyType>
+                </d2p1:Children>
+                <d2p1:Name z:Id="922">Area</d2p1:Name>
+                <d2p1:SavedHash>-915109055</d2p1:SavedHash>
+                <d2p1:Type z:Ref="921" i:nil="true" />
+              </d2p1:Property>
+            </d2p1:Properties>
+            <d2p1:TypeKind>ClassType</d2p1:TypeKind>
+          </d2p1:Type>
+        </d2p1:Types>
+      </d2p1:Namespace>
+    </d2p1:m_namespaces>
+  </d1p1:anyType>
+</z:anyType>         <d2p1:ImplementedInterfaces i:nil="true" />
                       <d2p1:Methods i:nil="true" />
                       <d2p1:Modifiers xmlns:d12p1="http://schemas.datacontract.org/2004/07/System" i:nil="true" />
                       <d2p1:Name z:Ref="29" i:nil="true" />

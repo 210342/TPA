@@ -41,8 +41,8 @@ namespace Library.Logic.ViewModel
         public ICommand ShowCurrentObject { get; }
         public ICommand ReloadAssemblyCommand { get; }
         public ICommand OpenFileCommand { get; }
-        public ICommand SaveModel { get; }
-        public ICommand LoadModel { get; }
+        public RelayCommand SaveModel { get; }
+        public RelayCommand LoadModel { get; }
         public ISourceProvider OpenFileSourceProvider { get; set; }
         public ISourceProvider SaveFileSourceProvider { get; set; }
         public bool Tracing { get; set; }
@@ -57,6 +57,8 @@ namespace Library.Logic.ViewModel
             {
                 isSerializationChecked = value;
                 ImportPersister();
+                SaveModel.RaiseCanExecuteChanged();
+                LoadModel.RaiseCanExecuteChanged();
                 OnPropertyChanged();
                 if(Tracing)
                 {
@@ -136,8 +138,8 @@ namespace Library.Logic.ViewModel
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
             OpenFileCommand = new RelayCommand(() => OpenFile(OpenFileSourceProvider));
-            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider), () => true);
-            LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => true);
+            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider), () => persister != null && persister is XmlModelSerializer);
+            LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => persister != null && persister is XmlModelSerializer);
         }
 
         private void LoadAssembly()
@@ -232,6 +234,7 @@ namespace Library.Logic.ViewModel
                     if(Tracing)
                     {
                         Trace.TraceWarning("Exception caught when trying to open a file for writing (serialization)");
+                        Trace.TraceWarning(ex.Message);
                     }
                 }
             }
@@ -266,6 +269,7 @@ namespace Library.Logic.ViewModel
                     if (Tracing)
                     {
                         Trace.TraceWarning("Exception caught when trying to open a file for reading (deserialization)");
+                        Trace.TraceWarning(ex.Message);
                     }
                 }
             }
