@@ -202,14 +202,13 @@ namespace Library.Logic.ViewModel
         {
             if(IsSerializationChecked)
             {
-                List<Type> types = new List<Type>();
+                List<Type> types = new List<Type>(Enumerable.Repeat(typeof(List<IMetadata>), 1));
                 types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
-                types.Add(typeof(List<IMetadata>));
-                persister = new XmlModelSerializer(types, typeof(Dictionary<int, IMetadata>));
+                persister = new XmlModelSerializer(types, typeof(IMetadata));
             }
             else
             {
-
+                // any other implementation of IPersister
             }
         }
 
@@ -244,6 +243,7 @@ namespace Library.Logic.ViewModel
                         {
                             ObjectsList.Add(new AssemblyItem(item as AssemblyMetadata));
                         }
+                        LoadedAssembly = "Model deserialized";
                     }
                 });
             }

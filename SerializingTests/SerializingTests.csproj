@@ -63,6 +63,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Library\Library.csproj">
+      <Project>{df4c29a8-dc9d-4abc-8b61-229495dd2c37}</Project>
+      <Name>Library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Serializing\Serializing.csproj">
       <Project>{D3F316A5-6F7D-42EC-B332-E6451EBCF704}</Project>
       <Name>Serializing</Name>

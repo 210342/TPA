@@ -47,6 +47,7 @@ namespace Serializing
             var settings = new XmlWriterSettings { Indent = true };
             if(SerializationStream != null)
             {
+                SerializationStream.Position = 0;
                 using (XmlWriter writer = XmlWriter.Create(SerializationStream, settings))
                 {
                     dcs.WriteObject(writer, toSave);
@@ -66,6 +67,7 @@ namespace Serializing
             object read = null;
             if (SerializationStream != null)
             {
+                SerializationStream.Position = 0;
                 using (XmlReader reader = XmlReader.Create(SerializationStream))
                 {
                     read = dcs.ReadObject(reader);
