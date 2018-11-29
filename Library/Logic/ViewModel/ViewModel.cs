@@ -15,6 +15,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using System.IO;
 using GalaSoft.MvvmLight.Command;
 
 namespace Library.Logic.ViewModel
@@ -119,7 +120,7 @@ namespace Library.Logic.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ViewModel() : this(true)
+        public ViewModel() : this(false)
         {
         }
         public ViewModel(bool tracing)
@@ -135,7 +136,7 @@ namespace Library.Logic.ViewModel
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
             OpenFileCommand = new RelayCommand(() => OpenFile(OpenFileSourceProvider));
-            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider), () => IsSerializationChecked);
+            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider), () => true);
             LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => true);
         }
 
@@ -191,7 +192,7 @@ namespace Library.Logic.ViewModel
             }
             catch (CompositionException compositionException)
             {
-                Trace.TraceError("Composition failed" +
+                Trace.TraceError("External TraceListener import failed. " +
                 compositionException.Message);
             }
             if(importedTraceListener != null)
@@ -206,8 +207,6 @@ namespace Library.Logic.ViewModel
                 List<Type> types = new List<Type>(Enumerable.Repeat(typeof(List<IMetadata>), 1));
                 types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
                 persister = new XmlModelSerializer(types, typeof(IMetadata));
-                
-                    ((RelayCommand)SaveModel).RaiseCanExecuteChanged();
             }
             else
             {
@@ -221,10 +220,20 @@ namespace Library.Logic.ViewModel
                 throw new System.ArgumentNullException("SourceProvider can't be null.");
             if (filePathProvider.GetAccess())
             {
-                persister.SourceName = filePathProvider.GetFilePath();
-                IEnumerable<IMetadata> objects = from TreeViewItem item in ObjectsList
-                                                 select item.ModelObject;
-                Task.Run(() => persister.Save(objects.ToList()));
+                try
+                {
+                    persister.SourceName = filePathProvider.GetFilePath();
+                    IEnumerable<IMetadata> objects = from TreeViewItem item in ObjectsList
+                                                     select item.ModelObject;
+                    Task.Run(() => persister.Save(objects.ToList()));
+                }
+                catch(IOException ex)
+                {
+                    if(Tracing)
+                    {
+                        Trace.TraceWarning("Exception caught when trying to open a file for writing (serialization)");
+                    }
+                }
             }
         }
 
@@ -234,21 +243,31 @@ namespace Library.Logic.ViewModel
                 throw new System.ArgumentNullException("SourceProvider can't be null.");
             if (filePathProvider.GetAccess())
             {
-                persister.SourceName = filePathProvider.GetFilePath();
-                Dispatcher.CurrentDispatcher.BeginInvoke((Action)delegate()
+                try
                 {
-                    object result = persister.Load();
-                    if (result is IEnumerable<IMetadata>)
+                    persister.SourceName = filePathProvider.GetFilePath();
+                    Dispatcher.CurrentDispatcher.BeginInvoke((Action)delegate ()
                     {
-                        ObjectsList.Clear();
-                        IEnumerable<IMetadata> objectsRead = result as IEnumerable<IMetadata>;
-                        foreach (IMetadata item in objectsRead)
+                        object result = persister.Load();
+                        if (result is IEnumerable<IMetadata>)
                         {
-                            ObjectsList.Add(new AssemblyItem(item as AssemblyMetadata));
+                            ObjectsList.Clear();
+                            IEnumerable<IMetadata> objectsRead = result as IEnumerable<IMetadata>;
+                            foreach (IMetadata item in objectsRead)
+                            {
+                                ObjectsList.Add(new AssemblyItem(item as AssemblyMetadata));
+                            }
+                            LoadedAssembly = "Model deserialized";
                         }
-                        LoadedAssembly = "Model deserialized";
+                    });
+                }
+                catch(IOException ex)
+                {
+                    if (Tracing)
+                    {
+                        Trace.TraceWarning("Exception caught when trying to open a file for reading (deserialization)");
                     }
-                });
+                }
             }
         }
 
