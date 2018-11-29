@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace Library.Data.Model
 {
+    [DataContract(Name = "Assembly")]
+    [Serializable]
     public class AssemblyMetadata : IMetadata
     {
 
@@ -22,16 +25,42 @@ namespace Library.Data.Model
         }
 
         private string m_Name;
+        [DataMember(Name = "m_namespaces")]
         private IEnumerable<NamespaceMetadata> m_Namespaces;
 
-        public string Name => m_Name;
+        [DataMember(Name = "Name")]
+        public string Name
+        {
+            get
+            {
+                return m_Name;
+            }
+            protected set
+            {
+                this.m_Name = value;
+            }
+        }
+        //public string Name => m_Name;
         public string Details {
             get
             {
                 return $"Assembly name: {m_Name}, has {m_Namespaces.Count()} namespaces."; 
             }
         }
-        public IEnumerable<IMetadata> Children => m_Namespaces;
+        //[DataMember(Name = "Children")]
+        public IEnumerable<IMetadata> Children
+        {
+            get
+            {
+                return m_Namespaces;
+            }
+            set
+            {
+                this.m_Namespaces = (IEnumerable < NamespaceMetadata > )value;
+            }
+        }
+        //public IEnumerable<IMetadata> Children => m_Namespaces;
+        [DataMember(Name = "SavedHash")]
         private int savedHash;
 
         public override int GetHashCode()

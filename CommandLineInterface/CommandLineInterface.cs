@@ -18,7 +18,8 @@ namespace CommandLineInterface
 
         public void Start(string dllPath)
         {
-            dataContext.FileSourceProvider = new TextFileSourceProvider(dllPath); //source provider
+            dataContext.OpenFileSourceProvider = new TextFileSourceProvider(dllPath); //source provider
+            dataContext.SaveFileSourceProvider = new TextFileSourceProvider(dllPath); //source provider
             try
             {
                 dataContext.OpenFileCommand.Execute(null);

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Library.Data.Model
 {
+    [DataContract(Name = "Namespace")]
+    [Serializable]
     public class NamespaceMetadata : IMetadata
     {
         public string Details
@@ -20,12 +23,31 @@ namespace Library.Data.Model
             m_Types = from type in types orderby type.Name select new TypeMetadata(type);
             savedHash = name.GetHashCode();
         }
-
+        internal NamespaceMetadata()
+        {
+        }
         private string m_NamespaceName;
+        [DataMember(Name = "Types")]
         private IEnumerable<TypeMetadata> m_Types;
+        //public IEnumerable<IMetadata> Children { get; set; }
         public IEnumerable<IMetadata> Children => m_Types;
+        [DataMember(Name = "Name")]
+        public string Name
+        {
+            get
+            {
+                return m_NamespaceName;
+            }
+            protected set
+            {
+                this.m_NamespaceName = value;
+            }
+        }
 
-        public string Name => m_NamespaceName;
+        
+
+        //public string Name => m_NamespaceName;
+        [DataMember(Name = "SavedHash")]
         private int savedHash;
         public override int GetHashCode()
         {

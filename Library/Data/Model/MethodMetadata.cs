@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Library.Data.Model
 {
+    [DataContract(Name = "Method")]
+    [Serializable]
     public class MethodMetadata : IMetadata
     {
         public string Details
@@ -42,16 +45,23 @@ namespace Library.Data.Model
 
         #region private
         //vars
+        [DataMember(Name = "Name")]
         private string m_Name;
+        [DataMember(Name = "GenericArguments")]
         private IEnumerable<TypeMetadata> m_GenericArguments;
+        [DataMember(Name = "Modifiers")]
         private Tuple<AccessLevel, AbstractENum, StaticEnum, VirtualEnum> m_Modifiers;
+        [DataMember(Name = "ReturnType")]
         private TypeMetadata m_ReturnType;
+        [DataMember(Name = "IsExtensionMethod")]
         private bool m_Extension;
+        [DataMember(Name = "Parameters")]
         private IEnumerable<ParameterMetadata> m_Parameters;
 
         public string Name => m_Name;
 
-        public IEnumerable<IMetadata> Children { get; }
+        //[DataMember(Name = "Children")]
+        public IEnumerable<IMetadata> Children { get; set; }
 
         //constructor
         private MethodMetadata(MethodBase method)
@@ -62,12 +72,20 @@ namespace Library.Data.Model
             m_Parameters = EmitParameters(method.GetParameters());
             m_Modifiers = EmitModifiers(method);
             m_Extension = EmitExtension(method);
+            FillChildren(new StreamingContext { });
+            savedHash = method.GetHashCode();
+        }
+        internal MethodMetadata() { }
+
+        [OnDeserialized]
+        private void FillChildren(StreamingContext context)
+        {
             List<IMetadata> elems = new List<IMetadata>();
             elems.Add(m_ReturnType);
             elems.AddRange(m_Parameters);
             Children = elems;
-            savedHash = method.GetHashCode();
         }
+
         //methods
         private static IEnumerable<ParameterMetadata> EmitParameters(IEnumerable<ParameterInfo> parms)
         {
@@ -106,6 +124,7 @@ namespace Library.Data.Model
             return new Tuple<AccessLevel, AbstractENum, StaticEnum, VirtualEnum>(_access, _abstract, _static, _virtual);
         }
         #endregion
+        [DataMember(Name = "Hash")]
         private int savedHash;
         public override int GetHashCode()
         {

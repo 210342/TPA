@@ -7,7 +7,7 @@ using Library.Logic.TreeView.Items;
 using Library.Data;
 using Library.Logic.TreeView;
 
-namespace LibraryTests.Logic.TreeView
+namespace LibraryTests.Logic.TreeView.Tests
 {
     [ExcludeFromCodeCoverage]
     [TestClass]

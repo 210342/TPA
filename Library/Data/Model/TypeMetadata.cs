@@ -2,9 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Library.Data.Model
 {
+    [DataContract(Name = "Type")]
+    [Serializable]
     public class TypeMetadata : IMetadata
     {
         public string Details
@@ -44,24 +47,48 @@ namespace Library.Data.Model
             m_BaseType = EmitExtends(type.BaseType);
             m_Properties = PropertyMetadata.EmitProperties(type.GetProperties());
             m_TypeKind = GetTypeKind(type);
-            m_Attributes = type.GetCustomAttributes(false).Cast<Attribute>();
-            List<AttributeMetadata> amList = new List<AttributeMetadata>();
-            amList.AddRange(m_Attributes.Select(n => new AttributeMetadata(n)));
+            
+            m_Attributes = new List<AttributeMetadata>();
+            type.GetCustomAttributes(false).Cast<Attribute>().ToList().ForEach( n => 
+                        ((List < AttributeMetadata >) m_Attributes).Add(new AttributeMetadata(n)));
             m_typeName = type.Name;
+            //FILL CHILDREN
+            FillChildren(new StreamingContext { });
+            
+            _cachedHash = type.GetHashCode();
+        }
 
+        internal TypeMetadata()
+        {
+        }
+        #endregion
+
+        #region OnDeserializing
+        [OnDeserialized]
+        private void FillChildren(StreamingContext context)
+        {
+            List<AttributeMetadata> amList = new List<AttributeMetadata>();
+            if(m_Attributes != null)
+                amList.AddRange(m_Attributes.Select(n => n));
             List<IMetadata> elems = new List<IMetadata>();
             elems.AddRange(amList);
-            elems.AddRange(m_ImplementedInterfaces);
-            elems.Add(m_BaseType);
-            elems.Add(m_DeclaringType);
-            elems.AddRange(m_Properties);
-            elems.AddRange(m_Constructors);
-            elems.AddRange(m_Methods);
-            elems.AddRange(m_NestedTypes);
+            if(m_ImplementedInterfaces != null)
+                elems.AddRange(m_ImplementedInterfaces);
+            if (m_BaseType != null)
+                elems.Add(m_BaseType);
+            if (m_DeclaringType != null)
+                elems.Add(m_DeclaringType);
+            if (m_Properties != null)
+                elems.AddRange(m_Properties);
+            if (m_Constructors != null)
+                elems.AddRange(m_Constructors);
+            if (m_Methods != null)
+                elems.AddRange(m_Methods);
+            if (m_NestedTypes != null)
+                elems.AddRange(m_NestedTypes);
             if (m_GenericArguments != null)
                 elems.AddRange(m_GenericArguments);
-            Children = elems;
-            _cachedHash = type.GetHashCode();
+            this.Children = elems;
         }
         #endregion
 
@@ -88,22 +115,45 @@ namespace Library.Data.Model
         #region private
         //vars
         private string m_typeName;
+        [DataMember(Name = "Namespace")]
         private string m_NamespaceName;
+        [DataMember(Name = "BaseType")]
         private TypeMetadata m_BaseType;
+        [DataMember(Name = "GenericArguments")]
         private IEnumerable<TypeMetadata> m_GenericArguments;
+        [DataMember(Name = "Modifiers")]
         private Tuple<AccessLevel, SealedEnum, AbstractENum> m_Modifiers;
+        [DataMember(Name = "TypeKind")]
         private TypeKind m_TypeKind;
-        private IEnumerable<Attribute> m_Attributes;
+        [DataMember(Name = "Attributes")]
+        private IEnumerable<AttributeMetadata> m_Attributes;
+        [DataMember(Name = "ImplementedInterfaces")]
         private IEnumerable<TypeMetadata> m_ImplementedInterfaces;
+        [DataMember(Name = "NestedTypes")]
         private IEnumerable<TypeMetadata> m_NestedTypes;
+        [DataMember(Name = "Properties")]
         private IEnumerable<PropertyMetadata> m_Properties;
+        [DataMember(Name = "DeclaringType")]
         private TypeMetadata m_DeclaringType;
+        [DataMember(Name = "Methods")]
         private IEnumerable<MethodMetadata> m_Methods;
+        [DataMember(Name = "Constructors")]
         private IEnumerable<MethodMetadata> m_Constructors;
 
-        public string Name => m_typeName;
+        [DataMember(Name = "Name")]
+        public string Name
+        {
+            get
+            {
+                return m_typeName;
+            }
+            protected set
+            {
+                this.m_typeName = value;
+            }
+        }
 
-        public IEnumerable<IMetadata> Children { get; }
+        public IEnumerable<IMetadata> Children { get; set; }
 
         //constructors
         private TypeMetadata(string typeName, string namespaceName, int hash)
@@ -174,6 +224,7 @@ namespace Library.Data.Model
         }
         #endregion
 
+        [DataMember(Name = "Hash")]
         private int _cachedHash = 0;
 
         public override int GetHashCode()

@@ -17,6 +17,7 @@ namespace Library.Logic.TreeView
         private bool m_IsExpanded;
 
         public string Type => this.GetType().ToString();
+        public IMetadata ModelObject => Metadata;
         public string Name { get; protected set; }
         public string Details { get; protected set; }
         protected IMetadata Metadata { get; set; }
@@ -57,15 +58,13 @@ namespace Library.Logic.TreeView
 
         private IEnumerable<TreeViewItem> EnumerateRootChildren()
         {
-            if(Metadata.Children != null)
+            if (Metadata.Children != null)
             {
                 foreach (IMetadata elem in Metadata.Children)
                 {
                     if (elem != null)
                     {
-                        TreeViewItem tvi = GetTreeItem(elem);
-                        
-                        yield return tvi;
+                        yield return GetTreeItem(elem);
                     }
                 }
             }

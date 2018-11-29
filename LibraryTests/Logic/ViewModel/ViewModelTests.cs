@@ -6,7 +6,9 @@ using Library.Data.Model;
 using Library.Logic.TreeView.Items;
 using Library.Logic.ViewModel;
 
-namespace LibraryTests.Logic.ViewModel
+
+
+namespace LibraryTests.Logic.ViewModel.Tests
 {
     [ExcludeFromCodeCoverage]
     [TestClass]
@@ -30,8 +32,8 @@ namespace LibraryTests.Logic.ViewModel
         public void ReloadAssemblyChangesAssembly()
         {
             VM.ViewModel vm = new VM.ViewModel(false);
-            vm.LoadedAssembly = typeof(VM.ViewModel).Assembly.Location;
             IMetadata loadedAssemblyRepr = vm.LoadedAssemblyRepresentation;
+            vm.LoadedAssembly = this.GetType().Assembly.Location;
             vm.ReloadAssemblyCommand.Execute(null);
             IMetadata reloadedAssemblyRepr = vm.LoadedAssemblyRepresentation;
             Assert.AreNotEqual(loadedAssemblyRepr, reloadedAssemblyRepr);
@@ -59,7 +61,7 @@ namespace LibraryTests.Logic.ViewModel
         public void OpenFileWorks()
         {
             VM.ViewModel vm = new VM.ViewModel(false);
-            vm.FileSourceProvider = new TestClass();
+            vm.OpenFileSourceProvider = new TestClass();
             vm.OpenFileCommand.Execute(null);
             Assert.IsNotNull(vm.LoadedAssembly);
         }
