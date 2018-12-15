@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using Library.Data.Model;
+using Library.Model;
 
 namespace LibraryTests.Data.Model
 {

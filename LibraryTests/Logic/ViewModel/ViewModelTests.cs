@@ -2,8 +2,8 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VM = Library.Logic.ViewModel;
-using Library.Data.Model;
-using Library.Logic.TreeView.Items;
+using Library.Model;
+using Library.Logic.ViewModel;
 using Library.Logic.ViewModel;
 
 

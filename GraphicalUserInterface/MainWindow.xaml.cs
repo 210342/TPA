@@ -11,16 +11,16 @@ namespace GraphicalUserInterface
         public MainWindow()
         {
             InitializeComponent();
+            
+        }
+        public override void EndInit()
+        {
+            base.EndInit();
             if (DataContext is ViewModel)
             {
                 ((ViewModel)DataContext).OpenFileSourceProvider = new OpenFileDialogProvider();
                 ((ViewModel)DataContext).SaveFileSourceProvider = new SaveFileDialogProvider();
             }
-        }
-
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            SelectedItemHelper.Content = e.NewValue;
         }
     }
 }

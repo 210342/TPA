@@ -1,5 +1,5 @@
 ﻿using Library.Data;
-using Library.Data.Model;
+using Library.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;

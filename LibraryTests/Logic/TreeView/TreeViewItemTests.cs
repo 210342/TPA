@@ -2,10 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Library.Data.Model;
-using Library.Logic.TreeView.Items;
+using Library.Model;
 using Library.Data;
-using Library.Logic.TreeView;
+using Library.Logic.ViewModel;
 
 namespace LibraryTests.Logic.TreeView.Tests
 {

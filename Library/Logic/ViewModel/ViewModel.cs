@@ -1,7 +1,6 @@
 ﻿using Library.Data;
-using Library.Data.Model;
-using Library.Logic.TreeView;
-using Library.Logic.TreeView.Items;
+using Library.Model;
+using Library.Logic.ViewModel;
 using Serializing;
 using System;
 using System.Linq;

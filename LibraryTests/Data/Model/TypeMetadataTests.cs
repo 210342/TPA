@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using Library.Data.Model;
+using Library.Model;
 
 namespace LibraryTests.Data.Model
 {
