@@ -9,8 +9,7 @@ namespace GraphicalUserInterface
 {
     internal class SaveFileDialogProvider : ISourceProvider
     {
-        //Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-        System.Windows.Forms.SaveFileDialog dialog = new System.Windows.Forms.SaveFileDialog();
+        Ookii.Dialogs.Wpf.VistaSaveFileDialog dialog = new Ookii.Dialogs.Wpf.VistaSaveFileDialog();
         internal SaveFileDialogProvider()
         {
             dialog.DefaultExt = "xml";
@@ -19,7 +18,7 @@ namespace GraphicalUserInterface
 
         public bool GetAccess()
         {
-            return dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK;
+            return dialog.ShowDialog() == true;
         }
 
         public string GetFilePath()

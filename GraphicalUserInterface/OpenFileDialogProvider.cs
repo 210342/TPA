@@ -5,8 +5,7 @@ namespace GraphicalUserInterface
 {
     internal class OpenFileDialogProvider : ISourceProvider
     {
-        //Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-        System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
+        Ookii.Dialogs.Wpf.VistaOpenFileDialog dialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
         internal OpenFileDialogProvider()
         {
             dialog.DefaultExt = "dll";
@@ -15,7 +14,8 @@ namespace GraphicalUserInterface
 
         public bool GetAccess()
         {
-            return dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK;
+            
+            return dialog.ShowDialog() == true;
         }
 
         public string GetFilePath()
