@@ -28,6 +28,17 @@ namespace Serializing
             }
         }
 
+        /*
+         * TODO:
+         * Create new model for serialization  
+         * After that serialization using plugin will be possible
+         * Because we won't have to provide known classes for serializer.
+         */
+        public XmlModelSerializer()
+        {
+
+        }
+
         public XmlModelSerializer(List<Type> knownTypes, Type nodeType)
         {
             dcs = new DataContractSerializer(

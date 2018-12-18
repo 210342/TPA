@@ -23,13 +23,9 @@ namespace Library.Logic.ViewModel
     public class ViewModel : INotifyPropertyChanged
     {
         #region Fields
-        [ImportMany(typeof(TraceListener))]
-        private System.Collections.Generic.IEnumerable<TraceListener> 
-            importedTraceListener = null;
-        [Import(typeof(IPersister))]
-        private IPersister persister;
+        TraceListenersLoader traceListenersLoader;
+        RepositoryLoader repositoriesLoader;
 
-        private CompositionContainer _container;
         private TreeViewItem objectSelected;
         private string _loadedAssembly;
         private TreeViewItem _objectToDisplay;
@@ -121,11 +117,13 @@ namespace Library.Logic.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ViewModel() : this(false)
+        public ViewModel() : this(true)
         {
         }
         public ViewModel(bool tracing)
         {
+            if (repositoriesLoader == null)
+                repositoriesLoader = new RepositoryLoader();
             Tracing = tracing;
             if (Tracing)
             {
@@ -137,8 +135,17 @@ namespace Library.Logic.ViewModel
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
             OpenFileCommand = new RelayCommand(() => OpenFile(OpenFileSourceProvider));
-            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider), () => persister != null && persister is XmlModelSerializer);
-            LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => persister != null && persister is XmlModelSerializer);
+            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider), () => repositoriesLoader.Repository != null 
+                                         && repositoriesLoader.Repository is XmlModelSerializer);
+            LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => repositoriesLoader.Repository != null 
+                                         && repositoriesLoader.Repository is XmlModelSerializer);
+        }
+
+        private void ImportTraceListener()
+        {
+            if (traceListenersLoader == null)
+                traceListenersLoader = new TraceListenersLoader();
+            traceListenersLoader.LoadTraceListeners();
         }
 
         private void LoadAssembly()
@@ -179,35 +186,25 @@ namespace Library.Logic.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void ImportTraceListener()
-        {
-            var catalog = new AggregateCatalog();
-            System.Reflection.Assembly loadedTracingAssembly =
-            System.Reflection.Assembly.UnsafeLoadFrom(@".\Tracing.dll");
-
-            catalog.Catalogs.Add(new AssemblyCatalog(loadedTracingAssembly));
-            _container = new CompositionContainer(catalog);
-            try
-            {
-                this._container.ComposeParts(this);
-            }
-            catch (CompositionException compositionException)
-            {
-                Trace.TraceError("External TraceListener import failed. " +
-                compositionException.Message);
-            }
-            if(importedTraceListener != null)
-                foreach(TraceListener listener in importedTraceListener)
-                    Trace.Listeners.Add(listener);
-        }
+        
 
         private void ImportPersister() //TODO
         {
+            //TODO: PLUGIN for repository
             if(IsSerializationChecked)
             {
+                //TEMPORARY SOLUTION, PLEASE CHECK
                 List<Type> types = new List<Type>(Enumerable.Repeat(typeof(List<IMetadata>), 1));
                 types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
-                persister = new XmlModelSerializer(types, typeof(IMetadata));
+                if (repositoriesLoader.Repository == null)
+                {
+                    typeof(RepositoryLoader)
+                        .GetProperty("Repository")
+                        .SetValue(
+                            repositoriesLoader,
+                            new XmlModelSerializer(types, typeof(IMetadata)),
+                            null);
+                }
             }
             else
             {
@@ -223,13 +220,13 @@ namespace Library.Logic.ViewModel
             {
                 try
                 {
-                    persister.SourceName = filePathProvider.GetFilePath();
+                    repositoriesLoader.Repository.SourceName = filePathProvider.GetFilePath();
                     IEnumerable<IMetadata> objects = from TreeViewItem item in ObjectsList
                                                      select item.ModelObject;
                     Task.Run(() =>
                     {
-                        persister.Save(objects.ToList());
-                        (persister as XmlModelSerializer).SerializationStream.Close();
+                        repositoriesLoader.Repository.Save(objects.ToList());
+                        (repositoriesLoader.Repository as XmlModelSerializer).SerializationStream.Close();
                     });
                 }
                 catch(IOException ex)
@@ -251,11 +248,11 @@ namespace Library.Logic.ViewModel
             {
                 try
                 {
-                    persister.SourceName = filePathProvider.GetFilePath();
+                    repositoriesLoader.Repository.SourceName = filePathProvider.GetFilePath();
                     Dispatcher.CurrentDispatcher.BeginInvoke((Action)delegate ()
                     {
-                        object result = persister.Load();
-                        (persister as XmlModelSerializer).SerializationStream.Close();
+                        object result = repositoriesLoader.Repository.Load();
+                        (repositoriesLoader.Repository as XmlModelSerializer).SerializationStream.Close();
                         if (result is IEnumerable<IMetadata>)
                         {
                             ObjectsList.Clear();
