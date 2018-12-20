@@ -20,7 +20,7 @@ namespace Library.Logic.ViewModel
         public string Type => this.GetType().ToString();
         public IMetadata ModelObject => Metadata;
         public string Name { get; protected set; }
-        public string Details { get; protected set; }
+        public abstract string Details { get; }
         protected IMetadata Metadata { get; set; }
         public List<TreeViewItem> Children { get; protected set; } = new List<TreeViewItem>() { null };
         public bool IsExpanded
@@ -47,7 +47,6 @@ namespace Library.Logic.ViewModel
             if (metadata == null)
                 throw new System.ArgumentNullException("Metadata node can't be null");
             this.Name = metadata.Name;
-            this.Details = metadata.Details;
             this.Metadata = metadata;
         }
 

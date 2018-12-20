@@ -1,14 +1,10 @@
 ﻿using Library.Data;
 using Library.Model;
-using Library.Logic.ViewModel;
-using Serializing;
 using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -16,6 +12,9 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using System.IO;
 using GalaSoft.MvvmLight.Command;
+using Tracing;
+using System.Reflection;
+using Persistance;
 
 namespace Library.Logic.ViewModel
 {
@@ -23,16 +22,17 @@ namespace Library.Logic.ViewModel
     public class ViewModel : INotifyPropertyChanged
     {
         #region Fields
-        TraceListenersLoader traceListenersLoader;
-        RepositoryLoader repositoriesLoader;
 
         private TreeViewItem objectSelected;
         private string _loadedAssembly;
         private TreeViewItem _objectToDisplay;
-        private bool isSerializationChecked;
         
         #endregion
+
         #region Properties
+
+        public ITracing Tracer { get; private set; }
+        public IPersister Persister { get; private set; }
         public ICommand ShowCurrentObject { get; }
         public ICommand ReloadAssemblyCommand { get; }
         public ICommand OpenFileCommand { get; }
@@ -42,26 +42,6 @@ namespace Library.Logic.ViewModel
         public ISourceProvider SaveFileSourceProvider { get; set; }
         public bool Tracing { get; set; }
         public ObservableCollection<TreeViewItem> ObjectsList { get; }
-        public bool IsSerializationChecked
-        {
-            get
-            {
-                return isSerializationChecked;
-            }
-            set
-            {
-                isSerializationChecked = value;
-                ImportPersister();
-                SaveModel.RaiseCanExecuteChanged();
-                LoadModel.RaiseCanExecuteChanged();
-                OnPropertyChanged();
-                if(Tracing)
-                {
-                    Trace.TraceInformation("Repository changed.");
-                    Trace.Flush();
-                }
-            }
-        }
         public TreeViewItem ObjectSelected
         {
             get
@@ -72,11 +52,6 @@ namespace Library.Logic.ViewModel
             {
                 PreviousSelection = objectSelected;
                 objectSelected = value;
-                if (Tracing)
-                {
-                    Trace.TraceInformation("ObjectSelected changed.");
-                    Trace.Flush();
-                }
                 OnPropertyChanged();
             }
         }
@@ -90,12 +65,6 @@ namespace Library.Logic.ViewModel
             {
                 this._objectToDisplay = value;
                 OnPropertyChanged();
-                if(Tracing)
-                {
-                    Trace.TraceInformation("ObjectToDisplay changed.");
-                    Trace.Flush();
-                }
-                
             }
         }
         public TreeViewItem PreviousSelection { get; private set; }
@@ -122,12 +91,10 @@ namespace Library.Logic.ViewModel
         }
         public ViewModel(bool tracing)
         {
-            if (repositoriesLoader == null)
-                repositoriesLoader = new RepositoryLoader();
             Tracing = tracing;
             if (Tracing)
             {
-                ImportTraceListener();
+                ImportTracer();
             }
             ImportPersister();
             LoadedAssemblyRepresentation = new AssemblyMetadata(System.Reflection.Assembly.GetAssembly(this.GetType()));
@@ -135,25 +102,54 @@ namespace Library.Logic.ViewModel
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
             OpenFileCommand = new RelayCommand(() => OpenFile(OpenFileSourceProvider));
-            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider), () => repositoriesLoader.Repository != null 
-                                         && repositoriesLoader.Repository is XmlModelSerializer);
-            LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => repositoriesLoader.Repository != null 
-                                         && repositoriesLoader.Repository is XmlModelSerializer);
+            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider), () => Persister != null && Persister is ISerializer);
+            LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => Persister != null && Persister is ISerializer);
         }
 
-        private void ImportTraceListener()
+        private void ImportTracer()
         {
-            if (traceListenersLoader == null)
-                traceListenersLoader = new TraceListenersLoader();
-            traceListenersLoader.LoadTraceListeners();
+            TracingProvider tracingProvider = 
+                new TracingProvider(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+
+            try
+            {
+                if (Tracer is null)
+                {
+                    Tracer = tracingProvider.ProvideTracer();
+                }
+            }
+            catch(Tracing.Exceptions.MEFTracingLoaderException e)
+            {
+                // Dialog Box
+                Tracing = false;
+            }
+        }
+
+        private void ImportPersister()
+        {
+            
+            PersistanceProvider persistanceProvider = 
+                new PersistanceProvider(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+
+            try
+            {
+                if (Persister is null)
+                {
+                    Persister = persistanceProvider.ProvidePersister();
+                }
+            }
+            catch (Persistance.Exceptions.MEFPersistanceLoaderException)
+            {
+                // Dialog Box
+            }
         }
 
         private void LoadAssembly()
         {
             if (Tracing)
             {
-                Trace.TraceInformation("Assembly loading.");
-                Trace.Flush();
+                Tracer.LogLoadingModel(LoadedAssembly);
+                Tracer.Flush();
             }
             Reflector reflector = new Reflector(LoadedAssembly);
             LoadedAssemblyRepresentation = reflector.m_AssemblyModel;
@@ -171,8 +167,8 @@ namespace Library.Logic.ViewModel
             }
             if (Tracing)
             {
-                Trace.TraceInformation("Assembly reloaded.");
-                Trace.Flush();
+                Tracer.LogModelLoaded(LoadedAssembly);
+                Tracer.Flush();
             }
         }
 
@@ -186,93 +182,100 @@ namespace Library.Logic.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        
-
-        private void ImportPersister() //TODO
+        private void Save(ISourceProvider filePathProvider)
         {
-            //TODO: PLUGIN for repository
-            if(IsSerializationChecked)
+            if(Persister is ISerializer)
             {
-                //TEMPORARY SOLUTION, PLEASE CHECK
-                List<Type> types = new List<Type>(Enumerable.Repeat(typeof(List<IMetadata>), 1));
-                types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
-                if (repositoriesLoader.Repository == null)
+
+                if (filePathProvider == null)
+                    throw new System.ArgumentNullException("SourceProvider can't be null.");
+                if (filePathProvider.GetAccess())
                 {
-                    typeof(RepositoryLoader)
-                        .GetProperty("Repository")
-                        .SetValue(
-                            repositoriesLoader,
-                            new XmlModelSerializer(types, typeof(IMetadata)),
-                            null);
+                    ISerializer serializer = Persister as ISerializer;
+                    try
+                    {
+                        if(!serializer.Initialised)
+                        {
+                            List<Type> types = new List<Type>(Enumerable.Repeat(typeof(List<IMetadata>), 1));
+                            types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
+                            serializer.KnownTypes = types;
+                            serializer.NodeType = typeof(IMetadata);
+                            serializer.InitialiseSerialization();
+                        }
+                        serializer.SourceName = filePathProvider.GetFilePath();
+                        IEnumerable<IMetadata> objects = from TreeViewItem item in ObjectsList
+                                                         select item.ModelObject;
+                        Task.Run(() =>
+                        {
+                            serializer.Save(objects.ToList());
+                            serializer.SerializationStream.Close();
+                        });
+                    }
+                    catch (IOException ex)
+                    {
+                        if (Tracing)
+                        {
+                            Tracer.LogFailure($"Exception caught when trying to open a file for writing (serialization) {Environment.NewLine}{ex.Message}");
+                            Tracer.Flush();
+                        }
+                    }
                 }
             }
             else
             {
-                // any other implementation of IPersister
-            }
-        }
-
-        private void Save(ISourceProvider filePathProvider)
-        {
-            if (filePathProvider == null)
-                throw new System.ArgumentNullException("SourceProvider can't be null.");
-            if (filePathProvider.GetAccess())
-            {
-                try
-                {
-                    repositoriesLoader.Repository.SourceName = filePathProvider.GetFilePath();
-                    IEnumerable<IMetadata> objects = from TreeViewItem item in ObjectsList
-                                                     select item.ModelObject;
-                    Task.Run(() =>
-                    {
-                        repositoriesLoader.Repository.Save(objects.ToList());
-                        (repositoriesLoader.Repository as XmlModelSerializer).SerializationStream.Close();
-                    });
-                }
-                catch(IOException ex)
-                {
-                    if(Tracing)
-                    {
-                        Trace.TraceWarning("Exception caught when trying to open a file for writing (serialization)");
-                        Trace.TraceWarning(ex.Message);
-                    }
-                }
+                // unsupported yet
             }
         }
 
         private void Load(ISourceProvider filePathProvider)
         {
-            if (filePathProvider == null)
-                throw new System.ArgumentNullException("SourceProvider can't be null.");
-            if (filePathProvider.GetAccess())
+            if(Persister is ISerializer)
             {
-                try
+                if (filePathProvider == null)
+                    throw new System.ArgumentNullException("SourceProvider can't be null.");
+                if (filePathProvider.GetAccess())
                 {
-                    repositoriesLoader.Repository.SourceName = filePathProvider.GetFilePath();
-                    Dispatcher.CurrentDispatcher.BeginInvoke((Action)delegate ()
+                    ISerializer serializer = Persister as ISerializer;
+                    try
                     {
-                        object result = repositoriesLoader.Repository.Load();
-                        (repositoriesLoader.Repository as XmlModelSerializer).SerializationStream.Close();
-                        if (result is IEnumerable<IMetadata>)
+                        if (!serializer.Initialised)
                         {
-                            ObjectsList.Clear();
-                            IEnumerable<IMetadata> objectsRead = result as IEnumerable<IMetadata>;
-                            foreach (IMetadata item in objectsRead)
-                            {
-                                ObjectsList.Add(new AssemblyItem(item as AssemblyMetadata));
-                            }
-                            LoadedAssembly = "Model deserialized";
+                            List<Type> types = new List<Type>(Enumerable.Repeat(typeof(List<IMetadata>), 1));
+                            types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
+                            serializer.KnownTypes = types;
+                            serializer.NodeType = typeof(IMetadata);
+                            serializer.InitialiseSerialization();
                         }
-                    });
-                }
-                catch(IOException ex)
-                {
-                    if (Tracing)
+                        serializer.SourceName = filePathProvider.GetFilePath();
+                        Dispatcher.CurrentDispatcher.BeginInvoke((Action)delegate ()
+                        {
+                            object result = serializer.Load();
+                            serializer.SerializationStream.Close();
+                            if (result is IEnumerable<IMetadata>)
+                            {
+                                ObjectsList.Clear();
+                                IEnumerable<IMetadata> objectsRead = result as IEnumerable<IMetadata>;
+                                foreach (IMetadata item in objectsRead)
+                                {
+                                    ObjectsList.Add(new AssemblyItem(item as AssemblyMetadata));
+                                }
+                                LoadedAssembly = "Model deserialized";
+                            }
+                        });
+                    }
+                    catch (IOException ex)
                     {
-                        Trace.TraceWarning("Exception caught when trying to open a file for reading (deserialization)");
-                        Trace.TraceWarning(ex.Message);
+                        if (Tracing)
+                        {
+                            Tracer.LogFailure($"Exception caught when trying to open a file for reading (deserialization){Environment.NewLine}{ex.Message}");
+                            Tracer.Flush();
+                        }
                     }
                 }
+            }
+            else
+            {
+                // not supported yet;
             }
         }
 

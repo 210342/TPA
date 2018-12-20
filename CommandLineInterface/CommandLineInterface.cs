@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Library.Logic.ViewModel;
-using Library.Logic.ViewModel;
 
 namespace CommandLineInterface
 {
@@ -49,52 +48,91 @@ namespace CommandLineInterface
             string selection = "";
             do
             {
-                maxIndex = 0; // reset index before each printout
-                Print(root, startIndex);
-                Console.WriteLine();
-                Console.WriteLine(dataContext.ObjectSelected.ToString()); // print detailed info
-                bool isIncorrectInput = false; // flag used to control application's flow
-                do
+                if(root != null)
                 {
-                    Console.WriteLine("___________________________________________________");
-                    Console.Write("Your selection (type \"quit\" to leave application): ");
-                    selection = Console.ReadLine();
-                    try
+                    maxIndex = 0; // reset index before each printout
+                    Print(root, startIndex);
+                    Console.WriteLine();
+                    Console.WriteLine(dataContext.ObjectSelected.ToString()); // print detailed info
+                    bool isIncorrectInput = false; // flag used to control application's flow
+                    do
                     {
-                        if(!Quit(selection))
+                        Console.WriteLine("___________________________________________________");
+                        Console.Write("Your selection (type \"quit\" to leave application): ");
+                        selection = Console.ReadLine();
+                        try
                         {
-                            int index = int.Parse(selection); // try to read chosen index
-                            isIncorrectInput = false; // get out of the loop
-                            selectionIndex = 0; // reset index before selection
-                            dataContext.ObjectSelected = SelectItem(root, index); // get an item under input index
-                            if (dataContext.ObjectSelected == null)
+                            if (!Quit(selection))
                             {
-                                throw new IndexOutOfRangeException(nameof(index));
+                                if (IsInputLoad(selection))
+                                {
+                                    Console.WriteLine("Please provide path to a file where model is saved:");
+                                    string path = Console.ReadLine();
+                                    dataContext.OpenFileSourceProvider = new TextFileSourceProvider(path);
+                                    dataContext.LoadModel.Execute(null);
+                                    try
+                                    {
+                                        root = dataContext.ObjectsList.First();
+                                    }
+                                    catch (InvalidOperationException)
+                                    {
+                                        root = null;
+                                    }
+                                }
+                                else if (IsInputSave(selection))
+                                {
+                                    Console.WriteLine("Please provide path to a file where the model should be saved:");
+                                    string path = Console.ReadLine();
+                                    dataContext.SaveFileSourceProvider = new TextFileSourceProvider(path);
+                                    dataContext.SaveModel.Execute(null);
+                                }
+                                else
+                                {
+                                    int index = int.Parse(selection); // try to read chosen index
+                                    isIncorrectInput = false; // get out of the loop
+                                    selectionIndex = 0; // reset index before selection
+                                    dataContext.ObjectSelected = SelectItem(root, index); // get an item under input index
+                                    if (dataContext.ObjectSelected == null)
+                                    {
+                                        throw new IndexOutOfRangeException(nameof(index));
+                                    }
+                                    dataContext.ObjectSelected.IsExpanded = !dataContext.ObjectSelected.IsExpanded;
+                                    isIncorrectInput = false; // get out of the loop
+                                }
                             }
-                            dataContext.ObjectSelected.IsExpanded = !dataContext.ObjectSelected.IsExpanded;
-                            isIncorrectInput = false; // get out of the loop
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Incorrect option \nPossible options: \n-> indexes written above objects \n-> quit");
+                            dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
+                            isIncorrectInput = true; // stay in the loop
+                        }
+                        catch (IndexOutOfRangeException)
+                        {
+                            Console.WriteLine("Incorrect option \nUndefined index");
+                            dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
+                            isIncorrectInput = true;
+                        }
+                        catch (ArgumentNullException)
+                        {
+                            Console.WriteLine("This object doesn't have a parent");
+                            dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
+                            isIncorrectInput = true; // stay in the loop
                         }
                     }
-                    catch(FormatException)
+                    while (isIncorrectInput);
+                }
+                else
+                {
+                    try
                     {
-                        Console.WriteLine("Incorrect option \nPossible options: \n-> indexes written above objects \n-> quit");
-                        dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
-                        isIncorrectInput = true; // stay in the loop
+                        root = dataContext.ObjectsList.First();
                     }
-                    catch(IndexOutOfRangeException)
+                    catch (InvalidOperationException)
                     {
-                        Console.WriteLine("Incorrect option \nUndefined index");
-                        dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
-                        isIncorrectInput = true;
-                    }
-                    catch (ArgumentNullException)
-                    {
-                        Console.WriteLine("This object doesn't have a parent");
-                        dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
-                        isIncorrectInput = true; // stay in the loop
+                        root = null;
                     }
                 }
-                while (isIncorrectInput);
             }
             while(!Quit(selection));
         }
@@ -102,6 +140,16 @@ namespace CommandLineInterface
         private bool Quit(string input)
         {
             return input.ToLower() == "quit" || input.ToLower() == "q";
+        }
+
+        private bool IsInputLoad(string input)
+        {
+            return input.ToLower() == "load" || input.ToLower() == "l";
+        }
+
+        private bool IsInputSave(string input)
+        {
+            return input.ToLower() == "save" || input.ToLower() == "s";
         }
 
         private void Print(TreeViewItem item, int depth)
