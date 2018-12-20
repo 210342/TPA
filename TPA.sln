@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerializingTests", "Seriali
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSemanticTracing", "FileSemanticTracing\FileSemanticTracing.csproj", "{9FA31689-DFE7-4286-97AC-7DA130E55649}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseSemanticTracing", "DatabaseSemanticTracing\DatabaseSemanticTracing.csproj", "{31FC8C2D-D006-4FA6-A7F8-08A5E59E8E9E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,12 +65,16 @@ Global
 		{9FA31689-DFE7-4286-97AC-7DA130E55649}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FA31689-DFE7-4286-97AC-7DA130E55649}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FA31689-DFE7-4286-97AC-7DA130E55649}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31FC8C2D-D006-4FA6-A7F8-08A5E59E8E9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31FC8C2D-D006-4FA6-A7F8-08A5E59E8E9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31FC8C2D-D006-4FA6-A7F8-08A5E59E8E9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31FC8C2D-D006-4FA6-A7F8-08A5E59E8E9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {DF0BA247-769B-4BB6-8663-E3694B03C0F8}
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
+		SolutionGuid = {DF0BA247-769B-4BB6-8663-E3694B03C0F8}
 	EndGlobalSection
 EndGlobal

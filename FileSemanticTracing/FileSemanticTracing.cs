@@ -36,32 +36,14 @@ namespace FileSemanticTracing
                 _subscription.Dispose();
             }
         }
-
-        public void LogDatabaseConnectionClosed(string databaseName)
-        {
-            SemanticLoggingEventSource.Log.DatabaseConnectionClosed(databaseName);
-        }
-
-        public void LogDatabaseConnectionEstablished(string databaseName)
-        {
-            SemanticLoggingEventSource.Log.DatabaseConnectionEstablished(databaseName);
-        }
-
         public void LogFailure(string message)
         {
             SemanticLoggingEventSource.Log.Failure(message);
         }
-
-        public void LogFileClosed(string filePath)
+        public void LogSuccess(string message)
         {
-            SemanticLoggingEventSource.Log.FileClosed(filePath);
+            SemanticLoggingEventSource.Log.Success(message);
         }
-
-        public void LogFileOpened(string filePath)
-        {
-            SemanticLoggingEventSource.Log.FileOpened(filePath);
-        }
-
         public void LogLoadingModel(string loadedAssemblyName)
         {
             SemanticLoggingEventSource.Log.LoadingModel(loadedAssemblyName);
