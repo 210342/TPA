@@ -10,10 +10,7 @@ namespace Tracing
     {
         void LogStartup();
         void LogFailure(string message);
-        void LogFileOpened(string filePath);
-        void LogFileClosed(string filePath);
-        void LogDatabaseConnectionEstablished(string databaseName);
-        void LogDatabaseConnectionClosed(string databaseName);
+        void LogSuccess(string message);
         void LogLoadingModel(string loadedAssemblyName);
         void LogModelLoaded(string loadedAssemblyName);
         void LogSavingModel(string savedAssemblyName);

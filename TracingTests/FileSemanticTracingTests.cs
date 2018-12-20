@@ -38,6 +38,7 @@ namespace FileSemanticTracing.Tests
             Assert.IsTrue(File.Exists(_systemUnderTest.FilePath));
         }
 
+        /*
         [TestMethod()]
         public void LogDatabaseConnectionClosedTest()
         {
@@ -59,18 +60,6 @@ namespace FileSemanticTracing.Tests
             fileInfo.Refresh();
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
-
-        [TestMethod()]
-        public void LogFailureTest()
-        {
-            fileInfo.Refresh();
-            long oldLength = fileInfo.Length;
-            _systemUnderTest.LogFailure("FAIL");
-            _systemUnderTest.Flush();
-            fileInfo.Refresh();
-            Assert.IsTrue(oldLength < fileInfo.Length);
-        }
-
         [TestMethod()]
         public void LogFileClosedTest()
         {
@@ -92,7 +81,27 @@ namespace FileSemanticTracing.Tests
             fileInfo.Refresh();
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
-
+        */
+        [TestMethod()]
+        public void LogFailureTest()
+        {
+            fileInfo.Refresh();
+            long oldLength = fileInfo.Length;
+            _systemUnderTest.LogFailure("FAIL");
+            _systemUnderTest.Flush();
+            fileInfo.Refresh();
+            Assert.IsTrue(oldLength < fileInfo.Length);
+        }
+        [TestMethod()]
+        public void LogSuccessTest()
+        {
+            fileInfo.Refresh();
+            long oldLength = fileInfo.Length;
+            _systemUnderTest.LogFailure("SUCCESS");
+            _systemUnderTest.Flush();
+            fileInfo.Refresh();
+            Assert.IsTrue(oldLength < fileInfo.Length);
+        }
         [TestMethod()]
         public void LogLoadingModelTest()
         {
