@@ -49,6 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileSemanticTracingTests.cs" />
     <Compile Include="FileTracerListenerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DbTraceListenerTests.cs" />
@@ -57,6 +58,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FileSemanticTracing\FileSemanticTracing.csproj">
+      <Project>{9FA31689-DFE7-4286-97AC-7DA130E55649}</Project>
+      <Name>FileSemanticTracing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tracing\Tracing.csproj">
       <Project>{552a1500-eafa-4239-a91a-e3d62593378c}</Project>
       <Name>Tracing</Name>

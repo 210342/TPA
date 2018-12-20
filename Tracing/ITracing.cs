@@ -18,5 +18,6 @@ namespace Tracing
         void LogModelLoaded(string loadedAssemblyName);
         void LogSavingModel(string savedAssemblyName);
         void LogModelSaved(string savedAssemblyName);
+        void Flush();
     }
 }

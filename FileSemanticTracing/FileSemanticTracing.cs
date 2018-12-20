@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Practices.EnterpriseLibrary.SemanticLogging;
+using Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,9 +9,35 @@ using Tracing;
 
 namespace FileSemanticTracing
 {
-    public class FileSemanticTracing : ITracing
+    public class FileSemanticTracing : ITracing, IDisposable
     {
-        private readonly string filepath = $"{nameof(FileSemanticTracing)}.log";
+        private readonly SinkSubscription<FlatFileSink> _subscription;
+
+        public string FilePath { get; }
+
+        public FileSemanticTracing()
+        {
+            FilePath = $"{nameof(FileSemanticTracing)}.log";
+            ObservableEventListener listener = new ObservableEventListener();
+            listener.EnableEvents(SemanticLoggingEventSource.Log, System.Diagnostics.Tracing.EventLevel.LogAlways, Keywords.All);
+            _subscription = listener.LogToFlatFile(FilePath);
+        }
+
+        ~FileSemanticTracing()
+        {
+            if (_subscription != null)
+            {
+                _subscription.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            if(_subscription != null)
+            {
+                _subscription.Dispose();
+            }
+        }
 
         public void LogDatabaseConnectionClosed(string databaseName)
         {
@@ -18,47 +46,52 @@ namespace FileSemanticTracing
 
         public void LogDatabaseConnectionEstablished(string databaseName)
         {
-            throw new NotImplementedException();
+            SemanticLoggingEventSource.Log.DatabaseConnectionEstablished(databaseName);
         }
 
         public void LogFailure(string message)
         {
-            throw new NotImplementedException();
+            SemanticLoggingEventSource.Log.Failure(message);
         }
 
         public void LogFileClosed(string filePath)
         {
-            throw new NotImplementedException();
+            SemanticLoggingEventSource.Log.FileClosed(filePath);
         }
 
         public void LogFileOpened(string filePath)
         {
-            throw new NotImplementedException();
+            SemanticLoggingEventSource.Log.FileOpened(filePath);
         }
 
         public void LogLoadingModel(string loadedAssemblyName)
         {
-            throw new NotImplementedException();
+            SemanticLoggingEventSource.Log.LoadingModel(loadedAssemblyName);
         }
 
         public void LogModelLoaded(string loadedAssemblyName)
         {
-            throw new NotImplementedException();
+            SemanticLoggingEventSource.Log.ModelLoaded(loadedAssemblyName);
         }
 
         public void LogModelSaved(string savedAssemblyName)
         {
-            throw new NotImplementedException();
+            SemanticLoggingEventSource.Log.ModelSaved(savedAssemblyName);
         }
 
         public void LogSavingModel(string savedAssemblyName)
         {
-            throw new NotImplementedException();
+            SemanticLoggingEventSource.Log.SavingModel(savedAssemblyName);
         }
 
         public void LogStartup()
         {
-            throw new NotImplementedException();
+            SemanticLoggingEventSource.Log.Startup();
+        }
+
+        public void Flush()
+        {
+            _subscription.Sink.FlushAsync();
         }
     }
 }

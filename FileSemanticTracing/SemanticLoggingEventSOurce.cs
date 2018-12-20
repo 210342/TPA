@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace FileSemanticTracing
 {
+    [EventSource(Name = "SemanticLogging")]
     public class SemanticLoggingEventSource : EventSource
     {
         public static SemanticLoggingEventSource Log { get; } = new SemanticLoggingEventSource();
@@ -15,7 +16,7 @@ namespace FileSemanticTracing
         public class Tasks
         {
             public const EventTask Page = (EventTask)1;
-            public const EventTask DBQuery = (EventTask)2;
+            public const EventTask DatabaseConnection = (EventTask)2;
             public const EventTask File = (EventTask)16;
         }
 
@@ -53,7 +54,7 @@ namespace FileSemanticTracing
             WriteEvent((int)EventID.Failure, message);
         }
 
-        [Event((int)EventID.FileOpened, Message = "Opening file {1} activityID={0}", Opcode = EventOpcode.Start,
+        [Event((int)EventID.FileOpened, Message = "Opening file {0}", Opcode = EventOpcode.Start,
             Task = Tasks.File, Keywords = Keywords.File, Level = EventLevel.Informational)]
         public void FileOpened(string filePath)
         {
@@ -63,7 +64,7 @@ namespace FileSemanticTracing
             }
         }
 
-        [Event((int)EventID.FileClosed, Opcode = EventOpcode.Stop, Task = Tasks.File, Keywords = Keywords.File, Level = EventLevel.Informational)]
+        [Event((int)EventID.FileClosed, Message = "Closing file {0}", Opcode = EventOpcode.Stop, Task = Tasks.File, Keywords = Keywords.File, Level = EventLevel.Informational)]
         public void FileClosed(string filePath)
         {
             if (this.IsEnabled())
@@ -72,19 +73,19 @@ namespace FileSemanticTracing
             }
         }
 
-        [Event((int)EventID.DatabaseConnectionEstablished, Opcode = EventOpcode.Start, Task = Tasks.DBQuery, Keywords = Keywords.DataBase, Level = EventLevel.Informational)]
+        [Event((int)EventID.DatabaseConnectionEstablished, Opcode = EventOpcode.Start, Task = Tasks.DatabaseConnection, Keywords = Keywords.DataBase, Level = EventLevel.Informational)]
         public void DatabaseConnectionEstablished(string databaseName)
         {
             WriteEvent((int)EventID.DatabaseConnectionEstablished, databaseName);
         }
 
-        [Event((int)EventID.DatabaseConnectionClosed, Opcode = EventOpcode.Stop, Task = Tasks.DBQuery, Keywords = Keywords.DataBase, Level = EventLevel.Informational)]
+        [Event((int)EventID.DatabaseConnectionClosed, Opcode = EventOpcode.Stop, Task = Tasks.DatabaseConnection, Keywords = Keywords.DataBase, Level = EventLevel.Informational)]
         public void DatabaseConnectionClosed(string databaseName)
         {
-            WriteEvent((int)EventID.DatabaseConnectionClosed);
+            WriteEvent((int)EventID.DatabaseConnectionClosed, databaseName);
         }
 
-        [Event((int)EventID.LoadingModel, Level = EventLevel.Informational, Keywords = Keywords.Diagnostic)]
+        [Event((int)EventID.LoadingModel, Level = EventLevel.Informational, Keywords = Keywords.Diagnostic, Opcode = EventOpcode.Start)]
         public void LoadingModel(string loadedAssemblyName)
         {
             if (IsEnabled())
@@ -93,30 +94,30 @@ namespace FileSemanticTracing
             }
         }
 
-        [Event((int)EventID.ModelLoaded, Level = EventLevel.Informational, Keywords = Keywords.Diagnostic)]
+        [Event((int)EventID.ModelLoaded, Level = EventLevel.Informational, Keywords = Keywords.Diagnostic, Opcode = EventOpcode.Stop)]
         public void ModelLoaded(string loadedAssemblyName)
         {
             if (IsEnabled())
             {
-                WriteEvent((int)EventID.LoadingModel, loadedAssemblyName);
+                WriteEvent((int)EventID.ModelLoaded, loadedAssemblyName);
             }
         }
 
-        [Event((int)EventID.SavingModel, Level = EventLevel.Informational, Keywords = Keywords.Diagnostic)]
+        [Event((int)EventID.SavingModel, Level = EventLevel.Informational, Keywords = Keywords.Diagnostic, Opcode = EventOpcode.Start)]
         public void SavingModel(string savedAssemblyName)
         {
             if (IsEnabled())
             {
-                WriteEvent((int)EventID.LoadingModel, savedAssemblyName);
+                WriteEvent((int)EventID.SavingModel, savedAssemblyName);
             }
         }
 
-        [Event((int)EventID.ModelSaved, Level = EventLevel.Informational, Keywords = Keywords.Diagnostic)]
+        [Event((int)EventID.ModelSaved, Level = EventLevel.Informational, Keywords = Keywords.Diagnostic, Opcode = EventOpcode.Stop)]
         public void ModelSaved(string savedAssemblyName)
         {
             if (IsEnabled())
             {
-                WriteEvent((int)EventID.LoadingModel, savedAssemblyName);
+                WriteEvent((int)EventID.ModelSaved, savedAssemblyName);
             }
         }
     }

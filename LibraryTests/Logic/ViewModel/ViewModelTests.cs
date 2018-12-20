@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VM = Library.Logic.ViewModel;
 using Library.Model;
 using Library.Logic.ViewModel;
-using Library.Logic.ViewModel;
 
 
 

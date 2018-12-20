@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Library.Logic.ViewModel;
-using Library.Logic.ViewModel;
 
 namespace CommandLineInterface
 {
