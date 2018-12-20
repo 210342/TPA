@@ -108,11 +108,8 @@ namespace Library.Logic.ViewModel
 
         private void ImportTracer()
         {
-            TracingProvider tracingProvider = new TracingProvider()
-            {
-                DirectoryCatalog = new System.ComponentModel.Composition.Hosting.DirectoryCatalog
-                (new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)).LocalPath)
-            };
+            TracingProvider tracingProvider = 
+                new TracingProvider(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
             try
             {
@@ -121,20 +118,18 @@ namespace Library.Logic.ViewModel
                     Tracer = tracingProvider.ProvideTracer();
                 }
             }
-            catch(Tracing.Exceptions.MEFTracingLoaderException)
+            catch(Tracing.Exceptions.MEFTracingLoaderException e)
             {
                 // Dialog Box
                 Tracing = false;
             }
         }
 
-        private void ImportPersister() //TODO
+        private void ImportPersister()
         {
-            PersistanceProvider persistanceProvider = new PersistanceProvider()
-            {
-                DirectoryCatalog = new System.ComponentModel.Composition.Hosting.DirectoryCatalog
-                (new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)).LocalPath)
-            };
+            
+            PersistanceProvider persistanceProvider = 
+                new PersistanceProvider(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
             try
             {
@@ -154,6 +149,7 @@ namespace Library.Logic.ViewModel
             if (Tracing)
             {
                 Tracer.LogLoadingModel(LoadedAssembly);
+                Tracer.Flush();
             }
             Reflector reflector = new Reflector(LoadedAssembly);
             LoadedAssemblyRepresentation = reflector.m_AssemblyModel;
@@ -172,6 +168,7 @@ namespace Library.Logic.ViewModel
             if (Tracing)
             {
                 Tracer.LogModelLoaded(LoadedAssembly);
+                Tracer.Flush();
             }
         }
 
@@ -219,6 +216,7 @@ namespace Library.Logic.ViewModel
                         if (Tracing)
                         {
                             Tracer.LogFailure($"Exception caught when trying to open a file for writing (serialization) {Environment.NewLine}{ex.Message}");
+                            Tracer.Flush();
                         }
                     }
                 }
@@ -270,6 +268,7 @@ namespace Library.Logic.ViewModel
                         if (Tracing)
                         {
                             Tracer.LogFailure($"Exception caught when trying to open a file for reading (deserialization){Environment.NewLine}{ex.Message}");
+                            Tracer.Flush();
                         }
                     }
                 }
