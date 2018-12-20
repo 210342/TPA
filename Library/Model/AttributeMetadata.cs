@@ -19,13 +19,6 @@ namespace Library.Model
         [DataMember(Name = "Name")]
         private string m_Name;
         public string Name => m_Name;
-        public string Details
-        {
-            get
-            {
-                return $"Attribute name: {m_Name}.";
-            }
-        }
         public IEnumerable<IMetadata> Children => null;
         [DataMember(Name = "SavedHash")]
         private int savedHash;

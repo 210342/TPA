@@ -1,6 +1,6 @@
 ﻿namespace Library.Model
 {
-    internal enum SealedEnum
+    public enum SealedEnum
     {
         Sealed, NotSealed
     }

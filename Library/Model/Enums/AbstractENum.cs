@@ -1,7 +1,7 @@
 ﻿
 namespace Library.Model
 {
-    internal enum AbstractENum
+    public enum AbstractENum
     {
         NotAbstract, Abstract
     }
