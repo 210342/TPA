@@ -14,6 +14,7 @@ using System.Windows.Threading;
 using System.IO;
 using GalaSoft.MvvmLight.Command;
 using Tracing;
+using System.Reflection;
 
 namespace Library.Logic.ViewModel
 {
@@ -21,8 +22,8 @@ namespace Library.Logic.ViewModel
     public class ViewModel : INotifyPropertyChanged
     {
         #region Fields
+
         TracingProvider tracingProvider;
-        ITracing tracer;
         RepositoryLoader repositoriesLoader;
 
         private TreeViewItem objectSelected;
@@ -31,7 +32,10 @@ namespace Library.Logic.ViewModel
         private bool isSerializationChecked;
         
         #endregion
+
         #region Properties
+
+        public ITracing Tracer { get; private set; }
         public ICommand ShowCurrentObject { get; }
         public ICommand ReloadAssemblyCommand { get; }
         public ICommand OpenFileCommand { get; }
@@ -126,7 +130,7 @@ namespace Library.Logic.ViewModel
             Tracing = tracing;
             if (Tracing)
             {
-                ImportTraceListener();
+                ImportTracer();
             }
             ImportPersister();
             LoadedAssemblyRepresentation = new AssemblyMetadata(System.Reflection.Assembly.GetAssembly(this.GetType()));
@@ -140,16 +144,20 @@ namespace Library.Logic.ViewModel
                                          && repositoriesLoader.Repository is XmlModelSerializer);
         }
 
-        private void ImportTraceListener()
+        private void ImportTracer()
         {
             if (tracingProvider == null)
             {
-                tracingProvider = new TracingProvider();
+                tracingProvider = new TracingProvider()
+                {
+                    DirectoryCatalog = new System.ComponentModel.Composition.Hosting.DirectoryCatalog
+                    (new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)).LocalPath)
+                };
             }
 
-            if (!(tracer is null))
+            if (Tracer is null)
             {
-                tracer = tracingProvider.ProvideTracer();
+                Tracer = tracingProvider.ProvideTracer();
             }
         }
 

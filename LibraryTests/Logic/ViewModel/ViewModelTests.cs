@@ -26,7 +26,7 @@ namespace LibraryTests.Logic.ViewModel.Tests
             }
         }
 
-        VM.ViewModel vm = new VM.ViewModel(false);
+        readonly VM.ViewModel _vm = new VM.ViewModel(false);
         [TestMethod]
         public void ReloadAssemblyChangesAssembly()
         {
@@ -41,8 +41,10 @@ namespace LibraryTests.Logic.ViewModel.Tests
         [TestMethod]
         public void ReloadAsseblyListPopulated()
         {
-            VM.ViewModel vm = new VM.ViewModel(false);
-            vm.LoadedAssembly = typeof(VM.ViewModel).Assembly.Location;
+            VM.ViewModel vm = new VM.ViewModel(false)
+            {
+                LoadedAssembly = typeof(VM.ViewModel).Assembly.Location
+            };
             vm.ReloadAssemblyCommand.Execute(null);
             Assert.AreNotEqual(0, vm.ObjectsList.Count);
         }
@@ -50,8 +52,10 @@ namespace LibraryTests.Logic.ViewModel.Tests
         [TestMethod]
         public void ObjectToDisplayChanges()
         {
-            VM.ViewModel vm = new VM.ViewModel(false);
-            vm.ObjectSelected = new TypeItem(new TypeMetadata(typeof(Type)));
+            VM.ViewModel vm = new VM.ViewModel(false)
+            {
+                ObjectSelected = new TypeItem(new TypeMetadata(typeof(Type)))
+            };
             vm.ShowCurrentObject.Execute(null);
             Assert.AreEqual(vm.ObjectSelected, vm.ObjectToDisplay);
         }
@@ -59,10 +63,19 @@ namespace LibraryTests.Logic.ViewModel.Tests
         [TestMethod]
         public void OpenFileWorks()
         {
-            VM.ViewModel vm = new VM.ViewModel(false);
-            vm.OpenFileSourceProvider = new TestClass();
+            VM.ViewModel vm = new VM.ViewModel(false)
+            {
+                OpenFileSourceProvider = new TestClass()
+            };
             vm.OpenFileCommand.Execute(null);
             Assert.IsNotNull(vm.LoadedAssembly);
+        }
+
+        [TestMethod]
+        public void ImportTracerTest()
+        {
+            VM.ViewModel vm = new VM.ViewModel(true);
+            Assert.IsNotNull(vm.Tracer);
         }
     }
 }

@@ -16,9 +16,6 @@ namespace LibraryTests.Logic.ViewModel.Tests
         public void ProvideTracerTest()
         {
             _sut.DirectoryCatalog = new DirectoryCatalog(".");
-            Console.WriteLine(_sut.DirectoryCatalog.FullPath);
-            foreach (string str in _sut.DirectoryCatalog.LoadedFiles)
-                Console.WriteLine(str);
             Assert.IsNotNull(_sut.ProvideTracer());
         }
     }
