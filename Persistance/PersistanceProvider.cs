@@ -19,8 +19,20 @@ namespace Persistance
 
         public DirectoryCatalog DirectoryCatalog { get; set; }
 
+        public PersistanceProvider()
+        {
+
+        }
+
+        public PersistanceProvider(string assemblyPath)
+        {
+            DirectoryCatalog = new DirectoryCatalog(assemblyPath);
+        }
+
         public IPersister ProvidePersister()
         {
+            if (DirectoryCatalog == null)
+                throw new MEFPersistanceLoaderException("Directory catalog can't be null");
             AggregateCatalog catalog = new AggregateCatalog();
             catalog.Catalogs.Add(DirectoryCatalog);
             _container = new CompositionContainer(catalog);

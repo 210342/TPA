@@ -12,10 +12,21 @@ namespace Tracing
 
         public DirectoryCatalog DirectoryCatalog { get; set; }
 
+        public TracingProvider()
+        {
+
+        }
+
+        public TracingProvider(string assemblyPath)
+        {
+            DirectoryCatalog = new DirectoryCatalog(assemblyPath);
+        }
+
         public ITracing ProvideTracer()
         {
+            if (DirectoryCatalog == null)
+                throw new MEFTracingLoaderException("Directory catalog can't be null");
             AggregateCatalog catalog = new AggregateCatalog();
-            // catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetCallingAssembly()));
             catalog.Catalogs.Add(DirectoryCatalog);
             _container = new CompositionContainer(catalog);
             try
