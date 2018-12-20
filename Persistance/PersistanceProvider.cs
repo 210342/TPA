@@ -32,6 +32,10 @@ namespace Persistance
             {
                 throw new MEFPersistanceLoaderException("Couldn't compose persistance object", compositionException);
             }
+            if(persister is null)
+            {
+                throw new MEFPersistanceLoaderException("Couldn't compose persistance object");
+            }
             return persister;
         }
     }

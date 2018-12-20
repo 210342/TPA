@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileSemanticTracing
+namespace SemanticTracing
 {
     [EventSource(Name = "FileSemanticLogging")]
     public class SemanticLoggingEventSource : EventSource

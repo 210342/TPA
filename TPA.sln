@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSemanticTracing", "File
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistance", "Persistance\Persistance.csproj", "{82468F99-B386-4419-8DB0-FCA10B12699E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistanceTests", "PersistanceTests\PersistanceTests.csproj", "{7C7650F9-D2EB-4F3D-9089-981C4A1FF41C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSemanticTracingTests", "FileSemanticTracingTests\FileSemanticTracingTests.csproj", "{69F2D376-FC83-4215-AC99-058D53142FF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,14 @@ Global
 		{82468F99-B386-4419-8DB0-FCA10B12699E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82468F99-B386-4419-8DB0-FCA10B12699E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82468F99-B386-4419-8DB0-FCA10B12699E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C7650F9-D2EB-4F3D-9089-981C4A1FF41C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C7650F9-D2EB-4F3D-9089-981C4A1FF41C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C7650F9-D2EB-4F3D-9089-981C4A1FF41C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C7650F9-D2EB-4F3D-9089-981C4A1FF41C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69F2D376-FC83-4215-AC99-058D53142FF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69F2D376-FC83-4215-AC99-058D53142FF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69F2D376-FC83-4215-AC99-058D53142FF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69F2D376-FC83-4215-AC99-058D53142FF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

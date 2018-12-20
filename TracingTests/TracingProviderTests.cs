@@ -1,11 +1,10 @@
-﻿using Library.Logic.ViewModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.CodeAnalysis;
 using Tracing;
 
-namespace LibraryTests.Logic.ViewModel.Tests
+namespace Tracing.Tests
 {
     [TestClass]
     [ExcludeFromCodeCoverage]

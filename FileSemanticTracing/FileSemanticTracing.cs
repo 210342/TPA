@@ -4,7 +4,7 @@ using System;
 using System.ComponentModel.Composition;
 using Tracing;
 
-namespace FileSemanticTracing
+namespace SemanticTracing
 {
     [Export(typeof(ITracing))]
     public class FileSemanticTracing : ITracing, IDisposable
@@ -19,14 +19,6 @@ namespace FileSemanticTracing
             ObservableEventListener listener = new ObservableEventListener();
             listener.EnableEvents(SemanticLoggingEventSource.Log, System.Diagnostics.Tracing.EventLevel.LogAlways, Keywords.All);
             _subscription = listener.LogToFlatFile(FilePath);
-        }
-
-        ~FileSemanticTracing()
-        {
-            if (_subscription != null)
-            {
-                _subscription.Dispose();
-            }
         }
 
         public void Dispose()

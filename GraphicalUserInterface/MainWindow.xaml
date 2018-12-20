@@ -33,7 +33,5 @@
         <Button Command="{Binding Path=OpenFileCommand}"  x:Name="button" Content="Load" HorizontalAlignment="Left" Margin="330,4,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Height="22"/>
         <Button Command="{Binding SaveModel}"  x:Name="button_Copy1" Content="Save model" HorizontalAlignment="Left" Margin="330,406,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Height="22"/>
         <Button Command="{Binding LoadModel}"  x:Name="button_Copy2" Content="Load model" HorizontalAlignment="Left" Margin="249,406,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Height="22"/>
-        <RadioButton IsChecked="{Binding IsSerializationChecked, Mode=TwoWay}" Content="File" x:Name="FileCheckBox" HorizontalAlignment="Left" Margin="20,406,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Height="16"/>
-        <RadioButton Content="Database" x:Name="DBCheckBox" HorizontalAlignment="Left" Margin="95,406,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" IsEnabled="False" Height="16"/>
     </Grid>
 </Window>

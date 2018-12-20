@@ -26,7 +26,6 @@ namespace Library.Logic.ViewModel
         private TreeViewItem objectSelected;
         private string _loadedAssembly;
         private TreeViewItem _objectToDisplay;
-        private bool isSerializationChecked;
         
         #endregion
 
@@ -43,26 +42,6 @@ namespace Library.Logic.ViewModel
         public ISourceProvider SaveFileSourceProvider { get; set; }
         public bool Tracing { get; set; }
         public ObservableCollection<TreeViewItem> ObjectsList { get; }
-        public bool IsSerializationChecked
-        {
-            get
-            {
-                return isSerializationChecked;
-            }
-            set
-            {
-                isSerializationChecked = value;
-                ImportPersister();
-                SaveModel.RaiseCanExecuteChanged();
-                LoadModel.RaiseCanExecuteChanged();
-                OnPropertyChanged();
-                if(Tracing)
-                {
-                    Trace.TraceInformation("Repository changed.");
-                    Trace.Flush();
-                }
-            }
-        }
         public TreeViewItem ObjectSelected
         {
             get
@@ -73,11 +52,6 @@ namespace Library.Logic.ViewModel
             {
                 PreviousSelection = objectSelected;
                 objectSelected = value;
-                if (Tracing)
-                {
-                    Trace.TraceInformation("ObjectSelected changed.");
-                    Trace.Flush();
-                }
                 OnPropertyChanged();
             }
         }
@@ -91,12 +65,6 @@ namespace Library.Logic.ViewModel
             {
                 this._objectToDisplay = value;
                 OnPropertyChanged();
-                if(Tracing)
-                {
-                    Trace.TraceInformation("ObjectToDisplay changed.");
-                    Trace.Flush();
-                }
-                
             }
         }
         public TreeViewItem PreviousSelection { get; private set; }
@@ -179,23 +147,13 @@ namespace Library.Logic.ViewModel
             {
                 // Dialog Box
             }
-            if(Persister is ISerializer)
-            {
-                List<Type> types = new List<Type>(Enumerable.Repeat(typeof(List<IMetadata>), 1));
-                types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
-                ISerializer serializer = Persister as ISerializer;
-                serializer.KnownTypes = types;
-                serializer.NodeType = typeof(IMetadata);
-                serializer.InitialiseSerialization();
-            }
         }
 
         private void LoadAssembly()
         {
             if (Tracing)
             {
-                Trace.TraceInformation("Assembly loading.");
-                Trace.Flush();
+                Tracer.LogLoadingModel(LoadedAssembly);
             }
             Reflector reflector = new Reflector(LoadedAssembly);
             LoadedAssemblyRepresentation = reflector.m_AssemblyModel;
@@ -213,8 +171,7 @@ namespace Library.Logic.ViewModel
             }
             if (Tracing)
             {
-                Trace.TraceInformation("Assembly reloaded.");
-                Trace.Flush();
+                Tracer.LogModelLoaded(LoadedAssembly);
             }
         }
 
@@ -232,6 +189,7 @@ namespace Library.Logic.ViewModel
         {
             if(Persister is ISerializer)
             {
+
                 if (filePathProvider == null)
                     throw new System.ArgumentNullException("SourceProvider can't be null.");
                 if (filePathProvider.GetAccess())
@@ -239,6 +197,14 @@ namespace Library.Logic.ViewModel
                     ISerializer serializer = Persister as ISerializer;
                     try
                     {
+                        if(!serializer.Initialised)
+                        {
+                            List<Type> types = new List<Type>(Enumerable.Repeat(typeof(List<IMetadata>), 1));
+                            types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
+                            serializer.KnownTypes = types;
+                            serializer.NodeType = typeof(IMetadata);
+                            serializer.InitialiseSerialization();
+                        }
                         serializer.SourceName = filePathProvider.GetFilePath();
                         IEnumerable<IMetadata> objects = from TreeViewItem item in ObjectsList
                                                          select item.ModelObject;
@@ -274,6 +240,14 @@ namespace Library.Logic.ViewModel
                     ISerializer serializer = Persister as ISerializer;
                     try
                     {
+                        if (!serializer.Initialised)
+                        {
+                            List<Type> types = new List<Type>(Enumerable.Repeat(typeof(List<IMetadata>), 1));
+                            types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
+                            serializer.KnownTypes = types;
+                            serializer.NodeType = typeof(IMetadata);
+                            serializer.InitialiseSerialization();
+                        }
                         serializer.SourceName = filePathProvider.GetFilePath();
                         Dispatcher.CurrentDispatcher.BeginInvoke((Action)delegate ()
                         {
