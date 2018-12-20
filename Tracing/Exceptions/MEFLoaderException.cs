@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Logic.Exceptions
+namespace Tracing.Exceptions
 {
-    internal class MEFLoaderException : Exception
+    public class MEFLoaderException : Exception
     {
         internal MEFLoaderException() { }
         internal MEFLoaderException(string message) : base(message) { }

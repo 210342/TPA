@@ -1,12 +1,10 @@
-﻿using Library.Logic.Exceptions;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.Reflection;
-using Tracing;
+using Tracing.Exceptions;
 
-namespace Library.Logic.ViewModel
+namespace Tracing
 {
-    internal class TracingProvider
+    public class TracingProvider
     {
         [Import(typeof(ITracing))]
         private ITracing _tracer = null;
@@ -14,7 +12,7 @@ namespace Library.Logic.ViewModel
 
         public DirectoryCatalog DirectoryCatalog { get; set; }
 
-        internal ITracing ProvideTracer()
+        public ITracing ProvideTracer()
         {
             AggregateCatalog catalog = new AggregateCatalog();
             // catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetCallingAssembly()));

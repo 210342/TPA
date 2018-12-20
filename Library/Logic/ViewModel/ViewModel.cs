@@ -155,9 +155,16 @@ namespace Library.Logic.ViewModel
                 };
             }
 
-            if (Tracer is null)
+            try
             {
-                Tracer = tracingProvider.ProvideTracer();
+                if (Tracer is null)
+                {
+                    Tracer = tracingProvider.ProvideTracer();
+                }
+            }
+            catch(Tracing.Exceptions.MEFLoaderException ex)
+            {
+                // Dialog Box
             }
         }
 

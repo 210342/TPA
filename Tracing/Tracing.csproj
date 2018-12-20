@@ -70,10 +70,10 @@
   <ItemGroup>
     <Compile Include="DatabaseHandling\DatabaseWriter.cs" />
     <Compile Include="DatabaseHandling\IDatabaseWriter.cs" />
-    <Compile Include="DbTraceListener.cs" />
-    <Compile Include="FileTraceListener.cs" />
+    <Compile Include="Exceptions\MEFLoaderException.cs" />
     <Compile Include="ITracing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TracingProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
