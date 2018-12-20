@@ -1,5 +1,6 @@
 ﻿using Library.Logic.ViewModel;
 using System;
+using System.IO;
 
 namespace CommandLineInterface
 {
@@ -16,7 +17,7 @@ namespace CommandLineInterface
 
         public bool GetAccess()
         {
-            return System.IO.File.Exists(this.path);
+            return !File.Exists(this.path) || (File.Exists(path) && File.Open(path, FileMode.Open) != null);
         }
 
         public string GetFilePath()
