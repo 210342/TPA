@@ -39,7 +39,6 @@ namespace Library.Model
 
         public string Name => m_Name;
         public IEnumerable<TypeMetadata> GenericArguments => m_GenericArguments;
-        public Tuple<AccessLevel, AbstractENum, StaticEnum, VirtualEnum> Modifiers => Modifiers;
         public TypeMetadata ReturnType => m_ReturnType;
         public bool IsExtension => m_Extension;
         public IEnumerable<ParameterMetadata> Parameters => m_Parameters;
@@ -150,6 +149,12 @@ namespace Library.Model
                 paramsString.Append(")");
             }
             return $"{(m_ReturnType != null ? "" + m_ReturnType.Name : "")} {m_Name}{paramsString.ToString()}";
+        }
+
+        public string ModifiersString()
+        {
+            return (m_Modifiers?.Item1.ToString()) + (m_Modifiers?.Item2.ToString())
+                + (m_Modifiers?.Item3.ToString() + m_Modifiers?.Item4.ToString());
         }
     }
 }

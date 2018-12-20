@@ -30,8 +30,7 @@ namespace Library.Logic.ViewModel
                 }
                 _details = _details.Remove(_details.Length - 2, 1) + ")\n";
             }
-            _details += $"Modifiers: {source.Modifiers.Item1.ToString()}, " +
-                $"{source.Modifiers.Item2.ToString()}, {source.Modifiers.Item3.ToString()}, {source.Modifiers.Item4.ToString()}.";
+            _details += $"Modifiers: {source.ModifiersString()}";
         }
 
         protected override TreeViewItem GetChildOfType(IMetadata metadata)

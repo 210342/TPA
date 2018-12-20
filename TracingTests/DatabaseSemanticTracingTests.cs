@@ -21,12 +21,12 @@ namespace FileSemanticTracing.Tests
             _systemUnderTest.Dispose();
         }
 
-        [TestMethod()]
+        //[TestMethod()]
         public void DatabaseSemanticTracingTest()
         {
             Assert.IsNotNull(_systemUnderTest);
         }
-        [TestMethod()]
+        //[TestMethod()]
         public void LogFailureTest()
         {
             
@@ -35,7 +35,7 @@ namespace FileSemanticTracing.Tests
             //Assert.IsTrue(oldLength < fileInfo.Length);
         }
         
-        [TestMethod()]
+        //[TestMethod()]
         public void LogSuccessTest()
         {
             _systemUnderTest.LogSuccess("SUCCESS");

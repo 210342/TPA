@@ -22,8 +22,7 @@ namespace Library.Logic.ViewModel
                     _details += $"{intf.Name}, ";
             }
             _details += $"\nType Kind: {source.MyTypeKind.ToString()}\n";
-            _details += $"Modifiers: {source.Modifiers?.Item1.ToString()}," +
-                $"{source.Modifiers?.Item2.ToString()},{source.Modifiers?.Item3.ToString()}.";
+            _details += $"Modifiers: {source.ModifiersString()}.";
         }
 
         protected override TreeViewItem GetChildOfType(IMetadata metadata)

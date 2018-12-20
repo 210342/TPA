@@ -1,7 +1,7 @@
 ﻿
 namespace Library.Model
 {
-    public enum AccessLevel
+    internal enum AccessLevel
     {
         IsPublic, IsProtected, IsProtectedInternal, IsPrivate
     }
