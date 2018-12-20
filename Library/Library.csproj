@@ -61,8 +61,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logic\Exceptions\MEFLoaderException.cs" />
     <Compile Include="Logic\ViewModel\RepositoryLoader.cs" />
-    <Compile Include="Logic\ViewModel\TraceListenersLoader.cs" />
+    <Compile Include="Logic\ViewModel\TracingProvider.cs" />
     <Compile Include="Model\AttributeMetadata.cs" />
     <Compile Include="Model\Enums\AbstractENum.cs" />
     <Compile Include="Model\Enums\AccessLevel.cs" />

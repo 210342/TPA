@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using System.IO;
 using GalaSoft.MvvmLight.Command;
+using Tracing;
 
 namespace Library.Logic.ViewModel
 {
@@ -20,7 +21,8 @@ namespace Library.Logic.ViewModel
     public class ViewModel : INotifyPropertyChanged
     {
         #region Fields
-        TraceListenersLoader traceListenersLoader;
+        TracingProvider tracingProvider;
+        ITracing tracer;
         RepositoryLoader repositoriesLoader;
 
         private TreeViewItem objectSelected;
@@ -140,9 +142,15 @@ namespace Library.Logic.ViewModel
 
         private void ImportTraceListener()
         {
-            if (traceListenersLoader == null)
-                traceListenersLoader = new TraceListenersLoader();
-            traceListenersLoader.LoadTraceListeners();
+            if (tracingProvider == null)
+            {
+                tracingProvider = new TracingProvider();
+            }
+
+            if (!(tracer is null))
+            {
+                tracer = tracingProvider.ProvideTracer();
+            }
         }
 
         private void LoadAssembly()

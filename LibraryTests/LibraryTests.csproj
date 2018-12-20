@@ -47,6 +47,7 @@
       <HintPath>..\packages\MSTest.TestFramework.1.3.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +61,7 @@
     <Compile Include="Data\Model\AssemblyMetadataTests.cs" />
     <Compile Include="Data\ReflectorTests.cs" />
     <Compile Include="Logic\TreeView\TreeViewItemTests.cs" />
+    <Compile Include="Logic\ViewModel\TracingProviderTests.cs" />
     <Compile Include="Logic\ViewModel\ViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -72,6 +74,15 @@
       <Project>{df4c29a8-dc9d-4abc-8b61-229495dd2c37}</Project>
       <Name>Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tracing\Tracing.csproj">
+      <Project>{552a1500-eafa-4239-a91a-e3d62593378c}</Project>
+      <Name>Tracing</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FileSemanticTracing.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

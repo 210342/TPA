@@ -1,10 +1,12 @@
 ﻿using Microsoft.Practices.EnterpriseLibrary.SemanticLogging;
 using Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks;
 using System;
+using System.ComponentModel.Composition;
 using Tracing;
 
 namespace FileSemanticTracing
 {
+    [Export(typeof(ITracing))]
     public class FileSemanticTracing : ITracing, IDisposable
     {
         private readonly SinkSubscription<FlatFileSink> _subscription;
