@@ -1,4 +1,5 @@
-﻿using Serializing;
+﻿using Persistance;
+using Persistance.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -8,20 +9,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Logic.ViewModel
+namespace Persistance
 {
-    internal class RepositoryLoader
+    public class PersistanceProvider
     {
         [Import(typeof(IPersister))]
         private IPersister persister;
-
-        public IPersister Repository { get => persister; private set => persister = value; }
-
         private CompositionContainer _container;
 
-        public void LoadRepository()
+        public DirectoryCatalog DirectoryCatalog { get; set; }
+
+        public IPersister ProvidePersister()
         {
             AggregateCatalog catalog = new AggregateCatalog();
+            catalog.Catalogs.Add(DirectoryCatalog);
             _container = new CompositionContainer(catalog);
             try
             {
@@ -29,11 +30,9 @@ namespace Library.Logic.ViewModel
             }
             catch (CompositionException compositionException)
             {
-                Trace.TraceError("External repositories import failed. " +
-                compositionException.Message);
+                throw new MEFPersistanceLoaderException("Couldn't compose persistance object", compositionException);
             }
+            return persister;
         }
-        
-
     }
 }

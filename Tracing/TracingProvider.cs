@@ -24,11 +24,11 @@ namespace Tracing
             }
             catch (CompositionException compositionException)
             {
-                throw new MEFLoaderException("Couldn't compose application", compositionException);
+                throw new MEFTracingLoaderException("Couldn't compose application", compositionException);
             }
             if (_tracer is null)
             {
-                throw new MEFLoaderException($"Could not load {typeof(ITracing)}");
+                throw new MEFTracingLoaderException($"Could not load {typeof(ITracing)}");
             }
             else
             {

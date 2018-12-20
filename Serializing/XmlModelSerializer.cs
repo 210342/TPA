@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Persistance;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
-using System.Xml.Serialization;
 
 namespace Serializing
 {
     [Export(typeof(IPersister))]
-    public class XmlModelSerializer : IPersister
+    public class XmlModelSerializer : ISerializer
     {
         private DataContractSerializer dcs; 
         private string sourceName;
@@ -27,6 +27,9 @@ namespace Serializing
                 SerializationStream = new FileStream(SourceName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             }
         }
+        public IEnumerable<Type> KnownTypes { get; set; }
+        public Type NodeType { get ; set; }
+        public bool Initialised { get; private set; } = false;
 
         /*
          * TODO:
@@ -41,6 +44,8 @@ namespace Serializing
 
         public XmlModelSerializer(List<Type> knownTypes, Type nodeType)
         {
+            KnownTypes = knownTypes;
+            NodeType = nodeType;
             dcs = new DataContractSerializer(
                 type: nodeType, 
                 knownTypes: knownTypes,
@@ -76,6 +81,18 @@ namespace Serializing
                 }
             }
             return read;
+        }
+
+        public void InitialiseSerialization()
+        {
+            dcs = new DataContractSerializer(
+                type: NodeType,
+                knownTypes: KnownTypes,
+                maxItemsInObjectGraph: 100000,
+                ignoreExtensionDataObject: false,
+                preserveObjectReferences: true,
+                dataContractSurrogate: null);
+            Initialised = true;
         }
     }
 }

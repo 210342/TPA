@@ -70,7 +70,7 @@
   <ItemGroup>
     <Compile Include="DatabaseHandling\DatabaseWriter.cs" />
     <Compile Include="DatabaseHandling\IDatabaseWriter.cs" />
-    <Compile Include="Exceptions\MEFLoaderException.cs" />
+    <Compile Include="Exceptions\MEFTracingLoaderException.cs" />
     <Compile Include="ITracing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TracingProvider.cs" />
