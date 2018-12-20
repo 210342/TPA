@@ -9,7 +9,6 @@ namespace Library.Model
     public interface IMetadata
     {
         string Name { get; }
-        string Details { get; }
         IEnumerable<IMetadata> Children { get; }
     }
 }

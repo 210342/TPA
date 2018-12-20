@@ -10,28 +10,6 @@ namespace Library.Model
     [Serializable]
     public class TypeMetadata : IMetadata
     {
-        public string Details
-        {
-            get
-            {
-                var ret = $"Type: {m_typeName}{(m_BaseType != null ? ",extends " + m_BaseType.Name : string.Empty)}";
-                if (m_ImplementedInterfaces != null)
-                {
-                    ret += ",implements ";
-                    foreach (var intf in m_ImplementedInterfaces)
-                        ret += $"{intf.Name}, ";
-                }
-                ret += $"\nType Kind: {m_TypeKind.ToString()}\n";
-                ret += $"Modifiers: {m_Modifiers?.Item1.ToString()}," +
-                    $"{m_Modifiers?.Item2.ToString()},{m_Modifiers?.Item3.ToString()}.";
-                return ret;
-            }
-        }
-        public void Build()
-        {
-
-        }
-
         #region constructors
         internal TypeMetadata(Type type)
         {
@@ -93,7 +71,7 @@ namespace Library.Model
         #endregion
 
         #region API
-        internal enum TypeKind
+        public enum TypeKind
         {
             Reference, EnumType, StructType, InterfaceType, ClassType
         }
@@ -114,6 +92,7 @@ namespace Library.Model
 
         #region private
         //vars
+        [DataMember(Name = "Name")]
         private string m_typeName;
         [DataMember(Name = "Namespace")]
         private string m_NamespaceName;
@@ -140,7 +119,8 @@ namespace Library.Model
         [DataMember(Name = "Constructors")]
         private IEnumerable<MethodMetadata> m_Constructors;
 
-        [DataMember(Name = "Name")]
+
+        #region properties
         public string Name
         {
             get
@@ -152,8 +132,21 @@ namespace Library.Model
                 this.m_typeName = value;
             }
         }
-
+        public string NamespaceName => m_NamespaceName;
+        public TypeMetadata BaseType => m_BaseType;
+        public IEnumerable<TypeMetadata> GenericArguments => m_GenericArguments;
+        public Tuple<AccessLevel, SealedEnum, AbstractENum> Modifiers => m_Modifiers;
+        public TypeKind MyTypeKind => m_TypeKind;
+        public IEnumerable<AttributeMetadata> Attributes => m_Attributes;
+        public IEnumerable<TypeMetadata> ImplementedInterfaces => m_ImplementedInterfaces;
+        public IEnumerable<TypeMetadata> NestedTypes => m_NestedTypes;
+        public IEnumerable<PropertyMetadata> Properties => m_Properties;
+        public TypeMetadata DeclaringType => m_DeclaringType;
+        public IEnumerable<MethodMetadata> Methods => m_Methods;
+        public IEnumerable<MethodMetadata> Constructors => m_Constructors;
         public IEnumerable<IMetadata> Children { get; set; }
+        #endregion
+
 
         //constructors
         private TypeMetadata(string typeName, string namespaceName, int hash)

@@ -9,14 +9,6 @@ namespace Library.Model
     [Serializable]
     public class NamespaceMetadata : IMetadata
     {
-        public string Details
-        {
-            get
-            {
-                return $"Namespace {m_NamespaceName}, contains {m_Types.Count()} types";
-            }
-        }
-
         internal NamespaceMetadata(string name, IEnumerable<Type> types)
         {
             m_NamespaceName = name;
@@ -29,7 +21,6 @@ namespace Library.Model
         private string m_NamespaceName;
         [DataMember(Name = "Types")]
         private IEnumerable<TypeMetadata> m_Types;
-        //public IEnumerable<IMetadata> Children { get; set; }
         public IEnumerable<IMetadata> Children => m_Types;
         [DataMember(Name = "Name")]
         public string Name
@@ -44,9 +35,6 @@ namespace Library.Model
             }
         }
 
-        
-
-        //public string Name => m_NamespaceName;
         [DataMember(Name = "SavedHash")]
         private int savedHash;
         public override int GetHashCode()

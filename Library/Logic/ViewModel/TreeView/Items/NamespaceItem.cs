@@ -1,12 +1,22 @@
 ﻿using Library.Model;
+using System.Linq;
 
 namespace Library.Logic.ViewModel
 {
     public class NamespaceItem : TreeViewItem
     {
+        private string _details;
+        public override string Details
+        {
+            get
+            {
+                return _details;
+            }
+        }
+
         public NamespaceItem(NamespaceMetadata source) : base(source)
         {
-            
+            _details = $"Namespace {source.Name}, contains {source.Children.Count()} types";
         }
 
         protected override TreeViewItem GetChildOfType(IMetadata metadata)

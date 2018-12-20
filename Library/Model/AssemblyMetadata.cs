@@ -41,12 +41,7 @@ namespace Library.Model
             }
         }
         //public string Name => m_Name;
-        public string Details {
-            get
-            {
-                return $"Assembly name: {m_Name}, has {m_Namespaces.Count()} namespaces."; 
-            }
-        }
+        
         //[DataMember(Name = "Children")]
         public IEnumerable<IMetadata> Children
         {
@@ -54,10 +49,10 @@ namespace Library.Model
             {
                 return m_Namespaces;
             }
-            set
+            /*set
             {
                 this.m_Namespaces = (IEnumerable < NamespaceMetadata > )value;
-            }
+            }*/
         }
         //public IEnumerable<IMetadata> Children => m_Namespaces;
         [DataMember(Name = "SavedHash")]

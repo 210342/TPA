@@ -10,13 +10,6 @@ namespace Library.Model
     [Serializable]
     public class PropertyMetadata : IMetadata
     {
-        public string Details
-        {
-            get
-            {
-                return $"Property: {m_Name} : {m_TypeMetadata.Name}";
-            }
-        }
         internal static IEnumerable<PropertyMetadata> EmitProperties(IEnumerable<PropertyInfo> props)
         {
             return from prop in props
@@ -31,7 +24,7 @@ namespace Library.Model
         private TypeMetadata m_TypeMetadata;
 
         public string Name => m_Name;
-
+        public TypeMetadata Type => m_TypeMetadata;
         [DataMember(Name = "Children")]
         public IEnumerable<IMetadata> Children
         {
