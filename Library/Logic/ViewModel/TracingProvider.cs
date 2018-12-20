@@ -17,6 +17,7 @@ namespace Library.Logic.ViewModel
         internal ITracing ProvideTracer()
         {
             AggregateCatalog catalog = new AggregateCatalog();
+            // catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetCallingAssembly()));
             catalog.Catalogs.Add(DirectoryCatalog);
             _container = new CompositionContainer(catalog);
             try

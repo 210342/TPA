@@ -1,12 +1,8 @@
 ﻿using Library.Logic.ViewModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibraryTests.Logic.ViewModel.Tests
 {
