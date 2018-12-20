@@ -1,6 +1,6 @@
 ﻿namespace Library.Model
 {
-    public enum StaticEnum
+    internal enum StaticEnum
     {
         NotStatic, Static
     }

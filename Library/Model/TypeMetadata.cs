@@ -135,7 +135,6 @@ namespace Library.Model
         public string NamespaceName => m_NamespaceName;
         public TypeMetadata BaseType => m_BaseType;
         public IEnumerable<TypeMetadata> GenericArguments => m_GenericArguments;
-        public Tuple<AccessLevel, SealedEnum, AbstractENum> Modifiers => m_Modifiers;
         public TypeKind MyTypeKind => m_TypeKind;
         public IEnumerable<AttributeMetadata> Attributes => m_Attributes;
         public IEnumerable<TypeMetadata> ImplementedInterfaces => m_ImplementedInterfaces;
@@ -242,6 +241,11 @@ namespace Library.Model
         public override string ToString()
         {
             return m_typeName;
+        }
+        public string ModifiersString()
+        {
+            return (m_Modifiers?.Item1.ToString()) + (m_Modifiers?.Item2.ToString())
+                + (m_Modifiers?.Item3.ToString() + m_Modifiers?.ToString());
         }
     }
 }

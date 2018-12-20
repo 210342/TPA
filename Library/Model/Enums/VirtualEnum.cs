@@ -1,6 +1,6 @@
 ﻿namespace Library.Model
 {
-    public enum VirtualEnum
+    internal enum VirtualEnum
     {
         NotVirtual, Virtual
     }
