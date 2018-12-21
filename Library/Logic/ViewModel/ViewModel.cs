@@ -5,7 +5,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Threading.Tasks;
@@ -15,6 +14,8 @@ using GalaSoft.MvvmLight.Command;
 using Tracing;
 using System.Reflection;
 using Persistance;
+using Library.Logic.MEFProviders;
+using Library.Logic.MEFProviders.Exceptions;
 
 namespace Library.Logic.ViewModel
 {
@@ -118,7 +119,7 @@ namespace Library.Logic.ViewModel
                     Tracer = tracingProvider.ProvideTracer();
                 }
             }
-            catch(Tracing.Exceptions.MEFTracingLoaderException e)
+            catch(MEFLoaderException)
             {
                 // Dialog Box
                 Tracing = false;
@@ -138,7 +139,7 @@ namespace Library.Logic.ViewModel
                     Persister = persistanceProvider.ProvidePersister();
                 }
             }
-            catch (Persistance.Exceptions.MEFPersistanceLoaderException)
+            catch (MEFLoaderException)
             {
                 // Dialog Box
             }

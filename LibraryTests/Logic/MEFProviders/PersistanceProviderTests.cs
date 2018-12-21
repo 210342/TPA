@@ -1,7 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Library.Logic.MEFProviders;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ComponentModel.Composition.Hosting;
 
-namespace Persistance.Tests
+namespace Library.Data.MEFProviders.Tests
 {
     [TestClass()]
     public class PersistanceProviderTests

@@ -1,10 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using Library.Logic.MEFProviders;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.CodeAnalysis;
-using Tracing;
 
-namespace Tracing.Tests
+namespace Library.Data.MEFProviders.Tests
 {
     [TestClass]
     [ExcludeFromCodeCoverage]

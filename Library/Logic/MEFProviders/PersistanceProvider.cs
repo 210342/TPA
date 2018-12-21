@@ -1,15 +1,9 @@
-﻿using Persistance;
-using Persistance.Exceptions;
-using System;
-using System.Collections.Generic;
+﻿using Library.Logic.MEFProviders.Exceptions;
+using Persistance;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Persistance
+namespace Library.Logic.MEFProviders
 {
     public class PersistanceProvider
     {
@@ -32,7 +26,7 @@ namespace Persistance
         public IPersister ProvidePersister()
         {
             if (DirectoryCatalog == null)
-                throw new MEFPersistanceLoaderException("Directory catalog can't be null");
+                throw new MEFLoaderException("Directory catalog can't be null");
             AggregateCatalog catalog = new AggregateCatalog();
             catalog.Catalogs.Add(DirectoryCatalog);
             _container = new CompositionContainer(catalog);
@@ -42,11 +36,11 @@ namespace Persistance
             }
             catch (CompositionException compositionException)
             {
-                throw new MEFPersistanceLoaderException("Couldn't compose persistance object", compositionException);
+                throw new MEFLoaderException("Couldn't compose persistance object", compositionException);
             }
             if(persister is null)
             {
-                throw new MEFPersistanceLoaderException("Couldn't compose persistance object");
+                throw new MEFLoaderException("Couldn't compose persistance object");
             }
             return persister;
         }

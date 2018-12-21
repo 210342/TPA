@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.Composition;
+﻿using Library.Logic.MEFProviders.Exceptions;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using Tracing.Exceptions;
+using Tracing;
 
-namespace Tracing
+namespace Library.Logic.MEFProviders
 {
     public class TracingProvider
     {
@@ -25,7 +26,7 @@ namespace Tracing
         public ITracing ProvideTracer()
         {
             if (DirectoryCatalog == null)
-                throw new MEFTracingLoaderException("Directory catalog can't be null");
+                throw new MEFLoaderException("Directory catalog can't be null");
             AggregateCatalog catalog = new AggregateCatalog();
             catalog.Catalogs.Add(DirectoryCatalog);
             _container = new CompositionContainer(catalog);
@@ -35,11 +36,11 @@ namespace Tracing
             }
             catch (CompositionException compositionException)
             {
-                throw new MEFTracingLoaderException("Couldn't compose application", compositionException);
+                throw new MEFLoaderException("Couldn't compose application", compositionException);
             }
             if (_tracer is null)
             {
-                throw new MEFTracingLoaderException($"Could not load {typeof(ITracing)}");
+                throw new MEFLoaderException($"Could not load {typeof(ITracing)}");
             }
             else
             {

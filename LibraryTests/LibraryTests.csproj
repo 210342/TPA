@@ -69,6 +69,8 @@
     <Compile Include="Data\Model\TypeMetadataTests.cs" />
     <Compile Include="Data\Model\AssemblyMetadataTests.cs" />
     <Compile Include="Data\ReflectorTests.cs" />
+    <Compile Include="Logic\MEFProviders\PersistanceProviderTests.cs" />
+    <Compile Include="Logic\MEFProviders\TracingProviderTests.cs" />
     <Compile Include="Logic\TreeView\TreeViewItemTests.cs" />
     <Compile Include="Logic\ViewModel\ViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +83,10 @@
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{df4c29a8-dc9d-4abc-8b61-229495dd2c37}</Project>
       <Name>Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Persistance\Persistance.csproj">
+      <Project>{82468f99-b386-4419-8db0-fca10b12699e}</Project>
+      <Name>Persistance</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tracing\Tracing.csproj">
       <Project>{552a1500-eafa-4239-a91a-e3d62593378c}</Project>
