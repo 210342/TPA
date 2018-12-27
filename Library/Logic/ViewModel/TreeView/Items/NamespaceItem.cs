@@ -1,4 +1,5 @@
 ﻿using Library.Model;
+using ModelContract;
 using System.Linq;
 
 namespace Library.Logic.ViewModel

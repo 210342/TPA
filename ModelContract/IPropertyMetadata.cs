@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Model
+namespace ModelContract
 {
-    public interface IMetadata
+    public interface IPropertyMetadata : IMetadata
     {
-        string Name { get; }
-        IEnumerable<IMetadata> Children { get; }
+        ITypeMetadata MyType { get; }
     }
 }

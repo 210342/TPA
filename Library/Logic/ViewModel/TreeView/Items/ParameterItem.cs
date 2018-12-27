@@ -1,4 +1,5 @@
 ﻿using Library.Model;
+using ModelContract;
 
 namespace Library.Logic.ViewModel
 {
@@ -15,7 +16,7 @@ namespace Library.Logic.ViewModel
 
         public ParameterItem(ParameterMetadata source) : base(source)
         {
-            _details = $"Parameter: {source.Name} : {source.Type.Name}";
+            _details = $"Parameter: {source.Name} : {source.TypeMetadata.Name}";
         }
 
         protected override TreeViewItem GetChildOfType(IMetadata metadata)

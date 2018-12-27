@@ -29,8 +29,10 @@ namespace LibraryTests.Logic.TreeView.Tests
         public void TreeViewItemChildrenNotNullOnExpanded()
         {
             TypeMetadata typeMeta = new TypeMetadata(typeof(Type));
-            var tvi = new TypeItem(typeMeta);
-            tvi.IsExpanded = true;
+            var tvi = new TypeItem(typeMeta)
+            {
+                IsExpanded = true
+            };
             Assert.IsNotNull(tvi.Children);
         }
         [TestMethod]

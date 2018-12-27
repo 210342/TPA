@@ -62,19 +62,13 @@
     <Compile Include="Logic\MEFProviders\PersistanceProvider.cs" />
     <Compile Include="Logic\MEFProviders\TracingProvider.cs" />
     <Compile Include="Model\AttributeMetadata.cs" />
-    <Compile Include="Model\Enums\AbstractENum.cs" />
-    <Compile Include="Model\Enums\AccessLevel.cs" />
     <Compile Include="Model\AssemblyMetadata.cs" />
     <Compile Include="Model\ExtensionMethods.cs" />
-    <Compile Include="Model\IMetadata.cs" />
     <Compile Include="Model\MethodMetadata.cs" />
     <Compile Include="Model\NamespaceMetadata.cs" />
     <Compile Include="Model\ParameterMetadata.cs" />
     <Compile Include="Model\PropertyMetadata.cs" />
-    <Compile Include="Model\Enums\SealedEnum.cs" />
-    <Compile Include="Model\Enums\StaticEnum.cs" />
     <Compile Include="Model\TypeMetadata.cs" />
-    <Compile Include="Model\Enums\VirtualEnum.cs" />
     <Compile Include="Data\Reflector.cs" />
     <Compile Include="Data\DataLoadedDictionary.cs" />
     <Compile Include="Logic\ViewModel\TreeView\Items\PropertyItem.cs" />
@@ -90,6 +84,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ModelContract\ModelContract.csproj">
+      <Project>{3a99a3ea-c964-4cb2-8747-8f9a10689cc7}</Project>
+      <Name>ModelContract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Persistance\Persistance.csproj">
       <Project>{82468f99-b386-4419-8db0-fca10b12699e}</Project>
       <Name>Persistance</Name>

@@ -1,10 +1,11 @@
 ﻿using Library.Model;
+using ModelContract;
 
 namespace Library.Logic.ViewModel
 {
     public class TypeItem : TreeViewItem
     {
-        private string _details;
+        private readonly string _details;
         public override string Details
         {
             get
@@ -21,7 +22,7 @@ namespace Library.Logic.ViewModel
                 foreach (var intf in source.ImplementedInterfaces)
                     _details += $"{intf.Name}, ";
             }
-            _details += $"\nType Kind: {source.MyTypeKind.ToString()}\n";
+            _details += $"\nType Kind: {source.TypeKind.ToString()}\n";
             _details += $"Modifiers: {source.ModifiersString()}.";
         }
 

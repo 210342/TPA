@@ -1,4 +1,5 @@
 ﻿using Library.Model;
+using ModelContract;
 
 namespace Library.Logic.ViewModel
 {
@@ -14,7 +15,7 @@ namespace Library.Logic.ViewModel
         }
         public PropertyItem(PropertyMetadata source) : base(source)
         {
-            _details = $"Property: {source.Name} : {source.Type.Name}";
+            _details = $"Property: {source.Name} : {source.MyType.Name}";
         }
 
         protected override TreeViewItem GetChildOfType(IMetadata metadata)

@@ -84,6 +84,10 @@
       <Project>{df4c29a8-dc9d-4abc-8b61-229495dd2c37}</Project>
       <Name>Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ModelContract\ModelContract.csproj">
+      <Project>{3a99a3ea-c964-4cb2-8747-8f9a10689cc7}</Project>
+      <Name>ModelContract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Persistance\Persistance.csproj">
       <Project>{82468f99-b386-4419-8db0-fca10b12699e}</Project>
       <Name>Persistance</Name>

@@ -1,10 +1,11 @@
 ﻿using Library.Model;
+using ModelContract;
 
 namespace Library.Logic.ViewModel
 {
     public class AssemblyItem : TreeViewItem
     {
-        private string _details;
+        private readonly string _details;
         public override string Details {
             get
             {

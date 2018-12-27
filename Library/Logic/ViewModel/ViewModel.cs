@@ -16,6 +16,7 @@ using System.Reflection;
 using Persistance;
 using Library.Logic.MEFProviders;
 using Library.Logic.MEFProviders.Exceptions;
+using ModelContract;
 
 namespace Library.Logic.ViewModel
 {

@@ -54,16 +54,16 @@ namespace LibraryTests.Data.Model
         public void EmitReferenceOfGeneric()
         {
             var obj = TypeMetadata.EmitReference(typeof(List<object>));
-            var notNull = obj.GetType().GetField("m_GenericArguments", 
-                BindingFlags.NonPublic | BindingFlags.Instance);
+            var notNull = obj.GetType().GetProperty("GenericArguments", 
+                BindingFlags.Public | BindingFlags.Instance);
             Assert.IsNotNull(notNull.GetValue(obj));
         }
         [TestMethod]
         public void EmitReferenceOfNonGeneric()
         {
             var obj = TypeMetadata.EmitReference(typeof(object));
-            var Null = obj.GetType().GetField("m_GenericArguments",
-                BindingFlags.NonPublic | BindingFlags.Instance);
+            var Null = obj.GetType().GetProperty("GenericArguments",
+                BindingFlags.Public | BindingFlags.Instance);
             
             Assert.IsNull(Null.GetValue(obj));
         }

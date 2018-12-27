@@ -1,7 +1,7 @@
 ﻿
-namespace Library.Model
+namespace ModelContract
 {
-    internal enum AccessLevel
+    public enum AccessLevelEnum
     {
         IsPublic, IsProtected, IsProtectedInternal, IsPrivate
     }

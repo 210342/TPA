@@ -3,13 +3,51 @@ using System.Reflection;
 using System.Linq;
 using System;
 using System.Runtime.Serialization;
+using ModelContract;
 
 namespace Library.Model
 {
-    [DataContract(Name = "Property")]
-    [Serializable]
-    public class PropertyMetadata : IMetadata
+    public class PropertyMetadata : IPropertyMetadata
     {
+        #region properties
+        public string Name { get; }
+        public ITypeMetadata MyType { get; private set; }
+        public IEnumerable<IMetadata> Children
+        {
+
+            get
+            {
+                return new[] { MyType };
+            }
+            set
+            {
+                foreach (var elem in value)
+                {
+                    MyType = (TypeMetadata)elem;
+                    break;
+                }
+            }
+        }
+        public int SavedHash { get; }
+
+        #endregion
+
+        #region constructors
+
+        private PropertyMetadata(string propertyName, TypeMetadata propertyType)
+        {
+            if (propertyName == null || propertyType == null)
+                throw new ArgumentNullException("Neither propertyName or TypeMetadata can be null.");
+            Name = propertyName;
+            MyType = propertyType;
+            SavedHash = 23;
+            SavedHash *= 31 + Name.GetHashCode();
+            SavedHash *= 31 + MyType.GetHashCode();
+        }
+        internal PropertyMetadata() { }
+
+        #endregion
+
         internal static IEnumerable<PropertyMetadata> EmitProperties(IEnumerable<PropertyInfo> props)
         {
             return from prop in props
@@ -18,67 +56,28 @@ namespace Library.Model
         }
 
         #region private
-        [DataMember(Name = "Name")]
-        private string m_Name;
-        [DataMember(Name = "Type")]
-        private TypeMetadata m_TypeMetadata;
 
-        public string Name => m_Name;
-        public TypeMetadata Type => m_TypeMetadata;
-        [DataMember(Name = "Children")]
-        public IEnumerable<IMetadata> Children
-        {
 
-            get
-            {
-                return new[] { m_TypeMetadata
-    };
-            }
-            set
-            {
-                foreach (var elem in value)
-                {
-                    this.m_TypeMetadata = (TypeMetadata)elem;
-                    break;
-                }
-            }
-        }
-
-        private PropertyMetadata(string propertyName, TypeMetadata propertyType)
-        {
-            if (propertyName == null || propertyType == null)
-                throw new ArgumentNullException("Neither propertyName or TypeMetadata can be null.");
-            m_Name = propertyName;
-            m_TypeMetadata = propertyType;
-            savedHash = 23;
-            savedHash *= 31 + m_Name.GetHashCode();
-            savedHash *= 31 + m_TypeMetadata.GetHashCode();
-        }
-        internal PropertyMetadata()
-        {
-        }
         #endregion
-        [DataMember(Name = "SavedHash")]
-        private int savedHash;
         public override int GetHashCode()
         {
-            return savedHash;
+            return SavedHash;
         }
         public override bool Equals(object obj)
         {
             if (this.GetType() != obj.GetType())
                 return false;
             PropertyMetadata pm = ((PropertyMetadata)obj);
-            if (this.m_Name == pm.m_Name)
+            if (this.Name == pm.Name)
             {
-                if (m_TypeMetadata != pm.m_TypeMetadata)
+                if (MyType != pm.MyType)
                     return false;
             }
             return false;
         }
         public override string ToString()
         {
-            return m_Name + " : " + m_TypeMetadata.Name + "<Property>";
+            return Name + " : " + MyType.Name + "<Property>";
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Library.Model;
+using ModelContract;
 using System.Linq;
 
 namespace Library.Logic.ViewModel
@@ -26,7 +27,7 @@ namespace Library.Logic.ViewModel
                 _details += $"(";
                 foreach (var param in source.Parameters)
                 {
-                    _details += $"{param.Name} : {param.Type}, ";
+                    _details += $"{param.Name} : {param.TypeMetadata}, ";
                 }
                 _details = _details.Remove(_details.Length - 2, 1) + ")\n";
             }

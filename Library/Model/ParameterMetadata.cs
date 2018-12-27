@@ -1,73 +1,68 @@
-﻿using System;
+﻿using ModelContract;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Library.Model
 {
-    [DataContract(Name = "Parameter")]
-    [Serializable]
-    public class ParameterMetadata : IMetadata
+    public class ParameterMetadata : IParameterMetadata
     {
-        public ParameterMetadata(string name, TypeMetadata typeMetadata)
+        public string Name { get; }
+        public ITypeMetadata TypeMetadata { get; private set; }
+        public int SavedHash { get; }
+        public IEnumerable<IMetadata> Children
         {
-            if (name == null || typeMetadata == null)
-                throw new ArgumentNullException("Neither name or TypeMetadata can be null.");
-            this.m_Name = name;
-            this.m_TypeMetadata = typeMetadata;
-            savedHash = 17;
-            savedHash *= 31 + m_Name.GetHashCode();
-            savedHash *= 31 + m_TypeMetadata.GetHashCode();
-        }
-        internal ParameterMetadata()
-        {
-        }
-        //private vars
-        [DataMember(Name = "Name")]
-        private string m_Name;
-        [DataMember(Name = "Type")]
-        private TypeMetadata m_TypeMetadata;
-
-        public TypeMetadata Type { get { return m_TypeMetadata; } }
-        public string Name => m_Name;
-
-        //[DataMember(Name = "Children")]
-        public IEnumerable<IMetadata> Children {
-
             get
             {
-                return new[] { m_TypeMetadata };
+                return new[] { TypeMetadata };
             }
             set
             {
-                foreach(var elem in value)
+                foreach (var elem in value)
                 {
-                    this.m_TypeMetadata = (TypeMetadata)elem;
+                    this.TypeMetadata = (TypeMetadata)elem;
                     break;
                 }
             }
         }
-        [DataMember(Name = "SavedHash")]
-        private int savedHash;
+
+        public ParameterMetadata(string name, TypeMetadata typeMetadata)
+        {
+            if (name == null || typeMetadata == null)
+                throw new ArgumentNullException("Neither name or TypeMetadata can be null.");
+            this.Name = name;
+            this.TypeMetadata = typeMetadata;
+            SavedHash = 17;
+            SavedHash *= 31 + Name.GetHashCode();
+            SavedHash *= 31 + TypeMetadata.GetHashCode();
+        }
+        internal ParameterMetadata() { }
+
+        #region object overrides
 
         public override int GetHashCode()
         {
-            return savedHash;
+            return SavedHash;
         }
+
         public override bool Equals(object obj)
         {
             if (this.GetType() != obj.GetType())
                 return false;
             ParameterMetadata pm = ((ParameterMetadata)obj);
-            if (this.m_Name == pm.m_Name)
+            if (this.Name == pm.Name)
             {
-                if (m_TypeMetadata !=pm.m_TypeMetadata)
+                if (TypeMetadata !=pm.TypeMetadata)
                     return false;
             }
             return false;
         }
+
         public override string ToString()
         {
-            return m_Name + ": " + m_TypeMetadata.Name;
+            return Name + ": " + TypeMetadata.Name;
         }
+
+        #endregion
     }
 }

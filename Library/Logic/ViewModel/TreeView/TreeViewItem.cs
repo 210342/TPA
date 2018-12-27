@@ -8,6 +8,7 @@
 
 using Library.Data;
 using Library.Model;
+using ModelContract;
 using System.Collections.Generic;
 
 namespace Library.Logic.ViewModel
