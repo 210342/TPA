@@ -2,6 +2,7 @@
 using Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks;
 using System;
 using System.ComponentModel.Composition;
+using System.IO;
 using Tracing;
 
 namespace SemanticTracing
@@ -11,14 +12,27 @@ namespace SemanticTracing
     {
         private readonly SinkSubscription<FlatFileSink> _subscription;
 
-        public string FilePath { get; }
+        public string FilePath { get; private set; }
 
         public FileSemanticTracing()
         {
-            FilePath = $"{nameof(FileSemanticTracing)}.log";
+            FindViableFilePath();
             ObservableEventListener listener = new ObservableEventListener();
             listener.EnableEvents(SemanticLoggingEventSource.Log, System.Diagnostics.Tracing.EventLevel.LogAlways, Keywords.All);
             _subscription = listener.LogToFlatFile(FilePath);
+        }
+
+        void FindViableFilePath()
+        {
+            bool notViable = true;
+            while(notViable)
+            {
+                FilePath = $"{nameof(FileSemanticTracing)} {DateTime.Now.Ticks}.log";
+                if(!File.Exists(FilePath))
+                {
+                    notViable = false;
+                }
+            }
         }
 
         public void Dispose()
@@ -28,14 +42,17 @@ namespace SemanticTracing
                 _subscription.Dispose();
             }
         }
+
         public void LogFailure(string message)
         {
             SemanticLoggingEventSource.Log.Failure(message);
         }
+
         public void LogSuccess(string message)
         {
             SemanticLoggingEventSource.Log.Success(message);
         }
+
         public void LogLoadingModel(string loadedAssemblyName)
         {
             SemanticLoggingEventSource.Log.LoadingModel(loadedAssemblyName);

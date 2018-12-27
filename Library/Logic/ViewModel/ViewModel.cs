@@ -119,10 +119,11 @@ namespace Library.Logic.ViewModel
                     Tracer = tracingProvider.ProvideTracer();
                 }
             }
-            catch(MEFLoaderException)
+            catch(MEFLoaderException ex)
             {
                 // Dialog Box
                 Tracing = false;
+                throw ex;
             }
         }
 
@@ -139,9 +140,10 @@ namespace Library.Logic.ViewModel
                     Persister = persistanceProvider.ProvidePersister();
                 }
             }
-            catch (MEFLoaderException)
+            catch (MEFLoaderException ex)
             {
                 // Dialog Box
+                throw ex;
             }
         }
 
