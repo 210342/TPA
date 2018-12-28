@@ -9,6 +9,24 @@ namespace Library.Model
 {
     public class TypeMetadata : ITypeMetadata
     {
+        #region properties
+        public string Name { get; }
+        public string NamespaceName { get; }
+        public ITypeMetadata BaseType { get; }
+        public IEnumerable<ITypeMetadata> GenericArguments { get; }
+        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; }
+        public TypeKindEnum TypeKind { get; }
+        public IEnumerable<IAttributeMetadata> Attributes { get; }
+        public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; }
+        public IEnumerable<ITypeMetadata> NestedTypes { get; }
+        public IEnumerable<IPropertyMetadata> Properties { get; }
+        public ITypeMetadata DeclaringType { get; }
+        public IEnumerable<IMethodMetadata> Methods { get; }
+        public IEnumerable<IMethodMetadata> Constructors { get; }
+        public IEnumerable<IMetadata> Children { get; private set; }
+        public int SavedHash { get; }
+        #endregion
+
         #region constructors
         internal TypeMetadata(Type type)
         {
@@ -37,6 +55,82 @@ namespace Library.Model
 
         internal TypeMetadata()
         {
+        }
+
+        public TypeMetadata(ITypeMetadata typeMetadata)
+        {
+            Name = typeMetadata.Name;
+            SavedHash = typeMetadata.SavedHash;
+
+            // Base type
+            if(typeMetadata.BaseType is null)
+            {
+                BaseType = null;
+            }
+            else if (MappingDictionary.AlreadyMapped.TryGetValue(typeMetadata.BaseType.SavedHash, out IMetadata item))
+            {
+                BaseType = item as ITypeMetadata;
+            }
+            else
+            {
+                ITypeMetadata newType = new TypeMetadata(typeMetadata.BaseType);
+                BaseType = newType;
+                MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+            }
+
+            // Generic Arguments
+            if(typeMetadata.GenericArguments is null)
+            {
+                GenericArguments = null;
+            }
+            else
+            {
+                List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
+                foreach(ITypeMetadata genericArgument in typeMetadata.GenericArguments)
+                {
+                    if(MappingDictionary.AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata item))
+                    {
+                        genericArguments.Add(item as ITypeMetadata);
+                    }
+                    else
+                    {
+                        ITypeMetadata newType = new TypeMetadata(genericArgument);
+                        genericArguments.Add(newType);
+                        MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                    }
+                }
+                GenericArguments = genericArguments;
+            }
+
+            // Modifiers
+            Modifiers = typeMetadata.Modifiers;
+
+            // Type kind
+            TypeKind = typeMetadata.TypeKind;
+
+            // Attributes
+            List<IAttributeMetadata> attributes = new List<IAttributeMetadata>();
+            foreach(IAttributeMetadata attribute in typeMetadata.Attributes)
+            {
+                if(MappingDictionary.AlreadyMapped.TryGetValue(attribute.SavedHash, out IMetadata item))
+                {
+                    attributes.Add(item as IAttributeMetadata);
+                }
+                else
+                {
+                    //IAttributeMetadata newAttribute = new AttributeMetadata(attribute);
+                    //attributes.Add(newAttribute);
+                    //MappingDictionary.AlreadyMapped.Add(newAttribute.SavedHash, newAttribute);
+                }
+            }
+            Attributes = attributes;
+
+            // Interfaces
+            List<ITypeMetadata> interafaces = new List<ITypeMetadata>();
+            foreach(ITypeMetadata implementedInterface in typeMetadata.ImplementedInterfaces)
+            {
+                //if(MappingDictionary.AlreadyMapped.TryGetValue())
+            }
         }
 
         private TypeMetadata(string typeName, string namespaceName, int hash)
@@ -98,24 +192,6 @@ namespace Library.Model
         {
             return from Type _argument in arguments select EmitReference(_argument);
         }
-        #endregion
-
-        #region properties
-        public string Name { get; }
-        public string NamespaceName { get; }
-        public ITypeMetadata BaseType { get; }
-        public IEnumerable<ITypeMetadata> GenericArguments { get; }
-        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; }
-        public TypeKindEnum TypeKind { get; }
-        public IEnumerable<IAttributeMetadata> Attributes { get; }
-        public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; } 
-        public IEnumerable<ITypeMetadata> NestedTypes { get; }
-        public IEnumerable<IPropertyMetadata> Properties { get; }
-        public ITypeMetadata DeclaringType { get; }
-        public IEnumerable<IMethodMetadata> Methods { get; }
-        public IEnumerable<IMethodMetadata> Constructors { get; }
-        public IEnumerable<IMetadata> Children { get; private set; }
-        public int SavedHash { get; }
         #endregion
 
         #region methods

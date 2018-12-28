@@ -1,13 +1,4 @@
-﻿//____________________________________________________________________________
-//
-//  Copyright (C) 2018, Mariusz Postol LODZ POLAND.
-//
-//  To be in touch join the community at GITTER: https://gitter.im/mpostol/TP
-//  Modified for custom needs by Adrian Fijalkowski.
-//____________________________________________________________________________
-
-using Library.Data;
-using Library.Model;
+﻿using Library.Data;
 using ModelContract;
 using System.Collections.Generic;
 

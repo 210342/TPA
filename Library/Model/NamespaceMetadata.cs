@@ -24,6 +24,28 @@ namespace Library.Model
         {
         }
 
+        public NamespaceMetadata(INamespaceMetadata namespaceMetadata)
+        {
+            Name = namespaceMetadata.Name;
+            SavedHash = namespaceMetadata.SavedHash;
+
+            List<ITypeMetadata> types = new List<ITypeMetadata>();
+            foreach(ITypeMetadata child in namespaceMetadata.Types)
+            {
+                if (MappingDictionary.AlreadyMapped.TryGetValue(child.SavedHash, out IMetadata item))
+                {
+                    types.Add(item as ITypeMetadata);
+                }
+                else
+                {
+                    ITypeMetadata newType = new TypeMetadata(child);
+                    types.Add(newType);
+                    MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                }
+            }
+            Types = types;
+        }
+
         public override int GetHashCode()
         {
             return SavedHash;

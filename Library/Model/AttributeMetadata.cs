@@ -24,6 +24,7 @@ namespace Library.Model
         {
             return SavedHash;
         }
+
         public override bool Equals(object obj)
         {
             if (this.GetType() != obj.GetType())

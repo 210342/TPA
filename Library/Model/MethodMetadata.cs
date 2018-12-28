@@ -46,11 +46,9 @@ namespace Library.Model
         }
         internal MethodMetadata() { }
 
-        [OnDeserialized]
         private void FillChildren(StreamingContext context)
         {
-            List<IMetadata> elems = new List<IMetadata>();
-            elems.Add(ReturnType);
+            List<IMetadata> elems = new List<IMetadata> { ReturnType };
             elems.AddRange(Parameters);
             Children = elems;
         }
