@@ -31,12 +31,6 @@ namespace Serializing
         public bool IsInitialised { get; private set; } = false;
         public IEnumerable<Type> KnownTypes { get; set; }
 
-        /*
-         * TODO:
-         * Create new model for serialization  
-         * After that serialization using plugin will be possible
-         * Because we won't have to provide known classes for serializer.
-         */
         public XmlModelSerializer()
         {
         }

@@ -104,8 +104,8 @@ namespace Library.Logic.ViewModel
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
             OpenFileCommand = new RelayCommand(() => OpenFile(OpenFileSourceProvider));
-            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider), () => Persister != null && Persister is ISerializer);
-            LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => Persister != null && Persister is ISerializer);
+            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider), () => Persister != null && !(ObjectsList.First() is null));
+            LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => Persister != null);
         }
 
         private void ImportTracer()
@@ -167,6 +167,7 @@ namespace Library.Logic.ViewModel
             {
                 TreeViewItem item = new AssemblyItem((AssemblyMetadata)LoadedAssemblyRepresentation);
                 ObjectsList.Add(item);
+                SaveModel.RaiseCanExecuteChanged();
                 ObjectSelected = item;
             }
             if (Tracing)
@@ -200,7 +201,7 @@ namespace Library.Logic.ViewModel
                     {
                         if(!serializer.IsInitialised)
                         {
-                            List<Type> types = new List<Type>(Enumerable.Repeat(typeof(List<IMetadata>), 1));
+                            List<Type> types = new List<Type>(Enumerable.Repeat(typeof(IMetadata), 1));
                             IEnumerable<Type> model = from type in typeof(SerializationModel.SerializationAssemblyMetadata).Assembly.GetTypes()
                                                       where typeof(IMetadata).IsAssignableFrom(type) && !type.IsInterface
                                                       select type;
@@ -209,12 +210,15 @@ namespace Library.Logic.ViewModel
                             serializer.NodeType = typeof(IMetadata);
                             serializer.InitialiseSerialization();
                         }
+                        SaveModel.RaiseCanExecuteChanged();
                         serializer.SourceName = filePathProvider.GetFilePath();
-                        IEnumerable<IMetadata> objects = from TreeViewItem item in ObjectsList
-                                                         select item.ModelObject;
                         Task.Run(() =>
                         {
-                            serializer.Save(objects.ToList());
+                            IAssemblyMetadata graph = new ModelMapper().Map(
+                                root: ObjectsList.First().ModelObject as IAssemblyMetadata, 
+                                model: typeof(SerializationModel.SerializationAssemblyMetadata).Assembly
+                                );
+                            serializer.Save(graph);
                             serializer.SerializationStream.Close();
                         });
                     }
@@ -257,15 +261,16 @@ namespace Library.Logic.ViewModel
                         Dispatcher.CurrentDispatcher.BeginInvoke((Action)delegate ()
                         {
                             object result = serializer.Load();
+
                             serializer.SerializationStream.Close();
-                            if (result is IEnumerable<IMetadata>)
+                            if (result is IAssemblyMetadata)
                             {
+                                IAssemblyMetadata graph = new ModelMapper().Map(
+                                    root: result as IAssemblyMetadata,
+                                    model: typeof(AssemblyMetadata).Assembly
+                                    );
                                 ObjectsList.Clear();
-                                IEnumerable<IMetadata> objectsRead = result as IEnumerable<IMetadata>;
-                                foreach (IMetadata item in objectsRead)
-                                {
-                                    ObjectsList.Add(new AssemblyItem(item as AssemblyMetadata));
-                                }
+                                ObjectsList.Add(new AssemblyItem(graph as AssemblyMetadata));
                                 LoadedAssembly = "Model deserialized";
                             }
                         });

@@ -13,7 +13,7 @@ namespace GraphicalUserInterface
         internal SaveFileDialogProvider()
         {
             dialog.DefaultExt = "xml";
-            dialog.Filter = "XML file (*xml)|*xml|Dynamically linked library (*dll)|*dll|All Files(*.*)|*.*";
+            dialog.Filter = "XML file (*.xml)|*.xml|All Files(*.*)|*.*";
         }
 
         public bool GetAccess()

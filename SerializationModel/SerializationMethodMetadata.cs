@@ -8,30 +8,23 @@ using System.Threading.Tasks;
 
 namespace SerializationModel
 {
-    [DataContract]
-    [KnownType(typeof(SerializationAssemblyMetadata))]
-    [KnownType(typeof(SerializationAttributeMetadata))]
-    [KnownType(typeof(SerializationMethodMetadata))]
-    [KnownType(typeof(SerializationNamespaceMetadata))]
-    [KnownType(typeof(SerializationParameterMetadata))]
-    [KnownType(typeof(SerializationPropertyMetadata))]
-    [KnownType(typeof(SerializationTypeMetadata))]
+    [DataContract(Name = "Method")]
     public class SerializationMethodMetadata : IMethodMetadata
     {
-        [DataMember]
-        public IEnumerable<ITypeMetadata> GenericArguments { get; }
-        [DataMember]
-        public ITypeMetadata ReturnType { get; }
-        [DataMember]
-        public bool IsExtension { get; }
-        [DataMember]
-        public IEnumerable<IParameterMetadata> Parameters { get; }
-        [DataMember]
-        public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; }
-        [DataMember]
-        public string Name { get; }
-        [DataMember]
-        public int SavedHash { get; }
+        [DataMember(Name = "GenericArguments")]
+        public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
+        [DataMember(Name = "ReturnType")]
+        public ITypeMetadata ReturnType { get; private set; }
+        [DataMember(Name = "IsExtension")]
+        public bool IsExtension { get; private set; }
+        [DataMember(Name = "Parameters")]
+        public IEnumerable<IParameterMetadata> Parameters { get; private set; }
+        [DataMember(Name = "Modifiers")]
+        public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; private set; }
+        [DataMember(Name = "Name")]
+        public string Name { get; private set; }
+        [DataMember(Name = "Hash")]
+        public int SavedHash { get; private set; }
         public IEnumerable<IMetadata> Children { get; private set; }
 
         public SerializationMethodMetadata(IMethodMetadata methodMetadata)

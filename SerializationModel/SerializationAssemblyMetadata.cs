@@ -8,22 +8,15 @@ using System.Threading.Tasks;
 
 namespace SerializationModel
 {
-    [DataContract]
-    [KnownType(typeof(SerializationAssemblyMetadata))]
-    [KnownType(typeof(SerializationAttributeMetadata))]
-    [KnownType(typeof(SerializationMethodMetadata))]
-    [KnownType(typeof(SerializationNamespaceMetadata))]
-    [KnownType(typeof(SerializationParameterMetadata))]
-    [KnownType(typeof(SerializationPropertyMetadata))]
-    [KnownType(typeof(SerializationTypeMetadata))]
+    [DataContract(Name = "Assembly")]
     public class SerializationAssemblyMetadata : IAssemblyMetadata
     {
-        [DataMember]
-        public IEnumerable<INamespaceMetadata> Namespaces { get; }
-        [DataMember]
-        public string Name { get; }
-        [DataMember]
-        public int SavedHash { get; }
+        [DataMember(Name = "Namespaces")]
+        public IEnumerable<INamespaceMetadata> Namespaces { get; private set; }
+        [DataMember(Name = "Name")]
+        public string Name { get; private set; }
+        [DataMember(Name = "Hash")]
+        public int SavedHash { get; private set; }
         public IEnumerable<IMetadata> Children { get { return Namespaces; } }
 
         public SerializationAssemblyMetadata(IAssemblyMetadata assemblyMetadata)

@@ -8,44 +8,37 @@ using System.Threading.Tasks;
 
 namespace SerializationModel
 {
-    [DataContract]
-    [KnownType(typeof(SerializationAssemblyMetadata))]
-    [KnownType(typeof(SerializationAttributeMetadata))]
-    [KnownType(typeof(SerializationMethodMetadata))]
-    [KnownType(typeof(SerializationNamespaceMetadata))]
-    [KnownType(typeof(SerializationParameterMetadata))]
-    [KnownType(typeof(SerializationPropertyMetadata))]
-    [KnownType(typeof(SerializationTypeMetadata))]
+    [DataContract(Name = "Type")]
     public class SerializationTypeMetadata : ITypeMetadata
     {
-        [DataMember]
-        public string NamespaceName { get; }
-        [DataMember]
-        public ITypeMetadata BaseType { get; }
-        [DataMember]
-        public IEnumerable<ITypeMetadata> GenericArguments { get; }
-        [DataMember]
-        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; }
-        [DataMember]
-        public TypeKindEnum TypeKind { get; }
-        [DataMember]
-        public IEnumerable<IAttributeMetadata> Attributes { get; }
-        [DataMember]
-        public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; }
-        [DataMember]
-        public IEnumerable<ITypeMetadata> NestedTypes { get; }
-        [DataMember]
-        public IEnumerable<IPropertyMetadata> Properties { get; }
-        [DataMember]
-        public ITypeMetadata DeclaringType { get; }
-        [DataMember]
-        public IEnumerable<IMethodMetadata> Methods { get; }
-        [DataMember]
-        public IEnumerable<IMethodMetadata> Constructors { get; }
-        [DataMember]
-        public string Name { get; }
-        [DataMember]
-        public int SavedHash { get; }
+        [DataMember(Name = "NamespaceName")]
+        public string NamespaceName { get; private set; }
+        [DataMember(Name = "BaseType")]
+        public ITypeMetadata BaseType { get; private set; }
+        [DataMember(Name = "GenericArguments")]
+        public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
+        [DataMember(Name = "Modifiers")]
+        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; private set; }
+        [DataMember(Name = "TypeKind")]
+        public TypeKindEnum TypeKind { get; private set; }
+        [DataMember(Name = "Attributes")]
+        public IEnumerable<IAttributeMetadata> Attributes { get; private set; }
+        [DataMember(Name = "Interfaces")]
+        public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; private set; }
+        [DataMember(Name = "NestedTypes")]
+        public IEnumerable<ITypeMetadata> NestedTypes { get; private set; }
+        [DataMember(Name = "Properties")]
+        public IEnumerable<IPropertyMetadata> Properties { get; private set; }
+        [DataMember(Name = "DeclaringType")]
+        public ITypeMetadata DeclaringType { get; private set; }
+        [DataMember(Name = "Methods")]
+        public IEnumerable<IMethodMetadata> Methods { get; private set; }
+        [DataMember(Name = "Constructors")]
+        public IEnumerable<IMethodMetadata> Constructors { get; private set; }
+        [DataMember(Name = "Name")]
+        public string Name { get; private set; }
+        [DataMember(Name = "Hash")]
+        public int SavedHash { get; private set; }
         public IEnumerable<IMetadata> Children { get; private set; }
 
         public SerializationTypeMetadata(ITypeMetadata typeMetadata)
