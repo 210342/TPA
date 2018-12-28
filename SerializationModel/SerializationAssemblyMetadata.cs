@@ -9,6 +9,13 @@ using System.Threading.Tasks;
 namespace SerializationModel
 {
     [DataContract]
+    [KnownType(typeof(SerializationAssemblyMetadata))]
+    [KnownType(typeof(SerializationAttributeMetadata))]
+    [KnownType(typeof(SerializationMethodMetadata))]
+    [KnownType(typeof(SerializationNamespaceMetadata))]
+    [KnownType(typeof(SerializationParameterMetadata))]
+    [KnownType(typeof(SerializationPropertyMetadata))]
+    [KnownType(typeof(SerializationTypeMetadata))]
     public class SerializationAssemblyMetadata : IAssemblyMetadata
     {
         [DataMember]
@@ -21,9 +28,23 @@ namespace SerializationModel
 
         public SerializationAssemblyMetadata(IAssemblyMetadata assemblyMetadata)
         {
-            Namespaces = assemblyMetadata.Namespaces;
             Name = assemblyMetadata.Name;
             SavedHash = assemblyMetadata.SavedHash;
+            List<INamespaceMetadata> namespaces = new List<INamespaceMetadata>();
+            foreach (INamespaceMetadata child in assemblyMetadata.Namespaces)
+            {
+                if (MappingDictionary.AlreadyMapped.TryGetValue(child.SavedHash, out IMetadata item))
+                {
+                    namespaces.Add(item as INamespaceMetadata);
+                }
+                else
+                {
+                    INamespaceMetadata newNamespace = new SerializationNamespaceMetadata(child);
+                    namespaces.Add(newNamespace);
+                    MappingDictionary.AlreadyMapped.Add(newNamespace.SavedHash, newNamespace);
+                }
+            }
+            Namespaces = namespaces;
         }
     }
 }

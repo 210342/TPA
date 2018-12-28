@@ -9,6 +9,13 @@ using System.Threading.Tasks;
 namespace SerializationModel
 {
     [DataContract]
+    [KnownType(typeof(SerializationAssemblyMetadata))]
+    [KnownType(typeof(SerializationAttributeMetadata))]
+    [KnownType(typeof(SerializationMethodMetadata))]
+    [KnownType(typeof(SerializationNamespaceMetadata))]
+    [KnownType(typeof(SerializationParameterMetadata))]
+    [KnownType(typeof(SerializationPropertyMetadata))]
+    [KnownType(typeof(SerializationTypeMetadata))]
     public class SerializationAttributeMetadata : IAttributeMetadata
     {
         [DataMember]

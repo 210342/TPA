@@ -48,6 +48,9 @@
     <Compile Include="SerializationAttributeMetadata.cs" />
     <Compile Include="SerializationMethodMetadata.cs" />
     <Compile Include="SerializationNamespaceMetadata.cs" />
+    <Compile Include="SerializationParameterMetadata.cs" />
+    <Compile Include="SerializationPropertyMetadata.cs" />
+    <Compile Include="SerializationTypeMetadata.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ModelContract\ModelContract.csproj">

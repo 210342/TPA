@@ -1,64 +1,54 @@
-﻿using Library.Model;
-using ModelContract;
+﻿using ModelContract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Library.Model
+namespace SerializationModel
 {
-    public class TypeMetadata : ITypeMetadata
+    [DataContract]
+    [KnownType(typeof(SerializationAssemblyMetadata))]
+    [KnownType(typeof(SerializationAttributeMetadata))]
+    [KnownType(typeof(SerializationMethodMetadata))]
+    [KnownType(typeof(SerializationNamespaceMetadata))]
+    [KnownType(typeof(SerializationParameterMetadata))]
+    [KnownType(typeof(SerializationPropertyMetadata))]
+    [KnownType(typeof(SerializationTypeMetadata))]
+    public class SerializationTypeMetadata : ITypeMetadata
     {
-        #region properties
-        public string Name { get; }
+        [DataMember]
         public string NamespaceName { get; }
+        [DataMember]
         public ITypeMetadata BaseType { get; }
+        [DataMember]
         public IEnumerable<ITypeMetadata> GenericArguments { get; }
+        [DataMember]
         public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; }
+        [DataMember]
         public TypeKindEnum TypeKind { get; }
+        [DataMember]
         public IEnumerable<IAttributeMetadata> Attributes { get; }
+        [DataMember]
         public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; }
+        [DataMember]
         public IEnumerable<ITypeMetadata> NestedTypes { get; }
+        [DataMember]
         public IEnumerable<IPropertyMetadata> Properties { get; }
+        [DataMember]
         public ITypeMetadata DeclaringType { get; }
+        [DataMember]
         public IEnumerable<IMethodMetadata> Methods { get; }
+        [DataMember]
         public IEnumerable<IMethodMetadata> Constructors { get; }
-        public IEnumerable<IMetadata> Children { get; private set; }
+        [DataMember]
+        public string Name { get; }
+        [DataMember]
         public int SavedHash { get; }
-        #endregion
+        public IEnumerable<IMetadata> Children { get; private set; }
 
-        #region constructors
-        internal TypeMetadata(Type type)
-        {
-            if (type == null)
-                throw new ArgumentNullException("Type can't be null.");
-            NamespaceName = type.Namespace;
-            DeclaringType = EmitDeclaringType(type.DeclaringType);
-            Constructors = MethodMetadata.EmitMethods(type.GetConstructors());
-            Methods = MethodMetadata.EmitMethods(type.GetMethods());
-            NestedTypes = EmitNestedTypes(type.GetNestedTypes());
-            ImplementedInterfaces = EmitImplements(type.GetInterfaces());
-            GenericArguments = !type.IsGenericTypeDefinition ? null : TypeMetadata.EmitGenericArguments(type.GetGenericArguments());
-            Modifiers = EmitModifiers(type);
-            BaseType = EmitExtends(type.BaseType);
-            Properties = PropertyMetadata.EmitProperties(type.GetProperties());
-            TypeKind = GetTypeKind(type);
-            
-            Attributes = new List<AttributeMetadata>();
-            type.GetCustomAttributes(false).Cast<Attribute>().ToList().ForEach( n => 
-                        ((List < AttributeMetadata >) Attributes).Add(new AttributeMetadata(n)));
-            Name = type.Name;
-            //FILL CHILDREN
-            FillChildren(new StreamingContext { });
-            
-            SavedHash = type.GetHashCode();
-        }
-
-        internal TypeMetadata()
-        {
-        }
-
-        public TypeMetadata(ITypeMetadata typeMetadata)
+        public SerializationTypeMetadata(ITypeMetadata typeMetadata)
         {
             Name = typeMetadata.Name;
             SavedHash = typeMetadata.SavedHash;
@@ -75,7 +65,7 @@ namespace Library.Model
             }
             else
             {
-                ITypeMetadata newType = new TypeMetadata(typeMetadata.BaseType);
+                ITypeMetadata newType = new SerializationTypeMetadata(typeMetadata.BaseType);
                 BaseType = newType;
                 MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
             }
@@ -96,7 +86,7 @@ namespace Library.Model
                     }
                     else
                     {
-                        ITypeMetadata newType = new TypeMetadata(genericArgument);
+                        ITypeMetadata newType = new SerializationTypeMetadata(genericArgument);
                         genericArguments.Add(newType);
                         MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
                     }
@@ -126,7 +116,7 @@ namespace Library.Model
                     }
                     else
                     {
-                        IAttributeMetadata newAttribute = new AttributeMetadata(attribute);
+                        IAttributeMetadata newAttribute = new SerializationAttributeMetadata(attribute);
                         attributes.Add(newAttribute);
                         MappingDictionary.AlreadyMapped.Add(newAttribute.SavedHash, newAttribute);
                     }
@@ -150,7 +140,7 @@ namespace Library.Model
                     }
                     else
                     {
-                        ITypeMetadata newInterface = new TypeMetadata(implementedInterface);
+                        ITypeMetadata newInterface = new SerializationTypeMetadata(implementedInterface);
                         interfaces.Add(newInterface);
                         MappingDictionary.AlreadyMapped.Add(newInterface.SavedHash, newInterface);
                     }
@@ -174,7 +164,7 @@ namespace Library.Model
                     }
                     else
                     {
-                        ITypeMetadata newType = new TypeMetadata(nestedType);
+                        ITypeMetadata newType = new SerializationTypeMetadata(nestedType);
                         nestedTypes.Add(newType);
                         MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
                     }
@@ -198,7 +188,7 @@ namespace Library.Model
                     }
                     else
                     {
-                        IPropertyMetadata newProperty = new PropertyMetadata(property);
+                        IPropertyMetadata newProperty = new SerializationPropertyMetadata(property);
                         properties.Add(newProperty);
                         MappingDictionary.AlreadyMapped.Add(newProperty.SavedHash, newProperty);
                     }
@@ -207,17 +197,17 @@ namespace Library.Model
             }
 
             //Declaring type
-            if(typeMetadata.DeclaringType is null)
+            if (typeMetadata.DeclaringType is null)
             {
                 DeclaringType = null;
             }
-            else if(MappingDictionary.AlreadyMapped.TryGetValue(typeMetadata.DeclaringType.SavedHash, out IMetadata item))
+            else if (MappingDictionary.AlreadyMapped.TryGetValue(typeMetadata.DeclaringType.SavedHash, out IMetadata item))
             {
                 DeclaringType = item as ITypeMetadata;
             }
             else
             {
-                ITypeMetadata newType = new TypeMetadata(typeMetadata.DeclaringType);
+                ITypeMetadata newType = new SerializationTypeMetadata(typeMetadata.DeclaringType);
                 DeclaringType = newType;
                 MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
             }
@@ -238,7 +228,7 @@ namespace Library.Model
                     }
                     else
                     {
-                        IMethodMetadata newMethod = new MethodMetadata(method);
+                        IMethodMetadata newMethod = new SerializationMethodMetadata(method);
                         methods.Add(newMethod);
                         MappingDictionary.AlreadyMapped.Add(newMethod.SavedHash, newMethod);
                     }
@@ -263,7 +253,7 @@ namespace Library.Model
                     }
                     else
                     {
-                        IMethodMetadata newMethod = new MethodMetadata(constructor);
+                        IMethodMetadata newMethod = new SerializationMethodMetadata(constructor);
                         constructors.Add(newMethod);
                         MappingDictionary.AlreadyMapped.Add(newMethod.SavedHash, newMethod);
                     }
@@ -274,29 +264,15 @@ namespace Library.Model
             FillChildren(new StreamingContext());
         }
 
-        private TypeMetadata(string typeName, string namespaceName, int hash)
-        {
-            if (typeName == null || namespaceName == null)
-                throw new ArgumentNullException("Type can't be null.");
-            Name = typeName;
-            NamespaceName = namespaceName;
-            SavedHash = hash;
-        }
-        private TypeMetadata(string typeName, string namespaceName, IEnumerable<TypeMetadata> genericArguments, int hash)
-            : this(typeName, namespaceName, hash)
-        {
-            GenericArguments = genericArguments;
-        }
-        #endregion
-
+        [OnDeserialized]
         private void FillChildren(StreamingContext context)
         {
             List<IAttributeMetadata> amList = new List<IAttributeMetadata>();
-            if(Attributes != null)
+            if (Attributes != null)
                 amList.AddRange(Attributes.Select(n => n));
             List<IMetadata> elems = new List<IMetadata>();
             elems.AddRange(amList);
-            if(ImplementedInterfaces != null)
+            if (ImplementedInterfaces != null)
                 elems.AddRange(ImplementedInterfaces);
             if (BaseType != null)
                 elems.Add(BaseType);
@@ -314,110 +290,5 @@ namespace Library.Model
                 elems.AddRange(GenericArguments);
             this.Children = elems;
         }
-
-        #region API
-        
-        internal static TypeMetadata EmitReference(Type type)
-        {           
-            if (!type.IsGenericType)
-                return new TypeMetadata(type.Name, type.GetNamespace(), 
-                    type.GetHashCode());
-            else
-                return new TypeMetadata(type.Name, type.GetNamespace(), EmitGenericArguments(type.GetGenericArguments()),
-                    type.GetHashCode());
-        }
-        internal static IEnumerable<TypeMetadata> EmitGenericArguments(IEnumerable<Type> arguments)
-        {
-            return from Type _argument in arguments select EmitReference(_argument);
-        }
-        #endregion
-
-        #region methods
-        private TypeMetadata EmitDeclaringType(Type declaringType)
-        {
-            if (declaringType == null)
-                return null;
-            return EmitReference(declaringType);
-        }
-        private IEnumerable<TypeMetadata> EmitNestedTypes(IEnumerable<Type> nestedTypes)
-        {
-            return from _type in nestedTypes
-                   where _type.GetVisible()
-                   select new TypeMetadata(_type);
-        }
-        private IEnumerable<TypeMetadata> EmitImplements(IEnumerable<Type> interfaces)
-        {
-            return from currentInterface in interfaces
-                   select EmitReference(currentInterface);
-        }
-        private static TypeKindEnum GetTypeKind(Type type) //#80 TPA: Reflection - Invalid return value of GetTypeKind() 
-        {
-            return type.IsEnum ? TypeKindEnum.EnumType :
-                   type.IsValueType ? TypeKindEnum.StructType :
-                   type.IsInterface ? TypeKindEnum.InterfaceType :
-                   TypeKindEnum.ClassType;
-        }
-        static Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> EmitModifiers(Type type)
-        {
-            //set defaults 
-            AccessLevelEnum _access = AccessLevelEnum.IsPrivate;
-            AbstractEnum _abstract = AbstractEnum.NotAbstract;
-            SealedEnum _sealed = SealedEnum.NotSealed;
-            // check if not default 
-            if (type.IsPublic)
-                _access = AccessLevelEnum.IsPublic;
-            else if (type.IsNestedPublic)
-                _access = AccessLevelEnum.IsPublic;
-            else if (type.IsNestedFamily)
-                _access = AccessLevelEnum.IsProtected;
-            else if (type.IsNestedFamANDAssem)
-                _access = AccessLevelEnum.IsProtectedInternal;
-            if (type.IsSealed)
-                _sealed = SealedEnum.Sealed;
-            if (type.IsAbstract)
-                _abstract = AbstractEnum.Abstract;
-            return new Tuple<AccessLevelEnum, SealedEnum, AbstractEnum>(_access, _sealed, _abstract);
-        }
-        private static TypeMetadata EmitExtends(Type baseType)
-        {
-            if (baseType == null || baseType == typeof(Object) || baseType == typeof(ValueType) || baseType == typeof(Enum))
-                return null;
-            return EmitReference(baseType);
-        }
-
-        #endregion
-
-        #region object overrides
-
-        public override int GetHashCode()
-        {
-            return SavedHash;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (GetType() != obj.GetType())
-                return false;
-            TypeMetadata tm = ((TypeMetadata)obj);
-            if (Name == tm.Name)
-            {
-                if (NamespaceName != tm.NamespaceName)
-                    return false;
-                return true;
-            }
-            return false;
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-        public string ModifiersString()
-        {
-            return (Modifiers?.Item1.ToString()) + (Modifiers?.Item2.ToString())
-                + (Modifiers?.Item3.ToString() + Modifiers?.ToString());
-        }
-
-        #endregion
     }
 }
