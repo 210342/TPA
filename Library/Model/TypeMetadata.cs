@@ -32,6 +32,7 @@ namespace Library.Model
         {
             if (type == null)
                 throw new ArgumentNullException("Type can't be null.");
+            NamespaceName = type.Namespace;
             DeclaringType = EmitDeclaringType(type.DeclaringType);
             Constructors = MethodMetadata.EmitMethods(type.GetConstructors());
             Methods = MethodMetadata.EmitMethods(type.GetMethods());
@@ -61,9 +62,10 @@ namespace Library.Model
         {
             Name = typeMetadata.Name;
             SavedHash = typeMetadata.SavedHash;
+            NamespaceName = typeMetadata.NamespaceName;
 
             // Base type
-            if(typeMetadata.BaseType is null)
+            if (typeMetadata.BaseType is null)
             {
                 BaseType = null;
             }
@@ -79,16 +81,16 @@ namespace Library.Model
             }
 
             // Generic Arguments
-            if(typeMetadata.GenericArguments is null)
+            if (typeMetadata.GenericArguments is null)
             {
                 GenericArguments = null;
             }
             else
             {
                 List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
-                foreach(ITypeMetadata genericArgument in typeMetadata.GenericArguments)
+                foreach (ITypeMetadata genericArgument in typeMetadata.GenericArguments)
                 {
-                    if(MappingDictionary.AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata item))
+                    if (MappingDictionary.AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata item))
                     {
                         genericArguments.Add(item as ITypeMetadata);
                     }
@@ -109,28 +111,167 @@ namespace Library.Model
             TypeKind = typeMetadata.TypeKind;
 
             // Attributes
-            List<IAttributeMetadata> attributes = new List<IAttributeMetadata>();
-            foreach(IAttributeMetadata attribute in typeMetadata.Attributes)
+            if (typeMetadata.Attributes is null)
             {
-                if(MappingDictionary.AlreadyMapped.TryGetValue(attribute.SavedHash, out IMetadata item))
-                {
-                    attributes.Add(item as IAttributeMetadata);
-                }
-                else
-                {
-                    //IAttributeMetadata newAttribute = new AttributeMetadata(attribute);
-                    //attributes.Add(newAttribute);
-                    //MappingDictionary.AlreadyMapped.Add(newAttribute.SavedHash, newAttribute);
-                }
+                Attributes = Enumerable.Empty<IAttributeMetadata>();
             }
-            Attributes = attributes;
+            else
+            {
+                List<IAttributeMetadata> attributes = new List<IAttributeMetadata>();
+                foreach (IAttributeMetadata attribute in typeMetadata.Attributes)
+                {
+                    if (MappingDictionary.AlreadyMapped.TryGetValue(attribute.SavedHash, out IMetadata item))
+                    {
+                        attributes.Add(item as IAttributeMetadata);
+                    }
+                    else
+                    {
+                        IAttributeMetadata newAttribute = new AttributeMetadata(attribute);
+                        attributes.Add(newAttribute);
+                        MappingDictionary.AlreadyMapped.Add(newAttribute.SavedHash, newAttribute);
+                    }
+                }
+                Attributes = attributes;
+            }
 
             // Interfaces
-            List<ITypeMetadata> interafaces = new List<ITypeMetadata>();
-            foreach(ITypeMetadata implementedInterface in typeMetadata.ImplementedInterfaces)
+            if (typeMetadata.ImplementedInterfaces is null)
             {
-                //if(MappingDictionary.AlreadyMapped.TryGetValue())
+                ImplementedInterfaces = Enumerable.Empty<ITypeMetadata>();
             }
+            else
+            {
+                List<ITypeMetadata> interfaces = new List<ITypeMetadata>();
+                foreach (ITypeMetadata implementedInterface in typeMetadata.ImplementedInterfaces)
+                {
+                    if (MappingDictionary.AlreadyMapped.TryGetValue(implementedInterface.SavedHash, out IMetadata item))
+                    {
+                        interfaces.Add(item as ITypeMetadata);
+                    }
+                    else
+                    {
+                        ITypeMetadata newInterface = new TypeMetadata(implementedInterface);
+                        interfaces.Add(newInterface);
+                        MappingDictionary.AlreadyMapped.Add(newInterface.SavedHash, newInterface);
+                    }
+                }
+                ImplementedInterfaces = interfaces;
+            }
+
+            // Nested Types
+            if (typeMetadata.NestedTypes is null)
+            {
+                NestedTypes = null;
+            }
+            else
+            {
+                List<ITypeMetadata> nestedTypes = new List<ITypeMetadata>();
+                foreach (ITypeMetadata nestedType in typeMetadata.NestedTypes)
+                {
+                    if (MappingDictionary.AlreadyMapped.TryGetValue(nestedType.SavedHash, out IMetadata item))
+                    {
+                        nestedTypes.Add(item as ITypeMetadata);
+                    }
+                    else
+                    {
+                        ITypeMetadata newType = new TypeMetadata(nestedType);
+                        nestedTypes.Add(newType);
+                        MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                    }
+                }
+                NestedTypes = nestedTypes;
+            }
+
+            // Properties
+            if (typeMetadata.Properties is null)
+            {
+                Properties = Enumerable.Empty<IPropertyMetadata>();
+            }
+            else
+            {
+                List<IPropertyMetadata> properties = new List<IPropertyMetadata>();
+                foreach (IPropertyMetadata property in typeMetadata.Properties)
+                {
+                    if (MappingDictionary.AlreadyMapped.TryGetValue(property.SavedHash, out IMetadata item))
+                    {
+                        properties.Add(item as IPropertyMetadata);
+                    }
+                    else
+                    {
+                        IPropertyMetadata newProperty = new PropertyMetadata(property);
+                        properties.Add(newProperty);
+                        MappingDictionary.AlreadyMapped.Add(newProperty.SavedHash, newProperty);
+                    }
+                }
+                Properties = properties;
+            }
+
+            //Declaring type
+            if(typeMetadata.DeclaringType is null)
+            {
+                DeclaringType = null;
+            }
+            else if(MappingDictionary.AlreadyMapped.TryGetValue(typeMetadata.DeclaringType.SavedHash, out IMetadata item))
+            {
+                DeclaringType = item as ITypeMetadata;
+            }
+            else
+            {
+                ITypeMetadata newType = new TypeMetadata(typeMetadata.DeclaringType);
+                DeclaringType = newType;
+                MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+            }
+
+            // Methods
+            if (typeMetadata.Methods is null)
+            {
+                Methods = Enumerable.Empty<IMethodMetadata>();
+            }
+            else
+            {
+                List<IMethodMetadata> methods = new List<IMethodMetadata>();
+                foreach (IMethodMetadata method in typeMetadata.Methods)
+                {
+                    if (MappingDictionary.AlreadyMapped.TryGetValue(method.SavedHash, out IMetadata item))
+                    {
+                        methods.Add(item as IMethodMetadata);
+                    }
+                    else
+                    {
+                        IMethodMetadata newMethod = new MethodMetadata(method);
+                        methods.Add(newMethod);
+                        MappingDictionary.AlreadyMapped.Add(newMethod.SavedHash, newMethod);
+                    }
+                }
+                Methods = methods;
+            }
+
+            // Constructors
+            // Methods
+            if (typeMetadata.Methods is null)
+            {
+                Constructors = Enumerable.Empty<IMethodMetadata>();
+            }
+            else
+            {
+                List<IMethodMetadata> constructors = new List<IMethodMetadata>();
+                foreach (IMethodMetadata constructor in typeMetadata.Methods)
+                {
+                    if (MappingDictionary.AlreadyMapped.TryGetValue(constructor.SavedHash, out IMetadata item))
+                    {
+                        constructors.Add(item as IMethodMetadata);
+                    }
+                    else
+                    {
+                        IMethodMetadata newMethod = new MethodMetadata(constructor);
+                        constructors.Add(newMethod);
+                        MappingDictionary.AlreadyMapped.Add(newMethod.SavedHash, newMethod);
+                    }
+                }
+                Constructors = constructors;
+            }
+
+            FillChildren(new StreamingContext());
         }
 
         private TypeMetadata(string typeName, string namespaceName, int hash)

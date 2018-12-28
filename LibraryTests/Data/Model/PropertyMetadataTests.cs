@@ -13,8 +13,8 @@ namespace LibraryTests.Data.Model
     {
         protected class TestClass
         {
-            Type propertyOne { get; }
-            Type propertyTwo { get; }
+            Type PropertyOne { get; }
+            Type PropertyTwo { get; }
         }
 
         [TestMethod]
@@ -42,6 +42,19 @@ namespace LibraryTests.Data.Model
                  null, new Type[] { typeof(string), typeof(TypeMetadata) }, null);
 
             ctor.Invoke(new object[] { null, null });
+        }
+
+        [TestMethod]
+        public void CopyCtorTest()
+        {
+            ConstructorInfo ctor = typeof(PropertyMetadata).GetConstructor(
+                 BindingFlags.Instance | BindingFlags.NonPublic,
+                 null, new Type[] { typeof(string), typeof(TypeMetadata) }, null);
+            PropertyMetadata tmp = (PropertyMetadata)ctor.Invoke(new object[] { "asdf", new TypeMetadata(typeof(PropertyMetadataTests)) });
+            PropertyMetadata sut = new PropertyMetadata(tmp);
+            Assert.IsTrue(tmp.Name.Equals(sut.Name));
+            Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
+            Assert.IsTrue(tmp.MyType.Name.Equals(sut.MyType.Name));
         }
     }
 }

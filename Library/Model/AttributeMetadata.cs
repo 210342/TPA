@@ -20,6 +20,12 @@ namespace Library.Model
         }
         internal AttributeMetadata() { }
 
+        public AttributeMetadata(IAttributeMetadata attributeMetadata)
+        {
+            Name = attributeMetadata.Name;
+            SavedHash = attributeMetadata.SavedHash;
+        }
+
         public override int GetHashCode()
         {
             return SavedHash;

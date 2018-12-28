@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Library.Model;
+using System.Linq;
 
 namespace LibraryTests.Data.Model
 {
@@ -28,8 +29,9 @@ namespace LibraryTests.Data.Model
         [ExpectedException(typeof(ArgumentNullException))]
         public void TypeMetadataThrowsOnNull()
         {
-            new TypeMetadata(null);
+            new TypeMetadata(default(Type));
         }
+
         [TestMethod]
         [ExpectedException(typeof(TargetInvocationException))]
         public void TypeMetadataTwoArgThrowsOnNull()
@@ -39,6 +41,7 @@ namespace LibraryTests.Data.Model
                  null, new Type[] { typeof(string), typeof(string), typeof(int) }, null);
             ctor.Invoke(new object[] { null, null, null });
         }
+
         [TestMethod]
         [ExpectedException(typeof(TargetInvocationException))]
         public void TypeMetadataGenericArgThrowsOnNull()
@@ -58,6 +61,7 @@ namespace LibraryTests.Data.Model
                 BindingFlags.Public | BindingFlags.Instance);
             Assert.IsNotNull(notNull.GetValue(obj));
         }
+
         [TestMethod]
         public void EmitReferenceOfNonGeneric()
         {
@@ -67,6 +71,7 @@ namespace LibraryTests.Data.Model
             
             Assert.IsNull(Null.GetValue(obj));
         }
+
         [TestMethod]
         public void EmitGenericArgumentsReturns()
         {
@@ -74,6 +79,7 @@ namespace LibraryTests.Data.Model
                 new List<TypeMetadata>(TypeMetadata.EmitGenericArguments(new[] { typeof(List<object>) }));
             Assert.AreNotEqual(0, obj.Count);
         }
+
         [TestMethod]
         public void EmitDeclaringTypeReturnsNull()
         {
@@ -83,6 +89,7 @@ namespace LibraryTests.Data.Model
             object value = method.Invoke(typeMeta, new object[] { null });
             Assert.IsNull(value);
         }
+
         [TestMethod]
         public void EmitDeclaringTypeReturnsValue()
         {
@@ -92,6 +99,7 @@ namespace LibraryTests.Data.Model
             object value = method.Invoke(typeMeta, new object[] { typeof(Type) });
             Assert.IsNotNull(value);
         }
+
         [TestMethod]
         [ExpectedException(typeof(TargetInvocationException))]
         public void EmitNestedTypesThrowsOnNull()
@@ -101,6 +109,7 @@ namespace LibraryTests.Data.Model
                 BindingFlags.Instance);
             object value = method.Invoke(typeMeta, new object[] { null });
         }
+
         [TestMethod]
         public void EmitNestedTypesResturns()
         {
@@ -111,6 +120,7 @@ namespace LibraryTests.Data.Model
             List<TypeMetadata> list = new List<TypeMetadata>( (IEnumerable<TypeMetadata>)value );
             Assert.AreNotEqual(0, list.Count);
         }
+
         [TestMethod]
         [ExpectedException(typeof(TargetInvocationException))]
         public void EmitImplementsThrowsOnNull()
@@ -120,6 +130,7 @@ namespace LibraryTests.Data.Model
                 BindingFlags.NonPublic | BindingFlags.Instance);
             object value = method.Invoke(typeMeta, new object[] { null });
         }
+
         [TestMethod]
         public void EmitImplementsReturns()
         {
@@ -134,6 +145,7 @@ namespace LibraryTests.Data.Model
                 list = new List<TypeMetadata>((IEnumerable<TypeMetadata>)value);
             Assert.AreNotEqual(0, list.Count);
         }
+
         [TestMethod]
         [ExpectedException(typeof(TargetInvocationException))]
         public void EmitModifiersThrowsOnNull()
@@ -142,6 +154,7 @@ namespace LibraryTests.Data.Model
                 BindingFlags.NonPublic | BindingFlags.Static);
             object value = method.Invoke(null, new object[] { null });
         }
+
         [TestMethod]
         public void EmitExtendsReturnsNullOnNull()
         {
@@ -149,6 +162,7 @@ namespace LibraryTests.Data.Model
             object value = method.Invoke(null, new object[] { null });
             Assert.IsNull(value);
         }
+
         [TestMethod]
         public void EmitExtendsReturns()
         {
@@ -160,6 +174,20 @@ namespace LibraryTests.Data.Model
             else
                 list = new List<TypeMetadata>((IEnumerable<TypeMetadata>)value);
             Assert.AreNotEqual(0, list.Count);
+        }
+
+        [TestMethod]
+        public void CopyCtorTest()
+        {
+            TypeMetadata tmp = new TypeMetadata(typeof(TypeMetadata));
+            TypeMetadata sut = new TypeMetadata(tmp);
+            Assert.IsTrue(tmp.Name.Equals(sut.Name));
+            Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
+            Assert.AreEqual(tmp.ImplementedInterfaces.Count(), sut.ImplementedInterfaces.Count());
+            Assert.AreEqual(tmp.Properties.Count(), sut.Properties.Count());
+            Assert.IsNull(sut.GenericArguments);
+            Assert.IsTrue(tmp.Modifiers.Equals(sut.Modifiers));
+            Assert.AreEqual(tmp.NamespaceName, sut.NamespaceName);
         }
     }
 }
