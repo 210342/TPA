@@ -8,7 +8,7 @@ namespace Library.Logic.MEFProviders
     public class PersistanceProvider
     {
         [Import(typeof(IPersister))]
-        private IPersister persister;
+        private IPersister _persister = null;
         private CompositionContainer _container;
 
         public DirectoryCatalog DirectoryCatalog { get; set; }
@@ -38,11 +38,11 @@ namespace Library.Logic.MEFProviders
             {
                 throw new MEFLoaderException("Couldn't compose persistance object", compositionException);
             }
-            if(persister is null)
+            if(_persister is null)
             {
                 throw new MEFLoaderException("Couldn't compose persistance object");
             }
-            return persister;
+            return _persister;
         }
     }
 }

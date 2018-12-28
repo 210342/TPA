@@ -198,10 +198,13 @@ namespace Library.Logic.ViewModel
                     ISerializer serializer = Persister as ISerializer;
                     try
                     {
-                        if(!serializer.Initialised)
+                        if(!serializer.IsInitialised)
                         {
                             List<Type> types = new List<Type>(Enumerable.Repeat(typeof(List<IMetadata>), 1));
-                            types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));
+                            IEnumerable<Type> model = from type in typeof(SerializationModel.SerializationAssemblyMetadata).Assembly.GetTypes()
+                                                      where typeof(IMetadata).IsAssignableFrom(type) && !type.IsInterface
+                                                      select type;
+                            types.AddRange(model);
                             serializer.KnownTypes = types;
                             serializer.NodeType = typeof(IMetadata);
                             serializer.InitialiseSerialization();
@@ -242,7 +245,7 @@ namespace Library.Logic.ViewModel
                     ISerializer serializer = Persister as ISerializer;
                     try
                     {
-                        if (!serializer.Initialised)
+                        if (!serializer.IsInitialised)
                         {
                             List<Type> types = new List<Type>(Enumerable.Repeat(typeof(List<IMetadata>), 1));
                             types.AddRange(DataLoadedDictionary.GetKnownMetadata(LoadedAssemblyRepresentation));

@@ -34,11 +34,16 @@ namespace Serializing.Tests
         [TestInitialize]
         public void SetUp()
         {
+            _serializationStream = new MemoryStream();
             List<Type> knownTypes = new List<Type>
                 (new Type[] { typeof(TestType), typeof(TestValue) });
-            _sut = new XmlModelSerializer(knownTypes, typeof(IParent));
-            _serializationStream = new MemoryStream();
-            _sut.SerializationStream = _serializationStream;
+            _sut = new XmlModelSerializer
+            {
+                KnownTypes = knownTypes,
+                NodeType = typeof(IParent),
+                SerializationStream = _serializationStream
+            };
+            _sut.InitialiseSerialization();
         }
 
         [TestMethod()]

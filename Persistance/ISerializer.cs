@@ -8,9 +8,9 @@ namespace Persistance
     {
         Stream SerializationStream { get; set; }
         string SourceName { get; set; }
-        IEnumerable<System.Type> KnownTypes { get; set; }
         System.Type NodeType { get; set; }
-        bool Initialised { get; }
+        bool IsInitialised { get; }
+        IEnumerable<Type> KnownTypes { get; set; }
 
         void InitialiseSerialization();
     }

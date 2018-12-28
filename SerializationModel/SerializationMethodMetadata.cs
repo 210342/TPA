@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SerializationModel
 {
-    [DataContract
+    [DataContract]
     [KnownType(typeof(SerializationAssemblyMetadata))]
     [KnownType(typeof(SerializationAttributeMetadata))]
     [KnownType(typeof(SerializationMethodMetadata))]
