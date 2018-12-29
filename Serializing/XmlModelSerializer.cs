@@ -1,4 +1,5 @@
 ﻿using Persistance;
+using SerializationModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -9,13 +10,13 @@ using System.Xml;
 namespace Serializing
 {
     [Export(typeof(IPersister))]
-    public class XmlModelSerializer : ISerializer
+    public class XmlModelSerializer : IPersister
     {
         private DataContractSerializer dataContractSerializer; 
         private string sourceName;
 
         public Stream SerializationStream { get; set; }
-        public string SourceName
+        /*public string SourceName
         {
             get
             {
@@ -26,19 +27,47 @@ namespace Serializing
                 sourceName = value;
                 SerializationStream = new FileStream(SourceName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             }
+        }*/
+        private Type NodeType { get; set;  }
+        private IEnumerable<Type> KnownTypes { get; set; }
+        private string _target;
+        public string Target { get => _target; set => SetTarget(value); }
+
+        private void SetTarget(string value)
+        {
+            this._target = value;
+            SerializationStream = new FileStream(value, FileMode.OpenOrCreate, FileAccess.ReadWrite);
         }
-        public Type NodeType { get; set;  }
-        public bool IsInitialised { get; private set; } = false;
-        public IEnumerable<Type> KnownTypes { get; set; }
 
         public XmlModelSerializer()
         {
+            NodeType = typeof(SerializationAssemblyMetadata);
+            KnownTypes = new Type[]
+            {
+                typeof(AbstractMapper), typeof(SerializationAttributeMetadata), typeof(SerializationMethodMetadata),
+                typeof(SerializationNamespaceMetadata), typeof(SerializationParameterMetadata),
+                typeof(SerializationPropertyMetadata), typeof(SerializationTypeMetadata)
+            };
+
+            dataContractSerializer = new DataContractSerializer(
+                type: NodeType,
+                knownTypes: KnownTypes,
+                maxItemsInObjectGraph: 100000,
+                ignoreExtensionDataObject: false,
+                preserveObjectReferences: true,
+                dataContractSurrogate: null);
+            if(Target != null)
+                SerializationStream = new FileStream(Target, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+        }
+        public XmlModelSerializer(Stream inStream) : this()
+        {
+            SerializationStream = inStream;
         }
 
         public void Save(object toSave)
         {
             var settings = new XmlWriterSettings { Indent = true };
-            if(SerializationStream != null && IsInitialised)
+            if(SerializationStream != null)
             {
                 SerializationStream.Position = 0;
                 using (XmlWriter writer = XmlWriter.Create(SerializationStream, settings))
@@ -52,7 +81,7 @@ namespace Serializing
         public object Load()
         {
             object read = null;
-            if (SerializationStream != null && IsInitialised)
+            if (SerializationStream != null)
             {
                 SerializationStream.Position = 0;
                 using (XmlReader reader = XmlReader.Create(SerializationStream))
@@ -63,16 +92,9 @@ namespace Serializing
             return read;
         }
 
-        public void InitialiseSerialization()
+        public void Dispose()
         {
-            dataContractSerializer = new DataContractSerializer(
-                type: NodeType,
-                knownTypes: KnownTypes,
-                maxItemsInObjectGraph: 100000,
-                ignoreExtensionDataObject: false,
-                preserveObjectReferences: true,
-                dataContractSurrogate: null);
-            IsInitialised = true;
+            SerializationStream.Dispose();
         }
     }
 }

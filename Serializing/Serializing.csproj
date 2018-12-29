@@ -43,9 +43,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializationModel\AbstractMapper.cs" />
+    <Compile Include="SerializationModel\SerializationAssemblyMetadata.cs" />
+    <Compile Include="SerializationModel\SerializationAttributeMetadata.cs" />
+    <Compile Include="SerializationModel\SerializationMethodMetadata.cs" />
+    <Compile Include="SerializationModel\SerializationNamespaceMetadata.cs" />
+    <Compile Include="SerializationModel\SerializationParameterMetadata.cs" />
+    <Compile Include="SerializationModel\SerializationPropertyMetadata.cs" />
+    <Compile Include="SerializationModel\SerializationTypeMetadata.cs" />
     <Compile Include="XmlModelSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ModelContract\ModelContract.csproj">
+      <Project>{3a99a3ea-c964-4cb2-8747-8f9a10689cc7}</Project>
+      <Name>ModelContract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Persistance\Persistance.csproj">
       <Project>{82468f99-b386-4419-8db0-fca10b12699e}</Project>
       <Name>Persistance</Name>

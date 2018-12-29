@@ -39,11 +39,8 @@ namespace Serializing.Tests
                 (new Type[] { typeof(TestType), typeof(TestValue) });
             _sut = new XmlModelSerializer
             {
-                KnownTypes = knownTypes,
-                NodeType = typeof(IParent),
                 SerializationStream = _serializationStream
             };
-            _sut.InitialiseSerialization();
         }
 
         [TestMethod()]
@@ -52,6 +49,7 @@ namespace Serializing.Tests
             Assert.IsNotNull(_sut);
         }
 
+        /*
         [TestMethod()]
         public void StreamSaveTest()
         {
@@ -69,12 +67,12 @@ namespace Serializing.Tests
             Assert.IsTrue(loaded is TestType);
             Assert.IsFalse((loaded as TestType).Values == null);
         }
-
+        */
         [TestMethod]
         public void SourceNameSetter()
         {
-            _sut.SourceName = "testing.txt";
-            Assert.IsFalse(string.IsNullOrEmpty(_sut.SourceName));
+            _sut.Target = "testing.txt";
+            Assert.IsFalse(string.IsNullOrEmpty(_sut.Target));
             Assert.IsNotNull(_sut.SerializationStream);
             Assert.IsTrue(_sut.SerializationStream is FileStream);
         }

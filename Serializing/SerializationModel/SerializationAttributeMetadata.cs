@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SerializationModel
 {
     [DataContract(Name = "Attribute")]
-    public class SerializationAttributeMetadata : IAttributeMetadata
+    public class SerializationAttributeMetadata : AbstractMapper, IAttributeMetadata
     {
         [DataMember(Name = "Name")]
         public string Name { get; private set; }

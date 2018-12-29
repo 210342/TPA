@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SerializationModel
 {
     [DataContract(Name = "Namespace")]
-    public class SerializationNamespaceMetadata : INamespaceMetadata
+    public class SerializationNamespaceMetadata : AbstractMapper, INamespaceMetadata
     {
         [DataMember(Name = "Types")]
         public IEnumerable<ITypeMetadata> Types { get; private set; }
@@ -26,7 +26,7 @@ namespace SerializationModel
             List<ITypeMetadata> types = new List<ITypeMetadata>();
             foreach (ITypeMetadata child in namespaceMetadata.Types)
             {
-                if (MappingDictionary.AlreadyMapped.TryGetValue(child.SavedHash, out IMetadata item))
+                if (AlreadyMapped.TryGetValue(child.SavedHash, out IMetadata item))
                 {
                     types.Add(item as ITypeMetadata);
                 }
@@ -34,7 +34,7 @@ namespace SerializationModel
                 {
                     ITypeMetadata newType = new SerializationTypeMetadata(child);
                     types.Add(newType);
-                    MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                    AlreadyMapped.Add(newType.SavedHash, newType);
                 }
             }
             Types = types;

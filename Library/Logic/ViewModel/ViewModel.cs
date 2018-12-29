@@ -189,109 +189,66 @@ namespace Library.Logic.ViewModel
 
         private void Save(ISourceProvider filePathProvider)
         {
-            if(Persister is ISerializer)
+            if (filePathProvider == null)
+                throw new System.ArgumentNullException("SourceProvider can't be null.");
+            if (filePathProvider.GetAccess())
             {
-
-                if (filePathProvider == null)
-                    throw new System.ArgumentNullException("SourceProvider can't be null.");
-                if (filePathProvider.GetAccess())
+                try
                 {
-                    ISerializer serializer = Persister as ISerializer;
-                    try
+                    Persister.Target = filePathProvider.GetFilePath();
+                    Task.Run(() =>
                     {
-                        if(!serializer.IsInitialised)
-                        {
-                            List<Type> types = new List<Type>(Enumerable.Repeat(typeof(IMetadata), 1));
-                            IEnumerable<Type> model = from type in typeof(SerializationModel.SerializationAssemblyMetadata).Assembly.GetTypes()
-                                                      where typeof(IMetadata).IsAssignableFrom(type) && !type.IsInterface
-                                                      select type;
-                            types.AddRange(model);
-                            serializer.KnownTypes = types;
-                            serializer.NodeType = typeof(IMetadata);
-                            serializer.InitialiseSerialization();
-                        }
-                        
-                        serializer.SourceName = filePathProvider.GetFilePath();
-                        Task.Run(() =>
-                        {
-                            IAssemblyMetadata graph = new ModelMapper().Map(
-                                root: ObjectsList.First().ModelObject as IAssemblyMetadata, 
-                                model: typeof(SerializationModel.SerializationAssemblyMetadata).Assembly
-                                );
-                            serializer.Save(graph);
-                            serializer.SerializationStream.Close();
-                        });
-                    }
-                    catch (IOException ex)
+                        IAssemblyMetadata graph = new ModelMapper().Map(
+                            root: ObjectsList.First().ModelObject as IAssemblyMetadata, 
+                            model: Persister.GetType().Assembly
+                            );
+                        Persister.Save(graph);
+                    });
+                }
+                catch (IOException ex)
+                {
+                    if (Tracing)
                     {
-                        if (Tracing)
-                        {
-                            Tracer.LogFailure($"Exception caught when trying to open a file for writing (serialization) {Environment.NewLine}{ex.Message}");
-                            Tracer.Flush();
-                        }
+                        Tracer.LogFailure($"Exception caught when trying to open a file for writing (serialization) {Environment.NewLine}{ex.Message}");
+                        Tracer.Flush();
                     }
                 }
-            }
-            else
-            {
-                // unsupported yet
             }
         }
 
         private void Load(ISourceProvider filePathProvider)
         {
-            if(Persister is ISerializer)
+            if (filePathProvider == null)
+                throw new System.ArgumentNullException("SourceProvider can't be null.");
+            if (filePathProvider.GetAccess())
             {
-                if (filePathProvider == null)
-                    throw new System.ArgumentNullException("SourceProvider can't be null.");
-                if (filePathProvider.GetAccess())
+                try
                 {
-                    ISerializer serializer = Persister as ISerializer;
-                    try
+                    Persister.Target = filePathProvider.GetFilePath();
+                    Dispatcher.CurrentDispatcher.BeginInvoke((Action)delegate ()
                     {
-                        if (!serializer.IsInitialised)
+                        object result = Persister.Load();
+                        if (result is IAssemblyMetadata)
                         {
-                            List<Type> types = new List<Type>(Enumerable.Repeat(typeof(IMetadata), 1));
-                            IEnumerable<Type> model = from type in typeof(SerializationModel.SerializationAssemblyMetadata).Assembly.GetTypes()
-                                                      where typeof(IMetadata).IsAssignableFrom(type) && !type.IsInterface
-                                                      select type;
-                            types.AddRange(model);
-                            serializer.KnownTypes = types;
-                            serializer.NodeType = typeof(IMetadata);
-                            serializer.InitialiseSerialization();
+                            IAssemblyMetadata graph = new ModelMapper().Map(
+                                root: result as IAssemblyMetadata,
+                                model: typeof(AssemblyMetadata).Assembly
+                                );
+                            ObjectsList.Clear();
+                            ObjectsList.Add(new AssemblyItem(graph as AssemblyMetadata));
+                            LoadedAssembly = "Model deserialized";
+                            SaveModel.RaiseCanExecuteChanged();
                         }
-                        serializer.SourceName = filePathProvider.GetFilePath();
-                        Dispatcher.CurrentDispatcher.BeginInvoke((Action)delegate ()
-                        {
-                            object result = serializer.Load();
-
-                            serializer.SerializationStream.Close();
-                            if (result is IAssemblyMetadata)
-                            {
-                                IAssemblyMetadata graph = new ModelMapper().Map(
-                                    root: result as IAssemblyMetadata,
-                                    model: typeof(AssemblyMetadata).Assembly
-                                    );
-                                ObjectsList.Clear();
-                                ObjectsList.Add(new AssemblyItem(graph as AssemblyMetadata));
-                                LoadedAssembly = "Model deserialized";
-                                SaveModel.RaiseCanExecuteChanged();
-                            }
-                        });
-                    }
-                    catch (IOException ex)
+                    });
+                }
+                catch (IOException ex)
+                {
+                    if (Tracing)
                     {
-                        if (Tracing)
-                        {
-                            Tracer.LogFailure($"Exception caught when trying to open a file for reading (deserialization){Environment.NewLine}{ex.Message}");
-                            Tracer.Flush();
-                        }
+                        Tracer.LogFailure($"Exception caught when trying to open a file for reading (deserialization){Environment.NewLine}{ex.Message}");
+                        Tracer.Flush();
                     }
                 }
-            }
-            else
-            {
-                // not supported yet;
             }
         }
 

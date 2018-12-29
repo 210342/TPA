@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SerializationModel
 {
     [DataContract(Name = "Method")]
-    public class SerializationMethodMetadata : IMethodMetadata
+    public class SerializationMethodMetadata : AbstractMapper, IMethodMetadata
     {
         [DataMember(Name = "GenericArguments")]
         public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
@@ -44,7 +44,7 @@ namespace SerializationModel
                 List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
                 foreach (ITypeMetadata genericArgument in methodMetadata.GenericArguments)
                 {
-                    if (MappingDictionary.AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata mappedArgument))
+                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata mappedArgument))
                     {
                         genericArguments.Add(mappedArgument as ITypeMetadata);
                     }
@@ -52,14 +52,14 @@ namespace SerializationModel
                     {
                         ITypeMetadata newType = new SerializationTypeMetadata(genericArgument);
                         genericArguments.Add(newType);
-                        MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                        AlreadyMapped.Add(newType.SavedHash, newType);
                     }
                 }
                 GenericArguments = genericArguments;
             }
 
             // Return type
-            if (MappingDictionary.AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out IMetadata item))
+            if (AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out IMetadata item))
             {
                 ReturnType = item as ITypeMetadata;
             }
@@ -67,7 +67,7 @@ namespace SerializationModel
             {
                 ITypeMetadata newType = new SerializationTypeMetadata(methodMetadata.ReturnType);
                 ReturnType = newType;
-                MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                AlreadyMapped.Add(newType.SavedHash, newType);
             }
 
             // Parameters
@@ -80,7 +80,7 @@ namespace SerializationModel
                 List<IParameterMetadata> parameters = new List<IParameterMetadata>();
                 foreach (IParameterMetadata parameter in methodMetadata.Parameters)
                 {
-                    if (MappingDictionary.AlreadyMapped.TryGetValue(parameter.SavedHash, out item))
+                    if (AlreadyMapped.TryGetValue(parameter.SavedHash, out item))
                     {
                         parameters.Add(item as IParameterMetadata);
                     }
@@ -88,7 +88,7 @@ namespace SerializationModel
                     {
                         IParameterMetadata newParameter = new SerializationParameterMetadata(parameter);
                         parameters.Add(newParameter);
-                        MappingDictionary.AlreadyMapped.Add(newParameter.SavedHash, newParameter);
+                        AlreadyMapped.Add(newParameter.SavedHash, newParameter);
                     }
                 }
                 Parameters = parameters;

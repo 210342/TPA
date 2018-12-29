@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Persistance
 {
-    public interface IPersister
+    public interface IPersister : IDisposable
     {
+        string Target { get; set; }
         void Save(object obj);
         object Load();
     }

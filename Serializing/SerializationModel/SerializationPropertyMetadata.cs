@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SerializationModel
 {
     [DataContract(Name = "Property")]
-    public class SerializationPropertyMetadata : IPropertyMetadata
+    public class SerializationPropertyMetadata : AbstractMapper, IPropertyMetadata
     {
         [DataMember(Name = "Type")]
         public ITypeMetadata MyType { get; private set; }
@@ -29,7 +29,7 @@ namespace SerializationModel
         {
             Name = propertyMetadata.Name;
             SavedHash = propertyMetadata.SavedHash;
-            if (MappingDictionary.AlreadyMapped.TryGetValue(propertyMetadata.MyType.SavedHash, out IMetadata item))
+            if (AlreadyMapped.TryGetValue(propertyMetadata.MyType.SavedHash, out IMetadata item))
             {
                 MyType = item as ITypeMetadata;
             }
@@ -37,7 +37,7 @@ namespace SerializationModel
             {
                 ITypeMetadata newType = new SerializationTypeMetadata(propertyMetadata.MyType);
                 MyType = newType;
-                MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                AlreadyMapped.Add(newType.SavedHash, newType);
             }
         }
     }
