@@ -60,6 +60,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\ModelMapperTests.cs" />
     <Compile Include="Data\Model\AttributeMetadataTests.cs" />
     <Compile Include="Data\Model\ExtensionMethodsTests.cs" />
     <Compile Include="Data\Model\MethodMetadataTests.cs" />
@@ -92,6 +93,10 @@
       <Project>{82468f99-b386-4419-8db0-fca10b12699e}</Project>
       <Name>Persistance</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SerializationModel\SerializationModel.csproj">
+      <Project>{56877f83-2269-45ac-a7a8-73a8228d9bcc}</Project>
+      <Name>SerializationModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tracing\Tracing.csproj">
       <Project>{552a1500-eafa-4239-a91a-e3d62593378c}</Project>
       <Name>Tracing</Name>
@@ -102,6 +107,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Serializing.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TPA.ApplicationArchitecture.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

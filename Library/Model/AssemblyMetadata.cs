@@ -33,6 +33,27 @@ namespace Library.Model
             SavedHash = assembly.GetHashCode();
         }
 
+        public AssemblyMetadata(IAssemblyMetadata assemblyMetadata)
+        {
+            Name = assemblyMetadata.Name;
+            SavedHash = assemblyMetadata.SavedHash;
+            List<INamespaceMetadata> namespaces = new List<INamespaceMetadata>();
+            foreach(INamespaceMetadata child in assemblyMetadata.Namespaces)
+            {
+                if(MappingDictionary.AlreadyMapped.TryGetValue(child.SavedHash, out IMetadata item))
+                {
+                    namespaces.Add(item as INamespaceMetadata);
+                }
+                else
+                {
+                    INamespaceMetadata newNamespace = new NamespaceMetadata(child);
+                    namespaces.Add(newNamespace);
+                    MappingDictionary.AlreadyMapped.Add(newNamespace.SavedHash, newNamespace);
+                }
+            }
+            Namespaces = namespaces;
+        }
+
         public override int GetHashCode()
         {
             return SavedHash;

@@ -38,6 +38,22 @@ namespace Library.Model
         }
         internal ParameterMetadata() { }
 
+        public ParameterMetadata(IParameterMetadata parameterMetadata)
+        {
+            Name = parameterMetadata.Name;
+            SavedHash = parameterMetadata.SavedHash;
+            if(MappingDictionary.AlreadyMapped.TryGetValue(parameterMetadata.TypeMetadata.SavedHash, out IMetadata item))
+            {
+                TypeMetadata = item as ITypeMetadata;
+            }
+            else
+            {
+                ITypeMetadata newType = new TypeMetadata(parameterMetadata.TypeMetadata);
+                TypeMetadata = newType;
+                MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+            }
+        }
+
         #region object overrides
 
         public override int GetHashCode()

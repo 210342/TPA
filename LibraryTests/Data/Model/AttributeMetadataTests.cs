@@ -13,7 +13,16 @@ namespace LibraryTests.Data.Model
         [ExpectedException(typeof(ArgumentNullException))]
         public void AttributeMetadataExceptionOnNull()
         {
-            new AttributeMetadata(null);
+            new AttributeMetadata(default(Attribute));
+        }
+
+        [TestMethod]
+        public void CopyCtorTest()
+        {
+            AttributeMetadata tmp = new AttributeMetadata(new TestClassAttribute());
+            AttributeMetadata sut = new AttributeMetadata(tmp);
+            Assert.IsTrue(tmp.Name.Equals(sut.Name));
+            Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
         }
     }
 }

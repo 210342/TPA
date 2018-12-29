@@ -11,7 +11,7 @@ namespace Serializing
     [Export(typeof(IPersister))]
     public class XmlModelSerializer : ISerializer
     {
-        private DataContractSerializer dcs; 
+        private DataContractSerializer dataContractSerializer; 
         private string sourceName;
 
         public Stream SerializationStream { get; set; }
@@ -27,43 +27,23 @@ namespace Serializing
                 SerializationStream = new FileStream(SourceName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             }
         }
+        public Type NodeType { get; set;  }
+        public bool IsInitialised { get; private set; } = false;
         public IEnumerable<Type> KnownTypes { get; set; }
-        public Type NodeType { get ; set; }
-        public bool Initialised { get; private set; } = false;
 
-        /*
-         * TODO:
-         * Create new model for serialization  
-         * After that serialization using plugin will be possible
-         * Because we won't have to provide known classes for serializer.
-         */
         public XmlModelSerializer()
         {
-
-        }
-
-        public XmlModelSerializer(List<Type> knownTypes, Type nodeType)
-        {
-            KnownTypes = knownTypes;
-            NodeType = nodeType;
-            dcs = new DataContractSerializer(
-                type: nodeType, 
-                knownTypes: knownTypes,
-                maxItemsInObjectGraph: 100000,
-                ignoreExtensionDataObject: false,
-                preserveObjectReferences: true,
-                dataContractSurrogate: null);
         }
 
         public void Save(object toSave)
         {
             var settings = new XmlWriterSettings { Indent = true };
-            if(SerializationStream != null)
+            if(SerializationStream != null && IsInitialised)
             {
                 SerializationStream.Position = 0;
                 using (XmlWriter writer = XmlWriter.Create(SerializationStream, settings))
                 {
-                    dcs.WriteObject(writer, toSave);
+                    dataContractSerializer.WriteObject(writer, toSave);
                 }
                 SerializationStream.FlushAsync();
             }
@@ -72,12 +52,12 @@ namespace Serializing
         public object Load()
         {
             object read = null;
-            if (SerializationStream != null)
+            if (SerializationStream != null && IsInitialised)
             {
                 SerializationStream.Position = 0;
                 using (XmlReader reader = XmlReader.Create(SerializationStream))
                 {
-                    read = dcs.ReadObject(reader);
+                    read = dataContractSerializer.ReadObject(reader);
                 }
             }
             return read;
@@ -85,14 +65,14 @@ namespace Serializing
 
         public void InitialiseSerialization()
         {
-            dcs = new DataContractSerializer(
+            dataContractSerializer = new DataContractSerializer(
                 type: NodeType,
                 knownTypes: KnownTypes,
                 maxItemsInObjectGraph: 100000,
                 ignoreExtensionDataObject: false,
                 preserveObjectReferences: true,
                 dataContractSurrogate: null);
-            Initialised = true;
+            IsInitialised = true;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace GraphicalUserInterface
         internal OpenFileDialogProvider()
         {
             dialog.DefaultExt = "dll";
-            dialog.Filter = "XML file (*xml)|*xml|Dynamically linked library (*dll)|*dll|All Files(*.*)|*.*";
+            dialog.Filter = "Dynamically linked library (*.dll)|*.dll|XML file (*.xml)|*.xml|All Files(*.*)|*.*";
         }
 
         public bool GetAccess()

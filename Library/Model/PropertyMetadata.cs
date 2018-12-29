@@ -46,6 +46,22 @@ namespace Library.Model
         }
         internal PropertyMetadata() { }
 
+        public PropertyMetadata(IPropertyMetadata propertyMetadata)
+        {
+            Name = propertyMetadata.Name;
+            SavedHash = propertyMetadata.SavedHash;
+            if(MappingDictionary.AlreadyMapped.TryGetValue(propertyMetadata.MyType.SavedHash, out IMetadata item))
+            {
+                MyType = item as ITypeMetadata;
+            }
+            else
+            {
+                ITypeMetadata newType = new TypeMetadata(propertyMetadata.MyType);
+                MyType = newType;
+                MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+            }
+        }
+
         #endregion
 
         internal static IEnumerable<PropertyMetadata> EmitProperties(IEnumerable<PropertyInfo> props)

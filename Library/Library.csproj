@@ -48,16 +48,14 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\ModelMapper.cs" />
     <Compile Include="Logic\MEFProviders\Exceptions\MEFLoaderException.cs" />
     <Compile Include="Logic\MEFProviders\PersistanceProvider.cs" />
     <Compile Include="Logic\MEFProviders\TracingProvider.cs" />
@@ -91,6 +89,10 @@
     <ProjectReference Include="..\Persistance\Persistance.csproj">
       <Project>{82468f99-b386-4419-8db0-fca10b12699e}</Project>
       <Name>Persistance</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SerializationModel\SerializationModel.csproj">
+      <Project>{56877f83-2269-45ac-a7a8-73a8228d9bcc}</Project>
+      <Name>SerializationModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tracing\Tracing.csproj">
       <Project>{552a1500-eafa-4239-a91a-e3d62593378c}</Project>

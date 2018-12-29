@@ -55,6 +55,7 @@
     <Compile Include="IParameterMetadata.cs" />
     <Compile Include="IPropertyMetadata.cs" />
     <Compile Include="ITypeMetadata.cs" />
+    <Compile Include="MappingDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
