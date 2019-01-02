@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 
 namespace Library.Model
 {
-    public class AttributeMetadata : IAttributeMetadata
+    public class AttributeMetadata : AbstractMapper, IAttributeMetadata
     {
         public string Name { get; }
         public IEnumerable<IMetadata> Children => null;

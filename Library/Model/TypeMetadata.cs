@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 
 namespace Library.Model
 {
-    public class TypeMetadata : ITypeMetadata
+    public class TypeMetadata : AbstractMapper, ITypeMetadata
     {
         #region properties
         public string Name { get; }
@@ -69,7 +69,7 @@ namespace Library.Model
             {
                 BaseType = null;
             }
-            else if (MappingDictionary.AlreadyMapped.TryGetValue(typeMetadata.BaseType.SavedHash, out IMetadata item))
+            else if (AlreadyMapped.TryGetValue(typeMetadata.BaseType.SavedHash, out IMetadata item))
             {
                 BaseType = item as ITypeMetadata;
             }
@@ -77,7 +77,7 @@ namespace Library.Model
             {
                 ITypeMetadata newType = new TypeMetadata(typeMetadata.BaseType);
                 BaseType = newType;
-                MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                AlreadyMapped.Add(newType.SavedHash, newType);
             }
 
             // Generic Arguments
@@ -90,7 +90,7 @@ namespace Library.Model
                 List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
                 foreach (ITypeMetadata genericArgument in typeMetadata.GenericArguments)
                 {
-                    if (MappingDictionary.AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata item))
+                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata item))
                     {
                         genericArguments.Add(item as ITypeMetadata);
                     }
@@ -98,7 +98,7 @@ namespace Library.Model
                     {
                         ITypeMetadata newType = new TypeMetadata(genericArgument);
                         genericArguments.Add(newType);
-                        MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                        AlreadyMapped.Add(newType.SavedHash, newType);
                     }
                 }
                 GenericArguments = genericArguments;
@@ -120,7 +120,7 @@ namespace Library.Model
                 List<IAttributeMetadata> attributes = new List<IAttributeMetadata>();
                 foreach (IAttributeMetadata attribute in typeMetadata.Attributes)
                 {
-                    if (MappingDictionary.AlreadyMapped.TryGetValue(attribute.SavedHash, out IMetadata item))
+                    if (AlreadyMapped.TryGetValue(attribute.SavedHash, out IMetadata item))
                     {
                         attributes.Add(item as IAttributeMetadata);
                     }
@@ -128,7 +128,7 @@ namespace Library.Model
                     {
                         IAttributeMetadata newAttribute = new AttributeMetadata(attribute);
                         attributes.Add(newAttribute);
-                        MappingDictionary.AlreadyMapped.Add(newAttribute.SavedHash, newAttribute);
+                        AlreadyMapped.Add(newAttribute.SavedHash, newAttribute);
                     }
                 }
                 Attributes = attributes;
@@ -144,7 +144,7 @@ namespace Library.Model
                 List<ITypeMetadata> interfaces = new List<ITypeMetadata>();
                 foreach (ITypeMetadata implementedInterface in typeMetadata.ImplementedInterfaces)
                 {
-                    if (MappingDictionary.AlreadyMapped.TryGetValue(implementedInterface.SavedHash, out IMetadata item))
+                    if (AlreadyMapped.TryGetValue(implementedInterface.SavedHash, out IMetadata item))
                     {
                         interfaces.Add(item as ITypeMetadata);
                     }
@@ -152,7 +152,7 @@ namespace Library.Model
                     {
                         ITypeMetadata newInterface = new TypeMetadata(implementedInterface);
                         interfaces.Add(newInterface);
-                        MappingDictionary.AlreadyMapped.Add(newInterface.SavedHash, newInterface);
+                        AlreadyMapped.Add(newInterface.SavedHash, newInterface);
                     }
                 }
                 ImplementedInterfaces = interfaces;
@@ -168,7 +168,7 @@ namespace Library.Model
                 List<ITypeMetadata> nestedTypes = new List<ITypeMetadata>();
                 foreach (ITypeMetadata nestedType in typeMetadata.NestedTypes)
                 {
-                    if (MappingDictionary.AlreadyMapped.TryGetValue(nestedType.SavedHash, out IMetadata item))
+                    if (AlreadyMapped.TryGetValue(nestedType.SavedHash, out IMetadata item))
                     {
                         nestedTypes.Add(item as ITypeMetadata);
                     }
@@ -176,7 +176,7 @@ namespace Library.Model
                     {
                         ITypeMetadata newType = new TypeMetadata(nestedType);
                         nestedTypes.Add(newType);
-                        MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                        AlreadyMapped.Add(newType.SavedHash, newType);
                     }
                 }
                 NestedTypes = nestedTypes;
@@ -192,7 +192,7 @@ namespace Library.Model
                 List<IPropertyMetadata> properties = new List<IPropertyMetadata>();
                 foreach (IPropertyMetadata property in typeMetadata.Properties)
                 {
-                    if (MappingDictionary.AlreadyMapped.TryGetValue(property.SavedHash, out IMetadata item))
+                    if (AlreadyMapped.TryGetValue(property.SavedHash, out IMetadata item))
                     {
                         properties.Add(item as IPropertyMetadata);
                     }
@@ -200,7 +200,7 @@ namespace Library.Model
                     {
                         IPropertyMetadata newProperty = new PropertyMetadata(property);
                         properties.Add(newProperty);
-                        MappingDictionary.AlreadyMapped.Add(newProperty.SavedHash, newProperty);
+                        AlreadyMapped.Add(newProperty.SavedHash, newProperty);
                     }
                 }
                 Properties = properties;
@@ -211,7 +211,7 @@ namespace Library.Model
             {
                 DeclaringType = null;
             }
-            else if(MappingDictionary.AlreadyMapped.TryGetValue(typeMetadata.DeclaringType.SavedHash, out IMetadata item))
+            else if(AlreadyMapped.TryGetValue(typeMetadata.DeclaringType.SavedHash, out IMetadata item))
             {
                 DeclaringType = item as ITypeMetadata;
             }
@@ -219,7 +219,7 @@ namespace Library.Model
             {
                 ITypeMetadata newType = new TypeMetadata(typeMetadata.DeclaringType);
                 DeclaringType = newType;
-                MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                AlreadyMapped.Add(newType.SavedHash, newType);
             }
 
             // Methods
@@ -232,7 +232,7 @@ namespace Library.Model
                 List<IMethodMetadata> methods = new List<IMethodMetadata>();
                 foreach (IMethodMetadata method in typeMetadata.Methods)
                 {
-                    if (MappingDictionary.AlreadyMapped.TryGetValue(method.SavedHash, out IMetadata item))
+                    if (AlreadyMapped.TryGetValue(method.SavedHash, out IMetadata item))
                     {
                         methods.Add(item as IMethodMetadata);
                     }
@@ -240,7 +240,7 @@ namespace Library.Model
                     {
                         IMethodMetadata newMethod = new MethodMetadata(method);
                         methods.Add(newMethod);
-                        MappingDictionary.AlreadyMapped.Add(newMethod.SavedHash, newMethod);
+                        AlreadyMapped.Add(newMethod.SavedHash, newMethod);
                     }
                 }
                 Methods = methods;
@@ -257,7 +257,7 @@ namespace Library.Model
                 List<IMethodMetadata> constructors = new List<IMethodMetadata>();
                 foreach (IMethodMetadata constructor in typeMetadata.Methods)
                 {
-                    if (MappingDictionary.AlreadyMapped.TryGetValue(constructor.SavedHash, out IMetadata item))
+                    if (AlreadyMapped.TryGetValue(constructor.SavedHash, out IMetadata item))
                     {
                         constructors.Add(item as IMethodMetadata);
                     }
@@ -265,7 +265,7 @@ namespace Library.Model
                     {
                         IMethodMetadata newMethod = new MethodMetadata(constructor);
                         constructors.Add(newMethod);
-                        MappingDictionary.AlreadyMapped.Add(newMethod.SavedHash, newMethod);
+                        AlreadyMapped.Add(newMethod.SavedHash, newMethod);
                     }
                 }
                 Constructors = constructors;

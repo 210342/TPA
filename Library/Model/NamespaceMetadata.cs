@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 
 namespace Library.Model
 {
-    public class NamespaceMetadata : INamespaceMetadata
+    public class NamespaceMetadata : AbstractMapper, INamespaceMetadata
     {
         public IEnumerable<ITypeMetadata> Types { get; }
         public IEnumerable<IMetadata> Children => Types;
@@ -32,7 +32,7 @@ namespace Library.Model
             List<ITypeMetadata> types = new List<ITypeMetadata>();
             foreach(ITypeMetadata child in namespaceMetadata.Types)
             {
-                if (MappingDictionary.AlreadyMapped.TryGetValue(child.SavedHash, out IMetadata item))
+                if (AlreadyMapped.TryGetValue(child.SavedHash, out IMetadata item))
                 {
                     types.Add(item as ITypeMetadata);
                 }
@@ -40,7 +40,7 @@ namespace Library.Model
                 {
                     ITypeMetadata newType = new TypeMetadata(child);
                     types.Add(newType);
-                    MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                    AlreadyMapped.Add(newType.SavedHash, newType);
                 }
             }
             Types = types;

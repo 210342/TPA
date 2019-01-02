@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Library.Model
 {
-    public class MethodMetadata : IMethodMetadata
+    public class MethodMetadata : AbstractMapper, IMethodMetadata
     {
         internal static IEnumerable<MethodMetadata> EmitMethods(IEnumerable<MethodBase> methods)
         {
@@ -32,7 +32,6 @@ namespace Library.Model
 
         #endregion
 
-        //internal for testing purposes
         private MethodMetadata(MethodBase method)
         {
             Name = method.Name;
@@ -63,7 +62,7 @@ namespace Library.Model
                 List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
                 foreach (ITypeMetadata genericArgument in methodMetadata.GenericArguments)
                 {
-                    if (MappingDictionary.AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata mappedArgument))
+                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata mappedArgument))
                     {
                         genericArguments.Add(mappedArgument as ITypeMetadata);
                     }
@@ -71,14 +70,14 @@ namespace Library.Model
                     {
                         ITypeMetadata newType = new TypeMetadata(genericArgument);
                         genericArguments.Add(newType);
-                        MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                        AlreadyMapped.Add(newType.SavedHash, newType);
                     }
                 }
                 GenericArguments = genericArguments;
             }
 
             // Return type
-            if(MappingDictionary.AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out IMetadata item))
+            if(AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out IMetadata item))
             {
                 ReturnType = item as ITypeMetadata;
             }
@@ -86,7 +85,7 @@ namespace Library.Model
             {
                 ITypeMetadata newType = new TypeMetadata(methodMetadata.ReturnType);
                 ReturnType = newType;
-                MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                AlreadyMapped.Add(newType.SavedHash, newType);
             }
 
             // Parameters
@@ -99,7 +98,7 @@ namespace Library.Model
                 List<IParameterMetadata> parameters = new List<IParameterMetadata>();
                 foreach (IParameterMetadata parameter in methodMetadata.Parameters)
                 {
-                    if (MappingDictionary.AlreadyMapped.TryGetValue(parameter.SavedHash, out item))
+                    if (AlreadyMapped.TryGetValue(parameter.SavedHash, out item))
                     {
                         parameters.Add(item as IParameterMetadata);
                     }
@@ -107,7 +106,7 @@ namespace Library.Model
                     {
                         IParameterMetadata newParameter = new ParameterMetadata(parameter);
                         parameters.Add(newParameter);
-                        MappingDictionary.AlreadyMapped.Add(newParameter.SavedHash, newParameter);
+                        AlreadyMapped.Add(newParameter.SavedHash, newParameter);
                     }
                 }
                 Parameters = parameters;

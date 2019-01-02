@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 
 namespace Library.Model
 {
-    public class AssemblyMetadata : IAssemblyMetadata
+    public class AssemblyMetadata : AbstractMapper, IAssemblyMetadata
     {
         public int SavedHash { get; }
         public string Name { get; }
@@ -40,7 +40,7 @@ namespace Library.Model
             List<INamespaceMetadata> namespaces = new List<INamespaceMetadata>();
             foreach(INamespaceMetadata child in assemblyMetadata.Namespaces)
             {
-                if(MappingDictionary.AlreadyMapped.TryGetValue(child.SavedHash, out IMetadata item))
+                if(AlreadyMapped.TryGetValue(child.SavedHash, out IMetadata item))
                 {
                     namespaces.Add(item as INamespaceMetadata);
                 }
@@ -48,7 +48,7 @@ namespace Library.Model
                 {
                     INamespaceMetadata newNamespace = new NamespaceMetadata(child);
                     namespaces.Add(newNamespace);
-                    MappingDictionary.AlreadyMapped.Add(newNamespace.SavedHash, newNamespace);
+                    AlreadyMapped.Add(newNamespace.SavedHash, newNamespace);
                 }
             }
             Namespaces = namespaces;

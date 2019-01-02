@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 
 namespace Library.Model
 {
-    public class ParameterMetadata : IParameterMetadata
+    public class ParameterMetadata : AbstractMapper, IParameterMetadata
     {
         public string Name { get; }
         public ITypeMetadata TypeMetadata { get; private set; }
@@ -42,7 +42,7 @@ namespace Library.Model
         {
             Name = parameterMetadata.Name;
             SavedHash = parameterMetadata.SavedHash;
-            if(MappingDictionary.AlreadyMapped.TryGetValue(parameterMetadata.TypeMetadata.SavedHash, out IMetadata item))
+            if(AlreadyMapped.TryGetValue(parameterMetadata.TypeMetadata.SavedHash, out IMetadata item))
             {
                 TypeMetadata = item as ITypeMetadata;
             }
@@ -50,7 +50,7 @@ namespace Library.Model
             {
                 ITypeMetadata newType = new TypeMetadata(parameterMetadata.TypeMetadata);
                 TypeMetadata = newType;
-                MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                AlreadyMapped.Add(newType.SavedHash, newType);
             }
         }
 

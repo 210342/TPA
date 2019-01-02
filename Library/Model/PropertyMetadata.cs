@@ -7,7 +7,7 @@ using ModelContract;
 
 namespace Library.Model
 {
-    public class PropertyMetadata : IPropertyMetadata
+    public class PropertyMetadata : AbstractMapper, IPropertyMetadata
     {
         #region properties
         public string Name { get; }
@@ -50,7 +50,7 @@ namespace Library.Model
         {
             Name = propertyMetadata.Name;
             SavedHash = propertyMetadata.SavedHash;
-            if(MappingDictionary.AlreadyMapped.TryGetValue(propertyMetadata.MyType.SavedHash, out IMetadata item))
+            if(AlreadyMapped.TryGetValue(propertyMetadata.MyType.SavedHash, out IMetadata item))
             {
                 MyType = item as ITypeMetadata;
             }
@@ -58,7 +58,7 @@ namespace Library.Model
             {
                 ITypeMetadata newType = new TypeMetadata(propertyMetadata.MyType);
                 MyType = newType;
-                MappingDictionary.AlreadyMapped.Add(newType.SavedHash, newType);
+                AlreadyMapped.Add(newType.SavedHash, newType);
             }
         }
 

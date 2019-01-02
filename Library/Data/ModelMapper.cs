@@ -12,7 +12,6 @@ namespace Library.Data
     {
         public IAssemblyMetadata Map(IAssemblyMetadata root, Assembly model)
         {
-            MappingDictionary.AlreadyMapped.Clear();
             Type rootType = (from type in model.GetTypes()
                              where typeof(IAssemblyMetadata).IsAssignableFrom(type) && !type.IsInterface
                              select type).First();
