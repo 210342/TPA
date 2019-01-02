@@ -57,6 +57,13 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializationModel\SerializationAssemblyMetadataTests.cs" />
+    <Compile Include="SerializationModel\SerializationAttributeMetadataTests.cs" />
+    <Compile Include="SerializationModel\SerializationMethodMetadataTests.cs" />
+    <Compile Include="SerializationModel\SerializationNamespaceMetadataTests.cs" />
+    <Compile Include="SerializationModel\SerializationParameterMetadataTests.cs" />
+    <Compile Include="SerializationModel\SerializationPropertyMetadataTests.cs" />
+    <Compile Include="SerializationModel\SerializationTypeMetadataTests.cs" />
     <Compile Include="XmlModelSerializerTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +74,10 @@
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{df4c29a8-dc9d-4abc-8b61-229495dd2c37}</Project>
       <Name>Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelContract\ModelContract.csproj">
+      <Project>{3A99A3EA-C964-4CB2-8747-8F9A10689CC7}</Project>
+      <Name>ModelContract</Name>
     </ProjectReference>
     <ProjectReference Include="..\Serializing\Serializing.csproj">
       <Project>{D3F316A5-6F7D-42EC-B332-E6451EBCF704}</Project>
