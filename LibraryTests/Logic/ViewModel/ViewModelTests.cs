@@ -74,6 +74,7 @@ namespace LibraryTests.Logic.ViewModel.Tests
         public void ImportTracerTest()
         {
             VM.ViewModel vm = new VM.ViewModel(true);
+            vm.EndInit();
             Assert.IsNotNull(vm.Tracer);
         }
     }
