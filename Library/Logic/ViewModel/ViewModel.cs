@@ -93,12 +93,9 @@ namespace Library.Logic.ViewModel
         {
         }
 
-        public ViewModel(IErrorMessageBox errorProvider)
+        public ViewModel(bool tracing)
         {
-            ErrorMessageBox = errorProvider;
-            IsTracingEnabled = true;
-            ImportTracer();
-            ImportPersister();
+            IsTracingEnabled = tracing;
             LoadedAssemblyRepresentation = new AssemblyMetadata(Assembly.GetAssembly(this.GetType()));
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
@@ -108,21 +105,15 @@ namespace Library.Logic.ViewModel
             LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => Persister != null);
         }
 
-        public ViewModel(bool tracing)
+        public void  EndInit()
         {
-            IsTracingEnabled = tracing;
             if (IsTracingEnabled)
             {
                 ImportTracer();
             }
             ImportPersister();
-            LoadedAssemblyRepresentation = new AssemblyMetadata(Assembly.GetAssembly(this.GetType()));
-            ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
-            ObjectsList = new ObservableCollection<TreeViewItem>() { null };
-            ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
-            OpenFileCommand = new RelayCommand(() => OpenFile(OpenFileSourceProvider));
-            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider), () => Persister != null && !(ObjectsList.First() is null));
-            LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => Persister != null);
+            SaveModel.RaiseCanExecuteChanged();
+            LoadModel.RaiseCanExecuteChanged();
         }
 
         private void ImportTracer()

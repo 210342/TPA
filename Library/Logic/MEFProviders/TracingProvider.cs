@@ -37,7 +37,7 @@ namespace Library.Logic.MEFProviders
             }
             catch (CompositionException compositionException)
             {
-                throw new MEFLoaderException("Couldn't compose application", compositionException);
+                throw new MEFLoaderException("Couldn't compose tracing object", compositionException);
             }
             catch (Exception ex)
             {

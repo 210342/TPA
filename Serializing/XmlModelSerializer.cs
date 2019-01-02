@@ -46,6 +46,7 @@ namespace Serializing
             if(Target != null)
                 SerializationStream = new FileStream(Target, FileMode.OpenOrCreate, FileAccess.ReadWrite);
         }
+
         public XmlModelSerializer(Stream inStream) : this()
         {
             SerializationStream = inStream;

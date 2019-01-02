@@ -110,12 +110,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FileSemanticTracing.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Serializing.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="FileSemanticTracing.dll" />
+    <Content Include="Serializing.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,7 +8,7 @@ namespace CommandLineInterface
 {
     public class CommandLineInterface
     {
-        private ViewModel dataContext = new ViewModel(new PrintErrorMessage());
+        private ViewModel dataContext = new ViewModel();
         private TreeViewItem root;
         private readonly string tab = "   ";
         private readonly int startIndex = 0;
@@ -19,6 +19,8 @@ namespace CommandLineInterface
         {
             dataContext.OpenFileSourceProvider = new TextFileSourceProvider(dllPath); //source provider
             dataContext.SaveFileSourceProvider = new TextFileSourceProvider(dllPath); //source provider
+            dataContext.ErrorMessageBox = new PrintErrorMessage(); // 'error message box'
+            dataContext.EndInit();
             try
             {
                 dataContext.OpenFileCommand.Execute(null);

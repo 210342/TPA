@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace GraphicalUserInterface
 {
-    public class ErrorMessageBox : IErrorMessageBox
+    public class ErrorMessageBox : Window, IErrorMessageBox
     {
         public void ShowMessage(string title, string message)
         {
-            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.Cancel);
+            MessageBox.Show(this, message, title, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.Cancel);
         }
 
         public void CloseApp()
         {
-            Application.Current.Shutdown();
+            Application.Current?.Shutdown();
         }
     }
 }
