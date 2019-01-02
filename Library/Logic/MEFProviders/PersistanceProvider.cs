@@ -1,5 +1,6 @@
 ﻿using Library.Logic.MEFProviders.Exceptions;
 using Persistance;
+using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 
@@ -38,7 +39,11 @@ namespace Library.Logic.MEFProviders
             {
                 throw new MEFLoaderException("Couldn't compose persistance object", compositionException);
             }
-            if(_persister is null)
+            catch (Exception ex)
+            {
+                throw new MEFLoaderException($"Couldn't compose application, reason:{Environment.NewLine}{ex.GetType()}{Environment.NewLine}{ex.Message}");
+            }
+            if (_persister is null)
             {
                 throw new MEFLoaderException("Couldn't compose persistance object");
             }

@@ -20,6 +20,7 @@ namespace GraphicalUserInterface
             {
                 ((ViewModel)DataContext).OpenFileSourceProvider = new OpenFileDialogProvider();
                 ((ViewModel)DataContext).SaveFileSourceProvider = new SaveFileDialogProvider();
+                ((ViewModel)DataContext).ErrorMessageBox = new ErrorMessageBox();
             }
         }
     }

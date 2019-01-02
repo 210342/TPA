@@ -8,7 +8,7 @@ namespace CommandLineInterface
 {
     public class CommandLineInterface
     {
-        private ViewModel dataContext = new ViewModel();
+        private ViewModel dataContext = new ViewModel(new PrintErrorMessage());
         private TreeViewItem root;
         private readonly string tab = "   ";
         private readonly int startIndex = 0;

@@ -42,7 +42,8 @@ namespace Library.Logic.ViewModel
         public RelayCommand LoadModel { get; }
         public ISourceProvider OpenFileSourceProvider { get; set; }
         public ISourceProvider SaveFileSourceProvider { get; set; }
-        public bool Tracing { get; set; }
+        public IErrorMessageBox ErrorMessageBox { get; set; }
+        public bool IsTracingEnabled { get; set; }
         public ObservableCollection<TreeViewItem> ObjectsList { get; }
         public TreeViewItem ObjectSelected
         {
@@ -91,15 +92,31 @@ namespace Library.Logic.ViewModel
         public ViewModel() : this(true)
         {
         }
+
+        public ViewModel(IErrorMessageBox errorProvider)
+        {
+            ErrorMessageBox = errorProvider;
+            IsTracingEnabled = true;
+            ImportTracer();
+            ImportPersister();
+            LoadedAssemblyRepresentation = new AssemblyMetadata(Assembly.GetAssembly(this.GetType()));
+            ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
+            ObjectsList = new ObservableCollection<TreeViewItem>() { null };
+            ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
+            OpenFileCommand = new RelayCommand(() => OpenFile(OpenFileSourceProvider));
+            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider), () => Persister != null && !(ObjectsList.First() is null));
+            LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => Persister != null);
+        }
+
         public ViewModel(bool tracing)
         {
-            Tracing = tracing;
-            if (Tracing)
+            IsTracingEnabled = tracing;
+            if (IsTracingEnabled)
             {
                 ImportTracer();
             }
             ImportPersister();
-            LoadedAssemblyRepresentation = new AssemblyMetadata(System.Reflection.Assembly.GetAssembly(this.GetType()));
+            LoadedAssemblyRepresentation = new AssemblyMetadata(Assembly.GetAssembly(this.GetType()));
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<TreeViewItem>() { null };
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
@@ -122,9 +139,9 @@ namespace Library.Logic.ViewModel
             }
             catch(MEFLoaderException ex)
             {
-                // Dialog Box
-                Tracing = false;
-                throw ex;
+                ErrorMessageBox.ShowMessage("MEF composition error", ex.Message);
+                ErrorMessageBox.CloseApp();
+                IsTracingEnabled = false;
             }
         }
 
@@ -143,14 +160,14 @@ namespace Library.Logic.ViewModel
             }
             catch (MEFLoaderException ex)
             {
-                // Dialog Box
-                throw ex;
+                ErrorMessageBox.ShowMessage("MEF composition error", ex.Message);
+                ErrorMessageBox.CloseApp();
             }
         }
 
         private void LoadAssembly()
         {
-            if (Tracing)
+            if (IsTracingEnabled)
             {
                 Tracer.LogLoadingModel(LoadedAssembly);
                 Tracer.Flush();
@@ -170,7 +187,7 @@ namespace Library.Logic.ViewModel
                 SaveModel.RaiseCanExecuteChanged();
                 ObjectSelected = item;
             }
-            if (Tracing)
+            if (IsTracingEnabled)
             {
                 Tracer.LogModelLoaded(LoadedAssembly);
                 Tracer.Flush();
@@ -207,7 +224,7 @@ namespace Library.Logic.ViewModel
                 }
                 catch (IOException ex)
                 {
-                    if (Tracing)
+                    if (IsTracingEnabled)
                     {
                         Tracer.LogFailure($"Exception caught when trying to open a file for writing (serialization) {Environment.NewLine}{ex.Message}");
                         Tracer.Flush();
@@ -243,7 +260,7 @@ namespace Library.Logic.ViewModel
                 }
                 catch (IOException ex)
                 {
-                    if (Tracing)
+                    if (IsTracingEnabled)
                     {
                         Tracer.LogFailure($"Exception caught when trying to open a file for reading (deserialization){Environment.NewLine}{ex.Message}");
                         Tracer.Flush();

@@ -1,4 +1,5 @@
 ﻿using Library.Logic.MEFProviders.Exceptions;
+using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using Tracing;
@@ -37,6 +38,10 @@ namespace Library.Logic.MEFProviders
             catch (CompositionException compositionException)
             {
                 throw new MEFLoaderException("Couldn't compose application", compositionException);
+            }
+            catch (Exception ex)
+            {
+                throw new MEFLoaderException($"Couldn't compose application, reason:{Environment.NewLine}{ex.GetType()}{Environment.NewLine}{ex.Message}");
             }
             if (_tracer is null)
             {

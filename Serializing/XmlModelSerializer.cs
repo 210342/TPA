@@ -13,21 +13,8 @@ namespace Serializing
     public class XmlModelSerializer : IPersister
     {
         private DataContractSerializer dataContractSerializer; 
-        private string sourceName;
 
         public Stream SerializationStream { get; set; }
-        /*public string SourceName
-        {
-            get
-            {
-                return sourceName;
-            }
-            set
-            {
-                sourceName = value;
-                SerializationStream = new FileStream(SourceName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            }
-        }*/
         private Type NodeType { get; set;  }
         private IEnumerable<Type> KnownTypes { get; set; }
         private string _target;
