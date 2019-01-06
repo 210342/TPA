@@ -45,16 +45,20 @@ namespace DatabaseSemanticTracing
         {
             WriteEvent((int)EventID.Startup);
         }
+
         [Event((int)EventID.Failure, Message = "ApplicationFailure: {0}", Keywords = Keywords.Diagnostic, Level = EventLevel.Error)]
         public void Failure(string message)
         {
             WriteEvent((int)EventID.Failure, message);
         }
+
         [Event((int)EventID.Success, Message = "OperationSuccess: {0}", Keywords = Keywords.Diagnostic, Level = EventLevel.Verbose)]
         public void Success(string message)
         {
             WriteEvent((int)EventID.Success, message);
+
         }
+
         [Event((int)EventID.LoadingModel, Level = EventLevel.Informational, Keywords = Keywords.Diagnostic, Opcode = EventOpcode.Start)]
         public void LoadingModel(string loadedAssemblyName)
         {
