@@ -59,7 +59,7 @@ namespace DatabaseSemanticTracing
 
         }
 
-        [Event((int)EventID.LoadingModel, Level = EventLevel.Informational, Keywords = Keywords.Diagnostic, Opcode = EventOpcode.Start)]
+        [Event((int)EventID.LoadingModel, Message = "{0}", Level = EventLevel.Informational, Keywords = Keywords.Diagnostic, Opcode = EventOpcode.Start)]
         public void LoadingModel(string loadedAssemblyName)
         {
             if (IsEnabled())
@@ -68,7 +68,7 @@ namespace DatabaseSemanticTracing
             }
         }
 
-        [Event((int)EventID.ModelLoaded, Level = EventLevel.Informational, Keywords = Keywords.Diagnostic, Opcode = EventOpcode.Stop)]
+        [Event((int)EventID.ModelLoaded, Message = "{0}", Level = EventLevel.Informational, Keywords = Keywords.Diagnostic, Opcode = EventOpcode.Stop)]
         public void ModelLoaded(string loadedAssemblyName)
         {
             if (IsEnabled())
@@ -77,7 +77,7 @@ namespace DatabaseSemanticTracing
             }
         }
 
-        [Event((int)EventID.SavingModel, Level = EventLevel.Informational, Keywords = Keywords.Diagnostic, Opcode = EventOpcode.Start)]
+        [Event((int)EventID.SavingModel, Message = "{0}", Level = EventLevel.Informational, Keywords = Keywords.Diagnostic, Opcode = EventOpcode.Start)]
         public void SavingModel(string savedAssemblyName)
         {
             if (IsEnabled())
@@ -86,7 +86,7 @@ namespace DatabaseSemanticTracing
             }
         }
 
-        [Event((int)EventID.ModelSaved, Level = EventLevel.Informational, Keywords = Keywords.Diagnostic, Opcode = EventOpcode.Stop)]
+        [Event((int)EventID.ModelSaved, Message = "{0}", Level = EventLevel.Informational, Keywords = Keywords.Diagnostic, Opcode = EventOpcode.Stop)]
         public void ModelSaved(string savedAssemblyName)
         {
             if (IsEnabled())

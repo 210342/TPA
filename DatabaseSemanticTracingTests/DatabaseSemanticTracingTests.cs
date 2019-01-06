@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Threading;
 
 namespace DatabaseSemanticTracing.Tests
 {
@@ -19,12 +20,6 @@ namespace DatabaseSemanticTracing.Tests
         public void SetUp()
         {
             _sut = new DatabaseSemanticTracing();
-        }
-
-        [TestCleanup]
-        public void CleanUp()
-        {
-            _sut.Dispose();
         }
 
         [TestMethod()]
@@ -40,18 +35,12 @@ namespace DatabaseSemanticTracing.Tests
             {
                 connection.Open();
                 SqlTransaction transaction = connection.BeginTransaction();
-                int logsQuantity, logsQuantityAfter;
-                using (var command = new SqlCommand("SELECT COUNT(*) FROM dbo.Traces", connection, transaction))
-                {
-                    logsQuantity = (int)command.ExecuteScalar();
-                }
+                int logsQuantity = CheckLogsQuantity();
                 _sut.LogStartup();
-                using (var command = new SqlCommand("SELECT COUNT(*) FROM dbo.Traces", connection, transaction))
-                {
-                    logsQuantityAfter = (int)command.ExecuteScalar();
-                }
-                transaction.Rollback();
-                transaction.Dispose();
+                _sut.Dispose();
+                int logsQuantityAfter = CheckLogsQuantity();
+                Assert.AreEqual(logsQuantity + 1, logsQuantityAfter);
+                RemoveLastEntry();
                 connection.Close();
             }
         }
@@ -94,25 +83,43 @@ namespace DatabaseSemanticTracing.Tests
 
         private void CallGivenMethod(string methodName)
         {
+            int logsQuantity = CheckLogsQuantity();
             MethodInfo methodToCall = (from method in _sut.GetType().GetMethods()
                                        where method.Name.Equals(methodName)
                                        select method).First();
+            methodToCall.Invoke(_sut, new object[] { "TEST METHOD" });
+            _sut.Dispose();
+            int logsQuantityAfter = CheckLogsQuantity();
+            Assert.AreEqual(logsQuantity + 1, logsQuantityAfter);
+            RemoveLastEntry();
+        }
+
+        private int CheckLogsQuantity()
+        {
+            int quantity;
             using (var connection = new SqlConnection(_sut.ConnectionString))
             {
                 connection.Open();
                 SqlTransaction transaction = connection.BeginTransaction();
-                int logsQuantity, logsQuantityAfter;
                 using (var command = new SqlCommand("SELECT COUNT(*) FROM dbo.Traces", connection, transaction))
                 {
-                    logsQuantity = (int)command.ExecuteScalar();
+                    quantity = (int)command.ExecuteScalar();
                 }
-                methodToCall.Invoke(_sut, new object[] { "TEST METHOD" });
-                using (var command = new SqlCommand("SELECT COUNT(*) FROM dbo.Traces", connection, transaction))
+                connection.Close();
+            }
+            return quantity;
+        }
+
+        private void RemoveLastEntry()
+        {
+            using (var connection = new SqlConnection(_sut.ConnectionString))
+            {
+                connection.Open();
+                SqlTransaction transaction = connection.BeginTransaction();
+                using (var command = new SqlCommand("SELECT TOP 1 * FROM Traces ORDER BY id DESC", connection, transaction))
                 {
-                    logsQuantityAfter = (int)command.ExecuteScalar();
+                    command.ExecuteNonQuery();
                 }
-                transaction.Rollback();
-                transaction.Dispose();
                 connection.Close();
             }
         }

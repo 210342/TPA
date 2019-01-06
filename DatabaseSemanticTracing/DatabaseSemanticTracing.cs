@@ -1,8 +1,6 @@
 ﻿using Microsoft.Practices.EnterpriseLibrary.SemanticLogging;
-using Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks;
 using System;
 using System.ComponentModel.Composition;
-using System.Data.SqlClient;
 using System.Diagnostics.Tracing;
 using Tracing;
 
@@ -13,7 +11,7 @@ namespace DatabaseSemanticTracing
     {
         private readonly EventListener _listener;
 
-        public string ConnectionString { get; set; } = @"Data Source=DESKTOP-MPF14F3\SQLEXPRESS;Initial Catalog=Logging;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        public string ConnectionString { get; set; } = @"Data Source=ADAM-KOMPUTER\SQL;Initial Catalog=Logging;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
         public DatabaseSemanticTracing()
         {
