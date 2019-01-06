@@ -49,7 +49,7 @@ namespace DatabaseSemanticTracing.Tests
         {
             int logsQuantity = CheckLogsQuantity();
             _sut.LogStartup();
-            _sut.Dispose();
+            _sut.Flush();
             Assert.AreEqual(logsQuantity + 1, CheckLogsQuantity());
         }
 
@@ -96,7 +96,7 @@ namespace DatabaseSemanticTracing.Tests
                                        where method.Name.Equals(methodName)
                                        select method).First();
             methodToCall.Invoke(_sut, new object[] { "TEST METHOD" });
-            _sut.Dispose();
+            _sut.Flush();
             Assert.AreEqual(logsQuantity + 1, CheckLogsQuantity());
         }
 

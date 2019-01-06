@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Tracing;
+using System.Xml;
 using Tracing;
 
 namespace DatabaseSemanticTracing
@@ -9,12 +10,29 @@ namespace DatabaseSemanticTracing
     [Export(typeof(ITracing))]
     public class DatabaseSemanticTracing : ITracing, IDisposable
     {
-        private readonly EventListener _listener;
+        private EventListener _listener;
 
-        public string ConnectionString { get; set; } = @"Data Source=ADAM-KOMPUTER\SQL;Initial Catalog=Logging;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        public string ConnectionString { get; set; }
 
         public DatabaseSemanticTracing()
         {
+            using (XmlReader reader = 
+                XmlReader.Create($"{System.IO.Path.GetDirectoryName(GetType().Assembly.Location)}/DatabaseConfiguration.xml"))
+            {
+                while (reader.Read() && string.IsNullOrEmpty(ConnectionString))
+                {
+                    if (reader.IsStartElement())
+                    {
+                        if (reader.Name == "ConnectionString")
+                        {
+                            if (reader.Read())
+                            {
+                                ConnectionString = reader.Value;
+                            }
+                        }
+                    }
+                }
+            }
             _listener = SqlDatabaseLog.CreateListener("DatabaseSemanticTracing", ConnectionString);
             _listener.EnableEvents(SemanticLoggingEventSource.Log, EventLevel.LogAlways, Keywords.All);
         }
@@ -69,7 +87,9 @@ namespace DatabaseSemanticTracing
 
         public void Flush()
         {
-            // nothing to do
+            _listener.Dispose();
+            _listener = SqlDatabaseLog.CreateListener("DatabaseSemanticTracing", ConnectionString);
+            _listener.EnableEvents(SemanticLoggingEventSource.Log, EventLevel.LogAlways, Keywords.All);
         }
     }
 }
