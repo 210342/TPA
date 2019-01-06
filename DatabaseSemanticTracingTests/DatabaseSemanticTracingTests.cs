@@ -22,6 +22,22 @@ namespace DatabaseSemanticTracing.Tests
             _sut = new DatabaseSemanticTracing();
         }
 
+        [TestCleanup]
+        public void CleanUp()
+        {
+            using (var connection = new SqlConnection(_sut.ConnectionString))
+            {
+                connection.Open();
+                SqlTransaction transaction = connection.BeginTransaction();
+                using (var command = new SqlCommand("DELETE FROM Traces WHERE FormattedMessage LIKE '%TEST%'", connection, transaction))
+                {
+                    command.ExecuteScalar();
+                }
+                transaction.Commit();
+                connection.Close();
+            }
+        }
+
         [TestMethod()]
         public void DatabaseSemanticTracingTest()
         {
@@ -31,18 +47,10 @@ namespace DatabaseSemanticTracing.Tests
         [TestMethod]
         public void LogStartupTest()
         {
-            using (var connection = new SqlConnection(_sut.ConnectionString))
-            {
-                connection.Open();
-                SqlTransaction transaction = connection.BeginTransaction();
-                int logsQuantity = CheckLogsQuantity();
-                _sut.LogStartup();
-                _sut.Dispose();
-                int logsQuantityAfter = CheckLogsQuantity();
-                Assert.AreEqual(logsQuantity + 1, logsQuantityAfter);
-                RemoveLastEntry();
-                connection.Close();
-            }
+            int logsQuantity = CheckLogsQuantity();
+            _sut.LogStartup();
+            _sut.Dispose();
+            Assert.AreEqual(logsQuantity + 1, CheckLogsQuantity());
         }
 
         [TestMethod]
@@ -89,9 +97,7 @@ namespace DatabaseSemanticTracing.Tests
                                        select method).First();
             methodToCall.Invoke(_sut, new object[] { "TEST METHOD" });
             _sut.Dispose();
-            int logsQuantityAfter = CheckLogsQuantity();
-            Assert.AreEqual(logsQuantity + 1, logsQuantityAfter);
-            RemoveLastEntry();
+            Assert.AreEqual(logsQuantity + 1, CheckLogsQuantity());
         }
 
         private int CheckLogsQuantity()
@@ -108,20 +114,6 @@ namespace DatabaseSemanticTracing.Tests
                 connection.Close();
             }
             return quantity;
-        }
-
-        private void RemoveLastEntry()
-        {
-            using (var connection = new SqlConnection(_sut.ConnectionString))
-            {
-                connection.Open();
-                SqlTransaction transaction = connection.BeginTransaction();
-                using (var command = new SqlCommand("SELECT TOP 1 * FROM Traces ORDER BY id DESC", connection, transaction))
-                {
-                    command.ExecuteNonQuery();
-                }
-                connection.Close();
-            }
         }
     }
 }
