@@ -13,9 +13,7 @@ namespace DatabasePersistence.DBModel
         public IEnumerable<INamespaceMetadata> Namespaces { get; set; }
         public string Name { get; set; }
         public int SavedHash { get; set; }
-        public IEnumerable<IMetadata> Children { get { return NamespacesCol; } }
-
-        public ICollection<INamespaceMetadata> NamespacesCol = new List<INamespaceMetadata>();
+        public IEnumerable<IMetadata> Children { get { return Namespaces; } }
 
         public DbAssemblyMetadata(IAssemblyMetadata assemblyMetadata)
         {
@@ -36,7 +34,6 @@ namespace DatabasePersistence.DBModel
                 }
             }
             Namespaces = namespaces;
-            NamespacesCol = new List<INamespaceMetadata>(namespaces);
         }
 
         public DbAssemblyMetadata()

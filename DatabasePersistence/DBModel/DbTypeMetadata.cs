@@ -22,7 +22,7 @@ namespace DatabasePersistence.DBModel
         public ITypeMetadata DeclaringType { get; private set; }
         public IEnumerable<IMethodMetadata> Methods { get; private set; }
         public IEnumerable<IMethodMetadata> Constructors { get; private set; }
-        public string Name { get; private set; }
+        public string Name { get; set; }
         public int SavedHash { get; private set; }
         public IEnumerable<IMetadata> Children { get; private set; }
 
