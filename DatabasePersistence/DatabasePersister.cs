@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
+using System.Data.Entity.Migrations;
 
 namespace DatabasePersistence
 {
@@ -50,20 +52,57 @@ namespace DatabasePersistence
 
         public object Load()
         {
-            List<AbstractMapper> model = context.Model.ToList();
+            var processed = new HashSet<IMetadata>();
+            Console.WriteLine(context.Model.Count());
+            context.Model.ToList().ForEach(n => Console.WriteLine(n?.GetType()));
             IAssemblyMetadata assembly = 
-                (IAssemblyMetadata)model.Select(n => n).Where(n => typeof(IAssemblyMetadata).IsAssignableFrom(n.GetType())).First();
+                (IAssemblyMetadata)context.Model.Select(n => n)
+                .Where(n => n is DbAssemblyMetadata).First();
+            LoadGraph(assembly, processed);
             return assembly;
-
         }
 
         public void Save(object obj)
         {
+            var processed = new HashSet<IMetadata>();
+
             if (!typeof(IAssemblyMetadata).IsAssignableFrom(obj.GetType()))
                 throw new InvalidOperationException("Can't assign from given type.");
             AbstractMapper assembly = (AbstractMapper)obj;
-            context.Model.Add(assembly);
+
+            LoadGraph((IMetadata)assembly, processed);
+            foreach(var el in processed)
+            {
+                context.Model.AddOrUpdate((AbstractMapper)el);
+            }
+            //processed.ToList().ForEach(n => context.Model.Add((AbstractMapper)n));
+            //context.Model.Add(assembly);
             context.SaveChanges();
+        }
+
+        bool Contains(DbSet<AbstractMapper> set, AbstractMapper element)
+        {
+            foreach(var el in set)
+            {
+                if (el.Id == element.Id)
+                    return true;
+            }
+            return false;
+        }
+
+        private void LoadGraph(IMetadata head, HashSet<IMetadata> processed)
+        {
+            if(head != null && !processed.Contains(head))
+            {
+                processed.Add(head);
+                if(head.Children != null)
+                {
+                    foreach (var child in head.Children)
+                    {
+                        LoadGraph(child, processed);
+                    }
+                }
+            }
         }
     }
 }

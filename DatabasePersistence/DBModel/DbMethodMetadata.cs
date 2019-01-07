@@ -1,6 +1,7 @@
 ﻿using ModelContract;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -15,9 +16,9 @@ namespace DatabasePersistence.DBModel
         public bool IsExtension { get; private set; }
         public IEnumerable<IParameterMetadata> Parameters { get; private set; }
         public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; private set; }
-        public string Name { get; private set; }
-        public int SavedHash { get; private set; }
-        public IEnumerable<IMetadata> Children { get; private set; }
+        public string Name { get; set; }
+        public int SavedHash { get; protected set; }
+        public IEnumerable<IMetadata> Children { get; set; }
 
         public DbMethodMetadata(IMethodMetadata methodMetadata)
         {

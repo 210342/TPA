@@ -1,6 +1,8 @@
 ﻿using ModelContract;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -11,13 +13,21 @@ namespace DatabasePersistence.DBModel
     public class DbParameterMetadata : AbstractMapper, IParameterMetadata
     {
         public ITypeMetadata TypeMetadata { get; private set; }
-        public string Name { get; private set; }
-        public int SavedHash { get; private set; }
+        public string Name { get; set; }
+        public int SavedHash { get; protected set; }
+        [NotMapped]
         public IEnumerable<IMetadata> Children
         {
             get
             {
                 return new[] { TypeMetadata };
+            }
+            set
+            {
+                if (value != null)
+                    this.TypeMetadata = (ITypeMetadata)value.First();
+                else
+                    this.TypeMetadata = null;
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using ModelContract;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -10,9 +11,14 @@ namespace DatabasePersistence.DBModel
 {
     public class DbAttributeMetadata : AbstractMapper, IAttributeMetadata
     {
-        public string Name { get; private set; }
-        public int SavedHash { get; private set; }
-        public IEnumerable<IMetadata> Children => null;
+        public string Name { get; set; }
+        public int SavedHash { get; protected set; }
+        public IEnumerable<IMetadata> Children { get => null; set => NullOp(); }
+
+        private void NullOp()
+        {
+            
+        }
 
         public DbAttributeMetadata(IAttributeMetadata attributeMetadata)
         {

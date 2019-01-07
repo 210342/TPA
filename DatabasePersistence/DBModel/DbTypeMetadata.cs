@@ -1,10 +1,10 @@
 ﻿using ModelContract;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DatabasePersistence.DBModel
 {
@@ -23,8 +23,9 @@ namespace DatabasePersistence.DBModel
         public IEnumerable<IMethodMetadata> Methods { get; private set; }
         public IEnumerable<IMethodMetadata> Constructors { get; private set; }
         public string Name { get; set; }
-        public int SavedHash { get; private set; }
-        public IEnumerable<IMetadata> Children { get; private set; }
+        public int SavedHash { get; protected set; }
+        [NotMapped]
+        public IEnumerable<IMetadata> Children { get; set; }
 
         public DbTypeMetadata(ITypeMetadata typeMetadata)
         {
@@ -239,15 +240,14 @@ namespace DatabasePersistence.DBModel
                 Constructors = constructors;
             }
 
-            FillChildren(new StreamingContext());
+            FillChildren();
         }
 
         public DbTypeMetadata()
         {
         }
 
-        [OnDeserialized]
-        private void FillChildren(StreamingContext context)
+        private void FillChildren()
         {
             List<IAttributeMetadata> amList = new List<IAttributeMetadata>();
             if (Attributes != null)

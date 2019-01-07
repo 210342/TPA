@@ -1,10 +1,9 @@
-﻿using System;
-using DatabasePersistence.DBModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ModelContract;
+using System;
 using System.Linq;
-using System.Diagnostics;
 
-namespace DatabasePersistence.Tests
+namespace DatabasePersistence.DBModel
 {
     [TestClass]
     public class DatabasePersistenceTests
@@ -62,17 +61,39 @@ namespace DatabasePersistence.Tests
 
             persister.Save(assemblyMetadata);
             DbAssemblyMetadata loadedBack = (DbAssemblyMetadata)persister.Load();
+            PrintAssembly(loadedBack);
             Assert.IsNotNull(loadedBack);
             Assert.IsNotNull(loadedBack.Children);
             Assert.IsNotNull(loadedBack.Children.First());
-            Assert.AreEqual(loadedBack.Children.First(), assemblyMetadata.Children.First());
-            Assert.AreEqual(loadedBack.Children.First().Children, assemblyMetadata.Children.First().Children);
+            Assert.AreEqual(loadedBack.Namespaces.First(), assemblyMetadata.Namespaces.First());
+            Assert.AreEqual(loadedBack.Namespaces.First().Children, assemblyMetadata.Namespaces.First().Children);
         }
 
         [TestCleanup]
         public void CleanUp()
         {
             persister.Dispose();
+        }
+        void PrintAssembly(IAssemblyMetadata assembly)
+        {
+            Console.WriteLine(assembly?.Name);
+            if (assembly.Children != null)
+            {
+                foreach (var child in assembly.Children)
+                    Console.WriteLine(child?.Name);
+            }
+        }
+        void PrintNodes(IMetadata head)
+        {
+            if (head != null)
+            {
+                Console.WriteLine($"Node: {head.GetType()}::: {head.Name}");
+                if(head.Children != null)
+                {
+                    foreach (var child in head.Children)
+                        PrintNodes((IMetadata)child);
+                }
+            }
         }
     }
 }
