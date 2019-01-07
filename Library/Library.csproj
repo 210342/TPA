@@ -60,6 +60,7 @@
     <Compile Include="Logic\MEFProviders\PersistanceProvider.cs" />
     <Compile Include="Logic\MEFProviders\TracingProvider.cs" />
     <Compile Include="Logic\ViewModel\IErrorMessageBox.cs" />
+    <Compile Include="Logic\ViewModel\NullSourceProvider.cs" />
     <Compile Include="Model\AbstractMapper.cs" />
     <Compile Include="Model\AttributeMetadata.cs" />
     <Compile Include="Model\AssemblyMetadata.cs" />

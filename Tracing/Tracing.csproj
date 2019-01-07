@@ -68,8 +68,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatabaseHandling\DatabaseWriter.cs" />
-    <Compile Include="DatabaseHandling\IDatabaseWriter.cs" />
     <Compile Include="ITracing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

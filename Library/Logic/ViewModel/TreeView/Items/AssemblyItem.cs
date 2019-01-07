@@ -1,5 +1,6 @@
 ﻿using Library.Model;
 using ModelContract;
+using System.Linq;
 
 namespace Library.Logic.ViewModel
 {
@@ -16,7 +17,7 @@ namespace Library.Logic.ViewModel
         public AssemblyItem(AssemblyMetadata source) : base(source)
         {
             _details =  $"Assembly name: {source.Name}, " +
-                $"has {new System.Collections.Generic.List<IMetadata>(source.Children).Count} namespaces.";
+                $"has " + (source.Children == null ? "0" : source.Children.Count().ToString()) + " namespaces.";
         }
 
         protected override TreeViewItem GetChildOfType(IMetadata metadata)

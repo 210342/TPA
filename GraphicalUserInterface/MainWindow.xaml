@@ -5,12 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GraphicalUserInterface"
         xmlns:viewModel="clr-namespace:Library.Logic.ViewModel;assembly=Library"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="Dissasemblers: Age of Adaptive Programming" Height="467" Width="800">
     <Window.DataContext>
         <viewModel:ViewModel/>
     </Window.DataContext>
-
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding AppClosing}" ></i:InvokeCommandAction>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <TreeView Name="TreeView" Margin="10,31,10,32" RenderTransformOrigin="0.5,0.5" ItemsSource="{Binding ObjectsList}" Grid.ColumnSpan="2">
 

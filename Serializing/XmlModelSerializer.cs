@@ -20,6 +20,8 @@ namespace Serializing
         private string _target;
         public string Target { get => _target; set => SetTarget(value); }
 
+        public FileSystemDependency FileSystemDependency => FileSystemDependency.Dependent;
+
         private void SetTarget(string value)
         {
             this._target = value;

@@ -11,6 +11,8 @@ namespace DatabasePersistence.Tests
     {
 
         private DatabasePersister persister;
+        private string connectionString;
+
 
         [TestInitialize]
         public void Init()
@@ -18,9 +20,10 @@ namespace DatabasePersistence.Tests
             string assemblyPath = System.IO.Path.GetDirectoryName(
                 System.Reflection.Assembly.GetCallingAssembly().Location);
             string fileName = "LocalDB.mdf";
-            persister = new DatabasePersister();
-            persister.Target = $"Server=(localdb)\\mssqllocaldb;Integrated Security=true;"+
+            connectionString = $"Server=(localdb)\\mssqllocaldb;Integrated Security=true;" +
             $"AttachDbFileName='{assemblyPath}\\{fileName}';";
+            persister = new DatabasePersister();
+            persister.SetTarget ( connectionString );
         }
 
         [TestMethod]
@@ -65,6 +68,7 @@ namespace DatabasePersistence.Tests
             Assert.AreEqual(loadedBack.Children.First(), assemblyMetadata.Children.First());
             Assert.AreEqual(loadedBack.Children.First().Children, assemblyMetadata.Children.First().Children);
         }
+
         [TestCleanup]
         public void CleanUp()
         {

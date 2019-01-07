@@ -3,22 +3,44 @@ using ModelContract;
 using Persistance;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Configuration;
 using System.Linq;
 
 namespace DatabasePersistence
 {
+    [Export(typeof(IPersister))]
     public class DatabasePersister : IPersister
     {
         private DbModelAccesContext context;
 
-        private string _target;
 
-        public string Target { get => _target; set => SetTarget(value); }
+        public string Target { get; set; }
 
-        private void SetTarget(string connStr)
+        public FileSystemDependency FileSystemDependency => FileSystemDependency.Independent;
+
+        public void SetTarget(string connStr)
         {
+            if (context != null)
+                context.Dispose();
             context = new DbModelAccesContext(connStr);
-            this._target = connStr;
+            this.Target = connStr;
+        }
+        public DatabasePersister()
+        {
+            bool localFileAccess = false;
+            string localFileAccessString = ConfigurationManager.AppSettings["LocalFileAccess"];
+            if (localFileAccessString != null)
+                localFileAccess = bool.Parse(localFileAccessString);
+            if(!localFileAccess)
+                SetTarget(ConfigurationManager.AppSettings["Connection"]);
+            else
+            {
+                string assemblyPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                string fileName = ConfigurationManager.AppSettings["DbFileName"];
+                SetTarget ($"Server=(localdb)\\mssqllocaldb;Integrated Security=true;" +
+                    $"AttachDbFileName='{assemblyPath}\\{fileName}';");
+            }
         }
 
         public void Dispose()

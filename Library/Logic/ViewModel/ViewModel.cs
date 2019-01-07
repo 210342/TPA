@@ -38,6 +38,17 @@ namespace Library.Logic.ViewModel
         public ICommand ShowCurrentObject { get; }
         public ICommand ReloadAssemblyCommand { get; }
         public ICommand OpenFileCommand { get; }
+        public ICommand AppClosing
+        {
+            get
+            {
+                return new RelayCommand<CancelEventArgs>(
+                    (args) => {
+                        
+                        Persister?.Dispose();
+                    });
+            }
+        }
         public RelayCommand SaveModel { get; }
         public RelayCommand LoadModel { get; }
         public ISourceProvider OpenFileSourceProvider { get; set; }
@@ -151,6 +162,8 @@ namespace Library.Logic.ViewModel
             }
             catch (MEFLoaderException ex)
             {
+                if(IsTracingEnabled)
+                    Tracer.LogFailure("Persister loading failure. " + ex.Message + " " + ex.StackTrace);
                 ErrorMessageBox.ShowMessage("MEF composition error", ex.Message);
                 ErrorMessageBox.CloseApp();
             }
@@ -197,6 +210,9 @@ namespace Library.Logic.ViewModel
 
         private void Save(ISourceProvider filePathProvider)
         {
+            if (Persister.FileSystemDependency == FileSystemDependency.Independent)
+                filePathProvider = new NullSourceProvider();
+
             if (filePathProvider == null)
                 throw new System.ArgumentNullException("SourceProvider can't be null.");
             if (filePathProvider.GetAccess())
@@ -226,6 +242,9 @@ namespace Library.Logic.ViewModel
 
         private void Load(ISourceProvider filePathProvider)
         {
+            if (Persister.FileSystemDependency == FileSystemDependency.Independent)
+                filePathProvider = new NullSourceProvider();
+
             if (filePathProvider == null)
                 throw new System.ArgumentNullException("SourceProvider can't be null.");
             if (filePathProvider.GetAccess())
