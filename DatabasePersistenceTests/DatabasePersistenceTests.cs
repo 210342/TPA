@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContract;
 using System;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace DatabasePersistence.DBModel
@@ -12,87 +13,98 @@ namespace DatabasePersistence.DBModel
         private DatabasePersister persister;
         private string connectionString;
 
-
         [TestInitialize]
         public void Init()
         {
-            string assemblyPath = System.IO.Path.GetDirectoryName(
-                System.Reflection.Assembly.GetCallingAssembly().Location);
-            string fileName = "LocalDB.mdf";
-            connectionString = $"Server=(localdb)\\mssqllocaldb;Integrated Security=true;" +
-            $"AttachDbFileName='{assemblyPath}\\{fileName}';";
-            persister = new DatabasePersister();
-            persister.SetTarget ( connectionString );
+            // string assemblyPath = System.IO.Path.GetDirectoryName(
+            //    System.Reflection.Assembly.GetCallingAssembly().Location);
+            // string fileName = "LocalDB.mdf";
+            connectionString = $"Server=(localdb)\\mssqllocaldb;Integrated Security=true;";
+            persister = new DatabasePersister() { Target = connectionString };
         }
 
         [TestMethod]
         public void DbSaveTest()
         {
-            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata();
-            assemblyMetadata.Name = "test";
-            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata();
-            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata();
-            DbNamespaceMetadata namespaceMeta3 = new DbNamespaceMetadata();
-            namespaceMeta1.Name = "test1";
-            namespaceMeta2.Name = "test2";
-            namespaceMeta3.Name = "test3";
+            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata() { Name = "test0" };
+            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata() { Name = "test1" };
+            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata() { Name = "test2" };
+            DbNamespaceMetadata namespaceMeta3 = new DbNamespaceMetadata() { Name = "test3" };
             assemblyMetadata.Namespaces = new DbNamespaceMetadata[] { namespaceMeta1, namespaceMeta2, namespaceMeta3 };
 
             persister.Save(assemblyMetadata);
-            DbAssemblyMetadata loadedBack = (DbAssemblyMetadata)persister.Load();
-            Assert.IsNotNull(loadedBack);
-            Assert.AreEqual(loadedBack.Name, assemblyMetadata.Name);
-            Assert.AreEqual(loadedBack.Children.Count(), assemblyMetadata.Children.Count());
+            using (var connection = new SqlConnection(persister.Target))
+            {
+                connection.Open();
+                SqlTransaction transaction = connection.BeginTransaction();
+                using (var command = new SqlCommand("SELECT COUNT(*) FROM Assemblies", connection, transaction))
+                {
+                    Assert.AreEqual(1, (int)command.ExecuteScalar());
+                }
+                connection.Close();
+            }
         }
+
         [TestMethod]
         public void DbSecondDepthTest()
         {
-            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata();
-            assemblyMetadata.Name = "test";
-            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata();
-            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata();
-            DbTypeMetadata type1 = new DbTypeMetadata();
-            type1.Name = "Type1";
-            namespaceMeta1.Name = "test1";
-            namespaceMeta2.Name = "test2";
-            //----
+            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata() { Name = "test0" };
+            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata() { Name = "test1" };
+            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata() { Name = "test2" };
+            DbTypeMetadata type1 = new DbTypeMetadata { Name = "Type1" };
             namespaceMeta1.Types = new[] { type1 };
             assemblyMetadata.Namespaces = new DbNamespaceMetadata[] { namespaceMeta1, namespaceMeta2 };
 
             persister.Save(assemblyMetadata);
-            DbAssemblyMetadata loadedBack = (DbAssemblyMetadata)persister.Load();
-            PrintAssembly(loadedBack);
-            Assert.IsNotNull(loadedBack);
-            Assert.IsNotNull(loadedBack.Children);
-            Assert.IsNotNull(loadedBack.Children.First());
-            Assert.AreEqual(loadedBack.Namespaces.First(), assemblyMetadata.Namespaces.First());
-            Assert.AreEqual(loadedBack.Namespaces.First().Children, assemblyMetadata.Namespaces.First().Children);
+            using (var connection = new SqlConnection(persister.Target))
+            {
+                connection.Open();
+                SqlTransaction transaction = connection.BeginTransaction();
+                using (var command = new SqlCommand("SELECT COUNT(*) FROM Types", connection, transaction))
+                {
+                    Assert.AreEqual(1, (int)command.ExecuteScalar());
+                }
+                connection.Close();
+            }
         }
 
         [TestCleanup]
         public void CleanUp()
         {
-            persister.Dispose();
-        }
-        void PrintAssembly(IAssemblyMetadata assembly)
-        {
-            Console.WriteLine(assembly?.Name);
-            if (assembly.Children != null)
+            using (var connection = new SqlConnection(persister.Target))
             {
-                foreach (var child in assembly.Children)
-                    Console.WriteLine(child?.Name);
-            }
-        }
-        void PrintNodes(IMetadata head)
-        {
-            if (head != null)
-            {
-                Console.WriteLine($"Node: {head.GetType()}::: {head.Name}");
-                if(head.Children != null)
+                connection.Open();
+                SqlTransaction transaction = connection.BeginTransaction();
+                using (var command = new SqlCommand("DELETE FROM Types", connection, transaction))
                 {
-                    foreach (var child in head.Children)
-                        PrintNodes((IMetadata)child);
+                    command.ExecuteScalar();
                 }
+                using (var command = new SqlCommand("DELETE FROM Namespaces", connection, transaction))
+                {
+                    command.ExecuteScalar();
+                }
+                using (var command = new SqlCommand("DELETE FROM Assemblies", connection, transaction))
+                {
+                    command.ExecuteScalar();
+                }
+                using (var command = new SqlCommand("DELETE FROM Attributes", connection, transaction))
+                {
+                    command.ExecuteScalar();
+                }
+                using (var command = new SqlCommand("DELETE FROM Methods", connection, transaction))
+                {
+                    command.ExecuteScalar();
+                }
+                using (var command = new SqlCommand("DELETE FROM Parameters", connection, transaction))
+                {
+                    command.ExecuteScalar();
+                }
+                using (var command = new SqlCommand("DELETE FROM Properties", connection, transaction))
+                {
+                    command.ExecuteScalar();
+                }
+                //transaction.Commit();
+                connection.Close();
             }
         }
     }

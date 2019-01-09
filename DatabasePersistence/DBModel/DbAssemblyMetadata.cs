@@ -12,7 +12,6 @@ namespace DatabasePersistence.DBModel
 {
     public class DbAssemblyMetadata : AbstractMapper, IAssemblyMetadata
     {
-
         [NotMapped]
         public IEnumerable<INamespaceMetadata> Namespaces { get => NamespacesList; set => SetNamespaces(value); }
 

@@ -12,15 +12,33 @@ namespace DatabasePersistence.DBModel
 {
     public class DbNamespaceMetadata : AbstractMapper, INamespaceMetadata
     {
-        [Column]
-        public DbAssemblyMetadata DbAssemblyMetadata { get; set; }
-        public int DbAssemblyMetadataId { get; set; }
-        [NotMapped]
-        public IEnumerable<ITypeMetadata> Types { get;  set; }
+        #region EF collections
+        public ICollection<DbTypeMetadata> TypesList { get; set; } = new List<DbTypeMetadata>();
+        #endregion
+
+        #region EF
+
+        public DbAssemblyMetadata Assembly { get; set; }
+
+        #endregion
+
+        #region INamespaceMetadata
         public string Name { get; set; }
         public int SavedHash { get; protected set; }
         [NotMapped]
         public IEnumerable<IMetadata> Children { get { return Types; } set { SetType(value); } }
+        [NotMapped]
+        public IEnumerable<ITypeMetadata> Types
+        {
+            get => TypesList;
+            set
+            {
+                TypesList.Clear();
+                value.ToList().ForEach(t => TypesList.Add(t as DbTypeMetadata));
+            }
+        }
+
+        #endregion
 
         private void SetType(IEnumerable<IMetadata> list)
         {

@@ -10,6 +10,12 @@ namespace DatabasePersistence.DBModel
 {
     public class DbTypeMetadata : AbstractMapper, ITypeMetadata
     {
+        #region EF
+        public DbNamespaceMetadata Namespace { get; set; }
+        #endregion
+
+        #region ITypeMetadata
+
         public string NamespaceName { get; private set; }
         public ITypeMetadata BaseType { get; private set; }
         public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
@@ -26,6 +32,8 @@ namespace DatabasePersistence.DBModel
         public int SavedHash { get; protected set; }
         [NotMapped]
         public IEnumerable<IMetadata> Children { get; set; }
+
+        #endregion
 
         public DbTypeMetadata(ITypeMetadata typeMetadata)
         {
@@ -245,6 +253,8 @@ namespace DatabasePersistence.DBModel
 
         public DbTypeMetadata()
         {
+            SavedHash = 0;
+            TypeKind = TypeKindEnum.ClassType;
         }
 
         private void FillChildren()
