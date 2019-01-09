@@ -103,7 +103,7 @@ namespace DatabasePersistence.DBModel
                 {
                     command.ExecuteScalar();
                 }
-                //transaction.Commit();
+                transaction.Commit();
                 connection.Close();
             }
         }

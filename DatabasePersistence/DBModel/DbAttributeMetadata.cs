@@ -13,12 +13,7 @@ namespace DatabasePersistence.DBModel
     {
         public string Name { get; set; }
         public int SavedHash { get; protected set; }
-        public IEnumerable<IMetadata> Children { get => null; set => NullOp(); }
-
-        private void NullOp()
-        {
-            
-        }
+        public IEnumerable<IMetadata> Children { get => Enumerable.Empty<IMetadata>(); }
 
         public DbAttributeMetadata(IAttributeMetadata attributeMetadata)
         {

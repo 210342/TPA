@@ -11,25 +11,68 @@ namespace DatabasePersistence.DBModel
     public class DbTypeMetadata : AbstractMapper, ITypeMetadata
     {
         #region EF
-        public DbNamespaceMetadata Namespace { get; set; }
+
+        public ICollection<DbTypeMetadata> GenericArgumentsList
+        {
+            get => GenericArguments?.Cast<DbTypeMetadata>().ToList();
+            set => GenericArguments = value;
+        }
+        public ICollection<DbAttributeMetadata> AttributesList
+        {
+            get => Attributes?.Cast<DbAttributeMetadata>().ToList();
+            set => Attributes = value;
+        }
+        public ICollection<DbTypeMetadata> ImplementedInterfacesList
+        {
+            get => ImplementedInterfaces?.Cast<DbTypeMetadata>().ToList();
+            set => ImplementedInterfaces = value;
+        }
+        public ICollection<DbTypeMetadata> NestedTypesList
+        {
+            get => NestedTypes?.Cast<DbTypeMetadata>().ToList();
+            set => NestedTypes = value;
+        }
+        public ICollection<DbPropertyMetadata> PropertiesList
+        {
+            get => Properties?.Cast<DbPropertyMetadata>().ToList();
+            set => Properties = value;
+        }
+        public ICollection<DbMethodMetadata> MethodsList
+        {
+            get => Methods?.Cast<DbMethodMetadata>().ToList();
+            set => Methods = value;
+        }
+        public ICollection<DbMethodMetadata> ConstructorsList
+        {
+            get => Constructors?.Cast<DbMethodMetadata>().ToList();
+            set => Constructors = value;
+        }
+
         #endregion
 
         #region ITypeMetadata
 
-        public string NamespaceName { get; private set; }
-        public ITypeMetadata BaseType { get; private set; }
-        public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
-        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; private set; }
-        public TypeKindEnum TypeKind { get; private set; }
-        public IEnumerable<IAttributeMetadata> Attributes { get; private set; }
-        public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; private set; }
-        public IEnumerable<ITypeMetadata> NestedTypes { get; private set; }
-        public IEnumerable<IPropertyMetadata> Properties { get; private set; }
-        public ITypeMetadata DeclaringType { get; private set; }
-        public IEnumerable<IMethodMetadata> Methods { get; private set; }
-        public IEnumerable<IMethodMetadata> Constructors { get; private set; }
         public string Name { get; set; }
         public int SavedHash { get; protected set; }
+        public string NamespaceName { get; private set; }
+        public ITypeMetadata BaseType { get; private set; }
+        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; private set; }
+        public TypeKindEnum TypeKind { get; private set; }
+        public ITypeMetadata DeclaringType { get; private set; }
+        [NotMapped]
+        public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
+        [NotMapped]
+        public IEnumerable<IAttributeMetadata> Attributes { get; private set; }
+        [NotMapped]
+        public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; private set; }
+        [NotMapped]
+        public IEnumerable<ITypeMetadata> NestedTypes { get; private set; }
+        [NotMapped]
+        public IEnumerable<IPropertyMetadata> Properties { get; private set; }
+        [NotMapped]
+        public IEnumerable<IMethodMetadata> Methods { get; private set; }
+        [NotMapped]
+        public IEnumerable<IMethodMetadata> Constructors { get; private set; }
         [NotMapped]
         public IEnumerable<IMetadata> Children { get; set; }
 

@@ -4,7 +4,7 @@ using System.Data.Entity;
 
 namespace DatabasePersistence
 {
-    public class DbModelAccesContext : DbContext
+    public class DbModelAccessContext : DbContext
     {
         public virtual DbSet<DbAssemblyMetadata> Assemblies { get; set; }
         public virtual DbSet<DbAttributeMetadata> Attributes { get; set; }
@@ -15,8 +15,8 @@ namespace DatabasePersistence
         public virtual DbSet<DbTypeMetadata> Types { get; set; }
 
 
-        public DbModelAccesContext() : this("name=DbSource") { }
-        public DbModelAccesContext(string connectionString) : base(connectionString)
+        public DbModelAccessContext() : this("name=DbSource") { }
+        public DbModelAccessContext(string connectionString) : base(connectionString)
         {
             this.Configuration.LazyLoadingEnabled = false;
         }
@@ -27,9 +27,10 @@ namespace DatabasePersistence
             {
                 m.MapInheritedProperties();
                 m.ToTable("Assemblies");
-            }).HasMany(a => a.NamespacesList)
-            .WithRequired(n => n.Assembly)
-            .WillCascadeOnDelete();
+            });
+            //.HasMany(a => a.NamespacesList)
+            //.WithRequired(n => n.Assembly)
+            //.WillCascadeOnDelete();
 
             modelBuilder.Entity<DbAttributeMetadata>().Map(m =>
             {
@@ -47,9 +48,10 @@ namespace DatabasePersistence
             {
                 m.MapInheritedProperties();
                 m.ToTable("Namespaces");
-            }).HasMany(n => n.TypesList)
-            .WithRequired(t => t.Namespace)
-            .WillCascadeOnDelete();
+            });
+            //.HasMany(n => n.TypesList)
+            //.WithRequired(t => t.Namespace)
+            //.WillCascadeOnDelete();
 
             modelBuilder.Entity<DbParameterMetadata>().Map(m =>
             {

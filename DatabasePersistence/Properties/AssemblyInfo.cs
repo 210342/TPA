@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 // dla składników COM. Jeśli potrzebny jest dostęp do typu w tym zestawie z
 // COM, ustaw wartość true dla atrybutu ComVisible tego typu.
 [assembly: ComVisible(false)]
+[assembly: InternalsVisibleTo("DatabasePersistenceTests")]
 
 // Następujący identyfikator GUID jest identyfikatorem biblioteki typów w przypadku udostępnienia tego projektu w modelu COM
 [assembly: Guid("5fb2eedc-c436-4005-ae5a-31f6e3219a56")]

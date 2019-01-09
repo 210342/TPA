@@ -40,7 +40,7 @@ namespace DatabasePersistence
         public object Load()
         {
             object result = null;
-            using (var context = new DbModelAccesContext(Target))
+            using (var context = new DbModelAccessContext(Target))
             {
                 result = context.Assemblies.Last();
             }
@@ -53,7 +53,7 @@ namespace DatabasePersistence
             {
                 throw new InvalidOperationException("Can't assign from given type.");
             }
-            using (var context = new DbModelAccesContext(Target))
+            using (var context = new DbModelAccessContext(Target))
             {
                 DbAssemblyMetadata root = obj as DbAssemblyMetadata;
                 context.Assemblies.Add(root);

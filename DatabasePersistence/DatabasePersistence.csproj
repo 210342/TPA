@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabasePersister.cs" />
-    <Compile Include="DbModelAccesContext.cs" />
+    <Compile Include="DbModelAccessContext.cs" />
     <Compile Include="DBModel\AbstractMapper.cs" />
     <Compile Include="DBModel\DbAssemblyMetadata.cs" />
     <Compile Include="DBModel\DbAttributeMetadata.cs" />

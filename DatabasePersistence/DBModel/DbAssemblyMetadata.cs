@@ -12,40 +12,20 @@ namespace DatabasePersistence.DBModel
 {
     public class DbAssemblyMetadata : AbstractMapper, IAssemblyMetadata
     {
-        [NotMapped]
-        public IEnumerable<INamespaceMetadata> Namespaces { get => NamespacesList; set => SetNamespaces(value); }
-
-        private void SetNamespaces(IEnumerable<INamespaceMetadata> value)
+        public ICollection<DbNamespaceMetadata> NamespacesList
         {
-            if (value == null)
-                this.NamespacesList = null;
-            else
-            {
-                this.NamespacesList = new List<DbNamespaceMetadata>();
-                foreach(var el in value)
-                {
-                    this.NamespacesList.Add((DbNamespaceMetadata)el);
-                }
-            }
-        }
-        private void SetNamespaces(IEnumerable<IMetadata> value)
-        {
-            if (value == null)
-                this.NamespacesList = null;
-            else
-            {
-                this.NamespacesList = new List<DbNamespaceMetadata>();
-                value.ToList().ForEach(n => NamespacesList.Add((DbNamespaceMetadata)n));
-            }
-
+            get => Namespaces?.Cast<DbNamespaceMetadata>().ToList();
+            set => Namespaces = value;
         }
 
         public string Name { get; set; }
         public int SavedHash { get; protected set; }
         [NotMapped]
-        public IEnumerable<IMetadata> Children { get => Namespaces; set => SetNamespaces(value); }
+        public IEnumerable<INamespaceMetadata> Namespaces { get; internal set; }
+        [NotMapped]
+        public IEnumerable<IMetadata> Children { get => Namespaces; }
 
-        public List<DbNamespaceMetadata> NamespacesList {get; set;}
+        
 
         //public List<AbstractMapper> Parents { get; set; }
 
