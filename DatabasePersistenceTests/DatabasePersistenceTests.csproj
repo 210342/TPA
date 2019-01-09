@@ -80,6 +80,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="db.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="EntityFramework.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -1,13 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DatabaseSemanticTracing;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.CodeDom;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Reflection;
-using System.Threading;
 
 namespace DatabaseSemanticTracing.Tests
 {
@@ -21,7 +17,7 @@ namespace DatabaseSemanticTracing.Tests
         {
             _sut = new DatabaseSemanticTracing();
         }
-
+        /*
         [TestCleanup]
         public void CleanUp()
         {
@@ -34,9 +30,11 @@ namespace DatabaseSemanticTracing.Tests
                     command.ExecuteScalar();
                 }
                 transaction.Commit();
-                connection.Close();
+                transaction.Dispose();
+                connection.Dispose();
             }
         }
+        */
 
         [TestMethod()]
         public void DatabaseSemanticTracingTest()

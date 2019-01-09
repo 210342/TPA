@@ -32,18 +32,8 @@ namespace DatabasePersistence
 
         public DatabasePersister()
         {
-            bool localFileAccess = false;
-            string localFileAccessString = ConfigurationManager.AppSettings["LocalFileAccess"];
-            if (localFileAccessString != null)
-                localFileAccess = bool.Parse(localFileAccessString);
-            if(!localFileAccess)
-                Target = ConfigurationManager.AppSettings["Connection"];
-            else
-            {
-                string assemblyPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-                string fileName = ConfigurationManager.AppSettings["DbFileName"];
-                Target = $"Server=(localdb)\\mssqllocaldb;Integrated Security=true;";
-            }
+            string connectionString = ConfigurationManager.ConnectionStrings["DbSource"].ConnectionString;
+            Target = connectionString;
         }
 
         public void Dispose()
@@ -58,7 +48,7 @@ namespace DatabasePersistence
 
         public void Save(object obj)
         {
-            if (!typeof(IAssemblyMetadata).IsAssignableFrom(obj.GetType()))
+            if (!(obj is IAssemblyMetadata))
             {
                 throw new InvalidOperationException("Can't assign from given type.");
             }

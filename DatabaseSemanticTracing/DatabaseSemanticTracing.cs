@@ -1,7 +1,9 @@
 ﻿using Microsoft.Practices.EnterpriseLibrary.SemanticLogging;
 using System;
 using System.ComponentModel.Composition;
+using System.Configuration;
 using System.Diagnostics.Tracing;
+using System.Runtime.InteropServices;
 using System.Xml;
 using Tracing;
 
@@ -16,23 +18,8 @@ namespace DatabaseSemanticTracing
 
         public DatabaseSemanticTracing()
         {
-            using (XmlReader reader = 
-                XmlReader.Create($"{System.IO.Path.GetDirectoryName(GetType().Assembly.Location)}/DatabaseConfiguration.xml"))
-            {
-                while (reader.Read() && string.IsNullOrEmpty(ConnectionString))
-                {
-                    if (reader.IsStartElement())
-                    {
-                        if (reader.Name == "ConnectionString")
-                        {
-                            if (reader.Read())
-                            {
-                                ConnectionString = reader.Value;
-                            }
-                        }
-                    }
-                }
-            }
+            ConnectionString =
+                ConfigurationManager.ConnectionStrings["DbSource"].ConnectionString;
             _listener = SqlDatabaseLog.CreateListener("DatabaseSemanticTracing", ConnectionString);
             _listener.EnableEvents(SemanticLoggingEventSource.Log, EventLevel.LogAlways, Keywords.All);
         }
@@ -44,10 +31,7 @@ namespace DatabaseSemanticTracing
 
         public void Dispose()
         {
-            if(_listener != null)
-            {
-                _listener.Dispose();
-            }
+            _listener?.Dispose();
         }
 
         public void LogFailure(string message)
