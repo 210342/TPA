@@ -1,9 +1,8 @@
-﻿using System;
-using System.CodeDom;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Transactions;
 
 namespace DatabaseSemanticTracing.Tests
 {
@@ -21,21 +20,10 @@ namespace DatabaseSemanticTracing.Tests
         [TestCleanup]
         public void CleanUp()
         {
-            using (var connection = new SqlConnection(_sut.ConnectionString))
-            {
-                connection.Open();
-                SqlTransaction transaction = connection.BeginTransaction();
-                using (var command = new SqlCommand("DELETE FROM Traces WHERE FormattedMessage LIKE '%TEST%'", connection, transaction))
-                {
-                    command.ExecuteScalar();
-                }
-                transaction.Commit();
-                transaction.Dispose();
-                connection.Dispose();
-            }
+            _sut.Dispose();
         }
         
-
+        
         [TestMethod()]
         public void DatabaseSemanticTracingTest()
         {
@@ -45,46 +33,74 @@ namespace DatabaseSemanticTracing.Tests
         [TestMethod]
         public void LogStartupTest()
         {
-            int logsQuantity = CheckLogsQuantity();
-            _sut.LogStartup();
-            _sut.Flush();
-            Assert.AreEqual(logsQuantity + 1, CheckLogsQuantity());
+            using (TransactionScope scope = new TransactionScope())
+            {
+                int logsQuantity = CheckLogsQuantity();
+                _sut.LogStartup();
+                _sut.Flush();
+                Assert.AreEqual(logsQuantity + 1, CheckLogsQuantity());
+                scope.Dispose();
+            }
         }
 
         [TestMethod]
         public void LogSuccessTest()
         {
-            CallGivenMethod("LogSuccess");
+            using (TransactionScope scope = new TransactionScope())
+            {
+                CallGivenMethod("LogSuccess");
+                scope.Dispose();
+            }
         }
 
         [TestMethod]
         public void LogFailureTest()
         {
-            CallGivenMethod("LogFailure");
+            using (TransactionScope scope = new TransactionScope())
+            {
+                CallGivenMethod("LogFailure");
+                scope.Dispose();
+            }
         }
 
         [TestMethod]
         public void LogLoadingModelTest()
         {
-            CallGivenMethod("LogLoadingModel");
+            using (TransactionScope scope = new TransactionScope())
+            {
+                CallGivenMethod("LogLoadingModel");
+                scope.Dispose();
+            }
         }
 
         [TestMethod]
         public void LogModelLoadedTest()
         {
-            CallGivenMethod("LogModelLoaded");
+            using (TransactionScope scope = new TransactionScope())
+            {
+                CallGivenMethod("LogModelLoaded");
+                scope.Dispose();
+            }
         }
 
         [TestMethod]
         public void LogModelSavedTest()
         {
-            CallGivenMethod("LogModelSaved");
+            using (TransactionScope scope = new TransactionScope())
+            {
+                CallGivenMethod("LogModelSaved");
+                scope.Dispose();
+            }
         }
 
         [TestMethod]
         public void LogSavingModelTest()
         {
-            CallGivenMethod("LogSavingModel");
+            using (TransactionScope scope = new TransactionScope())
+            {
+                CallGivenMethod("LogSavingModel");
+                scope.Dispose();
+            }
         }
 
         private void CallGivenMethod(string methodName)
@@ -100,18 +116,19 @@ namespace DatabaseSemanticTracing.Tests
 
         private int CheckLogsQuantity()
         {
-            int quantity;
-            using (var connection = new SqlConnection(_sut.ConnectionString))
-            {
-                connection.Open();
-                SqlTransaction transaction = connection.BeginTransaction();
-                using (var command = new SqlCommand("SELECT COUNT(*) FROM dbo.Traces", connection, transaction))
+            
+                int quantity;
+                using (var connection = new SqlConnection(_sut.ConnectionString))
                 {
-                    quantity = (int)command.ExecuteScalar();
+                    connection.Open();
+                    SqlTransaction transaction = connection.BeginTransaction();
+                    using (var command = new SqlCommand("SELECT COUNT(*) FROM dbo.Traces", connection, transaction))
+                    {
+                        quantity = (int) command.ExecuteScalar();
+                    }
+                    connection.Close();
                 }
-                connection.Close();
-            }
-            return quantity;
+                return quantity;
         }
     }
 }
