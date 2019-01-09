@@ -13,29 +13,29 @@ namespace DatabasePersistence.DBModel
     public class DbMethodMetadata : AbstractMapper, IMethodMetadata
     {
         #region EF
-        public ICollection<DbTypeMetadata> GenericArgumentsList
-        {
-            get => GenericArguments?.Cast<DbTypeMetadata>().ToList();
-            set => GenericArguments = value;
-        }
-        public ICollection<DbParameterMetadata> ParametersList
-        {
-            get => Parameters?.Cast<DbParameterMetadata>().ToList();
-            set => Parameters = value;
-        }
+        public virtual ICollection<DbTypeMetadata> GenericArgumentsList { get; set; }
+        public virtual ICollection<DbParameterMetadata> ParametersList { get; set; }
         #endregion
 
         #region IMethodMetadata
 
-        public ITypeMetadata ReturnType { get; private set; }
+        public virtual ITypeMetadata ReturnType { get; private set; }
         public bool IsExtension { get; private set; }
         public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; private set; }
         public string Name { get; set; }
         public int SavedHash { get; protected set; }
         [NotMapped]
-        public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
+        public IEnumerable<ITypeMetadata> GenericArguments
+        {
+            get => GenericArgumentsList;
+            private set => GenericArgumentsList = value?.Cast<DbTypeMetadata>().ToList();
+        }
         [NotMapped]
-        public IEnumerable<IParameterMetadata> Parameters { get; internal set; }
+        public IEnumerable<IParameterMetadata> Parameters
+        {
+            get => ParametersList;
+            internal set => ParametersList = value?.Cast<DbParameterMetadata>().ToList();
+        }
         [NotMapped]
         public IEnumerable<IMetadata> Children { get; private set; }
 

@@ -12,41 +12,13 @@ namespace DatabasePersistence.DBModel
     {
         #region EF
 
-        public ICollection<DbTypeMetadata> GenericArgumentsList
-        {
-            get => GenericArguments?.Cast<DbTypeMetadata>().ToList();
-            set => GenericArguments = value;
-        }
-        public ICollection<DbAttributeMetadata> AttributesList
-        {
-            get => Attributes?.Cast<DbAttributeMetadata>().ToList();
-            set => Attributes = value;
-        }
-        public ICollection<DbTypeMetadata> ImplementedInterfacesList
-        {
-            get => ImplementedInterfaces?.Cast<DbTypeMetadata>().ToList();
-            set => ImplementedInterfaces = value;
-        }
-        public ICollection<DbTypeMetadata> NestedTypesList
-        {
-            get => NestedTypes?.Cast<DbTypeMetadata>().ToList();
-            set => NestedTypes = value;
-        }
-        public ICollection<DbPropertyMetadata> PropertiesList
-        {
-            get => Properties?.Cast<DbPropertyMetadata>().ToList();
-            set => Properties = value;
-        }
-        public ICollection<DbMethodMetadata> MethodsList
-        {
-            get => Methods?.Cast<DbMethodMetadata>().ToList();
-            set => Methods = value;
-        }
-        public ICollection<DbMethodMetadata> ConstructorsList
-        {
-            get => Constructors?.Cast<DbMethodMetadata>().ToList();
-            set => Constructors = value;
-        }
+        public virtual ICollection<DbTypeMetadata> GenericArgumentsList { get; set; }
+        public virtual ICollection<DbAttributeMetadata> AttributesList { get; set; }
+        public virtual ICollection<DbTypeMetadata> ImplementedInterfacesList { get; set; }
+        public virtual ICollection<DbTypeMetadata> NestedTypesList { get; set; }
+        public virtual ICollection<DbPropertyMetadata> PropertiesList { get; set; }
+        public virtual ICollection<DbMethodMetadata> MethodsList { get; set; }
+        public virtual ICollection<DbMethodMetadata> ConstructorsList { get; set; }
 
         #endregion
 
@@ -55,24 +27,52 @@ namespace DatabasePersistence.DBModel
         public string Name { get; set; }
         public int SavedHash { get; protected set; }
         public string NamespaceName { get; private set; }
-        public ITypeMetadata BaseType { get; private set; }
+        public virtual ITypeMetadata BaseType { get; private set; }
         public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; private set; }
-        public TypeKindEnum TypeKind { get; private set; }
-        public ITypeMetadata DeclaringType { get; private set; }
+        public virtual TypeKindEnum TypeKind { get; private set; }
+        public virtual ITypeMetadata DeclaringType { get; private set; }
         [NotMapped]
-        public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
+        public IEnumerable<ITypeMetadata> GenericArguments
+        {
+            get => GenericArgumentsList;
+            private set => GenericArgumentsList = value?.Cast<DbTypeMetadata>().ToList();
+        }
         [NotMapped]
-        public IEnumerable<IAttributeMetadata> Attributes { get; internal set; }
+        public IEnumerable<IAttributeMetadata> Attributes
+        {
+            get => AttributesList;
+            internal set => AttributesList = value?.Cast<DbAttributeMetadata>().ToList();
+        }
         [NotMapped]
-        public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; internal set; }
+        public IEnumerable<ITypeMetadata> ImplementedInterfaces
+        {
+            get => ImplementedInterfacesList;
+            internal set => ImplementedInterfacesList = value?.Cast<DbTypeMetadata>().ToList();
+        }
         [NotMapped]
-        public IEnumerable<ITypeMetadata> NestedTypes { get; private set; }
+        public IEnumerable<ITypeMetadata> NestedTypes
+        {
+            get => NestedTypesList;
+            private set => NestedTypesList = value?.Cast<DbTypeMetadata>().ToList();
+        }
         [NotMapped]
-        public IEnumerable<IPropertyMetadata> Properties { get; internal set; }
+        public IEnumerable<IPropertyMetadata> Properties
+        {
+            get => PropertiesList;
+            internal set => PropertiesList = value?.Cast<DbPropertyMetadata>().ToList();
+        }
         [NotMapped]
-        public IEnumerable<IMethodMetadata> Methods { get; internal set; }
+        public IEnumerable<IMethodMetadata> Methods
+        {
+            get => MethodsList;
+            internal set => MethodsList = value?.Cast<DbMethodMetadata>().ToList();
+        }
         [NotMapped]
-        public IEnumerable<IMethodMetadata> Constructors { get; private set; }
+        public IEnumerable<IMethodMetadata> Constructors
+        {
+            get => ConstructorsList;
+            private set => ConstructorsList = value?.Cast<DbMethodMetadata>().ToList();
+        }
         [NotMapped]
         public IEnumerable<IMetadata> Children { get; set; }
 

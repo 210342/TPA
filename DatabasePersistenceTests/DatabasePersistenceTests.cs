@@ -9,7 +9,6 @@ namespace DatabasePersistence.DBModel
     [TestClass]
     public class DatabasePersistenceTests
     {
-
         private DatabasePersister persister;
         private string connectionString;
 
@@ -21,6 +20,12 @@ namespace DatabasePersistence.DBModel
             // string fileName = "LocalDB.mdf";
             connectionString = $"Server=(localdb)\\mssqllocaldb;Integrated Security=true;";
             persister = new DatabasePersister() { Target = connectionString };
+        }
+
+        [TestCleanup]
+        public void CleanUp()
+        {
+            persister.Dispose();
         }
 
         [TestMethod]
@@ -101,7 +106,29 @@ namespace DatabasePersistence.DBModel
             Assert.AreEqual(parametersQuantityBefore + 1, CountInTable("Parameters"));
         }
 
+        [TestMethod]
+        public void LoadTest()
+        {
+            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata() { Name = "test0", Id=100000 };
+            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata() { Name = "test1" };
+            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata() { Name = "test2" };
+            assemblyMetadata.Namespaces = new DbNamespaceMetadata[] { namespaceMeta1, namespaceMeta2 };
+            DbTypeMetadata type1 = new DbTypeMetadata { Name = "Type1" };
+            DbTypeMetadata type2 = new DbTypeMetadata { Name = "Type2" };
+            namespaceMeta1.Types = new[] { type1 };
+            namespaceMeta2.Types = new[] { type2 };
 
+            persister.Save(assemblyMetadata);
+            object loaded = persister.Load();
+            DbAssemblyMetadata loadedAssembly = loaded as DbAssemblyMetadata;
+            Assert.IsNotNull(loadedAssembly);
+            Assert.AreEqual("test0", loadedAssembly.Name);
+            Assert.AreEqual(2, loadedAssembly.Namespaces.Count());
+            Assert.AreEqual("test1", loadedAssembly.Namespaces.First().Name);
+            Assert.AreEqual(1, loadedAssembly.Namespaces.First().Types.Count());
+            Assert.AreEqual("test2", loadedAssembly.Namespaces.Last().Name);
+            Assert.AreEqual(1, loadedAssembly.Namespaces.Last().Types.Count());
+        }
 
         private int CountInTable(string tableName)
         {

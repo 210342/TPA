@@ -13,11 +13,7 @@ namespace DatabasePersistence.DBModel
     public class DbNamespaceMetadata : AbstractMapper, INamespaceMetadata
     {
         #region EF
-        public ICollection<DbTypeMetadata> TypesList
-        {
-            get => Types?.Cast<DbTypeMetadata>().ToList();
-            set => Types = value;
-        } 
+        public virtual ICollection<DbTypeMetadata> TypesList { get; set; }
         #endregion
 
         #region INamespaceMetadata
@@ -26,7 +22,11 @@ namespace DatabasePersistence.DBModel
         [NotMapped]
         public IEnumerable<IMetadata> Children { get { return Types; } }
         [NotMapped]
-        public IEnumerable<ITypeMetadata> Types { get; internal set; }
+        public IEnumerable<ITypeMetadata> Types
+        {
+            get => TypesList;
+            internal set => TypesList = value?.Cast<DbTypeMetadata>().ToList();
+        }
 
         #endregion
 

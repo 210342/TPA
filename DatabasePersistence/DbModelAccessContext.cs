@@ -18,7 +18,7 @@ namespace DatabasePersistence
         public DbModelAccessContext() : this("name=DbSource") { }
         public DbModelAccessContext(string connectionString) : base(connectionString)
         {
-            this.Configuration.LazyLoadingEnabled = false;
+            // this.Configuration.LazyLoadingEnabled = false;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

@@ -12,16 +12,16 @@ namespace DatabasePersistence.DBModel
 {
     public class DbAssemblyMetadata : AbstractMapper, IAssemblyMetadata
     {
-        public ICollection<DbNamespaceMetadata> NamespacesList
-        {
-            get => Namespaces?.Cast<DbNamespaceMetadata>().ToList();
-            set => Namespaces = value;
-        }
+        public virtual ICollection<DbNamespaceMetadata> NamespacesList { get; set; }
 
         public string Name { get; set; }
         public int SavedHash { get; protected set; }
         [NotMapped]
-        public IEnumerable<INamespaceMetadata> Namespaces { get; internal set; }
+        public IEnumerable<INamespaceMetadata> Namespaces
+        {
+            get => NamespacesList;
+            internal set => NamespacesList = value?.Cast<DbNamespaceMetadata>().ToList();
+        }
         [NotMapped]
         public IEnumerable<IMetadata> Children { get => Namespaces; }
 

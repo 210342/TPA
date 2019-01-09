@@ -14,8 +14,19 @@ namespace DatabasePersistence
     [Export(typeof(IPersister))]
     public class DatabasePersister : IPersister
     {
+        private DbModelAccessContext context;
+        private string connectionString;
 
-        public string Target { get; set; }
+        public string Target
+        {
+            get { return connectionString; } 
+            set
+            {
+                connectionString = value;
+                context?.Dispose();
+                context = new DbModelAccessContext(value);
+            }
+        }
 
         public FileSystemDependency FileSystemDependency => FileSystemDependency.Independent;
 
@@ -35,16 +46,14 @@ namespace DatabasePersistence
             }
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            context?.Dispose();
+        }
 
         public object Load()
         {
-            object result = null;
-            using (var context = new DbModelAccessContext(Target))
-            {
-                result = context.Assemblies.Last();
-            }
-            return result;
+            return context.Assemblies.OrderByDescending(n => n.Id).First();
         }
 
         public void Save(object obj)
@@ -53,12 +62,9 @@ namespace DatabasePersistence
             {
                 throw new InvalidOperationException("Can't assign from given type.");
             }
-            using (var context = new DbModelAccessContext(Target))
-            {
-                DbAssemblyMetadata root = obj as DbAssemblyMetadata;
-                context.Assemblies.Add(root);
-                context.SaveChanges();
-            }
+            DbAssemblyMetadata root = obj as DbAssemblyMetadata;
+            context.Assemblies.Add(root);
+            context.SaveChanges();
         }
     }
 }
