@@ -62,15 +62,15 @@ namespace DatabasePersistence.DBModel
         [NotMapped]
         public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
         [NotMapped]
-        public IEnumerable<IAttributeMetadata> Attributes { get; private set; }
+        public IEnumerable<IAttributeMetadata> Attributes { get; internal set; }
         [NotMapped]
-        public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; private set; }
+        public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; internal set; }
         [NotMapped]
         public IEnumerable<ITypeMetadata> NestedTypes { get; private set; }
         [NotMapped]
-        public IEnumerable<IPropertyMetadata> Properties { get; private set; }
+        public IEnumerable<IPropertyMetadata> Properties { get; internal set; }
         [NotMapped]
-        public IEnumerable<IMethodMetadata> Methods { get; private set; }
+        public IEnumerable<IMethodMetadata> Methods { get; internal set; }
         [NotMapped]
         public IEnumerable<IMethodMetadata> Constructors { get; private set; }
         [NotMapped]

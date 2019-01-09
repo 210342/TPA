@@ -12,7 +12,7 @@ namespace DatabasePersistence.DBModel
 {
     public class DbParameterMetadata : AbstractMapper, IParameterMetadata
     {
-        public ITypeMetadata TypeMetadata { get; private set; }
+        public ITypeMetadata TypeMetadata { get; internal set; }
         public string Name { get; set; }
         public int SavedHash { get; protected set; }
         [NotMapped]

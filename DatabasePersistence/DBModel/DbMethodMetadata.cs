@@ -35,7 +35,7 @@ namespace DatabasePersistence.DBModel
         [NotMapped]
         public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
         [NotMapped]
-        public IEnumerable<IParameterMetadata> Parameters { get; private set; }
+        public IEnumerable<IParameterMetadata> Parameters { get; internal set; }
         [NotMapped]
         public IEnumerable<IMetadata> Children { get; private set; }
 
@@ -113,6 +113,7 @@ namespace DatabasePersistence.DBModel
 
         public DbMethodMetadata()
         {
+            SavedHash = 0;
         }
 
         private void FillChildren()

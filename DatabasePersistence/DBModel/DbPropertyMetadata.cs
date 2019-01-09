@@ -8,7 +8,7 @@ namespace DatabasePersistence.DBModel
 {
     public class DbPropertyMetadata : AbstractMapper, IPropertyMetadata
     {
-        public ITypeMetadata MyType { get; private set; }
+        public ITypeMetadata MyType { get; internal set; }
         public string Name { get; set; }
         public int SavedHash { get; protected set; }
         [NotMapped]

@@ -28,9 +28,6 @@ namespace DatabasePersistence
                 m.MapInheritedProperties();
                 m.ToTable("Assemblies");
             });
-            //.HasMany(a => a.NamespacesList)
-            //.WithRequired(n => n.Assembly)
-            //.WillCascadeOnDelete();
 
             modelBuilder.Entity<DbAttributeMetadata>().Map(m =>
             {
@@ -49,9 +46,6 @@ namespace DatabasePersistence
                 m.MapInheritedProperties();
                 m.ToTable("Namespaces");
             });
-            //.HasMany(n => n.TypesList)
-            //.WithRequired(t => t.Namespace)
-            //.WillCascadeOnDelete();
 
             modelBuilder.Entity<DbParameterMetadata>().Map(m =>
             {
