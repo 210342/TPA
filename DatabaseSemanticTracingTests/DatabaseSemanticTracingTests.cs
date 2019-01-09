@@ -17,7 +17,7 @@ namespace DatabaseSemanticTracing.Tests
         {
             _sut = new DatabaseSemanticTracing();
         }
-        /*
+        
         [TestCleanup]
         public void CleanUp()
         {
@@ -34,7 +34,7 @@ namespace DatabaseSemanticTracing.Tests
                 connection.Dispose();
             }
         }
-        */
+        
 
         [TestMethod()]
         public void DatabaseSemanticTracingTest()
