@@ -59,7 +59,7 @@ namespace LibraryTests.Data.Model
         [TestMethod]
         public void GetNamespaceResturnsExpectedValue()
         {
-            var nameSpaceName = typeof(Type).GetNamespace();
+            string nameSpaceName = typeof(Type).GetNamespace();
             Assert.AreEqual(typeof(Type).GetType().GetNamespace(), nameSpaceName);
         }
 

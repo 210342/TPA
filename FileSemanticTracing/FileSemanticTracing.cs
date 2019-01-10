@@ -16,7 +16,7 @@ namespace SemanticTracing
         public FileSemanticTracing()
         {
             FindViableFilePath();
-            var listener = new ObservableEventListener();
+            ObservableEventListener listener = new ObservableEventListener();
             listener.EnableEvents(SemanticLoggingEventSource.Log, EventLevel.LogAlways, Keywords.All);
             _subscription = listener.LogToFlatFile(FilePath);
         }
@@ -70,7 +70,7 @@ namespace SemanticTracing
 
         private void FindViableFilePath()
         {
-            var notViable = true;
+            bool notViable = true;
             while (notViable)
             {
                 FilePath = $"{nameof(FileSemanticTracing)} {DateTime.Now.Ticks}.log";

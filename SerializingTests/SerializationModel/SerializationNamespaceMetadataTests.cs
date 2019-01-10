@@ -12,7 +12,7 @@ namespace SerializationModel.Tests
         public void CopyCtorTest()
         {
             INamespaceMetadata tmp = new NamespaceTest();
-            var sut = new SerializationNamespaceMetadata(tmp);
+            SerializationNamespaceMetadata sut = new SerializationNamespaceMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
             Assert.AreEqual(tmp.Types.Count(), sut.Types.Count());

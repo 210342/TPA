@@ -14,7 +14,7 @@ namespace DatabasePersistence.DBModel.Tests
         [TestMethod]
         public void DbAssemblyMetadataTest1()
         {
-            var sut = new DbAssemblyMetadata
+            DbAssemblyMetadata sut = new DbAssemblyMetadata
             {
                 Namespaces = new[] {new DbNamespaceMetadata {Name = "test1"}}
             };

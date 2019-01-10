@@ -11,9 +11,9 @@ namespace SerializationModel
         {
             Name = assemblyMetadata.Name;
             SavedHash = assemblyMetadata.SavedHash;
-            var namespaces = new List<INamespaceMetadata>();
-            foreach (var child in assemblyMetadata.Namespaces)
-                if (AlreadyMapped.TryGetValue(child.SavedHash, out var item))
+            List<INamespaceMetadata> namespaces = new List<INamespaceMetadata>();
+            foreach (INamespaceMetadata child in assemblyMetadata.Namespaces)
+                if (AlreadyMapped.TryGetValue(child.SavedHash, out IMetadata item))
                 {
                     namespaces.Add(item as INamespaceMetadata);
                 }

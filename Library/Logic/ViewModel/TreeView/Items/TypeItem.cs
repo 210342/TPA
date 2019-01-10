@@ -14,7 +14,7 @@ namespace Library.Logic.ViewModel
             if (source.ImplementedInterfaces != null)
             {
                 _details += ",implements ";
-                foreach (var intf in source.ImplementedInterfaces)
+                foreach (ITypeMetadata intf in source.ImplementedInterfaces)
                     _details += $"{intf.Name}, ";
             }
 

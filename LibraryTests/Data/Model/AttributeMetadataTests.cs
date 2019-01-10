@@ -19,8 +19,8 @@ namespace LibraryTests.Data.Model
         [TestMethod]
         public void CopyCtorTest()
         {
-            var tmp = new AttributeMetadata(new TestClassAttribute());
-            var sut = new AttributeMetadata(tmp);
+            AttributeMetadata tmp = new AttributeMetadata(new TestClassAttribute());
+            AttributeMetadata sut = new AttributeMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
         }

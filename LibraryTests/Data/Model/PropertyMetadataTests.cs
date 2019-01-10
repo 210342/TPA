@@ -21,9 +21,9 @@ namespace LibraryTests.Data.Model
         [TestMethod]
         public void EmitPropertiesReturnsFine()
         {
-            var properties =
+            List<PropertyInfo> properties =
                 new List<PropertyInfo>(typeof(TestClass).GetProperties());
-            var propertiesMeta =
+            List<PropertyMetadata> propertiesMeta =
                 new List<PropertyMetadata>(PropertyMetadata.EmitProperties(properties));
             Assert.AreEqual(properties.Count, propertiesMeta.Count);
         }
@@ -32,7 +32,7 @@ namespace LibraryTests.Data.Model
         [ExpectedException(typeof(TargetInvocationException))]
         public void PropertyMetadataThrowsOnNull()
         {
-            var ctor = typeof(PropertyMetadata).GetConstructor(
+            ConstructorInfo ctor = typeof(PropertyMetadata).GetConstructor(
                 BindingFlags.Instance | BindingFlags.NonPublic,
                 null, new[] {typeof(string), typeof(TypeMetadata)}, null);
 
@@ -42,12 +42,12 @@ namespace LibraryTests.Data.Model
         [TestMethod]
         public void CopyCtorTest()
         {
-            var ctor = typeof(PropertyMetadata).GetConstructor(
+            ConstructorInfo ctor = typeof(PropertyMetadata).GetConstructor(
                 BindingFlags.Instance | BindingFlags.NonPublic,
                 null, new[] {typeof(string), typeof(TypeMetadata)}, null);
-            var tmp = (PropertyMetadata) ctor.Invoke(new object[]
+            PropertyMetadata tmp = (PropertyMetadata) ctor.Invoke(new object[]
                 {"asdf", new TypeMetadata(typeof(PropertyMetadataTests))});
-            var sut = new PropertyMetadata(tmp);
+            PropertyMetadata sut = new PropertyMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
             Assert.IsTrue(tmp.MyType.Name.Equals(sut.MyType.Name));

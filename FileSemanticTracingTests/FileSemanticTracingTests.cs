@@ -34,7 +34,7 @@ namespace SemanticTracing.Tests
         public void LogFailureTest()
         {
             fileInfo.Refresh();
-            var oldLength = fileInfo.Length;
+            long oldLength = fileInfo.Length;
             _systemUnderTest.LogFailure("FAIL");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
@@ -45,7 +45,7 @@ namespace SemanticTracing.Tests
         public void LogSuccessTest()
         {
             fileInfo.Refresh();
-            var oldLength = fileInfo.Length;
+            long oldLength = fileInfo.Length;
             _systemUnderTest.LogFailure("SUCCESS");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
@@ -56,7 +56,7 @@ namespace SemanticTracing.Tests
         public void LogLoadingModelTest()
         {
             fileInfo.Refresh();
-            var oldLength = fileInfo.Length;
+            long oldLength = fileInfo.Length;
             _systemUnderTest.LogLoadingModel("loading model");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
@@ -67,7 +67,7 @@ namespace SemanticTracing.Tests
         public void LogModelLoadedTest()
         {
             fileInfo.Refresh();
-            var oldLength = fileInfo.Length;
+            long oldLength = fileInfo.Length;
             _systemUnderTest.LogModelLoaded("model loaded");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
@@ -78,7 +78,7 @@ namespace SemanticTracing.Tests
         public void LogModelSavedTest()
         {
             fileInfo.Refresh();
-            var oldLength = fileInfo.Length;
+            long oldLength = fileInfo.Length;
             _systemUnderTest.LogModelSaved("model saved");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
@@ -89,7 +89,7 @@ namespace SemanticTracing.Tests
         public void LogSavingModelTest()
         {
             fileInfo.Refresh();
-            var oldLength = fileInfo.Length;
+            long oldLength = fileInfo.Length;
             _systemUnderTest.LogSavingModel("saving model");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
@@ -99,8 +99,8 @@ namespace SemanticTracing.Tests
         [TestMethod]
         public void LogStartupTest()
         {
-            var file = new FileInfo(_systemUnderTest.FilePath);
-            var oldLength = file.Length;
+            FileInfo file = new FileInfo(_systemUnderTest.FilePath);
+            long oldLength = file.Length;
             _systemUnderTest.LogStartup();
             _systemUnderTest.Flush();
             file.Refresh();

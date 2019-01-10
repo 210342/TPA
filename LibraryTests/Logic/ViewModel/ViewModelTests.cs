@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Library.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ModelContract;
 using VM = Library.Logic.ViewModel;
 
 namespace LibraryTests.Logic.ViewModel.Tests
@@ -16,18 +17,18 @@ namespace LibraryTests.Logic.ViewModel.Tests
         [TestMethod]
         public void ReloadAssemblyChangesAssembly()
         {
-            var vm = new VM.ViewModel(false);
-            var loadedAssemblyRepr = vm.LoadedAssemblyRepresentation;
+            VM.ViewModel vm = new VM.ViewModel(false);
+            IMetadata loadedAssemblyRepr = vm.LoadedAssemblyRepresentation;
             vm.LoadedAssembly = GetType().Assembly.Location;
             vm.ReloadAssemblyCommand.Execute(null);
-            var reloadedAssemblyRepr = vm.LoadedAssemblyRepresentation;
+            IMetadata reloadedAssemblyRepr = vm.LoadedAssemblyRepresentation;
             Assert.AreNotEqual(loadedAssemblyRepr, reloadedAssemblyRepr);
         }
 
         [TestMethod]
         public void ReloadAsseblyListPopulated()
         {
-            var vm = new VM.ViewModel(false)
+            VM.ViewModel vm = new VM.ViewModel(false)
             {
                 LoadedAssembly = typeof(VM.ViewModel).Assembly.Location
             };
@@ -38,7 +39,7 @@ namespace LibraryTests.Logic.ViewModel.Tests
         [TestMethod]
         public void ObjectToDisplayChanges()
         {
-            var vm = new VM.ViewModel(false)
+            VM.ViewModel vm = new VM.ViewModel(false)
             {
                 ObjectSelected = new VM.TypeItem(new TypeMetadata(typeof(Type)))
             };
@@ -49,7 +50,7 @@ namespace LibraryTests.Logic.ViewModel.Tests
         [TestMethod]
         public void OpenFileWorks()
         {
-            var vm = new VM.ViewModel(false)
+            VM.ViewModel vm = new VM.ViewModel(false)
             {
                 OpenFileSourceProvider = new TestClass()
             };
@@ -60,7 +61,7 @@ namespace LibraryTests.Logic.ViewModel.Tests
         [TestMethod]
         public void ImportTracerTest()
         {
-            var vm = new VM.ViewModel(true);
+            VM.ViewModel vm = new VM.ViewModel(true);
             vm.EndInit();
             Assert.IsNotNull(vm.Tracer);
         }

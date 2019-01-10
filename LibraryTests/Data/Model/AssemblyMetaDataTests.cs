@@ -21,8 +21,8 @@ namespace LibraryTests.Data.Model
         [TestMethod]
         public void CopyCtorTest()
         {
-            var tmp = new AssemblyMetadata(Assembly.GetExecutingAssembly());
-            var sut = new AssemblyMetadata(tmp);
+            AssemblyMetadata tmp = new AssemblyMetadata(Assembly.GetExecutingAssembly());
+            AssemblyMetadata sut = new AssemblyMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
             Assert.AreEqual(tmp.Namespaces.Count(), sut.Namespaces.Count());

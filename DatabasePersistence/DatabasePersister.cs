@@ -16,7 +16,7 @@ namespace DatabasePersistence
 
         public DatabasePersister()
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["DbSource"].ConnectionString;
+            string connectionString = ConfigurationManager.ConnectionStrings["DbSource"].ConnectionString;
             Target = connectionString;
         }
 
@@ -46,7 +46,7 @@ namespace DatabasePersistence
         public void Save(object obj)
         {
             if (!(obj is IAssemblyMetadata)) throw new InvalidOperationException("Can't assign from given type.");
-            var root = obj as DbAssemblyMetadata;
+            DbAssemblyMetadata root = obj as DbAssemblyMetadata;
             context.Assemblies.Add(root);
             context.SaveChanges();
         }

@@ -22,9 +22,9 @@ namespace DatabasePersistence.DBModel
             }
             else
             {
-                var genericArguments = new List<ITypeMetadata>();
-                foreach (var genericArgument in methodMetadata.GenericArguments)
-                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out var mappedArgument))
+                List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
+                foreach (ITypeMetadata genericArgument in methodMetadata.GenericArguments)
+                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata mappedArgument))
                     {
                         genericArguments.Add(mappedArgument as ITypeMetadata);
                     }
@@ -39,7 +39,7 @@ namespace DatabasePersistence.DBModel
             }
 
             // Return type
-            if (AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out var item))
+            if (AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out IMetadata item))
             {
                 ReturnType = item as ITypeMetadata;
             }
@@ -57,8 +57,8 @@ namespace DatabasePersistence.DBModel
             }
             else
             {
-                var parameters = new List<IParameterMetadata>();
-                foreach (var parameter in methodMetadata.Parameters)
+                List<IParameterMetadata> parameters = new List<IParameterMetadata>();
+                foreach (IParameterMetadata parameter in methodMetadata.Parameters)
                     if (AlreadyMapped.TryGetValue(parameter.SavedHash, out item))
                     {
                         parameters.Add(item as IParameterMetadata);
@@ -83,7 +83,7 @@ namespace DatabasePersistence.DBModel
 
         private void FillChildren()
         {
-            var elems = new List<IMetadata> {ReturnType};
+            List<IMetadata> elems = new List<IMetadata> {ReturnType};
             elems.AddRange(Parameters);
             Children = elems;
         }

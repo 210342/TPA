@@ -11,7 +11,7 @@ namespace SerializationModel
         {
             Name = parameterMetadata.Name;
             SavedHash = parameterMetadata.SavedHash;
-            if (AlreadyMapped.TryGetValue(parameterMetadata.TypeMetadata.SavedHash, out var item))
+            if (AlreadyMapped.TryGetValue(parameterMetadata.TypeMetadata.SavedHash, out IMetadata item))
             {
                 TypeMetadata = item as ITypeMetadata;
             }

@@ -11,7 +11,7 @@ namespace Library.Data
             if (string.IsNullOrEmpty(assemblyFile))
                 throw new ArgumentNullException("Assembly path can't be null or empty");
 
-            var assembly = Assembly.UnsafeLoadFrom(assemblyFile);
+            Assembly assembly = Assembly.UnsafeLoadFrom(assemblyFile);
             m_AssemblyModel = new AssemblyMetadata(assembly);
         }
 

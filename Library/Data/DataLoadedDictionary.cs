@@ -15,8 +15,8 @@ namespace Library.Data
 
         public static IEnumerable<Type> GetKnownMetadata(object obj)
         {
-            var types = Assembly.GetAssembly(obj.GetType()).GetTypes();
-            foreach (var type in types)
+            Type[] types = Assembly.GetAssembly(obj.GetType()).GetTypes();
+            foreach (Type type in types)
                 if (type.GetInterface("IMetadata") != null)
                     yield return type;
         }

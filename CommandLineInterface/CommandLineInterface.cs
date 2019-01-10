@@ -8,9 +8,9 @@ namespace CommandLineInterface
 {
     public class CommandLineInterface
     {
+        private readonly ViewModel dataContext = new ViewModel();
         private readonly int startIndex = 0;
         private readonly string tab = "   ";
-        private readonly ViewModel dataContext = new ViewModel();
         private int maxIndex;
         private TreeViewItem root;
         private int selectionIndex; // used to iterate through items
@@ -48,7 +48,7 @@ namespace CommandLineInterface
 
         private void Menu()
         {
-            var selection = "";
+            string selection = "";
             do
             {
                 if (root != null)
@@ -57,7 +57,7 @@ namespace CommandLineInterface
                     Print(root, startIndex);
                     Console.WriteLine();
                     Console.WriteLine(dataContext.ObjectSelected.ToString()); // print detailed info
-                    var isIncorrectInput = false; // flag used to control application's flow
+                    bool isIncorrectInput = false; // flag used to control application's flow
                     do
                     {
                         Console.WriteLine("___________________________________________________");
@@ -70,7 +70,7 @@ namespace CommandLineInterface
                                 if (IsInputLoad(selection))
                                 {
                                     Console.WriteLine("Please provide path to a file where model is saved:");
-                                    var path = Console.ReadLine();
+                                    string path = Console.ReadLine();
                                     dataContext.OpenFileSourceProvider = new TextFileSourceProvider(path);
                                     dataContext.LoadModel.Execute(null);
                                     try
@@ -85,13 +85,13 @@ namespace CommandLineInterface
                                 else if (IsInputSave(selection))
                                 {
                                     Console.WriteLine("Please provide path to a file where the model should be saved:");
-                                    var path = Console.ReadLine();
+                                    string path = Console.ReadLine();
                                     dataContext.SaveFileSourceProvider = new TextFileSourceProvider(path);
                                     dataContext.SaveModel.Execute(null);
                                 }
                                 else
                                 {
-                                    var index = int.Parse(selection); // try to read chosen index
+                                    int index = int.Parse(selection); // try to read chosen index
                                     isIncorrectInput = false; // get out of the loop
                                     selectionIndex = 0; // reset index before selection
                                     dataContext.ObjectSelected =
@@ -155,24 +155,24 @@ namespace CommandLineInterface
 
         private void Print(TreeViewItem item, int depth)
         {
-            var sb = new StringBuilder();
-            for (var i = 0; i < depth; ++i) sb.Append(tab);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < depth; ++i) sb.Append(tab);
             Console.WriteLine();
             Console.WriteLine($"{sb}INDEX: {maxIndex++}");
             Console.WriteLine($"{sb}{item.Name}");
             if (item.IsExpanded)
-                foreach (var kid in item.Children)
+                foreach (TreeViewItem kid in item.Children)
                     Print(kid, depth + 1);
         }
 
         private TreeViewItem SelectItem(TreeViewItem selected, int index)
         {
-            var tmp = selected;
+            TreeViewItem tmp = selected;
             if (selectionIndex++ == index) return selected;
 
             if (selected.IsExpanded)
             {
-                foreach (var kid in selected.Children)
+                foreach (TreeViewItem kid in selected.Children)
                 {
                     tmp = SelectItem(kid, index);
                     if (tmp != null) return tmp;

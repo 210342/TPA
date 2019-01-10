@@ -26,11 +26,11 @@ namespace Library.Model
         {
             Name = assemblyMetadata.Name;
             SavedHash = assemblyMetadata.SavedHash;
-            var namespaces = new List<INamespaceMetadata>();
+            List<INamespaceMetadata> namespaces = new List<INamespaceMetadata>();
             if (assemblyMetadata.Namespaces != null)
             {
-                foreach (var child in assemblyMetadata.Namespaces)
-                    if (AlreadyMapped.TryGetValue(child.SavedHash, out var item))
+                foreach (INamespaceMetadata child in assemblyMetadata.Namespaces)
+                    if (AlreadyMapped.TryGetValue(child.SavedHash, out IMetadata item))
                     {
                         namespaces.Add(item as INamespaceMetadata);
                     }

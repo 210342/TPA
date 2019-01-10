@@ -27,7 +27,7 @@ namespace Library.Logic.MEFProviders
         {
             if (DirectoryCatalog == null)
                 throw new MEFLoaderException("Directory catalog can't be null");
-            var catalog = new AggregateCatalog();
+            AggregateCatalog catalog = new AggregateCatalog();
             catalog.Catalogs.Add(DirectoryCatalog);
             _container = new CompositionContainer(catalog);
             try

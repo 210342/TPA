@@ -50,7 +50,7 @@ namespace Library.Logic.ViewModel
 
         private void ImportTracer()
         {
-            var tracingProvider =
+            TracingProvider tracingProvider =
                 new TracingProvider(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
             try
@@ -67,7 +67,7 @@ namespace Library.Logic.ViewModel
 
         private void ImportPersister()
         {
-            var persistanceProvider =
+            PersistanceProvider persistanceProvider =
                 new PersistanceProvider(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
             try
@@ -93,7 +93,7 @@ namespace Library.Logic.ViewModel
                 Tracer.Flush();
             }
 
-            var reflector = new Reflector(LoadedAssembly);
+            Reflector reflector = new Reflector(LoadedAssembly);
             LoadedAssemblyRepresentation = reflector.m_AssemblyModel;
         }
 
@@ -139,7 +139,7 @@ namespace Library.Logic.ViewModel
                     Persister.Target = filePathProvider.GetFilePath();
                     Task.Run(() =>
                     {
-                        var graph = new ModelMapper().Map(
+                        IAssemblyMetadata graph = new ModelMapper().Map(
                             ObjectsList.First().ModelObject as IAssemblyMetadata,
                             Persister.GetType().Assembly
                         );
@@ -170,10 +170,10 @@ namespace Library.Logic.ViewModel
                     Persister.Target = filePathProvider.GetFilePath();
                     Dispatcher.CurrentDispatcher.BeginInvoke((Action) delegate
                     {
-                        var result = Persister.Load();
+                        object result = Persister.Load();
                         if (result is IAssemblyMetadata)
                         {
-                            var graph = new ModelMapper().Map(
+                            IAssemblyMetadata graph = new ModelMapper().Map(
                                 result as IAssemblyMetadata,
                                 typeof(AssemblyMetadata).Assembly
                             );

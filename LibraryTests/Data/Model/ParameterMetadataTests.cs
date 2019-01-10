@@ -19,8 +19,8 @@ namespace LibraryTests.Data.Model
         [TestMethod]
         public void CopyCtorTest()
         {
-            var tmp = new ParameterMetadata("asdf", new TypeMetadata(typeof(ParameterMetadataTests)));
-            var sut = new ParameterMetadata(tmp);
+            ParameterMetadata tmp = new ParameterMetadata("asdf", new TypeMetadata(typeof(ParameterMetadataTests)));
+            ParameterMetadata sut = new ParameterMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
             Assert.IsTrue(tmp.TypeMetadata.Name.Equals(sut.TypeMetadata.Name));

@@ -12,8 +12,8 @@ namespace Serializing
     [Export(typeof(IPersister))]
     public class XmlModelSerializer : IPersister
     {
-        private string _target;
         private readonly DataContractSerializer dataContractSerializer;
+        private string _target;
 
         public XmlModelSerializer()
         {
@@ -55,11 +55,11 @@ namespace Serializing
 
         public void Save(object toSave)
         {
-            var settings = new XmlWriterSettings {Indent = true};
+            XmlWriterSettings settings = new XmlWriterSettings {Indent = true};
             if (SerializationStream != null)
             {
                 SerializationStream.Position = 0;
-                using (var writer = XmlWriter.Create(SerializationStream, settings))
+                using (XmlWriter writer = XmlWriter.Create(SerializationStream, settings))
                 {
                     dataContractSerializer.WriteObject(writer, toSave);
                 }
@@ -74,7 +74,7 @@ namespace Serializing
             if (SerializationStream != null)
             {
                 SerializationStream.Position = 0;
-                using (var reader = XmlReader.Create(SerializationStream))
+                using (XmlReader reader = XmlReader.Create(SerializationStream))
                 {
                     read = dataContractSerializer.ReadObject(reader);
                 }

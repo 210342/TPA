@@ -11,7 +11,7 @@ namespace SerializationModel
         {
             Name = propertyMetadata.Name;
             SavedHash = propertyMetadata.SavedHash;
-            if (AlreadyMapped.TryGetValue(propertyMetadata.MyType.SavedHash, out var item))
+            if (AlreadyMapped.TryGetValue(propertyMetadata.MyType.SavedHash, out IMetadata item))
             {
                 MyType = item as ITypeMetadata;
             }

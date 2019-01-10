@@ -11,8 +11,8 @@ namespace SerializationModel.Tests
         [TestMethod]
         public void CopyCtorTest()
         {
-            var tmp = new AssemblyTest();
-            var sut = new SerializationAssemblyMetadata(tmp);
+            AssemblyTest tmp = new AssemblyTest();
+            SerializationAssemblyMetadata sut = new SerializationAssemblyMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
             Assert.AreEqual(tmp.Namespaces.Count(), sut.Namespaces.Count());

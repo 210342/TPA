@@ -47,14 +47,14 @@ namespace Library.Logic.ViewModel
 
         private void BuildMyself()
         {
-            var list = new List<TreeViewItem>(EnumerateRootChildren());
+            List<TreeViewItem> list = new List<TreeViewItem>(EnumerateRootChildren());
             list.ForEach(n => Children.Add(n));
         }
 
         private IEnumerable<TreeViewItem> EnumerateRootChildren()
         {
             if (Metadata.Children != null)
-                foreach (var elem in Metadata.Children)
+                foreach (IMetadata elem in Metadata.Children)
                     if (elem != null)
                         yield return GetTreeItem(elem);
         }
@@ -62,7 +62,7 @@ namespace Library.Logic.ViewModel
         protected TreeViewItem GetTreeItem(IMetadata elem)
         {
             TreeViewItem tvi = null;
-            if (DataLoadedDictionary.Items.TryGetValue(elem.GetHashCode(), out var returnValue))
+            if (DataLoadedDictionary.Items.TryGetValue(elem.GetHashCode(), out IMetadata returnValue))
             {
                 tvi = GetChildOfType(returnValue);
             }

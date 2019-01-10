@@ -22,16 +22,16 @@ namespace LibraryTests.Logic.TreeView.Tests
         [TestMethod]
         public void TreeViewItemChildrenNullOnNotExpanded()
         {
-            var typeMeta = new TypeMetadata(typeof(Type));
-            var tvi = new TypeItem(typeMeta);
+            TypeMetadata typeMeta = new TypeMetadata(typeof(Type));
+            TypeItem tvi = new TypeItem(typeMeta);
             Assert.IsNull(tvi.Children[0]);
         }
 
         [TestMethod]
         public void TreeViewItemChildrenNotNullOnExpanded()
         {
-            var typeMeta = new TypeMetadata(typeof(Type));
-            var tvi = new TypeItem(typeMeta)
+            TypeMetadata typeMeta = new TypeMetadata(typeof(Type));
+            TypeItem tvi = new TypeItem(typeMeta)
             {
                 IsExpanded = true
             };
@@ -41,14 +41,14 @@ namespace LibraryTests.Logic.TreeView.Tests
         [TestMethod]
         public void DictionaryNotChangingOnSameIMetadatas()
         {
-            var typeMeta = new TypeMetadata(typeof(Type));
-            var method = typeof(TreeViewItem).GetMethod("EnumerateRootChildren",
+            TypeMetadata typeMeta = new TypeMetadata(typeof(Type));
+            MethodInfo method = typeof(TreeViewItem).GetMethod("EnumerateRootChildren",
                 BindingFlags.Instance | BindingFlags.NonPublic);
-            var tvi = new TypeItem(typeMeta);
+            TypeItem tvi = new TypeItem(typeMeta);
             method.Invoke(tvi, null);
-            var initialDictSize = DataLoadedDictionary.Items.Count;
+            int initialDictSize = DataLoadedDictionary.Items.Count;
             method.Invoke(tvi, null);
-            var nextlDictSize = DataLoadedDictionary.Items.Count;
+            int nextlDictSize = DataLoadedDictionary.Items.Count;
             Assert.AreEqual(initialDictSize, nextlDictSize);
         }
     }

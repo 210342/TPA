@@ -25,7 +25,7 @@ namespace Library.Model
         {
             Name = parameterMetadata.Name;
             SavedHash = parameterMetadata.SavedHash;
-            if (AlreadyMapped.TryGetValue(parameterMetadata.TypeMetadata.SavedHash, out var item))
+            if (AlreadyMapped.TryGetValue(parameterMetadata.TypeMetadata.SavedHash, out IMetadata item))
             {
                 TypeMetadata = item as ITypeMetadata;
             }
@@ -46,7 +46,7 @@ namespace Library.Model
             get => new[] {TypeMetadata};
             set
             {
-                foreach (var elem in value)
+                foreach (IMetadata elem in value)
                 {
                     TypeMetadata = (TypeMetadata) elem;
                     break;
@@ -65,7 +65,7 @@ namespace Library.Model
         {
             if (GetType() != obj.GetType())
                 return false;
-            var pm = (ParameterMetadata) obj;
+            ParameterMetadata pm = (ParameterMetadata) obj;
             if (Name == pm.Name)
                 if (TypeMetadata != pm.TypeMetadata)
                     return false;

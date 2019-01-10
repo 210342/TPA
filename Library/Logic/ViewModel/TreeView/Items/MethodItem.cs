@@ -20,7 +20,8 @@ namespace Library.Logic.ViewModel
             else
             {
                 _details += "(";
-                foreach (var param in source.Parameters) _details += $"{param.Name} : {param.TypeMetadata}, ";
+                foreach (IParameterMetadata param in source.Parameters)
+                    _details += $"{param.Name} : {param.TypeMetadata}, ";
                 _details = _details.Remove(_details.Length - 2, 1) + ")\n";
             }
 

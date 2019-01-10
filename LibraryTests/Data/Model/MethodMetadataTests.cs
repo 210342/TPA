@@ -22,9 +22,9 @@ namespace LibraryTests.Data.Model
         [TestMethod]
         public void EmitMethodsReturnsValue()
         {
-            var methods =
+            List<MethodBase> methods =
                 new List<MethodBase>(typeof(TestClass).GetMethods());
-            var methodsMeta =
+            List<MethodMetadata> methodsMeta =
                 new List<MethodMetadata>(MethodMetadata.EmitMethods(methods));
             Assert.AreEqual(methods.Count, methodsMeta.Count);
         }
@@ -32,12 +32,12 @@ namespace LibraryTests.Data.Model
         [TestMethod]
         public void CopyCtorTest()
         {
-            var ctor = typeof(MethodMetadata).GetConstructor(
+            ConstructorInfo ctor = typeof(MethodMetadata).GetConstructor(
                 BindingFlags.Instance | BindingFlags.NonPublic,
                 null, new[] {typeof(MethodBase)}, null);
 
-            var tmp = (MethodMetadata) ctor.Invoke(new object[] {typeof(TestClass).GetMethods().First()});
-            var sut = new MethodMetadata(tmp);
+            MethodMetadata tmp = (MethodMetadata) ctor.Invoke(new object[] {typeof(TestClass).GetMethods().First()});
+            MethodMetadata sut = new MethodMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
             Assert.AreEqual(tmp.Parameters.Count(), sut.Parameters.Count());

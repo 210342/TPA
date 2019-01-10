@@ -10,10 +10,10 @@ namespace Library.Model
     {
         private void FillChildren(StreamingContext context)
         {
-            var amList = new List<IAttributeMetadata>();
+            List<IAttributeMetadata> amList = new List<IAttributeMetadata>();
             if (Attributes != null)
                 amList.AddRange(Attributes.Select(n => n));
-            var elems = new List<IMetadata>();
+            List<IMetadata> elems = new List<IMetadata>();
             elems.AddRange(amList);
             if (ImplementedInterfaces != null)
                 elems.AddRange(ImplementedInterfaces);
@@ -97,7 +97,7 @@ namespace Library.Model
             {
                 BaseType = null;
             }
-            else if (AlreadyMapped.TryGetValue(typeMetadata.BaseType.SavedHash, out var item))
+            else if (AlreadyMapped.TryGetValue(typeMetadata.BaseType.SavedHash, out IMetadata item))
             {
                 BaseType = item as ITypeMetadata;
             }
@@ -115,9 +115,9 @@ namespace Library.Model
             }
             else
             {
-                var genericArguments = new List<ITypeMetadata>();
-                foreach (var genericArgument in typeMetadata.GenericArguments)
-                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out var item))
+                List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
+                foreach (ITypeMetadata genericArgument in typeMetadata.GenericArguments)
+                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata item))
                     {
                         genericArguments.Add(item as ITypeMetadata);
                     }
@@ -144,9 +144,9 @@ namespace Library.Model
             }
             else
             {
-                var attributes = new List<IAttributeMetadata>();
-                foreach (var attribute in typeMetadata.Attributes)
-                    if (AlreadyMapped.TryGetValue(attribute.SavedHash, out var item))
+                List<IAttributeMetadata> attributes = new List<IAttributeMetadata>();
+                foreach (IAttributeMetadata attribute in typeMetadata.Attributes)
+                    if (AlreadyMapped.TryGetValue(attribute.SavedHash, out IMetadata item))
                     {
                         attributes.Add(item as IAttributeMetadata);
                     }
@@ -167,9 +167,9 @@ namespace Library.Model
             }
             else
             {
-                var interfaces = new List<ITypeMetadata>();
-                foreach (var implementedInterface in typeMetadata.ImplementedInterfaces)
-                    if (AlreadyMapped.TryGetValue(implementedInterface.SavedHash, out var item))
+                List<ITypeMetadata> interfaces = new List<ITypeMetadata>();
+                foreach (ITypeMetadata implementedInterface in typeMetadata.ImplementedInterfaces)
+                    if (AlreadyMapped.TryGetValue(implementedInterface.SavedHash, out IMetadata item))
                     {
                         interfaces.Add(item as ITypeMetadata);
                     }
@@ -190,9 +190,9 @@ namespace Library.Model
             }
             else
             {
-                var nestedTypes = new List<ITypeMetadata>();
-                foreach (var nestedType in typeMetadata.NestedTypes)
-                    if (AlreadyMapped.TryGetValue(nestedType.SavedHash, out var item))
+                List<ITypeMetadata> nestedTypes = new List<ITypeMetadata>();
+                foreach (ITypeMetadata nestedType in typeMetadata.NestedTypes)
+                    if (AlreadyMapped.TryGetValue(nestedType.SavedHash, out IMetadata item))
                     {
                         nestedTypes.Add(item as ITypeMetadata);
                     }
@@ -213,9 +213,9 @@ namespace Library.Model
             }
             else
             {
-                var properties = new List<IPropertyMetadata>();
-                foreach (var property in typeMetadata.Properties)
-                    if (AlreadyMapped.TryGetValue(property.SavedHash, out var item))
+                List<IPropertyMetadata> properties = new List<IPropertyMetadata>();
+                foreach (IPropertyMetadata property in typeMetadata.Properties)
+                    if (AlreadyMapped.TryGetValue(property.SavedHash, out IMetadata item))
                     {
                         properties.Add(item as IPropertyMetadata);
                     }
@@ -234,7 +234,7 @@ namespace Library.Model
             {
                 DeclaringType = null;
             }
-            else if (AlreadyMapped.TryGetValue(typeMetadata.DeclaringType.SavedHash, out var item))
+            else if (AlreadyMapped.TryGetValue(typeMetadata.DeclaringType.SavedHash, out IMetadata item))
             {
                 DeclaringType = item as ITypeMetadata;
             }
@@ -252,9 +252,9 @@ namespace Library.Model
             }
             else
             {
-                var methods = new List<IMethodMetadata>();
-                foreach (var method in typeMetadata.Methods)
-                    if (AlreadyMapped.TryGetValue(method.SavedHash, out var item))
+                List<IMethodMetadata> methods = new List<IMethodMetadata>();
+                foreach (IMethodMetadata method in typeMetadata.Methods)
+                    if (AlreadyMapped.TryGetValue(method.SavedHash, out IMetadata item))
                     {
                         methods.Add(item as IMethodMetadata);
                     }
@@ -276,9 +276,9 @@ namespace Library.Model
             }
             else
             {
-                var constructors = new List<IMethodMetadata>();
-                foreach (var constructor in typeMetadata.Methods)
-                    if (AlreadyMapped.TryGetValue(constructor.SavedHash, out var item))
+                List<IMethodMetadata> constructors = new List<IMethodMetadata>();
+                foreach (IMethodMetadata constructor in typeMetadata.Methods)
+                    if (AlreadyMapped.TryGetValue(constructor.SavedHash, out IMetadata item))
                     {
                         constructors.Add(item as IMethodMetadata);
                     }
@@ -365,9 +365,9 @@ namespace Library.Model
         private static Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> EmitModifiers(Type type)
         {
             //set defaults 
-            var _access = AccessLevelEnum.IsPrivate;
-            var _abstract = AbstractEnum.NotAbstract;
-            var _sealed = SealedEnum.NotSealed;
+            AccessLevelEnum _access = AccessLevelEnum.IsPrivate;
+            AbstractEnum _abstract = AbstractEnum.NotAbstract;
+            SealedEnum _sealed = SealedEnum.NotSealed;
             // check if not default 
             if (type.IsPublic)
                 _access = AccessLevelEnum.IsPublic;
@@ -405,7 +405,7 @@ namespace Library.Model
         {
             if (GetType() != obj.GetType())
                 return false;
-            var tm = (TypeMetadata) obj;
+            TypeMetadata tm = (TypeMetadata) obj;
             if (Name == tm.Name)
             {
                 if (NamespaceName != tm.NamespaceName)

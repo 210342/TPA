@@ -10,8 +10,8 @@ namespace SerializationModel.Tests
         [TestMethod]
         public void CopyCtorTest()
         {
-            var tmp = new ParameterTest();
-            var sut = new SerializationParameterMetadata(tmp);
+            ParameterTest tmp = new ParameterTest();
+            SerializationParameterMetadata sut = new SerializationParameterMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
             Assert.IsTrue(tmp.TypeMetadata.Name.Equals(sut.TypeMetadata.Name));

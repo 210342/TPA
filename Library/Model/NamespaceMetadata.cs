@@ -23,9 +23,9 @@ namespace Library.Model
             Name = namespaceMetadata.Name;
             SavedHash = namespaceMetadata.SavedHash;
 
-            var types = new List<ITypeMetadata>();
-            foreach (var child in namespaceMetadata.Types)
-                if (AlreadyMapped.TryGetValue(child.SavedHash, out var item))
+            List<ITypeMetadata> types = new List<ITypeMetadata>();
+            foreach (ITypeMetadata child in namespaceMetadata.Types)
+                if (AlreadyMapped.TryGetValue(child.SavedHash, out IMetadata item))
                 {
                     types.Add(item as ITypeMetadata);
                 }
@@ -53,7 +53,7 @@ namespace Library.Model
         {
             if (GetType() != obj.GetType())
                 return false;
-            var nm = (NamespaceMetadata) obj;
+            NamespaceMetadata nm = (NamespaceMetadata) obj;
             if (Name == nm.Name)
                 return true;
             return false;

@@ -43,9 +43,9 @@ namespace Library.Model
             }
             else
             {
-                var genericArguments = new List<ITypeMetadata>();
-                foreach (var genericArgument in methodMetadata.GenericArguments)
-                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out var mappedArgument))
+                List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
+                foreach (ITypeMetadata genericArgument in methodMetadata.GenericArguments)
+                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata mappedArgument))
                     {
                         genericArguments.Add(mappedArgument as ITypeMetadata);
                     }
@@ -60,7 +60,7 @@ namespace Library.Model
             }
 
             // Return type
-            if (AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out var item))
+            if (AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out IMetadata item))
             {
                 ReturnType = item as ITypeMetadata;
             }
@@ -78,8 +78,8 @@ namespace Library.Model
             }
             else
             {
-                var parameters = new List<IParameterMetadata>();
-                foreach (var parameter in methodMetadata.Parameters)
+                List<IParameterMetadata> parameters = new List<IParameterMetadata>();
+                foreach (IParameterMetadata parameter in methodMetadata.Parameters)
                     if (AlreadyMapped.TryGetValue(parameter.SavedHash, out item))
                     {
                         parameters.Add(item as IParameterMetadata);
@@ -106,7 +106,7 @@ namespace Library.Model
 
         private void FillChildren(StreamingContext context)
         {
-            var elems = new List<IMetadata> {ReturnType};
+            List<IMetadata> elems = new List<IMetadata> {ReturnType};
             elems.AddRange(Parameters);
             Children = elems;
         }
@@ -134,7 +134,7 @@ namespace Library.Model
 
         private static TypeMetadata EmitReturnType(MethodBase method)
         {
-            var methodInfo = method as MethodInfo;
+            MethodInfo methodInfo = method as MethodInfo;
             if (methodInfo == null)
                 return null;
             return TypeMetadata.EmitReference(methodInfo.ReturnType);
@@ -147,20 +147,20 @@ namespace Library.Model
 
         private static Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> EmitModifiers(MethodBase method)
         {
-            var _access = AccessLevelEnum.IsPrivate;
+            AccessLevelEnum _access = AccessLevelEnum.IsPrivate;
             if (method.IsPublic)
                 _access = AccessLevelEnum.IsPublic;
             else if (method.IsFamily)
                 _access = AccessLevelEnum.IsProtected;
             else if (method.IsFamilyAndAssembly)
                 _access = AccessLevelEnum.IsProtectedInternal;
-            var _abstract = AbstractEnum.NotAbstract;
+            AbstractEnum _abstract = AbstractEnum.NotAbstract;
             if (method.IsAbstract)
                 _abstract = AbstractEnum.Abstract;
-            var _static = StaticEnum.NotStatic;
+            StaticEnum _static = StaticEnum.NotStatic;
             if (method.IsStatic)
                 _static = StaticEnum.Static;
-            var _virtual = VirtualEnum.NotVirtual;
+            VirtualEnum _virtual = VirtualEnum.NotVirtual;
             if (method.IsVirtual)
                 _virtual = VirtualEnum.Virtual;
             return new Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum>(_access, _abstract, _static,
@@ -180,13 +180,13 @@ namespace Library.Model
         {
             if (GetType() != obj.GetType())
                 return false;
-            var mm = (MethodMetadata) obj;
+            MethodMetadata mm = (MethodMetadata) obj;
             if (Name == mm.Name)
             {
                 if (ReturnType != mm.ReturnType)
                     return false;
-                var counter = 0;
-                foreach (var el in Parameters)
+                int counter = 0;
+                foreach (IParameterMetadata el in Parameters)
                     if (mm.Parameters.Any(n => n.Equals(el)))
                         ++counter;
                 if (counter != Parameters.Count())
@@ -199,7 +199,7 @@ namespace Library.Model
 
         public override string ToString()
         {
-            var paramsString = new StringBuilder("(");
+            StringBuilder paramsString = new StringBuilder("(");
             if (Parameters.Count() != 0)
             {
                 foreach (ParameterMetadata parameter in Parameters)

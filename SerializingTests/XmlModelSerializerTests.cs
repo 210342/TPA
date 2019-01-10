@@ -18,7 +18,7 @@ namespace Serializing.Tests
         public void SetUp()
         {
             _serializationStream = new MemoryStream();
-            var knownTypes = new List<Type>
+            List<Type> knownTypes = new List<Type>
                 (new[] {typeof(TestType), typeof(TestValue)});
             _sut = new XmlModelSerializer
             {

@@ -24,7 +24,7 @@ namespace Library.Model
         {
             if (GetType() != obj.GetType())
                 return false;
-            var pm = (PropertyMetadata) obj;
+            PropertyMetadata pm = (PropertyMetadata) obj;
             if (Name == pm.Name)
                 if (MyType != pm.MyType)
                     return false;
@@ -46,7 +46,7 @@ namespace Library.Model
             get => new[] {MyType};
             set
             {
-                foreach (var elem in value)
+                foreach (IMetadata elem in value)
                 {
                     MyType = (TypeMetadata) elem;
                     break;
@@ -79,7 +79,7 @@ namespace Library.Model
         {
             Name = propertyMetadata.Name;
             SavedHash = propertyMetadata.SavedHash;
-            if (AlreadyMapped.TryGetValue(propertyMetadata.MyType.SavedHash, out var item))
+            if (AlreadyMapped.TryGetValue(propertyMetadata.MyType.SavedHash, out IMetadata item))
             {
                 MyType = item as ITypeMetadata;
             }
