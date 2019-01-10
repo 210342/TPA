@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContract;
 
@@ -8,6 +9,13 @@ namespace SerializationModel.Tests
     [TestClass]
     public class SerializationNamespaceMetadataTests
     {
+        [TestInitialize]
+        public void NullifyDictionary()
+        {
+            FieldInfo field = typeof(AbstractMapper).GetField("<AlreadyMapped>k__BackingField",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            field.SetValue(null, new Dictionary<int, IMetadata>());
+        }
         [TestMethod]
         public void CopyCtorTest()
         {
