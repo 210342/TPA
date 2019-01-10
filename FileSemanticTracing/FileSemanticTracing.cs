@@ -9,7 +9,7 @@ using Tracing;
 namespace SemanticTracing
 {
     [Export(typeof(ITracing))]
-    public class FileSemanticTracing : ITracing, IDisposable
+    public class FileSemanticTracing : ITracing
     {
         private readonly SinkSubscription<FlatFileSink> _subscription;
 
@@ -26,6 +26,7 @@ namespace SemanticTracing
         public void Dispose()
         {
             if (_subscription != null) _subscription.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         public void LogFailure(string message)
