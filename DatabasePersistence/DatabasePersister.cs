@@ -1,25 +1,28 @@
-﻿using DatabasePersistence.DBModel;
-using ModelContract;
-using Persistance;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.Composition;
 using System.Configuration;
-using System.Data.Entity;
 using System.Linq;
-using System.Data.Entity.Migrations;
+using DatabasePersistence.DBModel;
+using ModelContract;
+using Persistance;
 
 namespace DatabasePersistence
 {
     [Export(typeof(IPersister))]
     public class DatabasePersister : IPersister
     {
-        private DbModelAccessContext context;
         private string connectionString;
+        private DbModelAccessContext context;
+
+        public DatabasePersister()
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["DbSource"].ConnectionString;
+            Target = connectionString;
+        }
 
         public string Target
         {
-            get { return connectionString; } 
+            get => connectionString;
             set
             {
                 connectionString = value;
@@ -29,12 +32,6 @@ namespace DatabasePersistence
         }
 
         public FileSystemDependency FileSystemDependency => FileSystemDependency.Independent;
-
-        public DatabasePersister()
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["DbSource"].ConnectionString;
-            Target = connectionString;
-        }
 
         public void Dispose()
         {
@@ -48,11 +45,8 @@ namespace DatabasePersistence
 
         public void Save(object obj)
         {
-            if (!(obj is IAssemblyMetadata))
-            {
-                throw new InvalidOperationException("Can't assign from given type.");
-            }
-            DbAssemblyMetadata root = obj as DbAssemblyMetadata;
+            if (!(obj is IAssemblyMetadata)) throw new InvalidOperationException("Can't assign from given type.");
+            var root = obj as DbAssemblyMetadata;
             context.Assemblies.Add(root);
             context.SaveChanges();
         }

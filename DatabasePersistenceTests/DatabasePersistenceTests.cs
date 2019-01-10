@@ -1,25 +1,28 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ModelContract;
-using System;
+﻿using System;
 using System.Data.SqlClient;
 using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DatabasePersistence.DBModel
 {
     [TestClass]
     public class DatabasePersistenceTests
     {
-        private DatabasePersister persister;
         private string connectionString;
+        private DatabasePersister persister;
 
         [TestInitialize]
         public void Init()
         {
-            // string assemblyPath = System.IO.Path.GetDirectoryName(
-            //    System.Reflection.Assembly.GetCallingAssembly().Location);
-            // string fileName = "LocalDB.mdf";
-            connectionString = $"Server=(localdb)\\mssqllocaldb;Integrated Security=true;";
-            persister = new DatabasePersister() { Target = connectionString };
+            persister = new DatabasePersister();
+            try
+            {
+                persister.Load();
+            }
+            catch (Exception e)
+            {
+                //BUG IN EF
+            }
         }
 
         [TestCleanup]
@@ -31,13 +34,13 @@ namespace DatabasePersistence.DBModel
         [TestMethod]
         public void DbSaveTest()
         {
-            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata() { Name = "test0" };
-            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata() { Name = "test1" };
-            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata() { Name = "test2" };
-            DbNamespaceMetadata namespaceMeta3 = new DbNamespaceMetadata() { Name = "test3" };
-            assemblyMetadata.Namespaces = new DbNamespaceMetadata[] { namespaceMeta1, namespaceMeta2, namespaceMeta3 };
+            var assemblyMetadata = new DbAssemblyMetadata {Name = "test0"};
+            var namespaceMeta1 = new DbNamespaceMetadata {Name = "test1"};
+            var namespaceMeta2 = new DbNamespaceMetadata {Name = "test2"};
+            var namespaceMeta3 = new DbNamespaceMetadata {Name = "test3"};
+            assemblyMetadata.Namespaces = new[] {namespaceMeta1, namespaceMeta2, namespaceMeta3};
 
-            int assembliesQuantityBefore = CountInTable("Assemblies");
+            var assembliesQuantityBefore = CountInTable("Assemblies");
             persister.Save(assemblyMetadata);
             Assert.AreEqual(assembliesQuantityBefore + 1, CountInTable("Assemblies"));
         }
@@ -45,14 +48,14 @@ namespace DatabasePersistence.DBModel
         [TestMethod]
         public void DbSecondDepthTest()
         {
-            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata() { Name = "test0" };
-            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata() { Name = "test1" };
-            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata() { Name = "test2" };
-            DbTypeMetadata type1 = new DbTypeMetadata { Name = "Type1" };
-            namespaceMeta1.Types = new[] { type1 };
-            assemblyMetadata.Namespaces = new DbNamespaceMetadata[] { namespaceMeta1, namespaceMeta2 };
+            var assemblyMetadata = new DbAssemblyMetadata {Name = "test0"};
+            var namespaceMeta1 = new DbNamespaceMetadata {Name = "test1"};
+            var namespaceMeta2 = new DbNamespaceMetadata {Name = "test2"};
+            var type1 = new DbTypeMetadata {Name = "Type1"};
+            namespaceMeta1.Types = new[] {type1};
+            assemblyMetadata.Namespaces = new[] {namespaceMeta1, namespaceMeta2};
 
-            int typesQuantityBefore = CountInTable("Types");
+            var typesQuantityBefore = CountInTable("Types");
             persister.Save(assemblyMetadata);
             Assert.AreEqual(typesQuantityBefore + 1, CountInTable("Types"));
         }
@@ -60,16 +63,16 @@ namespace DatabasePersistence.DBModel
         [TestMethod]
         public void RecurseTest()
         {
-            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata() { Name = "test0" };
-            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata() { Name = "test1" };
-            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata() { Name = "test2" };
-            DbTypeMetadata type1 = new DbTypeMetadata { Name = "Type1" };
-            type1.Properties = new[] { new DbPropertyMetadata() { Name = "prop", MyType = type1 } };
-            namespaceMeta1.Types = new[] { type1 };
-            assemblyMetadata.Namespaces = new DbNamespaceMetadata[] { namespaceMeta1, namespaceMeta2 };
+            var assemblyMetadata = new DbAssemblyMetadata {Name = "test0"};
+            var namespaceMeta1 = new DbNamespaceMetadata {Name = "test1"};
+            var namespaceMeta2 = new DbNamespaceMetadata {Name = "test2"};
+            var type1 = new DbTypeMetadata {Name = "Type1"};
+            type1.Properties = new[] {new DbPropertyMetadata {Name = "prop", MyType = type1}};
+            namespaceMeta1.Types = new[] {type1};
+            assemblyMetadata.Namespaces = new[] {namespaceMeta1, namespaceMeta2};
 
-            int typesQuantityBefore = CountInTable("Types");
-            int propertiesQuantityBefore = CountInTable("Properties");
+            var typesQuantityBefore = CountInTable("Types");
+            var propertiesQuantityBefore = CountInTable("Properties");
             persister.Save(assemblyMetadata);
             Assert.AreEqual(typesQuantityBefore + 1, CountInTable("Types"));
             Assert.AreEqual(propertiesQuantityBefore + 1, CountInTable("Properties"));
@@ -78,26 +81,26 @@ namespace DatabasePersistence.DBModel
         [TestMethod]
         public void DeepTest()
         {
-            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata() { Name = "test0" };
-            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata() { Name = "test1" };
-            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata() { Name = "test2" };
-            DbTypeMetadata type1 = new DbTypeMetadata { Name = "Type1" };
-            type1.Properties = new[] { new DbPropertyMetadata() { Name = "prop", MyType = type1 } };
-            type1.Attributes = new[] { new DbAttributeMetadata() { Name = "attr" } };
-            DbMethodMetadata method1 = new DbMethodMetadata()
+            var assemblyMetadata = new DbAssemblyMetadata {Name = "test0"};
+            var namespaceMeta1 = new DbNamespaceMetadata {Name = "test1"};
+            var namespaceMeta2 = new DbNamespaceMetadata {Name = "test2"};
+            var type1 = new DbTypeMetadata {Name = "Type1"};
+            type1.Properties = new[] {new DbPropertyMetadata {Name = "prop", MyType = type1}};
+            type1.Attributes = new[] {new DbAttributeMetadata {Name = "attr"}};
+            var method1 = new DbMethodMetadata
             {
                 Name = "method1",
-                Parameters = new[] { new DbParameterMetadata() { Name = "param1", TypeMetadata = type1 } }
+                Parameters = new[] {new DbParameterMetadata {Name = "param1", TypeMetadata = type1}}
             };
-            type1.Methods = new[] { method1 };
-            namespaceMeta1.Types = new[] { type1 };
-            assemblyMetadata.Namespaces = new DbNamespaceMetadata[] { namespaceMeta1, namespaceMeta2 };
+            type1.Methods = new[] {method1};
+            namespaceMeta1.Types = new[] {type1};
+            assemblyMetadata.Namespaces = new[] {namespaceMeta1, namespaceMeta2};
 
-            int typesQuantityBefore = CountInTable("Types");
-            int propertiesQuantityBefore = CountInTable("Properties");
-            int attributesQuantityBefore = CountInTable("Attributes");
-            int methodsQuantityBefore = CountInTable("Methods");
-            int parametersQuantityBefore = CountInTable("Parameters");
+            var typesQuantityBefore = CountInTable("Types");
+            var propertiesQuantityBefore = CountInTable("Properties");
+            var attributesQuantityBefore = CountInTable("Attributes");
+            var methodsQuantityBefore = CountInTable("Methods");
+            var parametersQuantityBefore = CountInTable("Parameters");
             persister.Save(assemblyMetadata);
             Assert.AreEqual(typesQuantityBefore + 1, CountInTable("Types"));
             Assert.AreEqual(propertiesQuantityBefore + 1, CountInTable("Properties"));
@@ -109,18 +112,18 @@ namespace DatabasePersistence.DBModel
         [TestMethod]
         public void LoadTest()
         {
-            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata() { Name = "test0", Id=100000 };
-            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata() { Name = "test1" };
-            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata() { Name = "test2" };
-            assemblyMetadata.Namespaces = new DbNamespaceMetadata[] { namespaceMeta1, namespaceMeta2 };
-            DbTypeMetadata type1 = new DbTypeMetadata { Name = "Type1" };
-            DbTypeMetadata type2 = new DbTypeMetadata { Name = "Type2" };
-            namespaceMeta1.Types = new[] { type1 };
-            namespaceMeta2.Types = new[] { type2 };
+            var assemblyMetadata = new DbAssemblyMetadata {Name = "test0", Id = 100000};
+            var namespaceMeta1 = new DbNamespaceMetadata {Name = "test1"};
+            var namespaceMeta2 = new DbNamespaceMetadata {Name = "test2"};
+            assemblyMetadata.Namespaces = new[] {namespaceMeta1, namespaceMeta2};
+            var type1 = new DbTypeMetadata {Name = "Type1"};
+            var type2 = new DbTypeMetadata {Name = "Type2"};
+            namespaceMeta1.Types = new[] {type1};
+            namespaceMeta2.Types = new[] {type2};
 
             persister.Save(assemblyMetadata);
-            object loaded = persister.Load();
-            DbAssemblyMetadata loadedAssembly = loaded as DbAssemblyMetadata;
+            var loaded = persister.Load();
+            var loadedAssembly = loaded as DbAssemblyMetadata;
             Assert.IsNotNull(loadedAssembly);
             Assert.AreEqual("test0", loadedAssembly.Name);
             Assert.AreEqual(2, loadedAssembly.Namespaces.Count());
@@ -132,17 +135,19 @@ namespace DatabasePersistence.DBModel
 
         private int CountInTable(string tableName)
         {
-            int result = 0;
+            var result = 0;
             using (var connection = new SqlConnection(persister.Target))
             {
                 connection.Open();
-                SqlTransaction transaction = connection.BeginTransaction();
+                var transaction = connection.BeginTransaction();
                 using (var command = new SqlCommand($"SELECT COUNT(Id) FROM dbo.{tableName}", connection, transaction))
                 {
-                    result = (int)command.ExecuteScalar();
+                    result = (int) command.ExecuteScalar();
                 }
+
                 connection.Close();
             }
+
             return result;
         }
     }

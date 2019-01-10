@@ -1,49 +1,32 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Serializing.Tests
 {
     [ExcludeFromCodeCoverage]
-    [TestClass()]
+    [TestClass]
     public class XmlModelSerializerTests
     {
-        XmlModelSerializer _sut = null;
-        Stream _serializationStream;
-
-        public interface IParent
-        {
-            IEnumerable<TestValue> Values { get; set; }
-        }
-
-        public class TestType : IParent
-        {
-            public string Name { get; set; }
-            public IEnumerable<TestValue> Values { get; set; }
-        }
-        public class TestValue : IParent
-        {
-            public string Name { get; set; }
-            public string ValueType { get; set; }
-            public IEnumerable<TestValue> Values { get; set; }
-        }
+        private Stream _serializationStream;
+        private XmlModelSerializer _sut;
 
 
         [TestInitialize]
         public void SetUp()
         {
             _serializationStream = new MemoryStream();
-            List<Type> knownTypes = new List<Type>
-                (new Type[] { typeof(TestType), typeof(TestValue) });
+            var knownTypes = new List<Type>
+                (new[] {typeof(TestType), typeof(TestValue)});
             _sut = new XmlModelSerializer
             {
                 SerializationStream = _serializationStream
             };
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void XmlModelSerializerTest()
         {
             Assert.IsNotNull(_sut);
@@ -75,6 +58,24 @@ namespace Serializing.Tests
             Assert.IsFalse(string.IsNullOrEmpty(_sut.Target));
             Assert.IsNotNull(_sut.SerializationStream);
             Assert.IsTrue(_sut.SerializationStream is FileStream);
+        }
+
+        public interface IParent
+        {
+            IEnumerable<TestValue> Values { get; set; }
+        }
+
+        public class TestType : IParent
+        {
+            public string Name { get; set; }
+            public IEnumerable<TestValue> Values { get; set; }
+        }
+
+        public class TestValue : IParent
+        {
+            public string Name { get; set; }
+            public string ValueType { get; set; }
+            public IEnumerable<TestValue> Values { get; set; }
         }
     }
 }

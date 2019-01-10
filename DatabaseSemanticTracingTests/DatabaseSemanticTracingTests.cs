@@ -1,12 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Data.SqlClient;
 using System.Linq;
-using System.Data.SqlClient;
-using System.Reflection;
 using System.Transactions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DatabaseSemanticTracing.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class DatabaseSemanticTracingTests
     {
         private DatabaseSemanticTracing _sut;
@@ -16,15 +15,15 @@ namespace DatabaseSemanticTracing.Tests
         {
             _sut = new DatabaseSemanticTracing();
         }
-        
+
         [TestCleanup]
         public void CleanUp()
         {
             _sut.Dispose();
         }
-        
-        
-        [TestMethod()]
+
+
+        [TestMethod]
         public void DatabaseSemanticTracingTest()
         {
             Assert.IsNotNull(_sut);
@@ -33,9 +32,9 @@ namespace DatabaseSemanticTracing.Tests
         [TestMethod]
         public void LogStartupTest()
         {
-            using (TransactionScope scope = new TransactionScope())
+            using (var scope = new TransactionScope())
             {
-                int logsQuantity = CheckLogsQuantity();
+                var logsQuantity = CheckLogsQuantity();
                 _sut.LogStartup();
                 _sut.Flush();
                 Assert.AreEqual(logsQuantity + 1, CheckLogsQuantity());
@@ -46,7 +45,7 @@ namespace DatabaseSemanticTracing.Tests
         [TestMethod]
         public void LogSuccessTest()
         {
-            using (TransactionScope scope = new TransactionScope())
+            using (var scope = new TransactionScope())
             {
                 CallGivenMethod("LogSuccess");
                 scope.Dispose();
@@ -56,7 +55,7 @@ namespace DatabaseSemanticTracing.Tests
         [TestMethod]
         public void LogFailureTest()
         {
-            using (TransactionScope scope = new TransactionScope())
+            using (var scope = new TransactionScope())
             {
                 CallGivenMethod("LogFailure");
                 scope.Dispose();
@@ -66,7 +65,7 @@ namespace DatabaseSemanticTracing.Tests
         [TestMethod]
         public void LogLoadingModelTest()
         {
-            using (TransactionScope scope = new TransactionScope())
+            using (var scope = new TransactionScope())
             {
                 CallGivenMethod("LogLoadingModel");
                 scope.Dispose();
@@ -76,7 +75,7 @@ namespace DatabaseSemanticTracing.Tests
         [TestMethod]
         public void LogModelLoadedTest()
         {
-            using (TransactionScope scope = new TransactionScope())
+            using (var scope = new TransactionScope())
             {
                 CallGivenMethod("LogModelLoaded");
                 scope.Dispose();
@@ -86,7 +85,7 @@ namespace DatabaseSemanticTracing.Tests
         [TestMethod]
         public void LogModelSavedTest()
         {
-            using (TransactionScope scope = new TransactionScope())
+            using (var scope = new TransactionScope())
             {
                 CallGivenMethod("LogModelSaved");
                 scope.Dispose();
@@ -96,7 +95,7 @@ namespace DatabaseSemanticTracing.Tests
         [TestMethod]
         public void LogSavingModelTest()
         {
-            using (TransactionScope scope = new TransactionScope())
+            using (var scope = new TransactionScope())
             {
                 CallGivenMethod("LogSavingModel");
                 scope.Dispose();
@@ -105,30 +104,31 @@ namespace DatabaseSemanticTracing.Tests
 
         private void CallGivenMethod(string methodName)
         {
-            int logsQuantity = CheckLogsQuantity();
-            MethodInfo methodToCall = (from method in _sut.GetType().GetMethods()
-                                       where method.Name.Equals(methodName)
-                                       select method).First();
-            methodToCall.Invoke(_sut, new object[] { "TEST METHOD" });
+            var logsQuantity = CheckLogsQuantity();
+            var methodToCall = (from method in _sut.GetType().GetMethods()
+                where method.Name.Equals(methodName)
+                select method).First();
+            methodToCall.Invoke(_sut, new object[] {"TEST METHOD"});
             _sut.Flush();
             Assert.AreEqual(logsQuantity + 1, CheckLogsQuantity());
         }
 
         private int CheckLogsQuantity()
         {
-            
-                int quantity;
-                using (var connection = new SqlConnection(_sut.ConnectionString))
+            int quantity;
+            using (var connection = new SqlConnection(_sut.ConnectionString))
+            {
+                connection.Open();
+                var transaction = connection.BeginTransaction();
+                using (var command = new SqlCommand("SELECT COUNT(*) FROM dbo.Traces", connection, transaction))
                 {
-                    connection.Open();
-                    SqlTransaction transaction = connection.BeginTransaction();
-                    using (var command = new SqlCommand("SELECT COUNT(*) FROM dbo.Traces", connection, transaction))
-                    {
-                        quantity = (int) command.ExecuteScalar();
-                    }
-                    connection.Close();
+                    quantity = (int) command.ExecuteScalar();
                 }
-                return quantity;
+
+                connection.Close();
+            }
+
+            return quantity;
         }
     }
 }

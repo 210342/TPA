@@ -1,46 +1,14 @@
-﻿using ModelContract;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using ModelContract;
 
 namespace SerializationModel
 {
     [DataContract(Name = "Type")]
     public class SerializationTypeMetadata : AbstractMapper, ITypeMetadata
     {
-        [DataMember(Name = "NamespaceName")]
-        public string NamespaceName { get; private set; }
-        [DataMember(Name = "BaseType")]
-        public ITypeMetadata BaseType { get; private set; }
-        [DataMember(Name = "GenericArguments")]
-        public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
-        [DataMember(Name = "Modifiers")]
-        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; private set; }
-        [DataMember(Name = "TypeKind")]
-        public TypeKindEnum TypeKind { get; private set; }
-        [DataMember(Name = "Attributes")]
-        public IEnumerable<IAttributeMetadata> Attributes { get; private set; }
-        [DataMember(Name = "Interfaces")]
-        public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; private set; }
-        [DataMember(Name = "NestedTypes")]
-        public IEnumerable<ITypeMetadata> NestedTypes { get; private set; }
-        [DataMember(Name = "Properties")]
-        public IEnumerable<IPropertyMetadata> Properties { get; private set; }
-        [DataMember(Name = "DeclaringType")]
-        public ITypeMetadata DeclaringType { get; private set; }
-        [DataMember(Name = "Methods")]
-        public IEnumerable<IMethodMetadata> Methods { get; private set; }
-        [DataMember(Name = "Constructors")]
-        public IEnumerable<IMethodMetadata> Constructors { get; private set; }
-        [DataMember(Name = "Name")]
-        public string Name { get; private set; }
-        [DataMember(Name = "Hash")]
-        public int SavedHash { get; private set; }
-        public IEnumerable<IMetadata> Children { get; private set; }
-
         public SerializationTypeMetadata(ITypeMetadata typeMetadata)
         {
             Name = typeMetadata.Name;
@@ -52,7 +20,7 @@ namespace SerializationModel
             {
                 BaseType = null;
             }
-            else if (AlreadyMapped.TryGetValue(typeMetadata.BaseType.SavedHash, out IMetadata item))
+            else if (AlreadyMapped.TryGetValue(typeMetadata.BaseType.SavedHash, out var item))
             {
                 BaseType = item as ITypeMetadata;
             }
@@ -70,10 +38,9 @@ namespace SerializationModel
             }
             else
             {
-                List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
-                foreach (ITypeMetadata genericArgument in typeMetadata.GenericArguments)
-                {
-                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata item))
+                var genericArguments = new List<ITypeMetadata>();
+                foreach (var genericArgument in typeMetadata.GenericArguments)
+                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out var item))
                     {
                         genericArguments.Add(item as ITypeMetadata);
                     }
@@ -83,7 +50,7 @@ namespace SerializationModel
                         genericArguments.Add(newType);
                         AlreadyMapped.Add(newType.SavedHash, newType);
                     }
-                }
+
                 GenericArguments = genericArguments;
             }
 
@@ -100,10 +67,9 @@ namespace SerializationModel
             }
             else
             {
-                List<IAttributeMetadata> attributes = new List<IAttributeMetadata>();
-                foreach (IAttributeMetadata attribute in typeMetadata.Attributes)
-                {
-                    if (AlreadyMapped.TryGetValue(attribute.SavedHash, out IMetadata item))
+                var attributes = new List<IAttributeMetadata>();
+                foreach (var attribute in typeMetadata.Attributes)
+                    if (AlreadyMapped.TryGetValue(attribute.SavedHash, out var item))
                     {
                         attributes.Add(item as IAttributeMetadata);
                     }
@@ -113,7 +79,7 @@ namespace SerializationModel
                         attributes.Add(newAttribute);
                         AlreadyMapped.Add(newAttribute.SavedHash, newAttribute);
                     }
-                }
+
                 Attributes = attributes;
             }
 
@@ -124,10 +90,9 @@ namespace SerializationModel
             }
             else
             {
-                List<ITypeMetadata> interfaces = new List<ITypeMetadata>();
-                foreach (ITypeMetadata implementedInterface in typeMetadata.ImplementedInterfaces)
-                {
-                    if (AlreadyMapped.TryGetValue(implementedInterface.SavedHash, out IMetadata item))
+                var interfaces = new List<ITypeMetadata>();
+                foreach (var implementedInterface in typeMetadata.ImplementedInterfaces)
+                    if (AlreadyMapped.TryGetValue(implementedInterface.SavedHash, out var item))
                     {
                         interfaces.Add(item as ITypeMetadata);
                     }
@@ -137,7 +102,7 @@ namespace SerializationModel
                         interfaces.Add(newInterface);
                         AlreadyMapped.Add(newInterface.SavedHash, newInterface);
                     }
-                }
+
                 ImplementedInterfaces = interfaces;
             }
 
@@ -148,10 +113,9 @@ namespace SerializationModel
             }
             else
             {
-                List<ITypeMetadata> nestedTypes = new List<ITypeMetadata>();
-                foreach (ITypeMetadata nestedType in typeMetadata.NestedTypes)
-                {
-                    if (AlreadyMapped.TryGetValue(nestedType.SavedHash, out IMetadata item))
+                var nestedTypes = new List<ITypeMetadata>();
+                foreach (var nestedType in typeMetadata.NestedTypes)
+                    if (AlreadyMapped.TryGetValue(nestedType.SavedHash, out var item))
                     {
                         nestedTypes.Add(item as ITypeMetadata);
                     }
@@ -161,7 +125,7 @@ namespace SerializationModel
                         nestedTypes.Add(newType);
                         AlreadyMapped.Add(newType.SavedHash, newType);
                     }
-                }
+
                 NestedTypes = nestedTypes;
             }
 
@@ -172,10 +136,9 @@ namespace SerializationModel
             }
             else
             {
-                List<IPropertyMetadata> properties = new List<IPropertyMetadata>();
-                foreach (IPropertyMetadata property in typeMetadata.Properties)
-                {
-                    if (AlreadyMapped.TryGetValue(property.SavedHash, out IMetadata item))
+                var properties = new List<IPropertyMetadata>();
+                foreach (var property in typeMetadata.Properties)
+                    if (AlreadyMapped.TryGetValue(property.SavedHash, out var item))
                     {
                         properties.Add(item as IPropertyMetadata);
                     }
@@ -185,7 +148,7 @@ namespace SerializationModel
                         properties.Add(newProperty);
                         AlreadyMapped.Add(newProperty.SavedHash, newProperty);
                     }
-                }
+
                 Properties = properties;
             }
 
@@ -194,7 +157,7 @@ namespace SerializationModel
             {
                 DeclaringType = null;
             }
-            else if (AlreadyMapped.TryGetValue(typeMetadata.DeclaringType.SavedHash, out IMetadata item))
+            else if (AlreadyMapped.TryGetValue(typeMetadata.DeclaringType.SavedHash, out var item))
             {
                 DeclaringType = item as ITypeMetadata;
             }
@@ -212,10 +175,9 @@ namespace SerializationModel
             }
             else
             {
-                List<IMethodMetadata> methods = new List<IMethodMetadata>();
-                foreach (IMethodMetadata method in typeMetadata.Methods)
-                {
-                    if (AlreadyMapped.TryGetValue(method.SavedHash, out IMetadata item))
+                var methods = new List<IMethodMetadata>();
+                foreach (var method in typeMetadata.Methods)
+                    if (AlreadyMapped.TryGetValue(method.SavedHash, out var item))
                     {
                         methods.Add(item as IMethodMetadata);
                     }
@@ -225,7 +187,7 @@ namespace SerializationModel
                         methods.Add(newMethod);
                         AlreadyMapped.Add(newMethod.SavedHash, newMethod);
                     }
-                }
+
                 Methods = methods;
             }
 
@@ -237,10 +199,9 @@ namespace SerializationModel
             }
             else
             {
-                List<IMethodMetadata> constructors = new List<IMethodMetadata>();
-                foreach (IMethodMetadata constructor in typeMetadata.Methods)
-                {
-                    if (AlreadyMapped.TryGetValue(constructor.SavedHash, out IMetadata item))
+                var constructors = new List<IMethodMetadata>();
+                foreach (var constructor in typeMetadata.Methods)
+                    if (AlreadyMapped.TryGetValue(constructor.SavedHash, out var item))
                     {
                         constructors.Add(item as IMethodMetadata);
                     }
@@ -250,20 +211,52 @@ namespace SerializationModel
                         constructors.Add(newMethod);
                         AlreadyMapped.Add(newMethod.SavedHash, newMethod);
                     }
-                }
+
                 Constructors = constructors;
             }
 
             FillChildren(new StreamingContext());
         }
 
+        [DataMember(Name = "NamespaceName")] public string NamespaceName { get; private set; }
+
+        [DataMember(Name = "BaseType")] public ITypeMetadata BaseType { get; private set; }
+
+        [DataMember(Name = "GenericArguments")]
+        public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
+
+        [DataMember(Name = "Modifiers")]
+        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; private set; }
+
+        [DataMember(Name = "TypeKind")] public TypeKindEnum TypeKind { get; private set; }
+
+        [DataMember(Name = "Attributes")] public IEnumerable<IAttributeMetadata> Attributes { get; private set; }
+
+        [DataMember(Name = "Interfaces")] public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; private set; }
+
+        [DataMember(Name = "NestedTypes")] public IEnumerable<ITypeMetadata> NestedTypes { get; private set; }
+
+        [DataMember(Name = "Properties")] public IEnumerable<IPropertyMetadata> Properties { get; private set; }
+
+        [DataMember(Name = "DeclaringType")] public ITypeMetadata DeclaringType { get; private set; }
+
+        [DataMember(Name = "Methods")] public IEnumerable<IMethodMetadata> Methods { get; private set; }
+
+        [DataMember(Name = "Constructors")] public IEnumerable<IMethodMetadata> Constructors { get; private set; }
+
+        [DataMember(Name = "Name")] public string Name { get; private set; }
+
+        [DataMember(Name = "Hash")] public int SavedHash { get; private set; }
+
+        public IEnumerable<IMetadata> Children { get; private set; }
+
         [OnDeserialized]
         private void FillChildren(StreamingContext context)
         {
-            List<IAttributeMetadata> amList = new List<IAttributeMetadata>();
+            var amList = new List<IAttributeMetadata>();
             if (Attributes != null)
                 amList.AddRange(Attributes.Select(n => n));
-            List<IMetadata> elems = new List<IMetadata>();
+            var elems = new List<IMetadata>();
             elems.AddRange(amList);
             if (ImplementedInterfaces != null)
                 elems.AddRange(ImplementedInterfaces);
@@ -281,7 +274,7 @@ namespace SerializationModel
                 elems.AddRange(NestedTypes);
             if (GenericArguments != null)
                 elems.AddRange(GenericArguments);
-            this.Children = elems;
+            Children = elems;
         }
     }
 }

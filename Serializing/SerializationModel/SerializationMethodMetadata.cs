@@ -1,32 +1,14 @@
-﻿using ModelContract;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using ModelContract;
 
 namespace SerializationModel
 {
     [DataContract(Name = "Method")]
     public class SerializationMethodMetadata : AbstractMapper, IMethodMetadata
     {
-        [DataMember(Name = "GenericArguments")]
-        public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
-        [DataMember(Name = "ReturnType")]
-        public ITypeMetadata ReturnType { get; private set; }
-        [DataMember(Name = "IsExtension")]
-        public bool IsExtension { get; private set; }
-        [DataMember(Name = "Parameters")]
-        public IEnumerable<IParameterMetadata> Parameters { get; private set; }
-        [DataMember(Name = "Modifiers")]
-        public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; private set; }
-        [DataMember(Name = "Name")]
-        public string Name { get; private set; }
-        [DataMember(Name = "Hash")]
-        public int SavedHash { get; private set; }
-        public IEnumerable<IMetadata> Children { get; private set; }
-
         public SerializationMethodMetadata(IMethodMetadata methodMetadata)
         {
             Name = methodMetadata.Name;
@@ -41,10 +23,9 @@ namespace SerializationModel
             }
             else
             {
-                List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
-                foreach (ITypeMetadata genericArgument in methodMetadata.GenericArguments)
-                {
-                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata mappedArgument))
+                var genericArguments = new List<ITypeMetadata>();
+                foreach (var genericArgument in methodMetadata.GenericArguments)
+                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out var mappedArgument))
                     {
                         genericArguments.Add(mappedArgument as ITypeMetadata);
                     }
@@ -54,12 +35,12 @@ namespace SerializationModel
                         genericArguments.Add(newType);
                         AlreadyMapped.Add(newType.SavedHash, newType);
                     }
-                }
+
                 GenericArguments = genericArguments;
             }
 
             // Return type
-            if (AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out IMetadata item))
+            if (AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out var item))
             {
                 ReturnType = item as ITypeMetadata;
             }
@@ -77,9 +58,8 @@ namespace SerializationModel
             }
             else
             {
-                List<IParameterMetadata> parameters = new List<IParameterMetadata>();
-                foreach (IParameterMetadata parameter in methodMetadata.Parameters)
-                {
+                var parameters = new List<IParameterMetadata>();
+                foreach (var parameter in methodMetadata.Parameters)
                     if (AlreadyMapped.TryGetValue(parameter.SavedHash, out item))
                     {
                         parameters.Add(item as IParameterMetadata);
@@ -90,17 +70,35 @@ namespace SerializationModel
                         parameters.Add(newParameter);
                         AlreadyMapped.Add(newParameter.SavedHash, newParameter);
                     }
-                }
+
                 Parameters = parameters;
             }
 
             FillChildren(new StreamingContext());
         }
 
+        [DataMember(Name = "GenericArguments")]
+        public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
+
+        [DataMember(Name = "ReturnType")] public ITypeMetadata ReturnType { get; private set; }
+
+        [DataMember(Name = "IsExtension")] public bool IsExtension { get; private set; }
+
+        [DataMember(Name = "Parameters")] public IEnumerable<IParameterMetadata> Parameters { get; private set; }
+
+        [DataMember(Name = "Modifiers")]
+        public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; private set; }
+
+        [DataMember(Name = "Name")] public string Name { get; private set; }
+
+        [DataMember(Name = "Hash")] public int SavedHash { get; private set; }
+
+        public IEnumerable<IMetadata> Children { get; private set; }
+
         [OnDeserialized]
         private void FillChildren(StreamingContext context)
         {
-            List<IMetadata> elems = new List<IMetadata> { ReturnType };
+            var elems = new List<IMetadata> {ReturnType};
             elems.AddRange(Parameters);
             Children = elems;
         }

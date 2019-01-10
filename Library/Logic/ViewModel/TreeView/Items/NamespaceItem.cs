@@ -1,24 +1,17 @@
-﻿using Library.Model;
+﻿using System.Linq;
+using Library.Model;
 using ModelContract;
-using System.Linq;
 
 namespace Library.Logic.ViewModel
 {
     public class NamespaceItem : TreeViewItem
     {
-        private string _details;
-        public override string Details
-        {
-            get
-            {
-                return _details;
-            }
-        }
-
         public NamespaceItem(NamespaceMetadata source) : base(source)
         {
-            _details = $"Namespace {source.Name}, contains {source.Children.Count()} types";
+            Details = $"Namespace {source.Name}, contains {source.Children.Count()} types";
         }
+
+        public override string Details { get; }
 
         protected override TreeViewItem GetChildOfType(IMetadata metadata)
         {
@@ -29,6 +22,7 @@ namespace Library.Logic.ViewModel
                 case TypeMetadata type:
                     return new TypeItem(type);
             }
+
             return null;
         }
     }

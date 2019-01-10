@@ -1,18 +1,12 @@
-﻿using ModelContract;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
+using ModelContract;
 
 namespace Library.Model
 {
     public class NamespaceMetadata : AbstractMapper, INamespaceMetadata
     {
-        public IEnumerable<ITypeMetadata> Types { get; }
-        public IEnumerable<IMetadata> Children => Types;
-        public string Name { get; }
-        public int SavedHash { get; }
-
         internal NamespaceMetadata(string name, IEnumerable<Type> types)
         {
             Name = name;
@@ -29,10 +23,9 @@ namespace Library.Model
             Name = namespaceMetadata.Name;
             SavedHash = namespaceMetadata.SavedHash;
 
-            List<ITypeMetadata> types = new List<ITypeMetadata>();
-            foreach(ITypeMetadata child in namespaceMetadata.Types)
-            {
-                if (AlreadyMapped.TryGetValue(child.SavedHash, out IMetadata item))
+            var types = new List<ITypeMetadata>();
+            foreach (var child in namespaceMetadata.Types)
+                if (AlreadyMapped.TryGetValue(child.SavedHash, out var item))
                 {
                     types.Add(item as ITypeMetadata);
                 }
@@ -42,9 +35,14 @@ namespace Library.Model
                     types.Add(newType);
                     AlreadyMapped.Add(newType.SavedHash, newType);
                 }
-            }
+
             Types = types;
         }
+
+        public IEnumerable<ITypeMetadata> Types { get; }
+        public IEnumerable<IMetadata> Children => Types;
+        public string Name { get; }
+        public int SavedHash { get; }
 
         public override int GetHashCode()
         {
@@ -53,15 +51,12 @@ namespace Library.Model
 
         public override bool Equals(object obj)
         {
-            if (this.GetType() != obj.GetType())
+            if (GetType() != obj.GetType())
                 return false;
-            NamespaceMetadata nm = ((NamespaceMetadata)obj);
-            if (this.Name == nm.Name)
-            {
+            var nm = (NamespaceMetadata) obj;
+            if (Name == nm.Name)
                 return true;
-            }
-            else
-                return false;
+            return false;
         }
 
         public override string ToString()

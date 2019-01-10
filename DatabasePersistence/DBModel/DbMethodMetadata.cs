@@ -1,46 +1,13 @@
-﻿using ModelContract;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using ModelContract;
 
 namespace DatabasePersistence.DBModel
 {
     public class DbMethodMetadata : AbstractMapper, IMethodMetadata
     {
-        #region EF
-        public virtual ICollection<DbTypeMetadata> GenericArgumentsList { get; set; }
-        public virtual ICollection<DbParameterMetadata> ParametersList { get; set; }
-        #endregion
-
-        #region IMethodMetadata
-
-        public virtual ITypeMetadata ReturnType { get; private set; }
-        public bool IsExtension { get; private set; }
-        public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; private set; }
-        public string Name { get; set; }
-        public int SavedHash { get; protected set; }
-        [NotMapped]
-        public IEnumerable<ITypeMetadata> GenericArguments
-        {
-            get => GenericArgumentsList;
-            private set => GenericArgumentsList = value?.Cast<DbTypeMetadata>().ToList();
-        }
-        [NotMapped]
-        public IEnumerable<IParameterMetadata> Parameters
-        {
-            get => ParametersList;
-            internal set => ParametersList = value?.Cast<DbParameterMetadata>().ToList();
-        }
-        [NotMapped]
-        public IEnumerable<IMetadata> Children { get; private set; }
-
-        #endregion
-
         public DbMethodMetadata(IMethodMetadata methodMetadata)
         {
             Name = methodMetadata.Name;
@@ -55,10 +22,9 @@ namespace DatabasePersistence.DBModel
             }
             else
             {
-                List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
-                foreach (ITypeMetadata genericArgument in methodMetadata.GenericArguments)
-                {
-                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata mappedArgument))
+                var genericArguments = new List<ITypeMetadata>();
+                foreach (var genericArgument in methodMetadata.GenericArguments)
+                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out var mappedArgument))
                     {
                         genericArguments.Add(mappedArgument as ITypeMetadata);
                     }
@@ -68,12 +34,12 @@ namespace DatabasePersistence.DBModel
                         genericArguments.Add(newType);
                         AlreadyMapped.Add(newType.SavedHash, newType);
                     }
-                }
+
                 GenericArguments = genericArguments;
             }
 
             // Return type
-            if (AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out IMetadata item))
+            if (AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out var item))
             {
                 ReturnType = item as ITypeMetadata;
             }
@@ -91,9 +57,8 @@ namespace DatabasePersistence.DBModel
             }
             else
             {
-                List<IParameterMetadata> parameters = new List<IParameterMetadata>();
-                foreach (IParameterMetadata parameter in methodMetadata.Parameters)
-                {
+                var parameters = new List<IParameterMetadata>();
+                foreach (var parameter in methodMetadata.Parameters)
                     if (AlreadyMapped.TryGetValue(parameter.SavedHash, out item))
                     {
                         parameters.Add(item as IParameterMetadata);
@@ -104,7 +69,7 @@ namespace DatabasePersistence.DBModel
                         parameters.Add(newParameter);
                         AlreadyMapped.Add(newParameter.SavedHash, newParameter);
                     }
-                }
+
                 Parameters = parameters;
             }
 
@@ -118,9 +83,42 @@ namespace DatabasePersistence.DBModel
 
         private void FillChildren()
         {
-            List<IMetadata> elems = new List<IMetadata> { ReturnType };
+            var elems = new List<IMetadata> {ReturnType};
             elems.AddRange(Parameters);
             Children = elems;
         }
+
+        #region EF
+
+        public virtual ICollection<DbTypeMetadata> GenericArgumentsList { get; set; }
+        public virtual ICollection<DbParameterMetadata> ParametersList { get; set; }
+
+        #endregion
+
+        #region IMethodMetadata
+
+        public virtual ITypeMetadata ReturnType { get; }
+        public bool IsExtension { get; }
+        public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; }
+        public string Name { get; set; }
+        public int SavedHash { get; protected set; }
+
+        [NotMapped]
+        public IEnumerable<ITypeMetadata> GenericArguments
+        {
+            get => GenericArgumentsList;
+            private set => GenericArgumentsList = value?.Cast<DbTypeMetadata>().ToList();
+        }
+
+        [NotMapped]
+        public IEnumerable<IParameterMetadata> Parameters
+        {
+            get => ParametersList;
+            internal set => ParametersList = value?.Cast<DbParameterMetadata>().ToList();
+        }
+
+        [NotMapped] public IEnumerable<IMetadata> Children { get; private set; }
+
+        #endregion
     }
 }

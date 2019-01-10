@@ -1,6 +1,8 @@
-﻿namespace Tracing
+﻿using System;
+
+namespace Tracing
 {
-    public interface ITracing
+    public interface ITracing : IDisposable
     {
         void LogStartup();
         void LogFailure(string message);

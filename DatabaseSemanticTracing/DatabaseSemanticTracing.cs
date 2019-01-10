@@ -1,10 +1,8 @@
-﻿using Microsoft.Practices.EnterpriseLibrary.SemanticLogging;
-using System;
+﻿using System;
 using System.ComponentModel.Composition;
 using System.Configuration;
 using System.Diagnostics.Tracing;
-using System.Runtime.InteropServices;
-using System.Xml;
+using Microsoft.Practices.EnterpriseLibrary.SemanticLogging;
 using Tracing;
 
 namespace DatabaseSemanticTracing
@@ -14,8 +12,6 @@ namespace DatabaseSemanticTracing
     {
         private EventListener _listener;
 
-        public string ConnectionString { get; set; }
-
         public DatabaseSemanticTracing()
         {
             ConnectionString =
@@ -24,10 +20,7 @@ namespace DatabaseSemanticTracing
             _listener.EnableEvents(SemanticLoggingEventSource.Log, EventLevel.LogAlways, Keywords.All);
         }
 
-        ~DatabaseSemanticTracing()
-        {
-            this.Dispose();
-        }
+        public string ConnectionString { get; set; }
 
         public void Dispose()
         {
@@ -74,6 +67,11 @@ namespace DatabaseSemanticTracing
             _listener.Dispose();
             _listener = SqlDatabaseLog.CreateListener("DatabaseSemanticTracing", ConnectionString);
             _listener.EnableEvents(SemanticLoggingEventSource.Log, EventLevel.LogAlways, Keywords.All);
+        }
+
+        ~DatabaseSemanticTracing()
+        {
+            Dispose();
         }
     }
 }

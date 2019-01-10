@@ -2,6 +2,7 @@
 {
     public enum FileSystemDependency
     {
-        Dependent, Independent
+        Dependent,
+        Independent
     }
 }

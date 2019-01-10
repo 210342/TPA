@@ -1,11 +1,12 @@
 ﻿using Library.Logic.ViewModel;
-using System;
+using Ookii.Dialogs.Wpf;
 
 namespace GraphicalUserInterface
 {
     internal class OpenFileDialogProvider : ISourceProvider
     {
-        Ookii.Dialogs.Wpf.VistaOpenFileDialog dialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
+        private readonly VistaOpenFileDialog dialog = new VistaOpenFileDialog();
+
         internal OpenFileDialogProvider()
         {
             dialog.DefaultExt = "dll";
@@ -14,7 +15,6 @@ namespace GraphicalUserInterface
 
         public bool GetAccess()
         {
-            
             return dialog.ShowDialog() == true;
         }
 

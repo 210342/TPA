@@ -1,15 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SemanticTracing;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SemanticTracing.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class FileSemanticTracingTests
     {
         private FileSemanticTracing _systemUnderTest;
@@ -28,7 +22,7 @@ namespace SemanticTracing.Tests
             _systemUnderTest.Dispose();
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void FileSemanticTracingTest()
         {
             Assert.IsNotNull(_systemUnderTest);
@@ -36,77 +30,77 @@ namespace SemanticTracing.Tests
             Assert.IsTrue(File.Exists(_systemUnderTest.FilePath));
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogFailureTest()
         {
             fileInfo.Refresh();
-            long oldLength = fileInfo.Length;
+            var oldLength = fileInfo.Length;
             _systemUnderTest.LogFailure("FAIL");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogSuccessTest()
         {
             fileInfo.Refresh();
-            long oldLength = fileInfo.Length;
+            var oldLength = fileInfo.Length;
             _systemUnderTest.LogFailure("SUCCESS");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogLoadingModelTest()
         {
             fileInfo.Refresh();
-            long oldLength = fileInfo.Length;
+            var oldLength = fileInfo.Length;
             _systemUnderTest.LogLoadingModel("loading model");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogModelLoadedTest()
         {
             fileInfo.Refresh();
-            long oldLength = fileInfo.Length;
+            var oldLength = fileInfo.Length;
             _systemUnderTest.LogModelLoaded("model loaded");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogModelSavedTest()
         {
             fileInfo.Refresh();
-            long oldLength = fileInfo.Length;
+            var oldLength = fileInfo.Length;
             _systemUnderTest.LogModelSaved("model saved");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogSavingModelTest()
         {
             fileInfo.Refresh();
-            long oldLength = fileInfo.Length;
+            var oldLength = fileInfo.Length;
             _systemUnderTest.LogSavingModel("saving model");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogStartupTest()
         {
-            FileInfo file = new FileInfo(_systemUnderTest.FilePath);
-            long oldLength = file.Length;
+            var file = new FileInfo(_systemUnderTest.FilePath);
+            var oldLength = file.Length;
             _systemUnderTest.LogStartup();
             _systemUnderTest.Flush();
             file.Refresh();

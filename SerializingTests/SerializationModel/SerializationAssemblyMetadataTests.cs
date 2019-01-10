@@ -1,44 +1,39 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ModelContract;
-using SerializationModel;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ModelContract;
 
 namespace SerializationModel.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class SerializationAssemblyMetadataTests
     {
+        [TestMethod]
+        public void CopyCtorTest()
+        {
+            var tmp = new AssemblyTest();
+            var sut = new SerializationAssemblyMetadata(tmp);
+            Assert.IsTrue(tmp.Name.Equals(sut.Name));
+            Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
+            Assert.AreEqual(tmp.Namespaces.Count(), sut.Namespaces.Count());
+        }
+
         private class AssemblyTest : IAssemblyMetadata
         {
-            public IEnumerable<INamespaceMetadata> Namespaces { get; }
-
-            public string Name { get; }
-
-            public IEnumerable<IMetadata> Children { get { return Namespaces; } }
-
-            public int SavedHash { get; }
-
             internal AssemblyTest()
             {
                 Name = "name";
                 SavedHash = 1;
                 Namespaces = Enumerable.Empty<INamespaceMetadata>();
             }
-        }
 
-        [TestMethod]
-        public void CopyCtorTest()
-        {
-            var tmp = new AssemblyTest();
-            SerializationAssemblyMetadata sut = new SerializationAssemblyMetadata(tmp);
-            Assert.IsTrue(tmp.Name.Equals(sut.Name));
-            Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
-            Assert.AreEqual(tmp.Namespaces.Count(), sut.Namespaces.Count());
+            public IEnumerable<INamespaceMetadata> Namespaces { get; }
+
+            public string Name { get; }
+
+            public IEnumerable<IMetadata> Children => Namespaces;
+
+            public int SavedHash { get; }
         }
     }
 }

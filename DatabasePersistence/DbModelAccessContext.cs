@@ -1,11 +1,19 @@
-using DatabasePersistence.DBModel;
 using System.Data.Entity;
-
+using DatabasePersistence.DBModel;
 
 namespace DatabasePersistence
 {
     public class DbModelAccessContext : DbContext
     {
+        public DbModelAccessContext() : this("name=DbSource")
+        {
+        }
+
+        public DbModelAccessContext(string connectionString) : base(connectionString)
+        {
+            // this.Configuration.LazyLoadingEnabled = false;
+        }
+
         public virtual DbSet<DbAssemblyMetadata> Assemblies { get; set; }
         public virtual DbSet<DbAttributeMetadata> Attributes { get; set; }
         public virtual DbSet<DbMethodMetadata> Methods { get; set; }
@@ -13,13 +21,6 @@ namespace DatabasePersistence
         public virtual DbSet<DbParameterMetadata> Parameters { get; set; }
         public virtual DbSet<DbPropertyMetadata> Properties { get; set; }
         public virtual DbSet<DbTypeMetadata> Types { get; set; }
-
-
-        public DbModelAccessContext() : this("name=DbSource") { }
-        public DbModelAccessContext(string connectionString) : base(connectionString)
-        {
-            // this.Configuration.LazyLoadingEnabled = false;
-        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

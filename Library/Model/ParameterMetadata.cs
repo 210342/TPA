@@ -1,48 +1,31 @@
-﻿using ModelContract;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using ModelContract;
 
 namespace Library.Model
 {
     public class ParameterMetadata : AbstractMapper, IParameterMetadata
     {
-        public string Name { get; }
-        public ITypeMetadata TypeMetadata { get; private set; }
-        public int SavedHash { get; }
-        public IEnumerable<IMetadata> Children
-        {
-            get
-            {
-                return new[] { TypeMetadata };
-            }
-            set
-            {
-                foreach (var elem in value)
-                {
-                    this.TypeMetadata = (TypeMetadata)elem;
-                    break;
-                }
-            }
-        }
-
         public ParameterMetadata(string name, TypeMetadata typeMetadata)
         {
             if (name == null || typeMetadata == null)
                 throw new ArgumentNullException("Neither name or TypeMetadata can be null.");
-            this.Name = name;
-            this.TypeMetadata = typeMetadata;
+            Name = name;
+            TypeMetadata = typeMetadata;
             SavedHash = 17;
             SavedHash *= 31 + Name.GetHashCode();
             SavedHash *= 31 + TypeMetadata.GetHashCode();
         }
-        internal ParameterMetadata() { }
+
+        internal ParameterMetadata()
+        {
+        }
 
         public ParameterMetadata(IParameterMetadata parameterMetadata)
         {
             Name = parameterMetadata.Name;
             SavedHash = parameterMetadata.SavedHash;
-            if(AlreadyMapped.TryGetValue(parameterMetadata.TypeMetadata.SavedHash, out IMetadata item))
+            if (AlreadyMapped.TryGetValue(parameterMetadata.TypeMetadata.SavedHash, out var item))
             {
                 TypeMetadata = item as ITypeMetadata;
             }
@@ -51,6 +34,23 @@ namespace Library.Model
                 ITypeMetadata newType = new TypeMetadata(parameterMetadata.TypeMetadata);
                 TypeMetadata = newType;
                 AlreadyMapped.Add(newType.SavedHash, newType);
+            }
+        }
+
+        public string Name { get; }
+        public ITypeMetadata TypeMetadata { get; private set; }
+        public int SavedHash { get; }
+
+        public IEnumerable<IMetadata> Children
+        {
+            get => new[] {TypeMetadata};
+            set
+            {
+                foreach (var elem in value)
+                {
+                    TypeMetadata = (TypeMetadata) elem;
+                    break;
+                }
             }
         }
 
@@ -63,14 +63,12 @@ namespace Library.Model
 
         public override bool Equals(object obj)
         {
-            if (this.GetType() != obj.GetType())
+            if (GetType() != obj.GetType())
                 return false;
-            ParameterMetadata pm = ((ParameterMetadata)obj);
-            if (this.Name == pm.Name)
-            {
-                if (TypeMetadata !=pm.TypeMetadata)
+            var pm = (ParameterMetadata) obj;
+            if (Name == pm.Name)
+                if (TypeMetadata != pm.TypeMetadata)
                     return false;
-            }
             return false;
         }
 

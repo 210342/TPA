@@ -1,15 +1,12 @@
 ﻿using Library.Logic.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Ookii.Dialogs.Wpf;
 
 namespace GraphicalUserInterface
 {
     internal class SaveFileDialogProvider : ISourceProvider
     {
-        Ookii.Dialogs.Wpf.VistaSaveFileDialog dialog = new Ookii.Dialogs.Wpf.VistaSaveFileDialog();
+        private readonly VistaSaveFileDialog dialog = new VistaSaveFileDialog();
+
         internal SaveFileDialogProvider()
         {
             dialog.DefaultExt = "xml";

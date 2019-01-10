@@ -83,6 +83,10 @@
     <Content Include="db.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="db_log.ldf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DependentUpon>db.mdf</DependentUpon>
+    </Content>
     <Content Include="EntityFramework.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

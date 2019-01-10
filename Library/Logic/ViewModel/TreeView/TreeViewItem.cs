@@ -1,23 +1,38 @@
-﻿using Library.Data;
-using ModelContract;
+﻿using System;
 using System.Collections.Generic;
+using Library.Data;
+using ModelContract;
 
 namespace Library.Logic.ViewModel
 {
     public abstract class TreeViewItem
     {
-        private bool m_WasBuilt;
         private bool m_IsExpanded;
+        private bool m_WasBuilt;
 
-        public string Type => this.GetType().ToString();
+        private TreeViewItem()
+        {
+            m_WasBuilt = false;
+        }
+
+        public TreeViewItem(IMetadata metadata)
+        {
+            if (metadata == null)
+                throw new ArgumentNullException("Metadata node can't be null");
+            Name = metadata.Name;
+            Metadata = metadata;
+        }
+
+        public string Type => GetType().ToString();
         public IMetadata ModelObject => Metadata;
         public string Name { get; protected set; }
         public abstract string Details { get; }
         protected IMetadata Metadata { get; set; }
-        public List<TreeViewItem> Children { get; protected set; } = new List<TreeViewItem>() { null };
+        public List<TreeViewItem> Children { get; protected set; } = new List<TreeViewItem> {null};
+
         public bool IsExpanded
         {
-            get { return m_IsExpanded; }
+            get => m_IsExpanded;
             set
             {
                 m_IsExpanded = value;
@@ -30,18 +45,6 @@ namespace Library.Logic.ViewModel
             }
         }
 
-        private TreeViewItem()
-        {
-            this.m_WasBuilt = false;
-        }
-        public TreeViewItem(IMetadata metadata) : base()
-        {
-            if (metadata == null)
-                throw new System.ArgumentNullException("Metadata node can't be null");
-            this.Name = metadata.Name;
-            this.Metadata = metadata;
-        }
-
         private void BuildMyself()
         {
             var list = new List<TreeViewItem>(EnumerateRootChildren());
@@ -51,21 +54,15 @@ namespace Library.Logic.ViewModel
         private IEnumerable<TreeViewItem> EnumerateRootChildren()
         {
             if (Metadata.Children != null)
-            {
-                foreach (IMetadata elem in Metadata.Children)
-                {
+                foreach (var elem in Metadata.Children)
                     if (elem != null)
-                    {
                         yield return GetTreeItem(elem);
-                    }
-                }
-            }
         }
 
         protected TreeViewItem GetTreeItem(IMetadata elem)
         {
             TreeViewItem tvi = null;
-            if (DataLoadedDictionary.Items.TryGetValue(elem.GetHashCode(), out IMetadata returnValue))
+            if (DataLoadedDictionary.Items.TryGetValue(elem.GetHashCode(), out var returnValue))
             {
                 tvi = GetChildOfType(returnValue);
             }
@@ -74,6 +71,7 @@ namespace Library.Logic.ViewModel
                 tvi = GetChildOfType(elem);
                 DataLoadedDictionary.Items.Add(elem.GetHashCode(), elem);
             }
+
             return tvi;
         }
 
@@ -85,4 +83,3 @@ namespace Library.Logic.ViewModel
         }
     }
 }
-

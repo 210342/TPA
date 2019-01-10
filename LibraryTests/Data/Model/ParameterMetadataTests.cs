@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using Library.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LibraryTests.Data.Model
 {
@@ -19,8 +19,8 @@ namespace LibraryTests.Data.Model
         [TestMethod]
         public void CopyCtorTest()
         {
-            ParameterMetadata tmp = new ParameterMetadata("asdf", new TypeMetadata(typeof(ParameterMetadataTests)));
-            ParameterMetadata sut = new ParameterMetadata(tmp);
+            var tmp = new ParameterMetadata("asdf", new TypeMetadata(typeof(ParameterMetadataTests)));
+            var sut = new ParameterMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
             Assert.IsTrue(tmp.TypeMetadata.Name.Equals(sut.TypeMetadata.Name));

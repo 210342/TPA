@@ -1,8 +1,9 @@
-﻿using Microsoft.Practices.EnterpriseLibrary.SemanticLogging;
-using Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks;
-using System;
+﻿using System;
 using System.ComponentModel.Composition;
+using System.Diagnostics.Tracing;
 using System.IO;
+using Microsoft.Practices.EnterpriseLibrary.SemanticLogging;
+using Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Sinks;
 using Tracing;
 
 namespace SemanticTracing
@@ -12,35 +13,19 @@ namespace SemanticTracing
     {
         private readonly SinkSubscription<FlatFileSink> _subscription;
 
-        public string FilePath { get; private set; }
-
         public FileSemanticTracing()
         {
             FindViableFilePath();
-            ObservableEventListener listener = new ObservableEventListener();
-            listener.EnableEvents(SemanticLoggingEventSource.Log, System.Diagnostics.Tracing.EventLevel.LogAlways, Keywords.All);
+            var listener = new ObservableEventListener();
+            listener.EnableEvents(SemanticLoggingEventSource.Log, EventLevel.LogAlways, Keywords.All);
             _subscription = listener.LogToFlatFile(FilePath);
         }
 
-        void FindViableFilePath()
-        {
-            bool notViable = true;
-            while(notViable)
-            {
-                FilePath = $"{nameof(FileSemanticTracing)} {DateTime.Now.Ticks}.log";
-                if(!File.Exists(FilePath))
-                {
-                    notViable = false;
-                }
-            }
-        }
+        public string FilePath { get; private set; }
 
         public void Dispose()
         {
-            if(_subscription != null)
-            {
-                _subscription.Dispose();
-            }
+            if (_subscription != null) _subscription.Dispose();
         }
 
         public void LogFailure(string message)
@@ -81,6 +66,16 @@ namespace SemanticTracing
         public void Flush()
         {
             _subscription.Sink.FlushAsync();
+        }
+
+        private void FindViableFilePath()
+        {
+            var notViable = true;
+            while (notViable)
+            {
+                FilePath = $"{nameof(FileSemanticTracing)} {DateTime.Now.Ticks}.log";
+                if (!File.Exists(FilePath)) notViable = false;
+            }
         }
     }
 }

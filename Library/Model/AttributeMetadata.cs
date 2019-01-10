@@ -1,16 +1,11 @@
-﻿using ModelContract;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using ModelContract;
 
 namespace Library.Model
 {
     public class AttributeMetadata : AbstractMapper, IAttributeMetadata
     {
-        public string Name { get; }
-        public IEnumerable<IMetadata> Children => null;
-        public int SavedHash { get; }
-
         internal AttributeMetadata(Attribute attribute)
         {
             if (attribute == null)
@@ -18,13 +13,20 @@ namespace Library.Model
             Name = attribute.GetType().Name;
             SavedHash = attribute.GetHashCode();
         }
-        internal AttributeMetadata() { }
+
+        internal AttributeMetadata()
+        {
+        }
 
         public AttributeMetadata(IAttributeMetadata attributeMetadata)
         {
             Name = attributeMetadata.Name;
             SavedHash = attributeMetadata.SavedHash;
         }
+
+        public string Name { get; }
+        public IEnumerable<IMetadata> Children => null;
+        public int SavedHash { get; }
 
         public override int GetHashCode()
         {
@@ -33,13 +35,13 @@ namespace Library.Model
 
         public override bool Equals(object obj)
         {
-            if (this.GetType() != obj.GetType())
+            if (GetType() != obj.GetType())
                 return false;
-            if (this.Name == ((AttributeMetadata)obj).Name)
+            if (Name == ((AttributeMetadata) obj).Name)
                 return true;
-            else
-                return false;
+            return false;
         }
+
         public override string ToString()
         {
             return "[" + Name + "]";

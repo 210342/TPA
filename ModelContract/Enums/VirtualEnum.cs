@@ -2,6 +2,7 @@
 {
     public enum VirtualEnum
     {
-        NotVirtual, Virtual
+        NotVirtual,
+        Virtual
     }
 }

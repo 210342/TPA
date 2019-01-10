@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using Library.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VM = Library.Logic.ViewModel;
-using Library.Model;
-using Library.Logic.ViewModel;
-using ModelContract;
 
 namespace LibraryTests.Logic.ViewModel.Tests
 {
@@ -12,35 +11,23 @@ namespace LibraryTests.Logic.ViewModel.Tests
     [TestClass]
     public class ViewModelTests
     {
-        class TestClass : ISourceProvider
-        {
-            public bool GetAccess()
-            {
-                return true;
-            }
+        private readonly VM.ViewModel _vm = new VM.ViewModel(false);
 
-            public string GetFilePath()
-            {
-                return System.Reflection.Assembly.GetAssembly(this.GetType()).Location;
-            }
-        }
-
-        readonly VM.ViewModel _vm = new VM.ViewModel(false);
         [TestMethod]
         public void ReloadAssemblyChangesAssembly()
         {
-            VM.ViewModel vm = new VM.ViewModel(false);
-            IMetadata loadedAssemblyRepr = vm.LoadedAssemblyRepresentation;
-            vm.LoadedAssembly = this.GetType().Assembly.Location;
+            var vm = new VM.ViewModel(false);
+            var loadedAssemblyRepr = vm.LoadedAssemblyRepresentation;
+            vm.LoadedAssembly = GetType().Assembly.Location;
             vm.ReloadAssemblyCommand.Execute(null);
-            IMetadata reloadedAssemblyRepr = vm.LoadedAssemblyRepresentation;
+            var reloadedAssemblyRepr = vm.LoadedAssemblyRepresentation;
             Assert.AreNotEqual(loadedAssemblyRepr, reloadedAssemblyRepr);
         }
 
         [TestMethod]
         public void ReloadAsseblyListPopulated()
         {
-            VM.ViewModel vm = new VM.ViewModel(false)
+            var vm = new VM.ViewModel(false)
             {
                 LoadedAssembly = typeof(VM.ViewModel).Assembly.Location
             };
@@ -51,9 +38,9 @@ namespace LibraryTests.Logic.ViewModel.Tests
         [TestMethod]
         public void ObjectToDisplayChanges()
         {
-            VM.ViewModel vm = new VM.ViewModel(false)
+            var vm = new VM.ViewModel(false)
             {
-                ObjectSelected = new TypeItem(new TypeMetadata(typeof(Type)))
+                ObjectSelected = new VM.TypeItem(new TypeMetadata(typeof(Type)))
             };
             vm.ShowCurrentObject.Execute(null);
             Assert.AreEqual(vm.ObjectSelected, vm.ObjectToDisplay);
@@ -62,7 +49,7 @@ namespace LibraryTests.Logic.ViewModel.Tests
         [TestMethod]
         public void OpenFileWorks()
         {
-            VM.ViewModel vm = new VM.ViewModel(false)
+            var vm = new VM.ViewModel(false)
             {
                 OpenFileSourceProvider = new TestClass()
             };
@@ -73,9 +60,22 @@ namespace LibraryTests.Logic.ViewModel.Tests
         [TestMethod]
         public void ImportTracerTest()
         {
-            VM.ViewModel vm = new VM.ViewModel(true);
+            var vm = new VM.ViewModel(true);
             vm.EndInit();
             Assert.IsNotNull(vm.Tracer);
+        }
+
+        private class TestClass : VM.ISourceProvider
+        {
+            public bool GetAccess()
+            {
+                return true;
+            }
+
+            public string GetFilePath()
+            {
+                return Assembly.GetAssembly(GetType()).Location;
+            }
         }
     }
 }
