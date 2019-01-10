@@ -15,6 +15,23 @@ namespace Serializing
         private readonly DataContractSerializer dataContractSerializer;
         private string _target;
 
+        public Stream SerializationStream { get; set; }
+        private Type NodeType { get; }
+        private IEnumerable<Type> KnownTypes { get; }
+
+        public string Target
+        {
+            get { return _target; }
+            set
+            {
+                _target = value;
+                SerializationStream?.Dispose();
+                SerializationStream = new FileStream(value, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            }
+        }
+
+        public FileSystemDependency FileSystemDependency => FileSystemDependency.Dependent;
+
         public XmlModelSerializer()
         {
             NodeType = typeof(SerializationAssemblyMetadata);
@@ -40,18 +57,6 @@ namespace Serializing
         {
             SerializationStream = inStream;
         }
-
-        public Stream SerializationStream { get; set; }
-        private Type NodeType { get; }
-        private IEnumerable<Type> KnownTypes { get; }
-
-        public string Target
-        {
-            get => _target;
-            set => SetTarget(value);
-        }
-
-        public FileSystemDependency FileSystemDependency => FileSystemDependency.Dependent;
 
         public void Save(object toSave)
         {
@@ -86,12 +91,6 @@ namespace Serializing
         public void Dispose()
         {
             SerializationStream?.Dispose();
-        }
-
-        private void SetTarget(string value)
-        {
-            _target = value;
-            SerializationStream = new FileStream(value, FileMode.OpenOrCreate, FileAccess.ReadWrite);
         }
     }
 }

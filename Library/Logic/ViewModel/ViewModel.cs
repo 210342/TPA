@@ -140,8 +140,8 @@ namespace Library.Logic.ViewModel
                     Task.Run(() =>
                     {
                         IAssemblyMetadata graph = new ModelMapper().Map(
-                            ObjectsList.First().ModelObject as IAssemblyMetadata,
-                            Persister.GetType().Assembly
+                            root: ObjectsList.First().ModelObject as IAssemblyMetadata,
+                            model: Persister.GetType().Assembly
                         );
                         Persister.Save(graph);
                     });
@@ -174,8 +174,8 @@ namespace Library.Logic.ViewModel
                         if (result is IAssemblyMetadata)
                         {
                             IAssemblyMetadata graph = new ModelMapper().Map(
-                                result as IAssemblyMetadata,
-                                typeof(AssemblyMetadata).Assembly
+                                root: result as IAssemblyMetadata,
+                                model: typeof(AssemblyMetadata).Assembly
                             );
                             ObjectsList.Clear();
                             ObjectsList.Add(new AssemblyItem(graph as AssemblyMetadata));
