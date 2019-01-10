@@ -8,7 +8,6 @@ namespace DatabasePersistence.DBModel
     [TestClass]
     public class DatabasePersistenceTests
     {
-        private string connectionString;
         private DatabasePersister persister;
 
         [TestInitialize]
@@ -19,7 +18,7 @@ namespace DatabasePersistence.DBModel
             {
                 persister.Load();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //BUG IN EF
             }

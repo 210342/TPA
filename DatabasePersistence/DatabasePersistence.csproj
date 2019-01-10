@@ -93,9 +93,9 @@
       <Project>{3a99a3ea-c964-4cb2-8747-8f9a10689cc7}</Project>
       <Name>ModelContract</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Persistance\Persistance.csproj">
+    <ProjectReference Include="..\Persistance\Persistence.csproj">
       <Project>{82468f99-b386-4419-8db0-fca10b12699e}</Project>
-      <Name>Persistance</Name>
+      <Name>Persistence</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

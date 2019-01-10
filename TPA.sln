@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerializingTests", "Seriali
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSemanticTracing", "FileSemanticTracing\FileSemanticTracing.csproj", "{9FA31689-DFE7-4286-97AC-7DA130E55649}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistance", "Persistance\Persistance.csproj", "{82468F99-B386-4419-8DB0-FCA10B12699E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistance\Persistence.csproj", "{82468F99-B386-4419-8DB0-FCA10B12699E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSemanticTracingTests", "FileSemanticTracingTests\FileSemanticTracingTests.csproj", "{69F2D376-FC83-4215-AC99-058D53142FF7}"
 EndProject
@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ViewModel", "ViewModel", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tracing", "Tracing", "{37D34E22-0406-4181-B984-029C89C766E0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistance", "Persistance", "{B54794B4-8253-4700-A4F6-5DB3E4756EE1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{B54794B4-8253-4700-A4F6-5DB3E4756EE1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelContract", "ModelContract\ModelContract.csproj", "{3A99A3EA-C964-4CB2-8747-8F9A10689CC7}"
 EndProject
@@ -131,7 +131,7 @@ Global
 		{E14081C5-A0DB-4526-9664-10E1BB69575A} = {B54794B4-8253-4700-A4F6-5DB3E4756EE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {DF0BA247-769B-4BB6-8663-E3694B03C0F8}
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
+		SolutionGuid = {DF0BA247-769B-4BB6-8663-E3694B03C0F8}
 	EndGlobalSection
 EndGlobal
