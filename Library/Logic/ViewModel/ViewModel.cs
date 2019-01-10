@@ -235,8 +235,18 @@ namespace Library.Logic.ViewModel
                             Tracer.Flush();
                         }
 
-                        Persister?.Dispose();
-                        Tracer?.Dispose();
+                        try
+                        {
+                            Persister.Dispose();
+                            Tracer?.Dispose();
+                        }
+                        catch (Exception e)
+                        {
+                            Tracer.LogFailure($"Caught and exception " +
+                                              $"during application closing process. {e.Message}");
+                            Tracer.Flush();
+                        }
+                        
                     });
             }
         }

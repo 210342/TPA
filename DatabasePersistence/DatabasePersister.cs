@@ -36,6 +36,7 @@ namespace DatabasePersistence
         public void Dispose()
         {
             context?.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         public object Load()
