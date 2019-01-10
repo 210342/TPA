@@ -10,7 +10,8 @@ namespace Library.Logic.MEFProviders
     {
         private CompositionContainer _container;
 
-        [Import(typeof(IPersister))] private IPersister _persister;
+        [Import(typeof(IPersister))] 
+        private IPersister _persister;
 
         public PersistanceProvider()
         {

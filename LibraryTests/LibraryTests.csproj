@@ -99,18 +99,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FileSemanticTracing.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="FileSemanticTracing.dll" />
     <Content Include="ModelContract.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Persistance.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Serializing.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Serializing.dll" />
     <Content Include="TPA.ApplicationArchitecture.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

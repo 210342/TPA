@@ -22,33 +22,34 @@ namespace SerializationModel.Tests
             Assert.IsFalse(sut.IsExtension);
             Assert.IsTrue(tmp.ReturnType.Name.Equals(sut.ReturnType.Name));
         }
+    }
 
-        private class MethodTest : IMethodMetadata
+    internal class MethodTest : IMethodMetadata
+    {
+        internal MethodTest()
         {
-            internal MethodTest()
-            {
-                Name = "name";
-                SavedHash = 1;
-                IsExtension = false;
-                Parameters = Enumerable.Empty<IParameterMetadata>();
-                ReturnType = new TypeTest("type");
-            }
-
-            public string Name { get; }
-
-            public IEnumerable<IMetadata> Children => Enumerable.Empty<IMetadata>();
-
-            public int SavedHash { get; }
-
-            public IEnumerable<ITypeMetadata> GenericArguments { get; }
-
-            public ITypeMetadata ReturnType { get; }
-
-            public bool IsExtension { get; }
-
-            public IEnumerable<IParameterMetadata> Parameters { get; }
-
-            public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; }
+            Name = "name";
+            SavedHash = 1;
+            IsExtension = false;
+            Parameters = Enumerable.Empty<IParameterMetadata>();
+            ReturnType = new TypeTest("type");
         }
+
+        public string Name { get; internal set; }
+
+        public IEnumerable<IMetadata> Children => Enumerable.Empty<IMetadata>();
+
+        public int SavedHash { get; internal set; }
+
+        public IEnumerable<ITypeMetadata> GenericArguments { get; internal set; }
+
+        public ITypeMetadata ReturnType { get; internal set; }
+
+        public bool IsExtension { get; internal set; }
+
+        public IEnumerable<IParameterMetadata> Parameters { get; internal set; }
+
+        public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; internal set; }
+        public void MapTypes() { }
     }
 }

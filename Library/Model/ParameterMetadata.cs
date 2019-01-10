@@ -31,9 +31,7 @@ namespace Library.Model
             }
             else
             {
-                ITypeMetadata newType = new TypeMetadata(parameterMetadata.TypeMetadata);
-                TypeMetadata = newType;
-                AlreadyMapped.Add(newType.SavedHash, newType);
+                TypeMetadata = new TypeMetadata(parameterMetadata.TypeMetadata.SavedHash, parameterMetadata.TypeMetadata.Name);
             }
         }
 
@@ -51,6 +49,14 @@ namespace Library.Model
                     TypeMetadata = (TypeMetadata) elem;
                     break;
                 }
+            }
+        }
+
+        public void MapTypes()
+        {
+            if (!TypeMetadata.Mapped && AlreadyMapped.TryGetValue(TypeMetadata.SavedHash, out IMetadata item))
+            {
+                TypeMetadata = item as ITypeMetadata;
             }
         }
 

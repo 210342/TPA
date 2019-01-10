@@ -25,9 +25,7 @@ namespace DatabasePersistence.DBModel
             }
             else
             {
-                ITypeMetadata newType = new DbTypeMetadata(typeMetadata.BaseType);
-                BaseType = newType;
-                AlreadyMapped.Add(newType.SavedHash, newType);
+                BaseType = new DbTypeMetadata(typeMetadata.BaseType.SavedHash, typeMetadata.BaseType.Name);
             }
 
             // Generic Arguments
@@ -45,9 +43,7 @@ namespace DatabasePersistence.DBModel
                     }
                     else
                     {
-                        ITypeMetadata newType = new DbTypeMetadata(genericArgument);
-                        genericArguments.Add(newType);
-                        AlreadyMapped.Add(newType.SavedHash, newType);
+                        genericArguments.Add(new DbTypeMetadata(genericArgument.SavedHash, genericArgument.Name));
                     }
 
                 GenericArguments = genericArguments;
@@ -97,9 +93,7 @@ namespace DatabasePersistence.DBModel
                     }
                     else
                     {
-                        ITypeMetadata newInterface = new DbTypeMetadata(implementedInterface);
-                        interfaces.Add(newInterface);
-                        AlreadyMapped.Add(newInterface.SavedHash, newInterface);
+                        interfaces.Add(new DbTypeMetadata(implementedInterface.SavedHash, implementedInterface.Name));
                     }
 
                 ImplementedInterfaces = interfaces;
@@ -120,9 +114,7 @@ namespace DatabasePersistence.DBModel
                     }
                     else
                     {
-                        ITypeMetadata newType = new DbTypeMetadata(nestedType);
-                        nestedTypes.Add(newType);
-                        AlreadyMapped.Add(newType.SavedHash, newType);
+                        nestedTypes.Add(new DbTypeMetadata(nestedType.SavedHash, nestedType.Name));
                     }
 
                 NestedTypes = nestedTypes;
@@ -162,9 +154,7 @@ namespace DatabasePersistence.DBModel
             }
             else
             {
-                ITypeMetadata newType = new DbTypeMetadata(typeMetadata.DeclaringType);
-                DeclaringType = newType;
-                AlreadyMapped.Add(newType.SavedHash, newType);
+                DeclaringType = new DbTypeMetadata(typeMetadata.DeclaringType.SavedHash, typeMetadata.DeclaringType.Name);
             }
 
             // Methods
@@ -217,10 +207,17 @@ namespace DatabasePersistence.DBModel
             FillChildren();
         }
 
-        public DbTypeMetadata()
+        internal DbTypeMetadata()
         {
             SavedHash = 0;
             TypeKind = TypeKindEnum.ClassType;
+        }
+
+        internal DbTypeMetadata(int hashCode, string name)
+        {
+            SavedHash = hashCode;
+            Name = name;
+            Mapped = false;
         }
 
         private void FillChildren()
@@ -263,13 +260,15 @@ namespace DatabasePersistence.DBModel
 
         #region ITypeMetadata
 
+        [NotMapped]
+        public bool Mapped { get; }
         public string Name { get; set; }
         public int SavedHash { get; protected set; }
         public string NamespaceName { get; }
-        public virtual ITypeMetadata BaseType { get; }
+        public virtual ITypeMetadata BaseType { get; private set; }
         public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; }
         public virtual TypeKindEnum TypeKind { get; }
-        public virtual ITypeMetadata DeclaringType { get; }
+        public virtual ITypeMetadata DeclaringType { get; private set; }
 
         [NotMapped]
         public IEnumerable<ITypeMetadata> GenericArguments
@@ -322,6 +321,80 @@ namespace DatabasePersistence.DBModel
 
         [NotMapped] public IEnumerable<IMetadata> Children { get; set; }
 
+        public void MapTypes()
+        {
+            if (BaseType != null && !BaseType.Mapped
+                && AlreadyMapped.TryGetValue(BaseType.SavedHash, out IMetadata item))
+            {
+                BaseType = item as ITypeMetadata;
+            }
+            if (DeclaringType != null && !DeclaringType.Mapped
+                && AlreadyMapped.TryGetValue(DeclaringType.SavedHash, out item))
+            {
+                DeclaringType = item as ITypeMetadata;
+            }
+            if (GenericArguments != null)
+            {
+                ICollection<ITypeMetadata> actualGenericArguments = new List<ITypeMetadata>();
+                foreach (ITypeMetadata type in GenericArguments)
+                {
+                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    {
+                        actualGenericArguments.Add(item as ITypeMetadata);
+                    }
+                    else
+                    {
+                        actualGenericArguments.Add(type);
+                    }
+                }
+                GenericArguments = actualGenericArguments;
+            }
+            if (ImplementedInterfaces != null)
+            {
+                ICollection<ITypeMetadata> actualImplementedInterfaces = new List<ITypeMetadata>();
+                foreach (ITypeMetadata type in ImplementedInterfaces)
+                {
+                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    {
+                        actualImplementedInterfaces.Add(item as ITypeMetadata);
+                    }
+                    else
+                    {
+                        actualImplementedInterfaces.Add(type);
+                    }
+                }
+                ImplementedInterfaces = actualImplementedInterfaces;
+            }
+            if (NestedTypes != null)
+            {
+                ICollection<ITypeMetadata> actualNestedTypes = new List<ITypeMetadata>();
+                foreach (ITypeMetadata type in NestedTypes)
+                {
+                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    {
+                        actualNestedTypes.Add(item as ITypeMetadata);
+                    }
+                    else
+                    {
+                        actualNestedTypes.Add(type);
+                    }
+                }
+                NestedTypes = actualNestedTypes;
+            }
+
+            foreach (IMethodMetadata method in Methods)
+            {
+                method.MapTypes();
+            }
+            foreach (IMethodMetadata method in Constructors)
+            {
+                method.MapTypes();
+            }
+            foreach (IPropertyMetadata property in Properties)
+            {
+                property.MapTypes();
+            }
+        }
         #endregion
     }
 }

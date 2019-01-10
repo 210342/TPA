@@ -17,9 +17,7 @@ namespace DatabasePersistence.DBModel
             }
             else
             {
-                ITypeMetadata newType = new DbTypeMetadata(propertyMetadata.MyType);
-                MyType = newType;
-                AlreadyMapped.Add(newType.SavedHash, newType);
+                MyType = new DbTypeMetadata(propertyMetadata.MyType.SavedHash, propertyMetadata.MyType.Name);
             }
         }
 
@@ -41,6 +39,14 @@ namespace DatabasePersistence.DBModel
                     MyType = (ITypeMetadata) value.First();
                 else
                     MyType = null;
+            }
+        }
+
+        public void MapTypes()
+        {
+            if (MyType.Mapped && AlreadyMapped.TryGetValue(MyType.SavedHash, out IMetadata item))
+            {
+                MyType = item as ITypeMetadata;
             }
         }
     }

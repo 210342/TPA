@@ -16,20 +16,22 @@ namespace SerializationModel.Tests
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
             Assert.IsTrue(tmp.TypeMetadata.Name.Equals(sut.TypeMetadata.Name));
         }
+    }
 
-        private class ParameterTest : IParameterMetadata
+    internal class ParameterTest : IParameterMetadata
+    {
+        internal ParameterTest()
         {
-            internal ParameterTest()
-            {
-                Name = "name";
-                SavedHash = 1;
-                TypeMetadata = new TypeTest("type");
-            }
-
-            public ITypeMetadata TypeMetadata { get; }
-            public string Name { get; }
-            public IEnumerable<IMetadata> Children { get; }
-            public int SavedHash { get; }
+            Name = "name";
+            SavedHash = 1;
+            TypeMetadata = new TypeTest("type");
         }
+
+        public ITypeMetadata TypeMetadata { get; internal set; }
+        public string Name { get; internal set; }
+        public IEnumerable<IMetadata> Children { get; }
+        public int SavedHash { get; internal set; }
+
+        public void MapTypes() { }
     }
 }

@@ -85,13 +85,19 @@ namespace Library.Model
             }
             else
             {
-                ITypeMetadata newType = new TypeMetadata(propertyMetadata.MyType);
-                MyType = newType;
-                AlreadyMapped.Add(newType.SavedHash, newType);
+                MyType = new TypeMetadata(propertyMetadata.MyType.SavedHash, propertyMetadata.MyType.Name);
             }
         }
 
         #endregion
+
+        public void MapTypes()
+        {
+            if (MyType.Mapped && AlreadyMapped.TryGetValue(MyType.SavedHash, out IMetadata item))
+            {
+                MyType = item as ITypeMetadata;
+            }
+        }
 
         #region private
 

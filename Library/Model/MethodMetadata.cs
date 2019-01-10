@@ -51,9 +51,7 @@ namespace Library.Model
                     }
                     else
                     {
-                        ITypeMetadata newType = new TypeMetadata(genericArgument);
-                        genericArguments.Add(newType);
-                        AlreadyMapped.Add(newType.SavedHash, newType);
+                        genericArguments.Add(new TypeMetadata(genericArgument.SavedHash, genericArgument.Name));
                     }
 
                 GenericArguments = genericArguments;
@@ -66,9 +64,7 @@ namespace Library.Model
             }
             else
             {
-                ITypeMetadata newType = new TypeMetadata(methodMetadata.ReturnType);
-                ReturnType = newType;
-                AlreadyMapped.Add(newType.SavedHash, newType);
+                ReturnType = new TypeMetadata(methodMetadata.ReturnType.SavedHash, methodMetadata.ReturnType.Name);
             }
 
             // Parameters
@@ -114,8 +110,8 @@ namespace Library.Model
         #region properties
 
         public string Name { get; }
-        public IEnumerable<ITypeMetadata> GenericArguments { get; }
-        public ITypeMetadata ReturnType { get; }
+        public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
+        public ITypeMetadata ReturnType { get; private set; }
         public bool IsExtension { get; }
         public IEnumerable<IParameterMetadata> Parameters { get; }
         public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; }
@@ -165,6 +161,35 @@ namespace Library.Model
                 _virtual = VirtualEnum.Virtual;
             return new Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum>(_access, _abstract, _static,
                 _virtual);
+        }
+
+        public void MapTypes()
+        {
+            if (ReturnType != null && string.IsNullOrEmpty(ReturnType.Name)
+                && AlreadyMapped.TryGetValue(ReturnType.SavedHash, out IMetadata item))
+            {
+                ReturnType = item as ITypeMetadata;
+            }
+            if (GenericArguments != null)
+            {
+                ICollection<ITypeMetadata> actualGenericArguments = new List<ITypeMetadata>();
+                foreach (ITypeMetadata type in GenericArguments)
+                {
+                    if (string.IsNullOrEmpty(type.Name) && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    {
+                        actualGenericArguments.Add(item as ITypeMetadata);
+                    }
+                    else
+                    {
+                        actualGenericArguments.Add(type);
+                    }
+                }
+                GenericArguments = actualGenericArguments;
+            }
+            foreach (IParameterMetadata parameter in Parameters)
+            {
+                parameter.MapTypes();
+            }
         }
 
         #endregion

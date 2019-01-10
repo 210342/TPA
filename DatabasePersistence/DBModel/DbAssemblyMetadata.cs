@@ -27,6 +27,13 @@ namespace DatabasePersistence.DBModel
                 }
 
             Namespaces = namespaces;
+            foreach (INamespaceMetadata _namespace in Namespaces)
+            {
+                foreach (ITypeMetadata type in _namespace.Types)
+                {
+                    type.MapTypes();
+                }
+            }
         }
 
         public DbAssemblyMetadata()

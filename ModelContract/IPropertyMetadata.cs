@@ -3,5 +3,7 @@
     public interface IPropertyMetadata : IMetadata
     {
         ITypeMetadata MyType { get; }
+
+        void MapTypes();
     }
 }

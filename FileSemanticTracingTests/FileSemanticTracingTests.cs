@@ -46,7 +46,7 @@ namespace SemanticTracing.Tests
         {
             fileInfo.Refresh();
             long oldLength = fileInfo.Length;
-            _systemUnderTest.LogFailure("SUCCESS");
+            _systemUnderTest.LogSuccess("SUCCESS");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
             Assert.IsTrue(oldLength < fileInfo.Length);

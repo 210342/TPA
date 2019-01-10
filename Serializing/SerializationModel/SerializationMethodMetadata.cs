@@ -31,9 +31,9 @@ namespace SerializationModel
                     }
                     else
                     {
-                        ITypeMetadata newType = new SerializationTypeMetadata(genericArgument);
-                        genericArguments.Add(newType);
-                        AlreadyMapped.Add(newType.SavedHash, newType);
+                        // use temporary constructor to save its hash, retrieve actual object afterr all mapping has been done
+                        genericArguments.Add(new SerializationTypeMetadata(
+                            new SerializationTypeMetadata(genericArgument.SavedHash, genericArgument.Name)));
                     }
 
                 GenericArguments = genericArguments;
@@ -46,9 +46,9 @@ namespace SerializationModel
             }
             else
             {
-                ITypeMetadata newType = new SerializationTypeMetadata(methodMetadata.ReturnType);
-                ReturnType = newType;
-                AlreadyMapped.Add(newType.SavedHash, newType);
+                // use temporary constructor to save its hash, retrieve actual object afterr all mapping has been done
+                ReturnType = new SerializationTypeMetadata(
+                    new SerializationTypeMetadata(methodMetadata.ReturnType.SavedHash, methodMetadata.ReturnType.Name));
             }
 
             // Parameters
@@ -101,6 +101,35 @@ namespace SerializationModel
             List<IMetadata> elems = new List<IMetadata> {ReturnType};
             elems.AddRange(Parameters);
             Children = elems;
+        }
+
+        public void MapTypes()
+        {
+            if (ReturnType != null && !ReturnType.Mapped
+                && AlreadyMapped.TryGetValue(ReturnType.SavedHash, out IMetadata item))
+            {
+                ReturnType = item as ITypeMetadata;
+            }
+            if(GenericArguments != null)
+            {
+                ICollection<ITypeMetadata> actualGenericArguments = new List<ITypeMetadata>();
+                foreach(ITypeMetadata type in GenericArguments)
+                {
+                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    {
+                        actualGenericArguments.Add(item as ITypeMetadata);
+                    }
+                    else
+                    {
+                        actualGenericArguments.Add(type);
+                    }
+                }
+                GenericArguments = actualGenericArguments;
+            }
+            foreach (IParameterMetadata parameter in Parameters)
+            {
+                parameter.MapTypes();
+            }
         }
     }
 }

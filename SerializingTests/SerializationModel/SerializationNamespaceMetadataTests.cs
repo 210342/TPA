@@ -17,20 +17,20 @@ namespace SerializationModel.Tests
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
             Assert.AreEqual(tmp.Types.Count(), sut.Types.Count());
         }
+    }
 
-        private class NamespaceTest : INamespaceMetadata
+    internal class NamespaceTest : INamespaceMetadata
+    {
+        internal NamespaceTest()
         {
-            internal NamespaceTest()
-            {
-                Name = "name";
-                SavedHash = 1;
-                Types = Enumerable.Empty<ITypeMetadata>();
-            }
-
-            public IEnumerable<ITypeMetadata> Types { get; }
-            public string Name { get; }
-            public IEnumerable<IMetadata> Children { get; }
-            public int SavedHash { get; }
+            Name = "name";
+            SavedHash = 1;
+            Types = Enumerable.Empty<ITypeMetadata>();
         }
+
+        public IEnumerable<ITypeMetadata> Types { get; internal set; }
+        public string Name { get; internal set; }
+        public IEnumerable<IMetadata> Children { get; }
+        public int SavedHash { get; internal set; }
     }
 }

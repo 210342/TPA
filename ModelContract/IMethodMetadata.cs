@@ -10,5 +10,7 @@ namespace ModelContract
         bool IsExtension { get; }
         IEnumerable<IParameterMetadata> Parameters { get; }
         Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; }
+
+        void MapTypes();
     }
 }

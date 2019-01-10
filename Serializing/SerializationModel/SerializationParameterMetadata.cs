@@ -17,9 +17,10 @@ namespace SerializationModel
             }
             else
             {
-                ITypeMetadata newType = new SerializationTypeMetadata(parameterMetadata.TypeMetadata);
-                TypeMetadata = newType;
-                AlreadyMapped.Add(newType.SavedHash, newType);
+                // use temporary constructor to save its hash, retrieve actual object afterr all mapping has been done
+                TypeMetadata = new SerializationTypeMetadata(
+                    new SerializationTypeMetadata(
+                        parameterMetadata.TypeMetadata.SavedHash, parameterMetadata.TypeMetadata.Name));
             }
         }
 
@@ -30,5 +31,13 @@ namespace SerializationModel
         [DataMember(Name = "Hash")] public int SavedHash { get; private set; }
 
         public IEnumerable<IMetadata> Children => new[] {TypeMetadata};
+
+        public void MapTypes()
+        {
+            if (!TypeMetadata.Mapped && AlreadyMapped.TryGetValue(TypeMetadata.SavedHash, out IMetadata item))
+            {
+                TypeMetadata = item as ITypeMetadata;
+            }
+        }
     }
 }

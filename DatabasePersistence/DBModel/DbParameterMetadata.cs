@@ -17,9 +17,8 @@ namespace DatabasePersistence.DBModel
             }
             else
             {
-                ITypeMetadata newType = new DbTypeMetadata(parameterMetadata.TypeMetadata);
-                TypeMetadata = newType;
-                AlreadyMapped.Add(newType.SavedHash, newType);
+                TypeMetadata = new DbTypeMetadata(
+                    parameterMetadata.TypeMetadata.SavedHash, parameterMetadata.TypeMetadata.Name);
             }
         }
 
@@ -41,6 +40,14 @@ namespace DatabasePersistence.DBModel
                     TypeMetadata = (ITypeMetadata) value.First();
                 else
                     TypeMetadata = null;
+            }
+        }
+
+        public void MapTypes()
+        {
+            if (!TypeMetadata.Mapped && AlreadyMapped.TryGetValue(TypeMetadata.SavedHash, out IMetadata item))
+            {
+                TypeMetadata = item as ITypeMetadata;
             }
         }
     }

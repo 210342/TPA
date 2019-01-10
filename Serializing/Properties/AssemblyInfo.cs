@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 // Ogólne informacje o zestawie są kontrolowane poprzez następujący 
 // zestaw atrybutów. Zmień wartości tych atrybutów, aby zmodyfikować informacje
@@ -17,6 +18,7 @@ using System.Runtime.InteropServices;
 // dla składników COM. Jeśli potrzebny jest dostęp do typu w tym zestawie z
 // COM, ustaw wartość true dla atrybutu ComVisible tego typu.
 [assembly: ComVisible(false)]
+[assembly: InternalsVisibleTo("SerializingTests")]
 
 // Następujący identyfikator GUID jest identyfikatorem biblioteki typów w przypadku udostępnienia tego projektu w modelu COM
 [assembly: Guid("d3f316a5-6f7d-42ec-b332-e6451ebcf704")]
