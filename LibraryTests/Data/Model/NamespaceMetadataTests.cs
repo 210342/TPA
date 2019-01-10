@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Library.Model;
 using System.Linq;
 using System.Reflection;
+using Library.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContract;
 
 namespace LibraryTests.Data.Model

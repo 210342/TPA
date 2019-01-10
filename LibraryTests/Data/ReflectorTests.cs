@@ -1,8 +1,8 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Reflection;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Library.Data;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LibraryTests.Data
 {
@@ -14,13 +14,14 @@ namespace LibraryTests.Data
         [ExpectedException(typeof(ArgumentNullException))]
         public void ReflectorStringArgThrowsOnNull()
         {
-            new Reflector((string)null);
+            new Reflector((string) null);
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ReflectorAssemblyArgThrowsOnNull()
         {
-            new Reflector((Assembly)null);
+            new Reflector((Assembly) null);
         }
     }
 }

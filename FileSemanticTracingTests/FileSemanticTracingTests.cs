@@ -1,15 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SemanticTracing;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SemanticTracing.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class FileSemanticTracingTests
     {
         private FileSemanticTracing _systemUnderTest;
@@ -28,7 +22,7 @@ namespace SemanticTracing.Tests
             _systemUnderTest.Dispose();
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void FileSemanticTracingTest()
         {
             Assert.IsNotNull(_systemUnderTest);
@@ -36,7 +30,7 @@ namespace SemanticTracing.Tests
             Assert.IsTrue(File.Exists(_systemUnderTest.FilePath));
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogFailureTest()
         {
             fileInfo.Refresh();
@@ -47,18 +41,18 @@ namespace SemanticTracing.Tests
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogSuccessTest()
         {
             fileInfo.Refresh();
             long oldLength = fileInfo.Length;
-            _systemUnderTest.LogFailure("SUCCESS");
+            _systemUnderTest.LogSuccess("SUCCESS");
             _systemUnderTest.Flush();
             fileInfo.Refresh();
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogLoadingModelTest()
         {
             fileInfo.Refresh();
@@ -69,7 +63,7 @@ namespace SemanticTracing.Tests
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogModelLoadedTest()
         {
             fileInfo.Refresh();
@@ -80,7 +74,7 @@ namespace SemanticTracing.Tests
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogModelSavedTest()
         {
             fileInfo.Refresh();
@@ -91,7 +85,7 @@ namespace SemanticTracing.Tests
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogSavingModelTest()
         {
             fileInfo.Refresh();
@@ -102,7 +96,7 @@ namespace SemanticTracing.Tests
             Assert.IsTrue(oldLength < fileInfo.Length);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LogStartupTest()
         {
             FileInfo file = new FileInfo(_systemUnderTest.FilePath);

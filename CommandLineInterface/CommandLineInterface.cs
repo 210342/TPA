@@ -8,12 +8,12 @@ namespace CommandLineInterface
 {
     public class CommandLineInterface
     {
-        private ViewModel dataContext = new ViewModel();
-        private TreeViewItem root;
-        private readonly string tab = "   ";
+        private readonly ViewModel dataContext = new ViewModel();
         private readonly int startIndex = 0;
-        private int maxIndex = 0;
-        private int selectionIndex = 0; // used to iterate through items
+        private readonly string tab = "   ";
+        private int maxIndex;
+        private TreeViewItem root;
+        private int selectionIndex; // used to iterate through items
 
         public void Start(string dllPath)
         {
@@ -41,6 +41,7 @@ namespace CommandLineInterface
             {
                 Console.WriteLine("Unknown problem occured. \n{0}", e.Message);
             }
+
             root = dataContext.ObjectsList.First();
             Menu();
         }
@@ -50,7 +51,7 @@ namespace CommandLineInterface
             string selection = "";
             do
             {
-                if(root != null)
+                if (root != null)
                 {
                     maxIndex = 0; // reset index before each printout
                     Print(root, startIndex);
@@ -93,11 +94,10 @@ namespace CommandLineInterface
                                     int index = int.Parse(selection); // try to read chosen index
                                     isIncorrectInput = false; // get out of the loop
                                     selectionIndex = 0; // reset index before selection
-                                    dataContext.ObjectSelected = SelectItem(root, index); // get an item under input index
+                                    dataContext.ObjectSelected =
+                                        SelectItem(root, index); // get an item under input index
                                     if (dataContext.ObjectSelected == null)
-                                    {
                                         throw new IndexOutOfRangeException(nameof(index));
-                                    }
                                     dataContext.ObjectSelected.IsExpanded = !dataContext.ObjectSelected.IsExpanded;
                                     isIncorrectInput = false; // get out of the loop
                                 }
@@ -105,7 +105,8 @@ namespace CommandLineInterface
                         }
                         catch (FormatException)
                         {
-                            Console.WriteLine("Incorrect option \nPossible options: \n-> indexes written above objects \n-> quit");
+                            Console.WriteLine(
+                                "Incorrect option \nPossible options: \n-> indexes written above objects \n-> quit");
                             dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
                             isIncorrectInput = true; // stay in the loop
                         }
@@ -121,8 +122,7 @@ namespace CommandLineInterface
                             dataContext.ObjectSelected = dataContext.PreviousSelection; // retrieve previous selection
                             isIncorrectInput = true; // stay in the loop
                         }
-                    }
-                    while (isIncorrectInput);
+                    } while (isIncorrectInput);
                 }
                 else
                 {
@@ -135,8 +135,7 @@ namespace CommandLineInterface
                         root = null;
                     }
                 }
-            }
-            while(!Quit(selection));
+            } while (!Quit(selection));
         }
 
         private bool Quit(string input)
@@ -157,48 +156,32 @@ namespace CommandLineInterface
         private void Print(TreeViewItem item, int depth)
         {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < depth; ++i)
-            {
-                sb.Append(tab);
-            }
+            for (int i = 0; i < depth; ++i) sb.Append(tab);
             Console.WriteLine();
-            Console.WriteLine($"{sb.ToString()}INDEX: {maxIndex++}");
-            Console.WriteLine($"{sb.ToString()}{item.Name}");
+            Console.WriteLine($"{sb}INDEX: {maxIndex++}");
+            Console.WriteLine($"{sb}{item.Name}");
             if (item.IsExpanded)
-            {
-                foreach(TreeViewItem kid in item.Children)
-                {
+                foreach (TreeViewItem kid in item.Children)
                     Print(kid, depth + 1);
-                }
-            }
         }
 
         private TreeViewItem SelectItem(TreeViewItem selected, int index)
         {
             TreeViewItem tmp = selected;
-            if(selectionIndex++ == index)
+            if (selectionIndex++ == index) return selected;
+
+            if (selected.IsExpanded)
             {
-                return selected;
-            }
-            else
-            {
-                if(selected.IsExpanded)
+                foreach (TreeViewItem kid in selected.Children)
                 {
-                    foreach(TreeViewItem kid in selected.Children)
-                    {
-                        tmp = SelectItem(kid, index);
-                        if(tmp != null)
-                        {
-                            return tmp;
-                        }
-                    }
-                    return null;
+                    tmp = SelectItem(kid, index);
+                    if (tmp != null) return tmp;
                 }
-                else
-                {
-                    return null;
-                }
+
+                return null;
             }
+
+            return null;
         }
     }
 }

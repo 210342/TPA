@@ -5,14 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GraphicalUserInterface"
         xmlns:viewModel="clr-namespace:Library.Logic.ViewModel;assembly=Library"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="Dissasemblers: Age of Adaptive Programming" Height="467" Width="800">
     <Window.DataContext>
-        <viewModel:ViewModel/>
+        <viewModel:ViewModel />
     </Window.DataContext>
-
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding AppClosing}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
-        <TreeView Name="TreeView" Margin="10,31,10,32" RenderTransformOrigin="0.5,0.5" ItemsSource="{Binding ObjectsList}" Grid.ColumnSpan="2">
+        <TreeView Name="TreeView" Margin="10,31,10,32" RenderTransformOrigin="0.5,0.5"
+                  ItemsSource="{Binding ObjectsList}" Grid.ColumnSpan="2">
 
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
@@ -25,9 +31,14 @@
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
-        <TextBox IsEnabled="false" Text="{Binding Path=LoadedAssembly, Mode=OneWay}"  x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="0,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="701" Grid.ColumnSpan="2"/>
-        <Button Command="{Binding Path=OpenFileCommand}"  x:Name="button" Content="Load" HorizontalAlignment="Left" Margin="706,3,0,0" VerticalAlignment="Top" Width="75" Height="22"/>
-        <Button Command="{Binding SaveModel}"  x:Name="SaveModel" Content="Save model" HorizontalAlignment="Right" Margin="0,0,90,8" VerticalAlignment="Bottom" Width="75" Grid.Column="1" Height="22"/>
-        <Button Command="{Binding LoadModel}"  x:Name="LoadModel" Content="Load model" HorizontalAlignment="Right" Margin="0,0,10,8" VerticalAlignment="Bottom" Width="75" Grid.Column="1" Height="22"/>
+        <TextBox IsEnabled="false" Text="{Binding Path=LoadedAssembly, Mode=OneWay}" x:Name="textBox"
+                 HorizontalAlignment="Left" Height="23" Margin="0,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top"
+                 Width="701" Grid.ColumnSpan="2" />
+        <Button Command="{Binding Path=OpenFileCommand}" x:Name="button" Content="Load" HorizontalAlignment="Left"
+                Margin="706,3,0,0" VerticalAlignment="Top" Width="75" Height="22" />
+        <Button Command="{Binding SaveModel}" x:Name="SaveModel" Content="Save model" HorizontalAlignment="Right"
+                Margin="0,0,90,8" VerticalAlignment="Bottom" Width="75" Grid.Column="1" Height="22" />
+        <Button Command="{Binding LoadModel}" x:Name="LoadModel" Content="Load model" HorizontalAlignment="Right"
+                Margin="0,0,10,8" VerticalAlignment="Bottom" Width="75" Grid.Column="1" Height="22" />
     </Grid>
 </Window>

@@ -2,6 +2,7 @@
 {
     public enum StaticEnum
     {
-        NotStatic, Static
+        NotStatic,
+        Static
     }
 }

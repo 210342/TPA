@@ -2,6 +2,7 @@
 {
     public enum SealedEnum
     {
-        Sealed, NotSealed
+        Sealed,
+        NotSealed
     }
 }

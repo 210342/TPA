@@ -1,30 +1,12 @@
-﻿using ModelContract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using ModelContract;
 
 namespace SerializationModel
 {
     [DataContract(Name = "Parameter")]
     public class SerializationParameterMetadata : AbstractMapper, IParameterMetadata
     {
-        [DataMember(Name = "Type")]
-        public ITypeMetadata TypeMetadata { get; private set; }
-        [DataMember(Name = "Name")]
-        public string Name { get; private set; }
-        [DataMember(Name = "Hash")]
-        public int SavedHash { get; private set; }
-        public IEnumerable<IMetadata> Children
-        {
-            get
-            {
-                return new[] { TypeMetadata };
-            }
-        }
-
         public SerializationParameterMetadata(IParameterMetadata parameterMetadata)
         {
             Name = parameterMetadata.Name;
@@ -35,9 +17,26 @@ namespace SerializationModel
             }
             else
             {
-                ITypeMetadata newType = new SerializationTypeMetadata(parameterMetadata.TypeMetadata);
-                TypeMetadata = newType;
-                AlreadyMapped.Add(newType.SavedHash, newType);
+                // use temporary constructor to save its hash, retrieve actual object afterr all mapping has been done
+                TypeMetadata = new SerializationTypeMetadata(
+                    new SerializationTypeMetadata(
+                        parameterMetadata.TypeMetadata.SavedHash, parameterMetadata.TypeMetadata.Name));
+            }
+        }
+
+        [DataMember(Name = "Type")] public ITypeMetadata TypeMetadata { get; private set; }
+
+        [DataMember(Name = "Name")] public string Name { get; private set; }
+
+        [DataMember(Name = "Hash")] public int SavedHash { get; private set; }
+
+        public IEnumerable<IMetadata> Children => new[] {TypeMetadata};
+
+        public void MapTypes()
+        {
+            if (!TypeMetadata.Mapped && AlreadyMapped.TryGetValue(TypeMetadata.SavedHash, out IMetadata item))
+            {
+                TypeMetadata = item as ITypeMetadata;
             }
         }
     }

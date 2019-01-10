@@ -1,32 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContract;
-using SerializationModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerializationModel.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class SerializationPropertyMetadataTests
     {
-        private class PropertyTest : IPropertyMetadata
+        [TestInitialize]
+        public void NullifyDictionary()
         {
-            public ITypeMetadata MyType { get; }
-            public string Name { get; }
-            public IEnumerable<IMetadata> Children { get; }
-            public int SavedHash { get; }
-
-            internal PropertyTest()
-            {
-                Name = "name";
-                SavedHash = 1;
-                MyType = new TypeTest("type");
-            }
+            FieldInfo field = typeof(AbstractMapper).GetField("<AlreadyMapped>k__BackingField",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            field.SetValue(null, new Dictionary<int, IMetadata>());
         }
-
         [TestMethod]
         public void CopyCtorTest()
         {
@@ -36,5 +24,22 @@ namespace SerializationModel.Tests
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
             Assert.IsTrue(tmp.MyType.Name.Equals(sut.MyType.Name));
         }
+    }
+
+    internal class PropertyTest : IPropertyMetadata
+    {
+        internal PropertyTest()
+        {
+            Name = "name";
+            SavedHash = 1;
+            MyType = new TypeTest("type");
+        }
+
+        public ITypeMetadata MyType { get; internal set; }
+        public string Name { get; internal set; }
+        public IEnumerable<IMetadata> Children { get; }
+        public int SavedHash { get; internal set; }
+
+        public void MapTypes() { }
     }
 }

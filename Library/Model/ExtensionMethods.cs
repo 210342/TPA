@@ -25,6 +25,5 @@ namespace Library.Model
                 throw new ArgumentNullException("Type can't be null.");
             return type.Namespace ?? string.Empty;
         }
-
     }
 }

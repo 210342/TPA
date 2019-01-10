@@ -1,49 +1,33 @@
-﻿using Library.Model;
-using ModelContract;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
+using ModelContract;
 
 namespace Library.Model
 {
     public class MethodMetadata : AbstractMapper, IMethodMetadata
     {
-        internal static IEnumerable<MethodMetadata> EmitMethods(IEnumerable<MethodBase> methods)
-        {
-            return from MethodBase _currentMethod in methods
-                   where _currentMethod.GetVisible()
-                   select new MethodMetadata(_currentMethod);
-        }
-
-        #region properties
-
-        public string Name { get; }
-        public IEnumerable<ITypeMetadata> GenericArguments { get; }
-        public ITypeMetadata ReturnType { get; }
-        public bool IsExtension { get; }
-        public IEnumerable<IParameterMetadata> Parameters { get; }
-        public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; }
-        public IEnumerable<IMetadata> Children { get; private set; }
-        public int SavedHash { get; }
-
-        #endregion
-
         private MethodMetadata(MethodBase method)
         {
             Name = method.Name;
-            GenericArguments = !method.IsGenericMethodDefinition ? null : TypeMetadata.EmitGenericArguments(method.GetGenericArguments());
+            GenericArguments = !method.IsGenericMethodDefinition
+                ? null
+                : TypeMetadata.EmitGenericArguments(method.GetGenericArguments());
             ReturnType = EmitReturnType(method);
             Parameters = EmitParameters(method.GetParameters());
             Modifiers = EmitModifiers(method);
             IsExtension = EmitExtension(method);
-            FillChildren(new StreamingContext { });
+            FillChildren(new StreamingContext());
             SavedHash = method.GetHashCode();
         }
-        internal MethodMetadata() { }
+
+        internal MethodMetadata()
+        {
+        }
 
         public MethodMetadata(IMethodMetadata methodMetadata)
         {
@@ -61,31 +45,26 @@ namespace Library.Model
             {
                 List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
                 foreach (ITypeMetadata genericArgument in methodMetadata.GenericArguments)
-                {
                     if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata mappedArgument))
                     {
                         genericArguments.Add(mappedArgument as ITypeMetadata);
                     }
                     else
                     {
-                        ITypeMetadata newType = new TypeMetadata(genericArgument);
-                        genericArguments.Add(newType);
-                        AlreadyMapped.Add(newType.SavedHash, newType);
+                        genericArguments.Add(new TypeMetadata(genericArgument.SavedHash, genericArgument.Name));
                     }
-                }
+
                 GenericArguments = genericArguments;
             }
 
             // Return type
-            if(AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out IMetadata item))
+            if (AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out IMetadata item))
             {
                 ReturnType = item as ITypeMetadata;
             }
             else
             {
-                ITypeMetadata newType = new TypeMetadata(methodMetadata.ReturnType);
-                ReturnType = newType;
-                AlreadyMapped.Add(newType.SavedHash, newType);
+                ReturnType = new TypeMetadata(methodMetadata.ReturnType.SavedHash, methodMetadata.ReturnType.Name);
             }
 
             // Parameters
@@ -97,7 +76,6 @@ namespace Library.Model
             {
                 List<IParameterMetadata> parameters = new List<IParameterMetadata>();
                 foreach (IParameterMetadata parameter in methodMetadata.Parameters)
-                {
                     if (AlreadyMapped.TryGetValue(parameter.SavedHash, out item))
                     {
                         parameters.Add(item as IParameterMetadata);
@@ -108,26 +86,48 @@ namespace Library.Model
                         parameters.Add(newParameter);
                         AlreadyMapped.Add(newParameter.SavedHash, newParameter);
                     }
-                }
+
                 Parameters = parameters;
             }
 
             FillChildren(new StreamingContext());
         }
 
+        internal static IEnumerable<MethodMetadata> EmitMethods(IEnumerable<MethodBase> methods)
+        {
+            return from MethodBase _currentMethod in methods
+                where _currentMethod.GetVisible()
+                select new MethodMetadata(_currentMethod);
+        }
+
         private void FillChildren(StreamingContext context)
         {
-            List<IMetadata> elems = new List<IMetadata> { ReturnType };
+            List<IMetadata> elems = new List<IMetadata> {ReturnType};
             elems.AddRange(Parameters);
             Children = elems;
         }
 
+        #region properties
+
+        public string Name { get; }
+        public IEnumerable<ITypeMetadata> GenericArguments { get; private set; }
+        public ITypeMetadata ReturnType { get; private set; }
+        public bool IsExtension { get; }
+        public IEnumerable<IParameterMetadata> Parameters { get; }
+        public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; }
+        public IEnumerable<IMetadata> Children { get; private set; }
+        public int SavedHash { get; }
+
+        #endregion
+
         #region methods
+
         private static IEnumerable<ParameterMetadata> EmitParameters(IEnumerable<ParameterInfo> parms)
         {
             return from parm in parms
-                   select new ParameterMetadata(parm.Name, TypeMetadata.EmitReference(parm.ParameterType));
+                select new ParameterMetadata(parm.Name, TypeMetadata.EmitReference(parm.ParameterType));
         }
+
         private static TypeMetadata EmitReturnType(MethodBase method)
         {
             MethodInfo methodInfo = method as MethodInfo;
@@ -135,10 +135,12 @@ namespace Library.Model
                 return null;
             return TypeMetadata.EmitReference(methodInfo.ReturnType);
         }
+
         private static bool EmitExtension(MethodBase method)
         {
             return method.IsDefined(typeof(ExtensionAttribute), true);
         }
+
         private static Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> EmitModifiers(MethodBase method)
         {
             AccessLevelEnum _access = AccessLevelEnum.IsPrivate;
@@ -157,45 +159,76 @@ namespace Library.Model
             VirtualEnum _virtual = VirtualEnum.NotVirtual;
             if (method.IsVirtual)
                 _virtual = VirtualEnum.Virtual;
-            return new Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum>(_access, _abstract, _static, _virtual);
+            return new Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum>(_access, _abstract, _static,
+                _virtual);
         }
+
+        public void MapTypes()
+        {
+            if (ReturnType != null && string.IsNullOrEmpty(ReturnType.Name)
+                && AlreadyMapped.TryGetValue(ReturnType.SavedHash, out IMetadata item))
+            {
+                ReturnType = item as ITypeMetadata;
+            }
+            if (GenericArguments != null)
+            {
+                ICollection<ITypeMetadata> actualGenericArguments = new List<ITypeMetadata>();
+                foreach (ITypeMetadata type in GenericArguments)
+                {
+                    if (string.IsNullOrEmpty(type.Name) && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    {
+                        actualGenericArguments.Add(item as ITypeMetadata);
+                    }
+                    else
+                    {
+                        actualGenericArguments.Add(type);
+                    }
+                }
+                GenericArguments = actualGenericArguments;
+            }
+            foreach (IParameterMetadata parameter in Parameters)
+            {
+                parameter.MapTypes();
+            }
+        }
+
         #endregion
 
         #region object overrides
+
         public override int GetHashCode()
         {
             return SavedHash;
         }
+
         public override bool Equals(object obj)
         {
-            if (this.GetType() != obj.GetType())
+            if (GetType() != obj.GetType())
                 return false;
-            MethodMetadata mm = ((MethodMetadata)obj);
-            if (this.Name == mm.Name)
+            MethodMetadata mm = (MethodMetadata) obj;
+            if (Name == mm.Name)
             {
                 if (ReturnType != mm.ReturnType)
                     return false;
                 int counter = 0;
-                foreach (var el in this.Parameters)
+                foreach (IParameterMetadata el in Parameters)
                     if (mm.Parameters.Any(n => n.Equals(el)))
                         ++counter;
-                if (counter != this.Parameters.Count())
+                if (counter != Parameters.Count())
                     return false;
                 return true;
             }
-            else
-                return false;
+
+            return false;
         }
+
         public override string ToString()
         {
             StringBuilder paramsString = new StringBuilder("(");
             if (Parameters.Count() != 0)
             {
-
                 foreach (ParameterMetadata parameter in Parameters)
-                {
                     paramsString.Append($"{parameter.TypeMetadata.Name} {parameter.Name}, ");
-                }
                 paramsString.Remove(paramsString.Length - 2, 2); // remove last comma and space
                 paramsString.Append(")");
             }
@@ -203,14 +236,15 @@ namespace Library.Model
             {
                 paramsString.Append(")");
             }
-            return $"{(ReturnType != null ? "" + ReturnType.Name : "")} {Name}{paramsString.ToString()}";
+
+            return $"{(ReturnType != null ? "" + ReturnType.Name : "")} {Name}{paramsString}";
         }
 
         public string ModifiersString()
         {
-            return (Modifiers?.Item1.ToString()) + (Modifiers?.Item2.ToString())
-                + (Modifiers?.Item3.ToString() + Modifiers?.Item4.ToString());
+            return Modifiers?.Item1 + Modifiers?.Item2.ToString() + Modifiers?.Item3 + Modifiers?.Item4;
         }
+
         #endregion
     }
 }

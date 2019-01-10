@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Library.Model;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
+using Library.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LibraryTests.Data.Model
 {
@@ -11,10 +11,12 @@ namespace LibraryTests.Data.Model
     [TestClass]
     public class AssemblyMetadataTests
     {
-
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void AssemblyMetadataExceptionOnNull() => new AssemblyMetadata(default(Assembly));
+        public void AssemblyMetadataExceptionOnNull()
+        {
+            new AssemblyMetadata(default(Assembly));
+        }
 
         [TestMethod]
         public void CopyCtorTest()

@@ -1,8 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Library.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LibraryTests.Data.Model
 {
@@ -10,52 +10,61 @@ namespace LibraryTests.Data.Model
     [TestClass]
     public class ExtensionMethodsTests
     {
-        private class PrivateTestType {}
-
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void GetVisibleForTypeThrowsExceptionOnNull()
         {
-            ExtensionMethods.GetVisible((Type)null);
+            ((Type) null).GetVisible();
         }
+
         [TestMethod]
         public void GetVisibleForTypeReturnTrue()
         {
-            Assert.AreEqual(true, ExtensionMethods.GetVisible(typeof(System.Type)));
+            Assert.AreEqual(true, typeof(Type).GetVisible());
         }
+
         [TestMethod]
         public void GetVisibleForTypeReturnFalse()
         {
-            Assert.AreEqual(false, ExtensionMethods.GetVisible(typeof(PrivateTestType)));
+            Assert.AreEqual(false, typeof(PrivateTestType).GetVisible());
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void GetVisibleForMethodThrowsExceptionOnNull()
         {
-            ExtensionMethods.GetVisible((MethodBase)null);
+            ((MethodBase) null).GetVisible();
         }
+
         [TestMethod]
         public void GetVisibleForMethodReturnTrue()
         {
-            Assert.AreEqual(true, ExtensionMethods.GetVisible(typeof(System.Type).GetMethod("ToString")));
+            Assert.AreEqual(true, typeof(Type).GetMethod("ToString").GetVisible());
         }
+
         [TestMethod]
         public void GetVisibleForMethodReturnFalse()
         {
-            Assert.AreEqual(false, ExtensionMethods.GetVisible(typeof(TypeMetadata).GetMethod("GetTypeKind", 
-                BindingFlags.Static | BindingFlags.NonPublic)));
+            Assert.AreEqual(false, typeof(TypeMetadata).GetMethod("GetTypeKind",
+                BindingFlags.Static | BindingFlags.NonPublic).GetVisible());
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void GetNamespaceThrowsExceptionOnNull()
         {
             ExtensionMethods.GetNamespace(null);
         }
+
         [TestMethod]
         public void GetNamespaceResturnsExpectedValue()
         {
-            string nameSpaceName = ExtensionMethods.GetNamespace(typeof(Type));
+            string nameSpaceName = typeof(Type).GetNamespace();
             Assert.AreEqual(typeof(Type).GetType().GetNamespace(), nameSpaceName);
+        }
+
+        private class PrivateTestType
+        {
         }
     }
 }

@@ -1,15 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Library.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ModelContract;
 
 namespace Library.Data.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class ModelMapperTests
     {
         /*

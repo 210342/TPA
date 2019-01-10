@@ -6,25 +6,23 @@ namespace Library.Logic.ViewModel
     public class TypeItem : TreeViewItem
     {
         private readonly string _details;
-        public override string Details
-        {
-            get
-            {
-                return _details;
-            }
-        }
+
         public TypeItem(TypeMetadata source) : base(source)
         {
-            _details = $"Type: {source.Name}{(source.BaseType != null ? ", extends " + source.BaseType.Name : string.Empty)}";
+            _details =
+                $"Type: {source.Name}{(source.BaseType != null ? ", extends " + source.BaseType.Name : string.Empty)}";
             if (source.ImplementedInterfaces != null)
             {
                 _details += ",implements ";
-                foreach (var intf in source.ImplementedInterfaces)
+                foreach (ITypeMetadata intf in source.ImplementedInterfaces)
                     _details += $"{intf.Name}, ";
             }
+
             _details += $"\nType Kind: {source.TypeKind.ToString()}\n";
             _details += $"Modifiers: {source.ModifiersString()}.";
         }
+
+        public override string Details => _details;
 
         protected override TreeViewItem GetChildOfType(IMetadata metadata)
         {
@@ -41,6 +39,7 @@ namespace Library.Logic.ViewModel
                 case TypeMetadata type:
                     return new TypeItem(type);
             }
+
             return null;
         }
     }

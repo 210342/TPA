@@ -5,18 +5,12 @@ namespace Library.Logic.ViewModel
 {
     public class AttributeItem : TreeViewItem
     {
-        private string _details;
-        public override string Details
-        {
-            get
-            {
-                return _details;
-            }
-        }
         public AttributeItem(AttributeMetadata source) : base(source)
         {
-            _details = $"Attribute name: {source.Name}.";
+            Details = $"Attribute name: {source.Name}.";
         }
+
+        public override string Details { get; }
 
         protected override TreeViewItem GetChildOfType(IMetadata metadata)
         {
@@ -29,6 +23,7 @@ namespace Library.Logic.ViewModel
                 case TypeMetadata type:
                     return new TypeItem(type);
             }
+
             return null;
         }
     }

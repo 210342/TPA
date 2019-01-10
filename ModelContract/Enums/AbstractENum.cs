@@ -1,8 +1,8 @@
-﻿
-namespace ModelContract
+﻿namespace ModelContract
 {
     public enum AbstractEnum
     {
-        NotAbstract, Abstract
+        NotAbstract,
+        Abstract
     }
 }

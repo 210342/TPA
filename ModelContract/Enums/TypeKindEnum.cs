@@ -2,6 +2,10 @@
 {
     public enum TypeKindEnum
     {
-        Reference, EnumType, StructType, InterfaceType, ClassType
+        Reference,
+        EnumType,
+        StructType,
+        InterfaceType,
+        ClassType
     }
 }

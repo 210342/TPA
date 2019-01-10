@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using Library.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LibraryTests.Data.Model
 {

@@ -1,6 +1,6 @@
-﻿using Library.Model;
-using System;
+﻿using System;
 using System.Reflection;
+using Library.Model;
 
 namespace Library.Data
 {
@@ -14,13 +14,14 @@ namespace Library.Data
             Assembly assembly = Assembly.UnsafeLoadFrom(assemblyFile);
             m_AssemblyModel = new AssemblyMetadata(assembly);
         }
+
         public Reflector(Assembly assembly)
         {
             if (assembly == null)
                 throw new ArgumentNullException("Assembly path can't be null or empty");
             m_AssemblyModel = new AssemblyMetadata(assembly);
         }
-        internal AssemblyMetadata m_AssemblyModel { get; private set; }
 
+        internal AssemblyMetadata m_AssemblyModel { get; }
     }
 }

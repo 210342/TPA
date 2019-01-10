@@ -1,28 +1,27 @@
-﻿using Library.Logic.MEFProviders.Exceptions;
-using System;
+﻿using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using Library.Logic.MEFProviders.Exceptions;
 using Tracing;
 
 namespace Library.Logic.MEFProviders
 {
     public class TracingProvider
     {
-        [Import(typeof(ITracing))]
-        private ITracing _tracer = null;
         private CompositionContainer _container;
 
-        public DirectoryCatalog DirectoryCatalog { get; set; }
+        [Import(typeof(ITracing))] private ITracing _tracer;
 
         public TracingProvider()
         {
-
         }
 
         public TracingProvider(string assemblyPath)
         {
             DirectoryCatalog = new DirectoryCatalog(assemblyPath);
         }
+
+        public DirectoryCatalog DirectoryCatalog { get; set; }
 
         public ITracing ProvideTracer()
         {
@@ -41,16 +40,13 @@ namespace Library.Logic.MEFProviders
             }
             catch (Exception ex)
             {
-                throw new MEFLoaderException($"Couldn't compose application, reason:{Environment.NewLine}{ex.GetType()}{Environment.NewLine}{ex.Message}");
+                throw new MEFLoaderException(
+                    $"Couldn't compose application, reason:{Environment.NewLine}{ex.GetType()}{Environment.NewLine}{ex.Message}");
             }
+
             if (_tracer is null)
-            {
                 throw new MEFLoaderException($"Could not load {typeof(ITracing)}");
-            }
-            else
-            {
-                return _tracer;
-            }
+            return _tracer;
         }
     }
 }

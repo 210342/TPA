@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ModelContract
 {
@@ -13,5 +10,7 @@ namespace ModelContract
         bool IsExtension { get; }
         IEnumerable<IParameterMetadata> Parameters { get; }
         Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; }
+
+        void MapTypes();
     }
 }

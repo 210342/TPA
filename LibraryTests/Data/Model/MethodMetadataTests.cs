@@ -1,10 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 using Library.Model;
-using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LibraryTests.Data.Model
 {
@@ -12,12 +12,6 @@ namespace LibraryTests.Data.Model
     [TestClass]
     public class MethodMetadataTests
     {
-        protected class TestClass
-        {
-            public void Test1() { }
-            public void Test2() { }
-        }
-
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void EmitMethodsThrowsOnNull()
@@ -28,9 +22,9 @@ namespace LibraryTests.Data.Model
         [TestMethod]
         public void EmitMethodsReturnsValue()
         {
-            List < MethodBase > methods = 
+            List<MethodBase> methods =
                 new List<MethodBase>(typeof(TestClass).GetMethods());
-            List<MethodMetadata> methodsMeta = 
+            List<MethodMetadata> methodsMeta =
                 new List<MethodMetadata>(MethodMetadata.EmitMethods(methods));
             Assert.AreEqual(methods.Count, methodsMeta.Count);
         }
@@ -39,10 +33,10 @@ namespace LibraryTests.Data.Model
         public void CopyCtorTest()
         {
             ConstructorInfo ctor = typeof(MethodMetadata).GetConstructor(
-                 BindingFlags.Instance | BindingFlags.NonPublic,
-                 null, new Type[] { typeof(MethodBase) }, null);
+                BindingFlags.Instance | BindingFlags.NonPublic,
+                null, new[] {typeof(MethodBase)}, null);
 
-            MethodMetadata tmp = (MethodMetadata)ctor.Invoke(new object[] { typeof(TestClass).GetMethods().First()});
+            MethodMetadata tmp = (MethodMetadata) ctor.Invoke(new object[] {typeof(TestClass).GetMethods().First()});
             MethodMetadata sut = new MethodMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
@@ -51,6 +45,17 @@ namespace LibraryTests.Data.Model
             Assert.IsTrue(tmp.Modifiers.Equals(sut.Modifiers));
             Assert.IsFalse(sut.IsExtension);
             Assert.IsTrue(tmp.ReturnType.Name.Equals(sut.ReturnType.Name));
+        }
+
+        protected class TestClass
+        {
+            public void Test1()
+            {
+            }
+
+            public void Test2()
+            {
+            }
         }
     }
 }

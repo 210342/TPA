@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VM = Library.Logic.ViewModel;
+using System.Reflection;
 using Library.Model;
-using Library.Logic.ViewModel;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContract;
+using VM = Library.Logic.ViewModel;
 
 namespace LibraryTests.Logic.ViewModel.Tests
 {
@@ -12,26 +12,14 @@ namespace LibraryTests.Logic.ViewModel.Tests
     [TestClass]
     public class ViewModelTests
     {
-        class TestClass : ISourceProvider
-        {
-            public bool GetAccess()
-            {
-                return true;
-            }
+        private readonly VM.ViewModel _vm = new VM.ViewModel(false);
 
-            public string GetFilePath()
-            {
-                return System.Reflection.Assembly.GetAssembly(this.GetType()).Location;
-            }
-        }
-
-        readonly VM.ViewModel _vm = new VM.ViewModel(false);
         [TestMethod]
         public void ReloadAssemblyChangesAssembly()
         {
             VM.ViewModel vm = new VM.ViewModel(false);
             IMetadata loadedAssemblyRepr = vm.LoadedAssemblyRepresentation;
-            vm.LoadedAssembly = this.GetType().Assembly.Location;
+            vm.LoadedAssembly = GetType().Assembly.Location;
             vm.ReloadAssemblyCommand.Execute(null);
             IMetadata reloadedAssemblyRepr = vm.LoadedAssemblyRepresentation;
             Assert.AreNotEqual(loadedAssemblyRepr, reloadedAssemblyRepr);
@@ -53,7 +41,7 @@ namespace LibraryTests.Logic.ViewModel.Tests
         {
             VM.ViewModel vm = new VM.ViewModel(false)
             {
-                ObjectSelected = new TypeItem(new TypeMetadata(typeof(Type)))
+                ObjectSelected = new VM.TypeItem(new TypeMetadata(typeof(Type)))
             };
             vm.ShowCurrentObject.Execute(null);
             Assert.AreEqual(vm.ObjectSelected, vm.ObjectToDisplay);
@@ -76,6 +64,19 @@ namespace LibraryTests.Logic.ViewModel.Tests
             VM.ViewModel vm = new VM.ViewModel(true);
             vm.EndInit();
             Assert.IsNotNull(vm.Tracer);
+        }
+
+        private class TestClass : VM.ISourceProvider
+        {
+            public bool GetAccess()
+            {
+                return true;
+            }
+
+            public string GetFilePath()
+            {
+                return Assembly.GetAssembly(GetType()).Location;
+            }
         }
     }
 }

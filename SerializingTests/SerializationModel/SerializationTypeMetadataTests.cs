@@ -1,32 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ModelContract;
-using SerializationModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ModelContract;
 
 namespace SerializationModel.Tests
 {
     internal class TypeTest : ITypeMetadata
     {
-        public string NamespaceName { get; }
-        public ITypeMetadata BaseType { get; }
-        public IEnumerable<ITypeMetadata> GenericArguments { get; }
-        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; }
-        public TypeKindEnum TypeKind { get; }
-        public IEnumerable<IAttributeMetadata> Attributes { get; }
-        public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; }
-        public IEnumerable<ITypeMetadata> NestedTypes { get; }
-        public IEnumerable<IPropertyMetadata> Properties { get; }
-        public ITypeMetadata DeclaringType { get; }
-        public IEnumerable<IMethodMetadata> Methods { get; }
-        public IEnumerable<IMethodMetadata> Constructors { get; }
-        public string Name { get; }
-        public IEnumerable<IMetadata> Children { get; }
-        public int SavedHash { get; }
-
         internal TypeTest()
         {
             Name = "name";
@@ -42,11 +24,37 @@ namespace SerializationModel.Tests
             Name = name;
             SavedHash = 1;
         }
+
+        public bool Mapped { get; }
+        public string NamespaceName { get; internal set; }
+        public ITypeMetadata BaseType { get; internal set; }
+        public IEnumerable<ITypeMetadata> GenericArguments { get; internal set; }
+        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; internal set; }
+        public TypeKindEnum TypeKind { get; internal set; }
+        public IEnumerable<IAttributeMetadata> Attributes { get; internal set; }
+        public IEnumerable<ITypeMetadata> ImplementedInterfaces { get; internal set; }
+        public IEnumerable<ITypeMetadata> NestedTypes { get; internal set; }
+        public IEnumerable<IPropertyMetadata> Properties { get; internal set; }
+        public ITypeMetadata DeclaringType { get; internal set; }
+        public IEnumerable<IMethodMetadata> Methods { get; internal set; }
+        public IEnumerable<IMethodMetadata> Constructors { get; internal set; }
+        public string Name { get; internal set; }
+        public IEnumerable<IMetadata> Children { get; }
+        public int SavedHash { get; internal set; }
+
+        public void MapTypes() { }
     }
 
-    [TestClass()]
+    [TestClass]
     public class SerializationTypeMetadataTests
     {
+        [TestInitialize]
+        public void NullifyDictionary()
+        {
+            FieldInfo field = typeof(AbstractMapper).GetField("<AlreadyMapped>k__BackingField",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            field.SetValue(null, new Dictionary<int, IMetadata>());
+        }
         [TestMethod]
         public void CopyCtorTest()
         {

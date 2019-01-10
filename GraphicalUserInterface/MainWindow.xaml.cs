@@ -1,10 +1,10 @@
-﻿using Library.Logic.ViewModel;
-using System.Windows;
+﻿using System.Windows;
+using Library.Logic.ViewModel;
 
 namespace GraphicalUserInterface
 {
     /// <summary>
-    /// Logika interakcji dla klasy MainWindow.xaml
+    ///     Logika interakcji dla klasy MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -16,10 +16,10 @@ namespace GraphicalUserInterface
         public override void EndInit()
         {
             base.EndInit();
-            ((ViewModel)DataContext).OpenFileSourceProvider = new OpenFileDialogProvider();
-            ((ViewModel)DataContext).SaveFileSourceProvider = new SaveFileDialogProvider();
-            ((ViewModel)DataContext).ErrorMessageBox = new ErrorMessageBox();
-            ((ViewModel)DataContext).EndInit();
+            ((ViewModel) DataContext).OpenFileSourceProvider = new OpenFileDialogProvider();
+            ((ViewModel) DataContext).SaveFileSourceProvider = new SaveFileDialogProvider();
+            ((ViewModel) DataContext).ErrorMessageBox = new ErrorMessageBox();
+            ((ViewModel) DataContext).EndInit();
         }
     }
 }
