@@ -46,6 +46,8 @@
       <HintPath>..\packages\MSTest.TestFramework.1.3.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -78,6 +80,10 @@
     <ProjectReference Include="..\ModelContract\ModelContract.csproj">
       <Project>{3A99A3EA-C964-4CB2-8747-8F9A10689CC7}</Project>
       <Name>ModelContract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Persistance\Persistence.csproj">
+      <Project>{82468f99-b386-4419-8db0-fca10b12699e}</Project>
+      <Name>Persistence</Name>
     </ProjectReference>
     <ProjectReference Include="..\Serializing\Serializing.csproj">
       <Project>{D3F316A5-6F7D-42EC-B332-E6451EBCF704}</Project>

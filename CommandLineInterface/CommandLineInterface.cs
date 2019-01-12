@@ -72,6 +72,7 @@ namespace CommandLineInterface
                                     Console.WriteLine("Please provide path to a file where model is saved:");
                                     string path = Console.ReadLine();
                                     dataContext.OpenFileSourceProvider = new TextFileSourceProvider(path);
+
                                     dataContext.LoadModel.Execute(null);
                                     try
                                     {
@@ -136,6 +137,7 @@ namespace CommandLineInterface
                     }
                 }
             } while (!Quit(selection));
+            dataContext.AppClosing.Execute(null);
         }
 
         private bool Quit(string input)

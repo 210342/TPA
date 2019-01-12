@@ -10,7 +10,10 @@ namespace Library.Logic.MEFProviders
     {
         private CompositionContainer _container;
 
-        [Import(typeof(ITracing))] private ITracing _tracer;
+        #pragma warning disable 0649
+        [Import(typeof(ITracing))]
+        private ITracing _tracer;
+        #pragma warning restore 0649
 
         public TracingProvider()
         {

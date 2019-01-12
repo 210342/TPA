@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -7,6 +8,7 @@ using ModelContract;
 namespace SerializationModel.Tests
 {
     [TestClass]
+    [ExcludeFromCodeCoverage]
     public class SerializationAssemblyMetadataTests
     {
         [TestInitialize]
@@ -54,6 +56,7 @@ namespace SerializationModel.Tests
         }
     }
 
+    [ExcludeFromCodeCoverage]
     internal class AssemblyTest : IAssemblyMetadata
     {
         internal AssemblyTest()

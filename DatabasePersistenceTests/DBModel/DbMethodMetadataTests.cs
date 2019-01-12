@@ -1,21 +1,24 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using DatabasePersistence.DBModel;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text;
+using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 using ModelContract;
+using System.Reflection;
 
-namespace SerializationModel.Tests
+namespace DatabasePersistence.DBModel.Tests
 {
-    [TestClass]
     [ExcludeFromCodeCoverage]
-    public class SerializationMethodMetadataTests
+    [TestClass()]
+    public class DbMethodMetadataTests
     {
         [TestInitialize]
         public void NullifyDictionary()
         {
-            FieldInfo field = typeof(AbstractMapper).GetField("<AlreadyMapped>k__BackingField", 
+            FieldInfo field = typeof(AbstractMapper).GetField("<AlreadyMapped>k__BackingField",
                 BindingFlags.Static | BindingFlags.NonPublic);
             field.SetValue(null, new Dictionary<int, IMetadata>());
         }
@@ -24,7 +27,7 @@ namespace SerializationModel.Tests
         public void CopyCtorTest()
         {
             MethodTest tmp = new MethodTest();
-            SerializationMethodMetadata sut = new SerializationMethodMetadata(tmp);
+            DbMethodMetadata sut = new DbMethodMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
             Assert.AreEqual(tmp.Parameters.Count(), sut.Parameters.Count());
@@ -32,6 +35,12 @@ namespace SerializationModel.Tests
             Assert.IsNull(sut.Modifiers);
             Assert.IsFalse(sut.IsExtension);
             Assert.IsTrue(tmp.ReturnType.Name.Equals(sut.ReturnType.Name));
+        }
+
+        [TestMethod()]
+        public void DbMethodMetadataEmptyCtorTest()
+        {
+            Assert.IsNotNull(new DbMethodMetadata());
         }
     }
 

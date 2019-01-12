@@ -36,9 +36,7 @@ namespace DatabasePersistence.DBModel
             }
         }
 
-        public DbAssemblyMetadata()
-        {
-        }
+        public DbAssemblyMetadata() { }
 
         public virtual ICollection<DbNamespaceMetadata> NamespacesList { get; set; }
 

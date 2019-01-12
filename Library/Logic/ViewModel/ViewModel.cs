@@ -92,9 +92,26 @@ namespace Library.Logic.ViewModel
                 Tracer.LogLoadingModel(LoadedAssembly);
                 Tracer.Flush();
             }
+            try
+            {
+                Reflector reflector = new Reflector(LoadedAssembly);
+                LoadedAssemblyRepresentation = reflector.AssemblyModel;
 
-            Reflector reflector = new Reflector(LoadedAssembly);
-            LoadedAssemblyRepresentation = reflector.m_AssemblyModel;
+                if (IsTracingEnabled)
+                {
+                    Tracer.LogModelLoaded(LoadedAssembly);
+                    Tracer.Flush();
+                }
+            }
+            catch(BadImageFormatException ex)
+            {
+                if(IsTracingEnabled)
+                {
+                    Tracer.LogFailure($"Failed when reading assembly {ex.Message}");
+                    Tracer.Flush();
+                }
+                ErrorMessageBox.ShowMessage("Library reading error", ex.Message);
+            }
         }
 
         private void ReloadAssembly()
@@ -107,12 +124,6 @@ namespace Library.Logic.ViewModel
                 ObjectsList.Add(item);
                 SaveModel.RaiseCanExecuteChanged();
                 ObjectSelected = item;
-            }
-
-            if (IsTracingEnabled)
-            {
-                Tracer.LogModelLoaded(LoadedAssembly);
-                Tracer.Flush();
             }
         }
 
@@ -139,11 +150,23 @@ namespace Library.Logic.ViewModel
                     Persister.Target = filePathProvider.GetFilePath();
                     Task.Run(() =>
                     {
+                        if (IsTracingEnabled)
+                        {
+                            Tracer.LogSavingModel(Persister.Target);
+                            Tracer.Flush();
+                        }
+
                         IAssemblyMetadata graph = new ModelMapper().Map(
                             root: ObjectsList.First().ModelObject as IAssemblyMetadata,
                             model: Persister.GetType().Assembly
                         );
                         Persister.Save(graph);
+
+                        if (IsTracingEnabled)
+                        {
+                            Tracer.LogModelSaved(Persister.Target);
+                            Tracer.Flush();
+                        }
                     });
                 }
                 catch (IOException ex)
@@ -170,6 +193,12 @@ namespace Library.Logic.ViewModel
                     Persister.Target = filePathProvider.GetFilePath();
                     Dispatcher.CurrentDispatcher.BeginInvoke((Action) delegate
                     {
+                        if (IsTracingEnabled)
+                        {
+                            Tracer.LogLoadingModel(Persister.Target);
+                            Tracer.Flush();
+                        }
+
                         object result = Persister.Load();
                         if (result is IAssemblyMetadata)
                         {
@@ -181,6 +210,12 @@ namespace Library.Logic.ViewModel
                             ObjectsList.Add(new AssemblyItem(graph as AssemblyMetadata));
                             LoadedAssembly = "Model deserialized";
                             SaveModel.RaiseCanExecuteChanged();
+
+                            if (IsTracingEnabled)
+                            {
+                                Tracer.LogModelLoaded(Persister.Target);
+                                Tracer.Flush();
+                            }
                         }
                     });
                 }

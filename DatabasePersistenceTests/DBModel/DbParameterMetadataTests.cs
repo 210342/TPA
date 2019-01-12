@@ -1,14 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using DatabasePersistence.DBModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContract;
+using System.Reflection;
 
-namespace SerializationModel.Tests
+namespace DatabasePersistence.DBModel.Tests
 {
-    [TestClass]
     [ExcludeFromCodeCoverage]
-    public class SerializationPropertyMetadataTests
+    [TestClass()]
+    public class DbParameterMetadataTests
     {
         [TestInitialize]
         public void NullifyDictionary()
@@ -21,25 +26,31 @@ namespace SerializationModel.Tests
         [TestMethod]
         public void CopyCtorTest()
         {
-            PropertyTest tmp = new PropertyTest();
-            SerializationPropertyMetadata sut = new SerializationPropertyMetadata(tmp);
+            ParameterTest tmp = new ParameterTest();
+            DbParameterMetadata sut = new DbParameterMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
-            Assert.IsTrue(tmp.MyType.Name.Equals(sut.MyType.Name));
+            Assert.IsTrue(tmp.TypeMetadata.Name.Equals(sut.TypeMetadata.Name));
+        }
+
+        [TestMethod()]
+        public void DbParameterMetadataEmptyCtorTest()
+        {
+            Assert.IsNotNull(new DbParameterMetadata());
         }
     }
 
     [ExcludeFromCodeCoverage]
-    internal class PropertyTest : IPropertyMetadata
+    internal class ParameterTest : IParameterMetadata
     {
-        internal PropertyTest()
+        internal ParameterTest()
         {
             Name = "name";
             SavedHash = 1;
-            MyType = new TypeTest("type");
+            TypeMetadata = new TypeTest("type");
         }
 
-        public ITypeMetadata MyType { get; internal set; }
+        public ITypeMetadata TypeMetadata { get; internal set; }
         public string Name { get; internal set; }
         public IEnumerable<IMetadata> Children { get; }
         public int SavedHash { get; internal set; }

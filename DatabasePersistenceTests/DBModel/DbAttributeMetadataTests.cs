@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using DatabasePersistence.DBModel;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text;
+using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 using ModelContract;
+using System.Reflection;
 
-namespace SerializationModel.Tests
+namespace DatabasePersistence.DBModel.Tests
 {
-    [TestClass]
     [ExcludeFromCodeCoverage]
-    public class SerializationAttributeMetadataTests
+    [TestClass()]
+    public class DbAttributeMetadataTests
     {
         [TestInitialize]
         public void NullifyDictionary()
@@ -18,13 +22,20 @@ namespace SerializationModel.Tests
                 BindingFlags.Static | BindingFlags.NonPublic);
             field.SetValue(null, new Dictionary<int, IMetadata>());
         }
+
         [TestMethod]
         public void CopyCtorTest()
         {
             AttributeTest tmp = new AttributeTest();
-            SerializationAttributeMetadata sut = new SerializationAttributeMetadata(tmp);
+            DbAttributeMetadata sut = new DbAttributeMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
+        }
+
+        [TestMethod]
+        public void DbAttributeMetadataEmptyCtorTest()
+        {
+            Assert.IsNotNull(new DbAttributeMetadata());
         }
     }
 

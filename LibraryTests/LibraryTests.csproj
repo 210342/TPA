@@ -102,6 +102,12 @@
     <Content Include="FileSemanticTracing.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging.TextFile.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Serializing.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

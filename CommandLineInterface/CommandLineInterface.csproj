@@ -61,8 +61,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FileSemanticTracing.dll" />
-    <Content Include="Serializing.dll" />
+    <Content Include="FileSemanticTracing.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging.TextFile.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Serializing.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

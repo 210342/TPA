@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DatabasePersistence.DBModel
 {
     [TestClass]
+    [ExcludeFromCodeCoverage]
     public class DatabasePersistenceTests
     {
         private DatabasePersister persister;

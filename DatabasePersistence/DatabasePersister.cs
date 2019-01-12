@@ -47,7 +47,7 @@ namespace DatabasePersistence
         public void Save(object obj)
         {
             if (!(obj is IAssemblyMetadata)) throw new InvalidOperationException("Can't assign from given type.");
-            DbAssemblyMetadata root = obj as DbAssemblyMetadata;
+            DbAssemblyMetadata root = obj as DbAssemblyMetadata ?? new DbAssemblyMetadata(obj as IAssemblyMetadata);
             context.Assemblies.Add(root);
             context.SaveChanges();
         }

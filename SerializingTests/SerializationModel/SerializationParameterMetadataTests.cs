@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContract;
@@ -6,6 +7,7 @@ using ModelContract;
 namespace SerializationModel.Tests
 {
     [TestClass]
+    [ExcludeFromCodeCoverage]
     public class SerializationParameterMetadataTests
     {
         [TestInitialize]
@@ -15,6 +17,7 @@ namespace SerializationModel.Tests
                 BindingFlags.Static | BindingFlags.NonPublic);
             field.SetValue(null, new Dictionary<int, IMetadata>());
         }
+
         [TestMethod]
         public void CopyCtorTest()
         {
@@ -26,6 +29,7 @@ namespace SerializationModel.Tests
         }
     }
 
+    [ExcludeFromCodeCoverage]
     internal class ParameterTest : IParameterMetadata
     {
         internal ParameterTest()

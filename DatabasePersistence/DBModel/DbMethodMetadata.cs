@@ -72,10 +72,7 @@ namespace DatabasePersistence.DBModel
             FillChildren();
         }
 
-        public DbMethodMetadata()
-        {
-            SavedHash = 0;
-        }
+        public DbMethodMetadata() { }
 
         private void FillChildren()
         {

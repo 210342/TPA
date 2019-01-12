@@ -10,8 +10,10 @@ namespace Library.Logic.MEFProviders
     {
         private CompositionContainer _container;
 
-        [Import(typeof(IPersister))] 
+        #pragma warning disable 0649
+        [Import(typeof(IPersister))]
         private IPersister _persister;
+        #pragma warning restore 0649
 
         public PersistanceProvider()
         {

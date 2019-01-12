@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Transactions;
@@ -7,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace DatabaseSemanticTracing.Tests
 {
     [TestClass]
+    [ExcludeFromCodeCoverage]
     public class DatabaseSemanticTracingTests
     {
         private DatabaseSemanticTracing _sut;
@@ -23,10 +25,19 @@ namespace DatabaseSemanticTracing.Tests
             _sut.Dispose();
         }
 
-
         [TestMethod]
         public void DatabaseSemanticTracingTest()
         {
+            Assert.IsNotNull(_sut);
+            _sut.Dispose();
+        }
+
+        [TestMethod]
+        public void DatabaseSemanticTracingDisposeTest()
+        {
+            _sut.GetType().GetField("_listener", BindingFlags.NonPublic | BindingFlags.Instance)
+                .SetValue(_sut, null);
+            _sut.Dispose();
             Assert.IsNotNull(_sut);
         }
 

@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SemanticTracing.Tests
 {
     [TestClass]
+    [ExcludeFromCodeCoverage]
     public class FileSemanticTracingTests
     {
         private FileSemanticTracing _systemUnderTest;

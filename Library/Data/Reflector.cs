@@ -11,17 +11,17 @@ namespace Library.Data
             if (string.IsNullOrEmpty(assemblyFile))
                 throw new ArgumentNullException("Assembly path can't be null or empty");
 
-            Assembly assembly = Assembly.UnsafeLoadFrom(assemblyFile);
-            m_AssemblyModel = new AssemblyMetadata(assembly);
+            Assembly assembly = Assembly.ReflectionOnlyLoadFrom(assemblyFile);
+            AssemblyModel = new AssemblyMetadata(assembly);
         }
 
         public Reflector(Assembly assembly)
         {
             if (assembly == null)
                 throw new ArgumentNullException("Assembly path can't be null or empty");
-            m_AssemblyModel = new AssemblyMetadata(assembly);
+            AssemblyModel = new AssemblyMetadata(assembly);
         }
 
-        internal AssemblyMetadata m_AssemblyModel { get; }
+        internal AssemblyMetadata AssemblyModel { get; private set; }
     }
 }

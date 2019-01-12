@@ -1,13 +1,43 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using DatabasePersistence.DBModel;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text;
+using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 using ModelContract;
+using System.Reflection;
 
-namespace SerializationModel.Tests
+namespace DatabasePersistence.DBModel.Tests
 {
+    [ExcludeFromCodeCoverage]
+    [TestClass()]
+    public class DbTypeMetadataTests
+    {
+        [TestInitialize]
+        public void NullifyDictionary()
+        {
+            FieldInfo field = typeof(AbstractMapper).GetField("<AlreadyMapped>k__BackingField",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            field.SetValue(null, new Dictionary<int, IMetadata>());
+        }
+
+        [TestMethod]
+        public void CopyCtorTest()
+        {
+            TypeTest tmp = new TypeTest();
+            DbTypeMetadata sut = new DbTypeMetadata(tmp);
+            Assert.IsTrue(tmp.Name.Equals(sut.Name));
+            Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
+            Assert.AreEqual(tmp.ImplementedInterfaces.Count(), sut.ImplementedInterfaces.Count());
+            Assert.AreEqual(tmp.Properties.Count(), sut.Properties.Count());
+            Assert.IsNull(sut.GenericArguments);
+            Assert.IsNull(sut.Modifiers);
+            Assert.AreEqual(tmp.NamespaceName, sut.NamespaceName);
+        }
+    }
+
     [ExcludeFromCodeCoverage]
     internal class TypeTest : ITypeMetadata
     {
@@ -47,29 +77,4 @@ namespace SerializationModel.Tests
         public void MapTypes() { }
     }
 
-    [TestClass]
-    [ExcludeFromCodeCoverage]
-    public class SerializationTypeMetadataTests
-    {
-        [TestInitialize]
-        public void NullifyDictionary()
-        {
-            FieldInfo field = typeof(AbstractMapper).GetField("<AlreadyMapped>k__BackingField",
-                BindingFlags.Static | BindingFlags.NonPublic);
-            field.SetValue(null, new Dictionary<int, IMetadata>());
-        }
-        [TestMethod]
-        public void CopyCtorTest()
-        {
-            TypeTest tmp = new TypeTest();
-            SerializationTypeMetadata sut = new SerializationTypeMetadata(tmp);
-            Assert.IsTrue(tmp.Name.Equals(sut.Name));
-            Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
-            Assert.AreEqual(tmp.ImplementedInterfaces.Count(), sut.ImplementedInterfaces.Count());
-            Assert.AreEqual(tmp.Properties.Count(), sut.Properties.Count());
-            Assert.IsNull(sut.GenericArguments);
-            Assert.IsNull(sut.Modifiers);
-            Assert.AreEqual(tmp.NamespaceName, sut.NamespaceName);
-        }
-    }
 }

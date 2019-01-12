@@ -16,8 +16,8 @@ namespace Serializing
         private string _target;
 
         public Stream SerializationStream { get; set; }
-        private Type NodeType { get; }
-        private IEnumerable<Type> KnownTypes { get; }
+        private Type NodeType { get; set; }
+        private IEnumerable<Type> KnownTypes { get; set; }
 
         public string Target
         {
@@ -49,8 +49,6 @@ namespace Serializing
                 false,
                 true,
                 null);
-            if (Target != null)
-                SerializationStream = new FileStream(Target, FileMode.OpenOrCreate, FileAccess.ReadWrite);
         }
 
         public XmlModelSerializer(Stream inStream) : this()
