@@ -74,15 +74,21 @@ namespace Serializing
         public object Load()
         {
             object read = null;
-            if (SerializationStream != null)
+            try
             {
-                SerializationStream.Position = 0;
-                using (XmlReader reader = XmlReader.Create(SerializationStream))
+                if (SerializationStream != null)
                 {
-                    read = dataContractSerializer.ReadObject(reader);
+                    SerializationStream.Position = 0;
+                    using (XmlReader reader = XmlReader.Create(SerializationStream))
+                    {
+                        read = dataContractSerializer.ReadObject(reader);
+                    }
                 }
             }
-
+            catch (SerializationException)
+            {
+                return null;
+            }
             return read;
         }
 

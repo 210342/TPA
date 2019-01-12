@@ -16,8 +16,7 @@ namespace DatabasePersistence
 
         public DatabasePersister()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DbSource"].ConnectionString;
-            Target = connectionString;
+            Target = ConfigurationManager.ConnectionStrings["DbSource"].ConnectionString;
         }
 
         public string Target

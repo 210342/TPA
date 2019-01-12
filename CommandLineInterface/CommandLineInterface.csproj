@@ -41,7 +41,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -61,9 +60,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="EntityFramework.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EntityFramework.SqlServer.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="FileSemanticTracing.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Database.dll" />
     <Content Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

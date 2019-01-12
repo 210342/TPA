@@ -19,15 +19,22 @@ namespace CommandLineInterface
 
         public bool GetAccess()
         {
-            bool value = !File.Exists(path);
-            if(!value)
+            try
             {
                 FileStream stream = File.Open(path, FileMode.Open);
-                value = stream != null;
                 stream?.Close();
                 stream?.Dispose();
+                return true;
             }
-            return value;
+            catch (IOException)
+            {
+                return false;
+            }
+            catch (ArgumentNullException)
+            {
+                // if path is null, return true and ask for a new path
+                return true;
+            }
         }
 
         public string GetFilePath()

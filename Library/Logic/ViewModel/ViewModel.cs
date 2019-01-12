@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -137,7 +138,7 @@ namespace Library.Logic.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void Save(ISourceProvider filePathProvider)
+        private async void Save(ISourceProvider filePathProvider)
         {
             if (Persister.FileSystemDependency == FileSystemDependency.Independent)
                 filePathProvider = new NullSourceProvider();
@@ -148,7 +149,7 @@ namespace Library.Logic.ViewModel
                 try
                 {
                     Persister.Target = filePathProvider.GetFilePath();
-                    Task.Run(() =>
+                    await Task.Run(() =>
                     {
                         if (IsTracingEnabled)
                         {
@@ -161,6 +162,7 @@ namespace Library.Logic.ViewModel
                             model: Persister.GetType().Assembly
                         );
                         Persister.Save(graph);
+                        Persister.Dispose();
 
                         if (IsTracingEnabled)
                         {
@@ -188,36 +190,19 @@ namespace Library.Logic.ViewModel
             if (filePathProvider == null)
                 throw new ArgumentNullException("SourceProvider can't be null.");
             if (filePathProvider.GetAccess())
+            {
                 try
                 {
                     Persister.Target = filePathProvider.GetFilePath();
-                    Dispatcher.CurrentDispatcher.BeginInvoke((Action) delegate
+
+                    if (SynchronizationContext.Current is null)
                     {
-                        if (IsTracingEnabled)
-                        {
-                            Tracer.LogLoadingModel(Persister.Target);
-                            Tracer.Flush();
-                        }
-
-                        object result = Persister.Load();
-                        if (result is IAssemblyMetadata)
-                        {
-                            IAssemblyMetadata graph = new ModelMapper().Map(
-                                root: result as IAssemblyMetadata,
-                                model: typeof(AssemblyMetadata).Assembly
-                            );
-                            ObjectsList.Clear();
-                            ObjectsList.Add(new AssemblyItem(graph as AssemblyMetadata));
-                            LoadedAssembly = "Model deserialized";
-                            SaveModel.RaiseCanExecuteChanged();
-
-                            if (IsTracingEnabled)
-                            {
-                                Tracer.LogModelLoaded(Persister.Target);
-                                Tracer.Flush();
-                            }
-                        }
-                    });
+                        LoadRootAssembly();
+                    }
+                    else
+                    {
+                        Dispatcher.CurrentDispatcher.BeginInvoke((Action)LoadRootAssembly);
+                    }
                 }
                 catch (IOException ex)
                 {
@@ -228,6 +213,40 @@ namespace Library.Logic.ViewModel
                         Tracer.Flush();
                     }
                 }
+            }
+            else
+            {
+                ErrorMessageBox.ShowMessage("File in use", "File you tried to open is currently in use by another program");
+            }
+        }
+
+        private void LoadRootAssembly()
+        {
+            if (IsTracingEnabled)
+            {
+                Tracer.LogLoadingModel(Persister.Target);
+                Tracer.Flush();
+            }
+
+            object result = Persister.Load();
+            if (result is IAssemblyMetadata)
+            {
+                IAssemblyMetadata graph = new ModelMapper().Map(
+                    root: result as IAssemblyMetadata,
+                    model: typeof(AssemblyMetadata).Assembly
+                );
+                ObjectsList.Clear();
+                ObjectsList.Add(new AssemblyItem(graph as AssemblyMetadata));
+                LoadedAssembly = "Model deserialized";
+                SaveModel.RaiseCanExecuteChanged();
+                Persister.Dispose();
+
+                if (IsTracingEnabled)
+                {
+                    Tracer.LogModelLoaded(Persister.Target);
+                    Tracer.Flush();
+                }
+            }
         }
 
         private void OpenFile(ISourceProvider sourceProvider)
@@ -287,6 +306,10 @@ namespace Library.Logic.ViewModel
         }
 
         public RelayCommand SaveModel { get; }
+        /// <summary>
+        /// This command checks whether SynchronizationContext is null;
+        /// if it is, it runs synchronously
+        /// </summary>
         public RelayCommand LoadModel { get; }
         public ISourceProvider OpenFileSourceProvider { get; set; }
         public ISourceProvider SaveFileSourceProvider { get; set; }

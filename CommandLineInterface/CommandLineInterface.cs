@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Collections.ObjectModel;
 using Library.Logic.ViewModel;
 
 namespace CommandLineInterface
@@ -9,8 +10,8 @@ namespace CommandLineInterface
     public class CommandLineInterface
     {
         private readonly ViewModel dataContext = new ViewModel();
-        private readonly int startIndex = 0;
-        private readonly string tab = "   ";
+        private const int startIndex = 0;
+        private const string tab = "   ";
         private int maxIndex;
         private TreeViewItem root;
         private int selectionIndex; // used to iterate through items
@@ -28,21 +29,34 @@ namespace CommandLineInterface
             catch (FileNotFoundException e)
             {
                 Console.WriteLine("File with given path doesn't exist \n {0}", e.Message);
+                Console.WriteLine("Application will now exit");
+                Console.Read();
+                return;
             }
             catch (DirectoryNotFoundException e)
             {
                 Console.WriteLine("Couldn't find a directory \n{0}", e.Message);
+                Console.WriteLine("Application will now exit");
+                Console.Read();
+                return;
             }
             catch (UnauthorizedAccessException e)
             {
                 Console.WriteLine("Insufficient access rights to read the file \n{0}", e.Message);
+                Console.WriteLine("Application will now exit");
+                Console.Read();
+                return;
             }
             catch (Exception e)
             {
                 Console.WriteLine("Unknown problem occured. \n{0}", e.Message);
+                Console.WriteLine("Application will now exit");
+                Console.Read();
+                return;
             }
 
             root = dataContext.ObjectsList.First();
+            dataContext.ObjectsList.CollectionChanged += ObservableCollectionChangedEventHandler;
             Menu();
         }
 
@@ -93,7 +107,6 @@ namespace CommandLineInterface
                                 else
                                 {
                                     int index = int.Parse(selection); // try to read chosen index
-                                    isIncorrectInput = false; // get out of the loop
                                     selectionIndex = 0; // reset index before selection
                                     dataContext.ObjectSelected =
                                         SelectItem(root, index); // get an item under input index
@@ -169,21 +182,25 @@ namespace CommandLineInterface
 
         private TreeViewItem SelectItem(TreeViewItem selected, int index)
         {
-            TreeViewItem tmp = selected;
             if (selectionIndex++ == index) return selected;
 
-            if (selected.IsExpanded)
-            {
-                foreach (TreeViewItem kid in selected.Children)
-                {
-                    tmp = SelectItem(kid, index);
-                    if (tmp != null) return tmp;
-                }
+            if (!selected.IsExpanded) return null;
 
-                return null;
+            foreach (TreeViewItem kid in selected.Children)
+            {
+                TreeViewItem tmp = SelectItem(kid, index);
+                if (tmp != null) return tmp;
             }
 
             return null;
+        }
+
+        private void ObservableCollectionChangedEventHandler(object sender, EventArgs a)
+        {
+            if (dataContext.ObjectsList.Any())
+            {
+                root = dataContext.ObjectsList.First();
+            }
         }
     }
 }

@@ -131,6 +131,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="EntityFramework.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EntityFramework.SqlServer.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="FileSemanticTracing.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -141,6 +147,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>LocalDB.mdf</DependentUpon>
     </Content>
+    <Content Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Database.dll" />
     <Content Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
