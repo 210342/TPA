@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using ModelContract;
 
@@ -74,7 +75,7 @@ namespace Library.Model
             TypeKind = GetTypeKind(type);
 
             Attributes = new List<AttributeMetadata>();
-            type.GetCustomAttributes(false).Cast<Attribute>().ToList().ForEach(n =>
+            type.CustomAttributes.ToList().ForEach(n =>
                 ((List<AttributeMetadata>) Attributes).Add(new AttributeMetadata(n)));
             Name = type.Name;
             //FILL CHILDREN

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using ModelContract;
 
 namespace Library.Model
@@ -7,6 +8,14 @@ namespace Library.Model
     public class AttributeMetadata : AbstractMapper, IAttributeMetadata
     {
         internal AttributeMetadata(Attribute attribute)
+        {
+            if (attribute == null)
+                throw new ArgumentNullException("Attribute can't be null.");
+            Name = attribute.GetType().Name;
+            SavedHash = attribute.GetHashCode();
+        }
+
+        internal AttributeMetadata(CustomAttributeData attribute)
         {
             if (attribute == null)
                 throw new ArgumentNullException("Attribute can't be null.");

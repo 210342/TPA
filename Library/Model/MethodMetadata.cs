@@ -138,7 +138,7 @@ namespace Library.Model
 
         private static bool EmitExtension(MethodBase method)
         {
-            return method.IsDefined(typeof(ExtensionAttribute), true);
+            return method.CustomAttributes.Count(x => x.AttributeType == typeof(ExtensionAttribute)) == 1;
         }
 
         private static Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> EmitModifiers(MethodBase method)

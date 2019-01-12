@@ -102,6 +102,9 @@
     <Content Include="FileSemanticTracing.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="libstdc++-6.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
