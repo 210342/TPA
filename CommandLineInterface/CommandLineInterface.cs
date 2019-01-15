@@ -174,7 +174,7 @@ namespace CommandLineInterface
             for (int i = 0; i < depth; ++i) sb.Append(tab);
             Console.WriteLine();
             Console.WriteLine($"{sb}INDEX: {maxIndex++}");
-            Console.WriteLine($"{sb}{item.Name}");
+            Console.WriteLine($"{sb}{item.FullName}");
             if (item.IsExpanded)
                 foreach (TreeViewItem kid in item.Children)
                     Print(kid, depth + 1);
