@@ -24,6 +24,8 @@ namespace Library.Logic.ViewModel
 
         public override string Details => _details;
 
+        public override string FullName => $"[Type] {Name}";
+
         protected override TreeViewItem GetChildOfType(IMetadata metadata)
         {
             switch (metadata)

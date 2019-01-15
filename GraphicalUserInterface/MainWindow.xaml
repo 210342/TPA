@@ -22,7 +22,7 @@
 
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
-                    <TextBlock Text="{Binding}" Margin="0,0,4,0" />
+                    <TextBlock Text="{Binding FullName}" Margin="0,0,4,0" />
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
             <TreeView.ItemContainerStyle>

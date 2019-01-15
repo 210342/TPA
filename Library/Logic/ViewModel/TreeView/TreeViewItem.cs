@@ -27,6 +27,7 @@ namespace Library.Logic.ViewModel
         public IMetadata ModelObject => Metadata;
         public string Name { get; protected set; }
         public abstract string Details { get; }
+        public abstract string FullName { get; }
         protected IMetadata Metadata { get; set; }
         public List<TreeViewItem> Children { get; protected set; } = new List<TreeViewItem> {null};
 
