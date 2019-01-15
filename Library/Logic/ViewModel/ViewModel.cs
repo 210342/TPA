@@ -138,17 +138,17 @@ namespace Library.Logic.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private async void Save(ISourceProvider filePathProvider)
+        private async void Save(ISourceProvider targetPathProvider)
         {
             if (Persister.FileSystemDependency == FileSystemDependency.Independent)
-                filePathProvider = new NullSourceProvider();
+                targetPathProvider = new NullSourceProvider();
 
-            if (filePathProvider == null)
+            if (targetPathProvider == null)
                 throw new ArgumentNullException("SourceProvider can't be null.");
-            if (filePathProvider.GetAccess())
+            if (targetPathProvider.GetAccess())
                 try
                 {
-                    Persister.Target = filePathProvider.GetFilePath();
+                    Persister.Target = targetPathProvider.GetPath();
                     await Task.Run(() =>
                     {
                         if (IsTracingEnabled)
@@ -176,7 +176,7 @@ namespace Library.Logic.ViewModel
                     if (IsTracingEnabled)
                     {
                         Tracer.LogFailure(
-                            $"Exception caught when trying to open a file for writing (serialization) {Environment.NewLine}{ex.Message}");
+                            $"Exception caught when trying to open a file for writing {Environment.NewLine}{ex.Message}");
                         Tracer.Flush();
                     }
                 }
@@ -193,7 +193,7 @@ namespace Library.Logic.ViewModel
             {
                 try
                 {
-                    Persister.Target = filePathProvider.GetFilePath();
+                    Persister.Target = filePathProvider.GetPath();
 
                     if (SynchronizationContext.Current is null)
                     {
@@ -209,14 +209,14 @@ namespace Library.Logic.ViewModel
                     if (IsTracingEnabled)
                     {
                         Tracer.LogFailure(
-                            $"Exception caught when trying to open a file for reading (deserialization){Environment.NewLine}{ex.Message}");
+                            $"Exception caught when trying to open a file for reading {Environment.NewLine}{ex.Message}");
                         Tracer.Flush();
                     }
                 }
             }
             else
             {
-                ErrorMessageBox.ShowMessage("File in use", "File you tried to open is currently in use by another program");
+                ErrorMessageBox.ShowMessage("Target in use", "File you tried to open is currently in use by another program");
             }
         }
 
@@ -255,7 +255,7 @@ namespace Library.Logic.ViewModel
                 throw new ArgumentNullException("SourceProvider can't be null.");
             if (sourceProvider.GetAccess())
             {
-                LoadedAssembly = sourceProvider.GetFilePath();
+                LoadedAssembly = sourceProvider.GetPath();
                 ReloadAssemblyCommand.Execute(null);
             }
         }

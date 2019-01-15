@@ -57,24 +57,6 @@ namespace Serializing.Tests
             _sut.Dispose();
         }
 
-        [TestMethod()]
-        public void StreamSaveTest()
-        {
-            object original = new TestType() { Name = "Type", Values = new[] { new TestValue() } };
-            _sut.Save(original);
-            Assert.AreNotEqual(0, _serializationStream.Length);
-        }
-
-        [TestMethod()]
-        public void StreamLoadTest()
-        {
-            object original = new TestType() { Name = "Type", Values = new[] { new TestValue() } };
-            _sut.Save(original);
-            object loaded = _sut.Load();
-            Assert.IsTrue(loaded is TestType);
-            Assert.IsFalse((loaded as TestType).Values == null);
-        }
-
         [TestMethod]
         public void SourceNameSetter()
         {

@@ -73,7 +73,7 @@ namespace LibraryTests.Logic.ViewModel.Tests
                 return true;
             }
 
-            public string GetFilePath()
+            public string GetPath()
             {
                 return Assembly.GetAssembly(GetType()).Location;
             }

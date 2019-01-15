@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
+using ModelContract;
 using Persistance;
 using SerializationModel;
 
@@ -56,7 +57,7 @@ namespace Serializing
             SerializationStream = inStream;
         }
 
-        public void Save(object toSave)
+        public void Save(IAssemblyMetadata toSave)
         {
             XmlWriterSettings settings = new XmlWriterSettings {Indent = true};
             if (SerializationStream != null)
@@ -71,7 +72,7 @@ namespace Serializing
             }
         }
 
-        public object Load()
+        public IAssemblyMetadata Load()
         {
             object read = null;
             try
@@ -89,7 +90,7 @@ namespace Serializing
             {
                 return null;
             }
-            return read;
+            return read as IAssemblyMetadata;
         }
 
         public void Dispose()

@@ -7,8 +7,6 @@ namespace DatabasePersistence.DBModel
 {
     public class DbAssemblyMetadata : AbstractMapper, IAssemblyMetadata
     {
-        //public List<AbstractMapper> Parents { get; set; }
-
         public DbAssemblyMetadata(IAssemblyMetadata assemblyMetadata)
         {
             Name = assemblyMetadata.Name;

@@ -5,14 +5,9 @@ namespace DatabasePersistence
 {
     public class DbModelAccessContext : DbContext
     {
-        public DbModelAccessContext() : this("name=DbSource")
-        {
-        }
+        public DbModelAccessContext() : this("name=DbSource") { }
 
-        public DbModelAccessContext(string connectionString) : base(connectionString)
-        {
-            // this.Configuration.LazyLoadingEnabled = false;
-        }
+        public DbModelAccessContext(string connectionString) : base(connectionString) { }
 
         public virtual DbSet<DbAssemblyMetadata> Assemblies { get; set; }
         public virtual DbSet<DbAttributeMetadata> Attributes { get; set; }

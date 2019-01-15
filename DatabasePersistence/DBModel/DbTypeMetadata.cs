@@ -255,6 +255,8 @@ namespace DatabasePersistence.DBModel
         public virtual ICollection<DbPropertyMetadata> PropertiesList { get; set; }
         public virtual ICollection<DbMethodMetadata> MethodsList { get; set; }
         public virtual ICollection<DbMethodMetadata> ConstructorsList { get; set; }
+        [InverseProperty("ImplementedInterfacesList")]
+        public virtual ICollection<DbTypeMetadata> TypesImplementingMe { get; set; }
 
         #endregion
 

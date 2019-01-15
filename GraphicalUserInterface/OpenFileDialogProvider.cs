@@ -18,7 +18,7 @@ namespace GraphicalUserInterface
             return dialog.ShowDialog() == true;
         }
 
-        public string GetFilePath()
+        public string GetPath()
         {
             return dialog.FileName;
         }

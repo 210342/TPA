@@ -3,6 +3,6 @@
     public interface ISourceProvider
     {
         bool GetAccess();
-        string GetFilePath();
+        string GetPath();
     }
 }

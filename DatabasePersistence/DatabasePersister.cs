@@ -24,9 +24,12 @@ namespace DatabasePersistence
             get => connectionString;
             set
             {
-                connectionString = value;
-                context?.Dispose();
-                context = new DbModelAccessContext(value);
+                if(!string.IsNullOrEmpty(value))
+                {
+                    connectionString = value;
+                    context?.Dispose();
+                    context = new DbModelAccessContext(value);
+                }
             }
         }
 
@@ -38,14 +41,13 @@ namespace DatabasePersistence
             GC.SuppressFinalize(this);
         }
 
-        public object Load()
+        public IAssemblyMetadata Load()
         {
             return context.Assemblies.OrderByDescending(n => n.Id).First();
         }
 
-        public void Save(object obj)
+        public void Save(IAssemblyMetadata obj)
         {
-            if (!(obj is IAssemblyMetadata)) throw new InvalidOperationException("Can't assign from given type.");
             DbAssemblyMetadata root = obj as DbAssemblyMetadata ?? new DbAssemblyMetadata(obj as IAssemblyMetadata);
             context.Assemblies.Add(root);
             context.SaveChanges();

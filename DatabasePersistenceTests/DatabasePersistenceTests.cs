@@ -82,19 +82,29 @@ namespace DatabasePersistence.DBModel
         [TestMethod]
         public void DeepTest()
         {
-            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata {Name = "test0"};
-            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata {Name = "test1"};
-            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata {Name = "test2"};
-            DbTypeMetadata type1 = new DbTypeMetadata {Name = "Type1"};
+            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata { Name = "test0" };
+            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata { Name = "test1" };
+            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata { Name = "test2" };
+            DbTypeMetadata type1 = new DbTypeMetadata { Name = "Type1" };
+            DbTypeMetadata type2 = new DbTypeMetadata { Name = "interface" };
+            DbTypeMetadata type3 = new DbTypeMetadata { Name = "type2" };
+            type1.ImplementedInterfaces = new[] { type2 };
+            type3.ImplementedInterfaces = new[] { type2 };
             type1.Properties = new[] {new DbPropertyMetadata {Name = "prop", MyType = type1}};
             type1.Attributes = new[] {new DbAttributeMetadata {Name = "attr"}};
+            DbParameterMetadata param1 = new DbParameterMetadata { Name = "param1", TypeMetadata = type1 };
             DbMethodMetadata method1 = new DbMethodMetadata
             {
                 Name = "method1",
-                Parameters = new[] {new DbParameterMetadata {Name = "param1", TypeMetadata = type1}}
+                Parameters = new[] {param1 , new DbParameterMetadata {Name = "param2", TypeMetadata = type3} }
             };
-            type1.Methods = new[] {method1};
-            namespaceMeta1.Types = new[] {type1};
+            DbMethodMetadata method2 = new DbMethodMetadata
+            {
+                Name = "method2",
+                Parameters = new[] { param1 }
+            };
+            type1.Methods = new[] {method1, method2};
+            namespaceMeta1.Types = new[] {type1, type2, type3};
             assemblyMetadata.Namespaces = new[] {namespaceMeta1, namespaceMeta2};
 
             int typesQuantityBefore = CountInTable("Types");
@@ -103,11 +113,11 @@ namespace DatabasePersistence.DBModel
             int methodsQuantityBefore = CountInTable("Methods");
             int parametersQuantityBefore = CountInTable("Parameters");
             persister.Save(assemblyMetadata);
-            Assert.AreEqual(typesQuantityBefore + 1, CountInTable("Types"));
+            Assert.AreEqual(typesQuantityBefore + 3, CountInTable("Types"));
             Assert.AreEqual(propertiesQuantityBefore + 1, CountInTable("Properties"));
             Assert.AreEqual(attributesQuantityBefore + 1, CountInTable("Attributes"));
-            Assert.AreEqual(methodsQuantityBefore + 1, CountInTable("Methods"));
-            Assert.AreEqual(parametersQuantityBefore + 1, CountInTable("Parameters"));
+            Assert.AreEqual(methodsQuantityBefore + 2, CountInTable("Methods"));
+            Assert.AreEqual(parametersQuantityBefore + 2, CountInTable("Parameters"));
         }
 
         [TestMethod]

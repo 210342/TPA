@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModelContract;
+using System;
 
 namespace Persistance
 {
@@ -6,7 +7,7 @@ namespace Persistance
     {
         FileSystemDependency FileSystemDependency { get; }
         string Target { get; set; }
-        void Save(object obj);
-        object Load();
+        void Save(IAssemblyMetadata obj);
+        IAssemblyMetadata Load();
     }
 }

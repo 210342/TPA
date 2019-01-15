@@ -37,7 +37,7 @@ namespace CommandLineInterface
             }
         }
 
-        public string GetFilePath()
+        public string GetPath()
         {
             if (string.IsNullOrEmpty(path))
             {

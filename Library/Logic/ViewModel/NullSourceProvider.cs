@@ -7,9 +7,9 @@
             return true;
         }
 
-        public string GetFilePath()
+        public string GetPath()
         {
-            return "";
+            return null;
         }
     }
 }

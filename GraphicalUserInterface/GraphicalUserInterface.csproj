@@ -131,6 +131,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DatabasePersistence.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="EntityFramework.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -147,14 +150,13 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>LocalDB.mdf</DependentUpon>
     </Content>
-    <Content Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging.Database.dll" />
     <Content Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging.TextFile.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Serializing.dll">
+    <Content Include="Newtonsoft.Json.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
