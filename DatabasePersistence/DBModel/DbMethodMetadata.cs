@@ -90,6 +90,7 @@ namespace DatabasePersistence.DBModel
 
         #region IMethodMetadata
 
+        [ForeignKey("TypesId")]
         public virtual ITypeMetadata ReturnType { get; private set; }
         public bool IsExtension { get; }
         public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; }

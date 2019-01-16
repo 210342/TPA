@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using DatabasePersistence.DBModel;
 using ModelContract;
 using Persistance;
@@ -42,7 +44,9 @@ namespace DatabasePersistence
 
         public IAssemblyMetadata Load()
         {
-            return context.Assemblies.OrderByDescending(n => n.Id).FirstOrDefault();
+            DbAssemblyMetadata result = context.Assemblies.OrderByDescending(n => n.Id).FirstOrDefault();
+            ExplicitLoading(result);
+            return result;
         }
 
         public void Save(IAssemblyMetadata obj)
@@ -50,6 +54,40 @@ namespace DatabasePersistence
             DbAssemblyMetadata root = obj as DbAssemblyMetadata ?? new DbAssemblyMetadata(obj);
             context.Assemblies.Add(root);
             context.SaveChanges();
+        }
+
+        private void ExplicitLoading(DbAssemblyMetadata loadedRoot)
+        {
+            context.Entry(loadedRoot).Collection(a => a.NamespacesList).Load();
+            foreach (DbNamespaceMetadata _namespace in loadedRoot.NamespacesList)
+            {
+                context.Entry(_namespace).Collection(n => n.TypesList).Load();
+                foreach (DbTypeMetadata type in _namespace.TypesList)
+                {
+                    context.Entry(type).Collection(t => t.ImplementedInterfacesList).Load();
+                    context.Entry(type).Collection(t => t.MethodsList).Load();
+                    context.Entry(type).Collection(t => t.NestedTypesList).Load();
+                    context.Entry(type).Collection(t => t.ConstructorsList).Load();
+                    context.Entry(type).Collection(t => t.GenericArgumentsList).Load();
+                    context.Entry(type).Collection(t => t.PropertiesList).Load();
+                    context.Entry(type).Collection(t => t.AttributesList).Load();
+                    foreach (DbPropertyMetadata property in type.PropertiesList)
+                    {
+                        //context.Entry(property).Reference(p => p.MyType).Load();
+                    }
+                    foreach (DbMethodMetadata method in type.MethodsList)
+                    {
+                        //context.Entry(method).Reference(m => m.ReturnType).Load();
+                        //context.Entry(method).Reference(m => m.Modifiers).Load();
+                        context.Entry(method).Collection(m => m.ParametersList).Load();
+                        context.Entry(method).Collection(m => m.GenericArgumentsList).Load();
+                        foreach (DbParameterMetadata parameter in method.ParametersList)
+                        {
+                            //context.Entry(parameter).Reference(p => p.TypeMetadata).Load();
+                        }
+                    }
+                }
+            }
         }
     }
 }
