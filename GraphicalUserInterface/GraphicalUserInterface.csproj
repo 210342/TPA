@@ -84,6 +84,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ErrorMessageBox.cs" />
+    <Compile Include="InformationMessageBox.cs" />
     <Compile Include="SaveFileDialogProvider.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

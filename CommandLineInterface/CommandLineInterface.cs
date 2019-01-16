@@ -20,7 +20,7 @@ namespace CommandLineInterface
         {
             dataContext.OpenFileSourceProvider = new TextFileSourceProvider(dllPath); //source provider
             dataContext.SaveFileSourceProvider = new TextFileSourceProvider(dllPath); //source provider
-            dataContext.ErrorMessageBox = new PrintErrorMessage(); // 'error message box'
+            dataContext.ErrorMessageProvider = new PrintErrorMessage(); // 'error message box'
             dataContext.EndInit();
             try
             {

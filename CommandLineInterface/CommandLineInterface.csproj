@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="CommandLineInterface.cs" />
     <Compile Include="PrintErrorMessage.cs" />
+    <Compile Include="PrintInformationMessage.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextFileSourceProvider.cs" />
