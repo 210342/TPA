@@ -11,29 +11,28 @@ namespace DatabasePersistence
     [Export(typeof(IPersister))]
     public class DatabasePersister : IPersister
     {
-        private string connectionString;
         private DbModelAccessContext context;
+        private readonly string _originalTarget;
 
         public DatabasePersister()
         {
-            Target = ConfigurationManager.ConnectionStrings["DbSource"].ConnectionString;
-        }
-
-        public string Target
-        {
-            get => connectionString;
-            set
-            {
-                if(!string.IsNullOrEmpty(value))
-                {
-                    connectionString = value;
-                    context?.Dispose();
-                    context = new DbModelAccessContext(value);
-                }
-            }
+            _originalTarget = ConfigurationManager.ConnectionStrings["DbSource"].ConnectionString;
         }
 
         public FileSystemDependency FileSystemDependency => FileSystemDependency.Independent;
+
+        public void Access(string target)
+        {
+            context?.Dispose();
+            if (string.IsNullOrEmpty(target))
+            {
+                context = new DbModelAccessContext(_originalTarget);
+            }
+            else
+            {
+                context = new DbModelAccessContext(target);
+            }
+        }
 
         public void Dispose()
         {
@@ -43,12 +42,12 @@ namespace DatabasePersistence
 
         public IAssemblyMetadata Load()
         {
-            return context.Assemblies.OrderByDescending(n => n.Id).First();
+            return context.Assemblies.OrderByDescending(n => n.Id).FirstOrDefault();
         }
 
         public void Save(IAssemblyMetadata obj)
         {
-            DbAssemblyMetadata root = obj as DbAssemblyMetadata ?? new DbAssemblyMetadata(obj as IAssemblyMetadata);
+            DbAssemblyMetadata root = obj as DbAssemblyMetadata ?? new DbAssemblyMetadata(obj);
             context.Assemblies.Add(root);
             context.SaveChanges();
         }

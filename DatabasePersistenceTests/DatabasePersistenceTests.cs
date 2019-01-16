@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DatabasePersistence.DBModel
@@ -11,6 +12,7 @@ namespace DatabasePersistence.DBModel
     public class DatabasePersistenceTests
     {
         private DatabasePersister persister;
+        private string _target;
 
         [TestInitialize]
         public void Init()
@@ -24,6 +26,8 @@ namespace DatabasePersistence.DBModel
             {
                 //BUG IN EF
             }
+            _target = (string)typeof(DatabasePersister).GetField(
+                "_originalTarget", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(persister);
         }
 
         [TestCleanup]
@@ -42,6 +46,7 @@ namespace DatabasePersistence.DBModel
             assemblyMetadata.Namespaces = new[] {namespaceMeta1, namespaceMeta2, namespaceMeta3};
 
             int assembliesQuantityBefore = CountInTable("Assemblies");
+            persister.Access(_target);
             persister.Save(assemblyMetadata);
             Assert.AreEqual(assembliesQuantityBefore + 1, CountInTable("Assemblies"));
         }
@@ -57,6 +62,7 @@ namespace DatabasePersistence.DBModel
             assemblyMetadata.Namespaces = new[] {namespaceMeta1, namespaceMeta2};
 
             int typesQuantityBefore = CountInTable("Types");
+            persister.Access(_target);
             persister.Save(assemblyMetadata);
             Assert.AreEqual(typesQuantityBefore + 1, CountInTable("Types"));
         }
@@ -74,6 +80,7 @@ namespace DatabasePersistence.DBModel
 
             int typesQuantityBefore = CountInTable("Types");
             int propertiesQuantityBefore = CountInTable("Properties");
+            persister.Access(_target);
             persister.Save(assemblyMetadata);
             Assert.AreEqual(typesQuantityBefore + 1, CountInTable("Types"));
             Assert.AreEqual(propertiesQuantityBefore + 1, CountInTable("Properties"));
@@ -112,6 +119,7 @@ namespace DatabasePersistence.DBModel
             int attributesQuantityBefore = CountInTable("Attributes");
             int methodsQuantityBefore = CountInTable("Methods");
             int parametersQuantityBefore = CountInTable("Parameters");
+            persister.Access(_target);
             persister.Save(assemblyMetadata);
             Assert.AreEqual(typesQuantityBefore + 3, CountInTable("Types"));
             Assert.AreEqual(propertiesQuantityBefore + 1, CountInTable("Properties"));
@@ -132,6 +140,7 @@ namespace DatabasePersistence.DBModel
             namespaceMeta1.Types = new[] {type1};
             namespaceMeta2.Types = new[] {type2};
 
+            persister.Access(_target);
             persister.Save(assemblyMetadata);
             object loaded = persister.Load();
             DbAssemblyMetadata loadedAssembly = loaded as DbAssemblyMetadata;
@@ -147,7 +156,7 @@ namespace DatabasePersistence.DBModel
         private int CountInTable(string tableName)
         {
             int result = 0;
-            using (SqlConnection connection = new SqlConnection(persister.Target))
+            using (SqlConnection connection = new SqlConnection(_target))
             {
                 connection.Open();
                 SqlTransaction transaction = connection.BeginTransaction();

@@ -4,15 +4,15 @@
               GeneratedClassNamespace="DatabasePersistenceTests.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="LocalDBConnectionString" Type="(Connection string)" Scope="Application">
+    <Setting Name="LocalDBAccessionString" Type="(Accession string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">
         &lt;?xml version="1.0" encoding="utf-16"?&gt;
-        &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-        &lt;ConnectionString&gt;Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=G:\Studia\5SEM\TPA\Project\TPA\DatabasePersistenceTests\LocalDB.mdf;Integrated Security=True;Connect Timeout=30&lt;/ConnectionString&gt;
+        &lt;SerializableAccessionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+        &lt;AccessionString&gt;Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=G:\Studia\5SEM\TPA\Project\TPA\DatabasePersistenceTests\LocalDB.mdf;Integrated Security=True;Access Timeout=30&lt;/AccessionString&gt;
         &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
-        &lt;/SerializableConnectionString&gt;
+        &lt;/SerializableAccessionString&gt;
       </DesignTimeValue>
-      <Value Profile="(Default)">Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=G:\Studia\5SEM\TPA\Project\TPA\DatabasePersistenceTests\LocalDB.mdf;Integrated Security=True;Connect Timeout=30</Value>
+      <Value Profile="(Default)">Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=G:\Studia\5SEM\TPA\Project\TPA\DatabasePersistenceTests\LocalDB.mdf;Integrated Security=True;Access Timeout=30</Value>
     </Setting>
   </Settings>
 </SettingsFile>

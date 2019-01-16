@@ -42,6 +42,8 @@ namespace DatabasePersistence.DBModel
             }
         }
 
+        #region EF
+
         public void MapTypes()
         {
             if (MyType.Mapped && AlreadyMapped.TryGetValue(MyType.SavedHash, out IMetadata item))
@@ -49,5 +51,9 @@ namespace DatabasePersistence.DBModel
                 MyType = item as ITypeMetadata;
             }
         }
+
+        public virtual ICollection<DbTypeMetadata> Types { get; set; }
+
+        #endregion
     }
 }

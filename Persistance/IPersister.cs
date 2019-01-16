@@ -6,7 +6,7 @@ namespace Persistance
     public interface IPersister : IDisposable
     {
         FileSystemDependency FileSystemDependency { get; }
-        string Target { get; set; }
+        void Access(string target);
         void Save(IAssemblyMetadata obj);
         IAssemblyMetadata Load();
     }

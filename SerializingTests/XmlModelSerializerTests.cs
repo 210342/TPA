@@ -27,7 +27,7 @@ namespace Serializing.Tests
             {
                 SerializationStream = _serializationStream
             };
-            _sut.GetType().GetField("dataContractSerializer", BindingFlags.NonPublic | BindingFlags.Instance).
+            _sut.GetType().GetField("dataContractSerializer", BindingFlags.NonPublic | BindingFlags.Instance)?.
                 SetValue(_sut, new DataContractSerializer(typeof(IParent), knownTypes, 100000, false, true, null));
         }
 
@@ -55,22 +55,6 @@ namespace Serializing.Tests
             _sut.SerializationStream.Dispose();
             _sut.SerializationStream = null;
             _sut.Dispose();
-        }
-
-        [TestMethod]
-        public void SourceNameSetter()
-        {
-            _sut.Target = "testing.txt";
-            Assert.IsFalse(string.IsNullOrEmpty(_sut.Target));
-            Assert.IsNotNull(_sut.SerializationStream);
-            Assert.IsTrue(_sut.SerializationStream is FileStream);
-            Stream oldStream = _sut.SerializationStream;
-            _sut.Target = "testing.txt";
-            Assert.IsFalse(_sut.SerializationStream.Equals(oldStream));
-            _sut.SerializationStream.Dispose();
-            _sut.SerializationStream = null;
-            _sut.Target = "testing.txt";
-            Assert.IsNotNull(_sut.SerializationStream);
         }
 
         public interface IParent

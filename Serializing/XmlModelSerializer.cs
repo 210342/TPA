@@ -14,22 +14,10 @@ namespace Serializing
     public class XmlModelSerializer : IPersister
     {
         private readonly DataContractSerializer dataContractSerializer;
-        private string _target;
 
         public Stream SerializationStream { get; set; }
         private Type NodeType { get; set; }
         private IEnumerable<Type> KnownTypes { get; set; }
-
-        public string Target
-        {
-            get { return _target; }
-            set
-            {
-                _target = value;
-                SerializationStream?.Dispose();
-                SerializationStream = new FileStream(value, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            }
-        }
 
         public FileSystemDependency FileSystemDependency => FileSystemDependency.Dependent;
 
@@ -55,6 +43,15 @@ namespace Serializing
         public XmlModelSerializer(Stream inStream) : this()
         {
             SerializationStream = inStream;
+        }
+
+        public void Access(string target)
+        {
+            if (!string.IsNullOrEmpty(target))
+            {
+                SerializationStream?.Dispose();
+                SerializationStream = new FileStream(target, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            }
         }
 
         public void Save(IAssemblyMetadata toSave)

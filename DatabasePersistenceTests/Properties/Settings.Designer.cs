@@ -29,7 +29,7 @@ namespace DatabasePersistenceTests.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=G:\\Studia\\5SEM\\TPA\\Project\\TP" +
-            "A\\DatabasePersistenceTests\\LocalDB.mdf;Integrated Security=True;Connect Timeout=" +
+            "A\\DatabasePersistenceTests\\LocalDB.mdf;Integrated Security=True;Access Timeout=" +
             "30")]
         public string LocalDBConnectionString {
             get {

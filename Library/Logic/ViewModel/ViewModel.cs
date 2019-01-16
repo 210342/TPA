@@ -140,23 +140,25 @@ namespace Library.Logic.ViewModel
 
         private async void Save(ISourceProvider targetPathProvider)
         {
+            if (targetPathProvider == null)
+                throw new ArgumentNullException(nameof(targetPathProvider), "SourceProvider can't be null.");
+
             if (Persister.FileSystemDependency == FileSystemDependency.Independent)
                 targetPathProvider = new NullSourceProvider();
 
-            if (targetPathProvider == null)
-                throw new ArgumentNullException("SourceProvider can't be null.");
             if (targetPathProvider.GetAccess())
                 try
                 {
-                    Persister.Target = targetPathProvider.GetPath();
+                    string target = targetPathProvider.GetPath();
                     await Task.Run(() =>
                     {
                         if (IsTracingEnabled)
                         {
-                            Tracer.LogSavingModel(Persister.Target);
+                            Tracer.LogSavingModel(target);
                             Tracer.Flush();
                         }
 
+                        Persister.Access(target);
                         IAssemblyMetadata graph = new ModelMapper().Map(
                             root: ObjectsList.First().ModelObject as IAssemblyMetadata,
                             model: Persister.GetType().Assembly
@@ -166,7 +168,7 @@ namespace Library.Logic.ViewModel
 
                         if (IsTracingEnabled)
                         {
-                            Tracer.LogModelSaved(Persister.Target);
+                            Tracer.LogModelSaved(target);
                             Tracer.Flush();
                         }
                     });
@@ -182,26 +184,26 @@ namespace Library.Logic.ViewModel
                 }
         }
 
-        private void Load(ISourceProvider filePathProvider)
+        private void Load(ISourceProvider targetPathProvider)
         {
-            if (Persister.FileSystemDependency == FileSystemDependency.Independent)
-                filePathProvider = new NullSourceProvider();
+            if (targetPathProvider == null)
+                throw new ArgumentNullException(nameof(targetPathProvider), "SourceProvider can't be null.");
 
-            if (filePathProvider == null)
-                throw new ArgumentNullException("SourceProvider can't be null.");
-            if (filePathProvider.GetAccess())
+            if (Persister.FileSystemDependency == FileSystemDependency.Independent)
+                targetPathProvider = new NullSourceProvider();
+
+            if (targetPathProvider.GetAccess())
             {
                 try
                 {
-                    Persister.Target = filePathProvider.GetPath();
-
+                    string target = targetPathProvider.GetPath();
                     if (SynchronizationContext.Current is null)
                     {
-                        LoadRootAssembly();
+                        LoadRootAssembly(target);
                     }
                     else
                     {
-                        Dispatcher.CurrentDispatcher.BeginInvoke((Action)LoadRootAssembly);
+                        Dispatcher.CurrentDispatcher.BeginInvoke((Action<string>)LoadRootAssembly, target);
                     }
                 }
                 catch (IOException ex)
@@ -220,19 +222,30 @@ namespace Library.Logic.ViewModel
             }
         }
 
-        private void LoadRootAssembly()
+        private void LoadRootAssembly(string target)
         {
             if (IsTracingEnabled)
             {
-                Tracer.LogLoadingModel(Persister.Target);
+                Tracer.LogLoadingModel(target);
                 Tracer.Flush();
             }
+            Persister.Access(target);
 
-            object result = Persister.Load();
-            if (result is IAssemblyMetadata)
+            IAssemblyMetadata result = Persister.Load();
+            if (result is null)
+            {
+                string errorMessage = "Database doesn't contain any elements";
+                ErrorMessageBox.ShowMessage("Loading error", errorMessage);
+                if (IsTracingEnabled)
+                {
+                    Tracer.LogFailure($"{target}; {errorMessage}");
+                    Tracer.Flush();
+                }
+            }
+            else
             {
                 IAssemblyMetadata graph = new ModelMapper().Map(
-                    root: result as IAssemblyMetadata,
+                    root: result,
                     model: typeof(AssemblyMetadata).Assembly
                 );
                 ObjectsList.Clear();
@@ -243,7 +256,7 @@ namespace Library.Logic.ViewModel
 
                 if (IsTracingEnabled)
                 {
-                    Tracer.LogModelLoaded(Persister.Target);
+                    Tracer.LogModelLoaded(target);
                     Tracer.Flush();
                 }
             }
@@ -252,7 +265,7 @@ namespace Library.Logic.ViewModel
         private void OpenFile(ISourceProvider sourceProvider)
         {
             if (sourceProvider == null)
-                throw new ArgumentNullException("SourceProvider can't be null.");
+                throw new ArgumentNullException(nameof(sourceProvider), "SourceProvider can't be null.");
             if (sourceProvider.GetAccess())
             {
                 LoadedAssembly = sourceProvider.GetPath();
