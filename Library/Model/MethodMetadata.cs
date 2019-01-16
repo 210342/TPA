@@ -228,7 +228,7 @@ namespace Library.Model
             if (Parameters.Count() != 0)
             {
                 foreach (ParameterMetadata parameter in Parameters)
-                    paramsString.Append($"{parameter.TypeMetadata.Name} {parameter.Name}, ");
+                    paramsString.Append($"{parameter.MyType.Name} {parameter.Name}, ");
                 paramsString.Remove(paramsString.Length - 2, 2); // remove last comma and space
                 paramsString.Append(")");
             }

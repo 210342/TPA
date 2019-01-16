@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Data.Entity;
 using DatabasePersistence.DBModel;
+using ModelContract;
 
 namespace DatabasePersistence
 {
@@ -39,6 +41,10 @@ namespace DatabasePersistence
                 m.MapInheritedProperties();
                 m.ToTable("Methods");
             });
+            modelBuilder.Entity<DbMethodMetadata>()
+                .HasOptional(m => m.DbReturnType)
+                .WithOptionalPrincipal()
+                .Map(x => x.MapKey("ReturnTypeId"));
 
             modelBuilder.Entity<DbNamespaceMetadata>().Map(m =>
             {
@@ -51,12 +57,21 @@ namespace DatabasePersistence
                 m.MapInheritedProperties();
                 m.ToTable("Parameters");
             });
+            modelBuilder.Entity<DbParameterMetadata>()
+                .HasOptional(m => m.DbMyType)
+                .WithOptionalPrincipal()
+                .Map(x => x.MapKey("ParameterTypeId"));
 
-            modelBuilder.Entity<DbPropertyMetadata>().Map(m =>
-            {
-                m.MapInheritedProperties();
-                m.ToTable("Properties");
-            });
+            modelBuilder.Entity<DbPropertyMetadata>()
+                .Map(m =>
+                {
+                    m.MapInheritedProperties();
+                    m.ToTable("Properties");
+                });
+            modelBuilder.Entity<DbPropertyMetadata>()
+                .HasOptional(p => p.DbMyType)
+                .WithOptionalPrincipal()
+                .Map(m => m.MapKey("PropertyTypeId"));
 
             modelBuilder.Entity<DbTypeMetadata>().Map(m =>
             {

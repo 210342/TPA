@@ -26,14 +26,9 @@ namespace DatabasePersistence
         public void Access(string target)
         {
             context?.Dispose();
-            if (string.IsNullOrEmpty(target))
-            {
-                context = new DbModelAccessContext(_originalTarget);
-            }
-            else
-            {
-                context = new DbModelAccessContext(target);
-            }
+            context = string.IsNullOrEmpty(target) 
+                ? new DbModelAccessContext(_originalTarget) 
+                : new DbModelAccessContext(target);
         }
 
         public void Dispose()
@@ -73,17 +68,16 @@ namespace DatabasePersistence
                     context.Entry(type).Collection(t => t.AttributesList).Load();
                     foreach (DbPropertyMetadata property in type.PropertiesList)
                     {
-                        //context.Entry(property).Reference(p => p.MyType).Load();
+                        context.Entry(property).Reference(p => p.DbMyType).Load();
                     }
                     foreach (DbMethodMetadata method in type.MethodsList)
                     {
-                        //context.Entry(method).Reference(m => m.ReturnType).Load();
-                        //context.Entry(method).Reference(m => m.Modifiers).Load();
+                        context.Entry(method).Reference(m => m.DbReturnType).Load();
                         context.Entry(method).Collection(m => m.ParametersList).Load();
                         context.Entry(method).Collection(m => m.GenericArgumentsList).Load();
                         foreach (DbParameterMetadata parameter in method.ParametersList)
                         {
-                            //context.Entry(parameter).Reference(p => p.TypeMetadata).Load();
+                            context.Entry(parameter).Reference(p => p.DbMyType).Load();
                         }
                     }
                 }

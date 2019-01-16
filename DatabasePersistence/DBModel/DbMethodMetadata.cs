@@ -85,13 +85,18 @@ namespace DatabasePersistence.DBModel
 
         public virtual ICollection<DbTypeMetadata> GenericArgumentsList { get; set; }
         public virtual ICollection<DbParameterMetadata> ParametersList { get; set; }
+        public virtual DbTypeMetadata DbReturnType { get; set; }
 
         #endregion
 
         #region IMethodMetadata
 
-        [ForeignKey("TypesId")]
-        public virtual ITypeMetadata ReturnType { get; private set; }
+        [NotMapped]
+        public virtual ITypeMetadata ReturnType
+        {
+            get => DbReturnType;
+            private set => DbReturnType = value as DbTypeMetadata;
+        }
         public bool IsExtension { get; }
         public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; }
         public string Name { get; set; }

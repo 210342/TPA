@@ -2,7 +2,7 @@
 {
     public interface IParameterMetadata : IMetadata
     {
-        ITypeMetadata TypeMetadata { get; }
+        ITypeMetadata MyType { get; }
 
         void MapTypes();
     }

@@ -99,11 +99,11 @@ namespace DatabasePersistence.DBModel
             type3.ImplementedInterfaces = new[] { type2 };
             type1.Properties = new[] {new DbPropertyMetadata {Name = "prop", MyType = type1}};
             type1.Attributes = new[] {new DbAttributeMetadata {Name = "attr"}};
-            DbParameterMetadata param1 = new DbParameterMetadata { Name = "param1", TypeMetadata = type1 };
+            DbParameterMetadata param1 = new DbParameterMetadata { Name = "param1", MyType = type1 };
             DbMethodMetadata method1 = new DbMethodMetadata
             {
                 Name = "method1",
-                Parameters = new[] {param1 , new DbParameterMetadata {Name = "param2", TypeMetadata = type3} }
+                Parameters = new[] {param1 , new DbParameterMetadata {Name = "param2", MyType = type3} }
             };
             DbMethodMetadata method2 = new DbMethodMetadata
             {
@@ -161,11 +161,17 @@ namespace DatabasePersistence.DBModel
                 connection.Open();
                 SqlTransaction transaction = connection.BeginTransaction();
                 using (SqlCommand command =
-                    new SqlCommand($"SELECT COUNT(Id) FROM dbo.{tableName}", connection, transaction))
+                    new SqlCommand($"SELECT COUNT(Id) FROM {tableName}", connection, transaction))
                 {
-                    result = (int) command.ExecuteScalar();
+                    try
+                    {
+                        result = (int) command.ExecuteScalar();
+                    }
+                    catch (SqlException)
+                    {
+                        result = 0;
+                    }
                 }
-
                 connection.Close();
             }
 

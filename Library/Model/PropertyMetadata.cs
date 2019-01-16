@@ -63,7 +63,7 @@ namespace Library.Model
         private PropertyMetadata(string propertyName, TypeMetadata propertyType)
         {
             if (propertyName == null || propertyType == null)
-                throw new ArgumentNullException("Neither propertyName or TypeMetadata can be null.");
+                throw new ArgumentNullException("Neither propertyName or MyType can be null.");
             Name = propertyName;
             MyType = propertyType;
             SavedHash = 23;

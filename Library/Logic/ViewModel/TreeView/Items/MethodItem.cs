@@ -21,7 +21,7 @@ namespace Library.Logic.ViewModel
             {
                 _details += "(";
                 foreach (IParameterMetadata param in source.Parameters)
-                    _details += $"{param.Name} : {param.TypeMetadata}, ";
+                    _details += $"{param.Name} : {param.MyType}, ";
                 _details = _details.Remove(_details.Length - 2, 1) + ")\n";
             }
 

@@ -11,14 +11,14 @@ namespace DatabasePersistence.DBModel
         {
             Name = parameterMetadata.Name;
             SavedHash = parameterMetadata.SavedHash;
-            if (AlreadyMapped.TryGetValue(parameterMetadata.TypeMetadata.SavedHash, out IMetadata item))
+            if (AlreadyMapped.TryGetValue(parameterMetadata.MyType.SavedHash, out IMetadata item))
             {
-                TypeMetadata = item as ITypeMetadata;
+                MyType = item as ITypeMetadata;
             }
             else
             {
-                TypeMetadata = new DbTypeMetadata(
-                    parameterMetadata.TypeMetadata.SavedHash, parameterMetadata.TypeMetadata.Name);
+                MyType = new DbTypeMetadata(
+                    parameterMetadata.MyType.SavedHash, parameterMetadata.MyType.Name);
             }
         }
 
@@ -26,20 +26,25 @@ namespace DatabasePersistence.DBModel
         {
         }
 
-        public virtual ITypeMetadata TypeMetadata { get; internal set; }
+        public virtual ITypeMetadata MyType
+        {
+            get => DbMyType;
+            internal set => DbMyType = value as DbTypeMetadata;
+        }
+        public virtual DbTypeMetadata DbMyType { get; set; }
         public string Name { get; set; }
         public int SavedHash { get; protected set; }
 
         [NotMapped]
         public IEnumerable<IMetadata> Children
         {
-            get => new[] {TypeMetadata};
+            get => new[] {MyType};
             set
             {
                 if (value != null)
-                    TypeMetadata = (ITypeMetadata) value.First();
+                    MyType = (ITypeMetadata) value.First();
                 else
-                    TypeMetadata = null;
+                    MyType = null;
             }
         }
 
@@ -47,9 +52,9 @@ namespace DatabasePersistence.DBModel
 
         public void MapTypes()
         {
-            if (!TypeMetadata.Mapped && AlreadyMapped.TryGetValue(TypeMetadata.SavedHash, out IMetadata item))
+            if (!MyType.Mapped && AlreadyMapped.TryGetValue(MyType.SavedHash, out IMetadata item))
             {
-                TypeMetadata = item as ITypeMetadata;
+                MyType = item as ITypeMetadata;
             }
         }
 

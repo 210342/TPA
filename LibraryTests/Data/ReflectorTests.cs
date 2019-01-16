@@ -83,7 +83,7 @@ namespace Library.Data.Tests
                 .MyType.Name);
             Assert.AreEqual(1, genericClass.Methods.Single(x => x.Name == "GenericMethod").Parameters.Count());
             Assert.AreEqual("T", genericClass.Methods.Single(x => x.Name == "GenericMethod")
-                .Parameters.Single().TypeMetadata.Name);
+                .Parameters.Single().MyType.Name);
             Assert.AreEqual("T",
                 genericClass.Methods.Single(x => x.Name == "GenericMethod").ReturnType.Name);
             //TypeMetaData lacks Fields info

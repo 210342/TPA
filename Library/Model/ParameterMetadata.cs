@@ -9,12 +9,12 @@ namespace Library.Model
         public ParameterMetadata(string name, TypeMetadata typeMetadata)
         {
             if (name == null || typeMetadata == null)
-                throw new ArgumentNullException("Neither name or TypeMetadata can be null.");
+                throw new ArgumentNullException("Neither name or MyType can be null.");
             Name = name;
-            TypeMetadata = typeMetadata;
+            MyType = typeMetadata;
             SavedHash = 17;
             SavedHash *= 31 + Name.GetHashCode();
-            SavedHash *= 31 + TypeMetadata.GetHashCode();
+            SavedHash *= 31 + MyType.GetHashCode();
         }
 
         internal ParameterMetadata()
@@ -25,28 +25,28 @@ namespace Library.Model
         {
             Name = parameterMetadata.Name;
             SavedHash = parameterMetadata.SavedHash;
-            if (AlreadyMapped.TryGetValue(parameterMetadata.TypeMetadata.SavedHash, out IMetadata item))
+            if (AlreadyMapped.TryGetValue(parameterMetadata.MyType.SavedHash, out IMetadata item))
             {
-                TypeMetadata = item as ITypeMetadata;
+                MyType = item as ITypeMetadata;
             }
             else
             {
-                TypeMetadata = new TypeMetadata(parameterMetadata.TypeMetadata.SavedHash, parameterMetadata.TypeMetadata.Name);
+                MyType = new TypeMetadata(parameterMetadata.MyType.SavedHash, parameterMetadata.MyType.Name);
             }
         }
 
         public string Name { get; }
-        public ITypeMetadata TypeMetadata { get; private set; }
+        public ITypeMetadata MyType { get; private set; }
         public int SavedHash { get; }
 
         public IEnumerable<IMetadata> Children
         {
-            get => new[] {TypeMetadata};
+            get => new[] {MyType};
             set
             {
                 foreach (IMetadata elem in value)
                 {
-                    TypeMetadata = (TypeMetadata) elem;
+                    MyType = (TypeMetadata) elem;
                     break;
                 }
             }
@@ -54,9 +54,9 @@ namespace Library.Model
 
         public void MapTypes()
         {
-            if (!TypeMetadata.Mapped && AlreadyMapped.TryGetValue(TypeMetadata.SavedHash, out IMetadata item))
+            if (!MyType.Mapped && AlreadyMapped.TryGetValue(MyType.SavedHash, out IMetadata item))
             {
-                TypeMetadata = item as ITypeMetadata;
+                MyType = item as ITypeMetadata;
             }
         }
 
@@ -73,14 +73,14 @@ namespace Library.Model
                 return false;
             ParameterMetadata pm = (ParameterMetadata) obj;
             if (Name == pm.Name)
-                if (TypeMetadata != pm.TypeMetadata)
+                if (MyType != pm.MyType)
                     return false;
             return false;
         }
 
         public override string ToString()
         {
-            return Name + ": " + TypeMetadata.Name;
+            return Name + ": " + MyType.Name;
         }
 
         #endregion

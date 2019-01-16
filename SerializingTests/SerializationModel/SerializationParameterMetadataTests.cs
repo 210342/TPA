@@ -25,7 +25,7 @@ namespace SerializationModel.Tests
             SerializationParameterMetadata sut = new SerializationParameterMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
-            Assert.IsTrue(tmp.TypeMetadata.Name.Equals(sut.TypeMetadata.Name));
+            Assert.IsTrue(tmp.MyType.Name.Equals(sut.MyType.Name));
         }
     }
 
@@ -36,10 +36,10 @@ namespace SerializationModel.Tests
         {
             Name = "name";
             SavedHash = 1;
-            TypeMetadata = new TypeTest("type");
+            MyType = new TypeTest("type");
         }
 
-        public ITypeMetadata TypeMetadata { get; internal set; }
+        public ITypeMetadata MyType { get; internal set; }
         public string Name { get; internal set; }
         public IEnumerable<IMetadata> Children { get; }
         public int SavedHash { get; internal set; }

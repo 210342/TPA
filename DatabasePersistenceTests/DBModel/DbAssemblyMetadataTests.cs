@@ -59,7 +59,7 @@ namespace DatabasePersistence.DBModel.Tests
             {
                 Name = "method1",
                 SavedHash = 6,
-                Parameters = new[] { new ParameterTest { Name = "param1", TypeMetadata = type1, SavedHash = 7 } }
+                Parameters = new[] { new ParameterTest { Name = "param1", MyType = type1, SavedHash = 7 } }
             };
             type1.Methods = new[] { method1 };
             namespaceMeta1.Types = new[] { type1 };

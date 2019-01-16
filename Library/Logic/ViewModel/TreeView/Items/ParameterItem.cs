@@ -7,7 +7,7 @@ namespace Library.Logic.ViewModel
     {
         public ParameterItem(ParameterMetadata source) : base(source)
         {
-            Details = $"Parameter: {source.Name} : {source.TypeMetadata.Name}";
+            Details = $"Parameter: {source.Name} : {source.MyType.Name}";
         }
 
         public override string Details { get; }

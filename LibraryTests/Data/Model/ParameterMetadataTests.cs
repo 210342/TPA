@@ -23,7 +23,7 @@ namespace LibraryTests.Data.Model
             ParameterMetadata sut = new ParameterMetadata(tmp);
             Assert.IsTrue(tmp.Name.Equals(sut.Name));
             Assert.AreEqual(tmp.SavedHash, sut.SavedHash);
-            Assert.IsTrue(tmp.TypeMetadata.Name.Equals(sut.TypeMetadata.Name));
+            Assert.IsTrue(tmp.MyType.Name.Equals(sut.MyType.Name));
         }
     }
 }

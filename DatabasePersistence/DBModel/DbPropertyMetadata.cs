@@ -25,7 +25,13 @@ namespace DatabasePersistence.DBModel
         {
         }
 
-        public virtual ITypeMetadata MyType { get; internal set; }
+        [NotMapped]
+        public virtual ITypeMetadata MyType
+        {
+            get => DbMyType;
+            internal set => DbMyType = value as DbTypeMetadata;
+        }
+        public virtual DbTypeMetadata DbMyType { get; set; }
         public string Name { get; set; }
         public int SavedHash { get; protected set; }
 
