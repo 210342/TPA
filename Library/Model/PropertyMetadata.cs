@@ -60,7 +60,7 @@ namespace Library.Model
 
         #region constructors
 
-        private PropertyMetadata(string propertyName, TypeMetadata propertyType)
+        internal PropertyMetadata(string propertyName, TypeMetadata propertyType)
         {
             if (propertyName == null || propertyType == null)
                 throw new ArgumentNullException("Neither propertyName or MyType can be null.");

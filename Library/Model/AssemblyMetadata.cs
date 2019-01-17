@@ -14,7 +14,7 @@ namespace Library.Model
                 throw new ArgumentNullException("Assembly can't be null");
             Name = assembly.ManifestModule.Name;
             Namespaces = from Type _type in assembly.GetTypes()
-                where _type.GetVisible()
+                where _type.GetVisible() || _type.IsNotPublic
                 group _type by _type.GetNamespace()
                 into _group
                 orderby _group.Key
