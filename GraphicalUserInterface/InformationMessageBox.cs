@@ -8,9 +8,9 @@ using Library.Logic.ViewModel;
 
 namespace GraphicalUserInterface
 {
-    public class InformationMessageBox : IInformationMessage
+    public class InformationMessageBox : IInformationMessageTarget
     {
-        public void ShowMessage(string title, string message)
+        public void SendMessage(string title, string message)
         {
             MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
         }

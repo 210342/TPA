@@ -3,9 +3,9 @@ using Library.Logic.ViewModel;
 
 namespace CommandLineInterface
 {
-    public class PrintErrorMessage : IErrorMessageBox
+    public class PrintErrorMessage : IErrorFlushTarget
     {
-        public void ShowMessage(string title, string message)
+        public void SendMessage(string title, string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(title.ToUpper());

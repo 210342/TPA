@@ -60,8 +60,8 @@ namespace Library.Logic.ViewModel
             }
             catch (MEFLoaderException ex)
             {
-                ErrorMessageProvider.ShowMessage("MEF composition error", ex.Message);
-                ErrorMessageProvider.CloseApp();
+                ErrorMessageTarget.SendMessage("MEF composition error", ex.Message);
+                ErrorMessageTarget.CloseApp();
                 IsTracingEnabled = false;
             }
         }
@@ -81,8 +81,8 @@ namespace Library.Logic.ViewModel
                     Tracer.LogFailure("Persister loading failure. " +
                                       $"{ex.Message}  {ex.StackTrace} " +
                                       $"{ex.InnerException?.Message} {ex.InnerException?.StackTrace}");
-                ErrorMessageProvider.ShowMessage("MEF composition error", ex.Message);
-                ErrorMessageProvider.CloseApp();
+                ErrorMessageTarget.SendMessage("MEF composition error", ex.Message);
+                ErrorMessageTarget.CloseApp();
             }
         }
 
@@ -111,7 +111,7 @@ namespace Library.Logic.ViewModel
                     Tracer.LogFailure($"Failed when reading assembly {ex.Message}");
                     Tracer.Flush();
                 }
-                ErrorMessageProvider.ShowMessage("Library reading error", ex.Message);
+                ErrorMessageTarget.SendMessage("Library reading error", ex.Message);
             }
         }
 
@@ -165,7 +165,7 @@ namespace Library.Logic.ViewModel
                         );
                         Persister.Save(graph);
                         Persister.Dispose();
-                        InformationMessageProvider.ShowMessage("Saving completed", "Model was successfully saved.");
+                        InformationMessageTarget.SendMessage("Saving completed", "Model was successfully saved.");
 
                         if (IsTracingEnabled)
                         {
@@ -174,8 +174,9 @@ namespace Library.Logic.ViewModel
                         }
                     });
                 }
-                catch (IOException ex)
+                catch (Exception ex)
                 {
+                    ErrorMessageTarget.SendMessage("Saving error", ex.Message);
                     if (IsTracingEnabled)
                     {
                         Tracer.LogFailure(
@@ -207,8 +208,9 @@ namespace Library.Logic.ViewModel
                         Dispatcher.CurrentDispatcher.BeginInvoke((Action<string>)LoadRootAssembly, target);
                     }
                 }
-                catch (IOException ex)
+                catch (Exception ex)
                 {
+                    ErrorMessageTarget.SendMessage("Loading error", ex.Message);
                     if (IsTracingEnabled)
                     {
                         Tracer.LogFailure(
@@ -219,7 +221,7 @@ namespace Library.Logic.ViewModel
             }
             else
             {
-                ErrorMessageProvider.ShowMessage("Target in use", "File you tried to open is currently in use by another program");
+                ErrorMessageTarget.SendMessage("Target in use", "File you tried to open is currently in use by another program");
             }
         }
 
@@ -232,11 +234,29 @@ namespace Library.Logic.ViewModel
             }
             Persister.Access(target);
 
-            IAssemblyMetadata result = Persister.Load();
+            IAssemblyMetadata result;
+            try
+            {
+
+                result = Persister.Load();
+            } catch (Exception e)
+            {
+                result = null;
+                string errorMessage = $"Error during retrieval of elements from repository. {e.Message}";
+                ErrorMessageTarget.SendMessage("Loading error", errorMessage);
+                if (IsTracingEnabled)
+                {
+                    Tracer.LogFailure($"{target}; {errorMessage}");
+                    Tracer.Flush();
+                }
+                return;
+            }
+
+
             if (result is null)
             {
                 string errorMessage = "Database doesn't contain any elements";
-                ErrorMessageProvider.ShowMessage("Loading error", errorMessage);
+                ErrorMessageTarget.SendMessage("Loading error", errorMessage);
                 if (IsTracingEnabled)
                 {
                     Tracer.LogFailure($"{target}; {errorMessage}");
@@ -254,7 +274,7 @@ namespace Library.Logic.ViewModel
                 LoadedAssembly = "Model deserialized";
                 SaveModel.RaiseCanExecuteChanged();
                 Persister.Dispose();
-                InformationMessageProvider?.ShowMessage("Loading completed", "Model was successfully loaded.");
+                InformationMessageTarget?.SendMessage("Loading completed", "Model was successfully loaded.");
 
                 if (IsTracingEnabled)
                 {
@@ -328,8 +348,8 @@ namespace Library.Logic.ViewModel
         public RelayCommand LoadModel { get; }
         public ISourceProvider OpenFileSourceProvider { get; set; }
         public ISourceProvider SaveFileSourceProvider { get; set; }
-        public IErrorMessageBox ErrorMessageProvider { get; set; }
-        public IInformationMessage InformationMessageProvider { get; set; }
+        public IErrorFlushTarget ErrorMessageTarget { get; set; }
+        public IInformationMessageTarget InformationMessageTarget { get; set; }
         public bool IsTracingEnabled { get; set; }
         public ObservableCollection<TreeViewItem> ObjectsList { get; }
 

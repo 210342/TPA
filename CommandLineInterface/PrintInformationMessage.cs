@@ -7,9 +7,9 @@ using Library.Logic.ViewModel;
 
 namespace CommandLineInterface
 {
-    internal class PrintInformationMessage : IInformationMessage
+    internal class PrintInformationMessage : IInformationMessageTarget
     {
-        public void ShowMessage(string title, string message)
+        public void SendMessage(string title, string message)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(title.ToUpper());

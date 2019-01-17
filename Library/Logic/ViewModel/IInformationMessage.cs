@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Library.Logic.ViewModel
+﻿namespace Library.Logic.ViewModel
 {
-    public interface IInformationMessage
+    public interface IInformationMessageTarget
     {
-        void ShowMessage(string title, string message);
+        void SendMessage(string title, string message);
     }
 }
