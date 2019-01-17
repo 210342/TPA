@@ -71,7 +71,7 @@ namespace Library.Model
             GenericArguments = !type.IsGenericTypeDefinition ? null : EmitGenericArguments(type.GetGenericArguments());
             Modifiers = EmitModifiers(type);
             BaseType = EmitExtends(type.BaseType);
-            Properties = PropertyMetadata.EmitProperties(type.GetProperties());
+            Properties = EmitPropertiesAndFields(type);
             TypeKind = GetTypeKind(type);
 
             Attributes = new List<AttributeMetadata>();
@@ -83,6 +83,15 @@ namespace Library.Model
 
             SavedHash = type.GetHashCode();
             Mapped = true;
+        }
+
+        private IEnumerable<IPropertyMetadata> EmitPropertiesAndFields(Type type)
+        {
+            IEnumerable<IPropertyMetadata> fields = from FieldInfo field
+                                            in type.GetFields(
+                                                BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)
+                                            select new PropertyMetadata(field.Name, EmitReference(field.FieldType));
+            return fields.Concat(PropertyMetadata.EmitProperties(type.GetProperties()));
         }
 
         internal TypeMetadata()

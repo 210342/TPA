@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
+using DatabasePersistence;
 using GalaSoft.MvvmLight.Command;
 using Library.Data;
 using Library.Logic.MEFProviders;
@@ -28,6 +29,7 @@ namespace Library.Logic.ViewModel
 
         public ViewModel(bool tracing)
         {
+            Persister = new DatabasePersister();
             IsTracingEnabled = tracing;
             LoadedAssemblyRepresentation = new AssemblyMetadata(Assembly.GetAssembly(GetType()));
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
@@ -68,22 +70,22 @@ namespace Library.Logic.ViewModel
 
         private void ImportPersister()
         {
-            PersistanceProvider persistanceProvider =
-                new PersistanceProvider(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            //PersistanceProvider persistanceProvider =
+            //    new PersistanceProvider(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
-            try
-            {
-                if (Persister is null) Persister = persistanceProvider.ProvidePersister();
-            }
-            catch (MEFLoaderException ex)
-            {
-                if (IsTracingEnabled)
-                    Tracer.LogFailure("Persister loading failure. " +
-                                      $"{ex.Message}  {ex.StackTrace} " +
-                                      $"{ex.InnerException?.Message} {ex.InnerException?.StackTrace}");
-                ErrorMessageTarget.SendMessage("MEF composition error", ex.Message);
-                ErrorMessageTarget.CloseApp();
-            }
+            //try
+            //{
+            //    if (Persister is null) Persister = persistanceProvider.ProvidePersister();
+            //}
+            //catch (MEFLoaderException ex)
+            //{
+            //    if (IsTracingEnabled)
+            //        Tracer.LogFailure("Persister loading failure. " +
+            //                          $"{ex.Message}  {ex.StackTrace} " +
+            //                          $"{ex.InnerException?.Message} {ex.InnerException?.StackTrace}");
+            //    ErrorMessageTarget.SendMessage("MEF composition error", ex.Message);
+            //    ErrorMessageTarget.CloseApp();
+            //}
         }
 
         private void LoadAssembly()
