@@ -73,10 +73,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Library\Library.csproj">
-      <Project>{df4c29a8-dc9d-4abc-8b61-229495dd2c37}</Project>
-      <Name>Library</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ModelContract\ModelContract.csproj">
       <Project>{3A99A3EA-C964-4CB2-8747-8F9A10689CC7}</Project>
       <Name>ModelContract</Name>
