@@ -58,8 +58,6 @@ namespace DatabasePersistence.DBModel
             }
         }
 
-        public virtual ICollection<DbMethodMetadata> Methods { get; set; }
-
         #endregion
 
     }

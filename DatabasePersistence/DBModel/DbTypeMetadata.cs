@@ -255,22 +255,35 @@ namespace DatabasePersistence.DBModel
         public virtual ICollection<DbPropertyMetadata> PropertiesList { get; set; }
         public virtual ICollection<DbMethodMetadata> MethodsList { get; set; }
         public virtual ICollection<DbMethodMetadata> ConstructorsList { get; set; }
-        [InverseProperty("ImplementedInterfacesList")]
         public virtual ICollection<DbTypeMetadata> TypesImplementingMe { get; set; }
+        public virtual DbTypeMetadata DbDeclaringType { get; set; }
+        public virtual DbTypeMetadata DbBaseType { get; set; }
 
         #endregion
 
         #region ITypeMetadata
 
         [NotMapped]
-        public bool Mapped { get; }
+        public bool Mapped { get; private set; }
         public string Name { get; set; }
         public int SavedHash { get; protected set; }
         public string NamespaceName { get; }
-        public virtual ITypeMetadata BaseType { get; private set; }
         public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; }
         public virtual TypeKindEnum TypeKind { get; }
-        public virtual ITypeMetadata DeclaringType { get; private set; }
+
+        [NotMapped]
+        public virtual ITypeMetadata BaseType
+        {
+            get => DbBaseType;
+            private set => DbBaseType = value as DbTypeMetadata;
+        }
+
+        [NotMapped]
+        public virtual ITypeMetadata DeclaringType
+        {
+            get => DbDeclaringType;
+            private set => DbDeclaringType = value as DbTypeMetadata;
+        }
 
         [NotMapped]
         public IEnumerable<ITypeMetadata> GenericArguments
@@ -321,7 +334,8 @@ namespace DatabasePersistence.DBModel
             private set => ConstructorsList = value?.Cast<DbMethodMetadata>().ToList();
         }
 
-        [NotMapped] public IEnumerable<IMetadata> Children { get; set; }
+        [NotMapped]
+        public IEnumerable<IMetadata> Children { get; private set; }
 
         public void MapTypes()
         {
@@ -396,6 +410,7 @@ namespace DatabasePersistence.DBModel
             {
                 property.MapTypes();
             }
+            Mapped = true;
         }
         #endregion
     }
