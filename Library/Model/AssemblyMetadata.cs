@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Library.Data;
 using ModelContract;
+using Persistance;
 
 namespace Library.Model
 {
@@ -57,6 +59,22 @@ namespace Library.Model
         public IEnumerable<INamespaceMetadata> Namespaces { get; }
 
         public IEnumerable<IMetadata> Children => Namespaces;
+
+        internal void Save(IPersister persister, string target)
+        {
+            persister.Access(target);
+            IAssemblyMetadata graph = new ModelMapper().Map(this, persister.GetType().Assembly);
+            persister.Save(graph);
+            persister.Dispose();
+        }
+
+        internal static AssemblyMetadata Load(IPersister persister, string target)
+        {
+            persister.Access(target);
+            IAssemblyMetadata result = persister.Load();
+            IAssemblyMetadata graph = new ModelMapper().Map(result, typeof(AssemblyMetadata).Assembly);
+            return graph as AssemblyMetadata;
+        }
 
         public override int GetHashCode()
         {

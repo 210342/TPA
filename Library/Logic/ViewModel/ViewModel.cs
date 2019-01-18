@@ -156,13 +156,7 @@ namespace Library.Logic.ViewModel
                             Tracer.Flush();
                         }
 
-                        Persister.Access(target);
-                        IAssemblyMetadata graph = new ModelMapper().Map(
-                            root: ObjectsList.First().ModelObject as IAssemblyMetadata,
-                            model: Persister.GetType().Assembly
-                        );
-                        Persister.Save(graph);
-                        Persister.Dispose();
+                        (ObjectsList.First().ModelObject as AssemblyMetadata)?.Save(Persister, target);
                         InformationMessageTarget.SendMessage("Saving completed", "Model was successfully saved.");
 
                         if (IsTracingEnabled)
@@ -230,16 +224,14 @@ namespace Library.Logic.ViewModel
                 Tracer.LogLoadingModel(target);
                 Tracer.Flush();
             }
-            Persister.Access(target);
 
-            IAssemblyMetadata result;
+            AssemblyMetadata graph = null;
             try
             {
-
-                result = Persister.Load();
-            } catch (Exception e)
+                graph = AssemblyMetadata.Load(Persister, target);
+            }
+            catch (Exception e)
             {
-                result = null;
                 string errorMessage = $"Error during retrieval of elements from repository. {e.Message}";
                 ErrorMessageTarget.SendMessage("Loading error", errorMessage);
                 if (IsTracingEnabled)
@@ -247,29 +239,13 @@ namespace Library.Logic.ViewModel
                     Tracer.LogFailure($"{target}; {errorMessage}");
                     Tracer.Flush();
                 }
-                return;
             }
 
-
-            if (result is null)
+            if (graph != null)
             {
-                string errorMessage = "Database doesn't contain any elements";
-                ErrorMessageTarget.SendMessage("Loading error", errorMessage);
-                if (IsTracingEnabled)
-                {
-                    Tracer.LogFailure($"{target}; {errorMessage}");
-                    Tracer.Flush();
-                }
-            }
-            else
-            {
-                IAssemblyMetadata graph = new ModelMapper().Map(
-                    root: result,
-                    model: typeof(AssemblyMetadata).Assembly
-                );
                 ObjectsList.Clear();
-                ObjectsList.Add(new AssemblyItem(graph as AssemblyMetadata));
-                LoadedAssembly = "Model deserialized";
+                ObjectsList.Add(new AssemblyItem(graph));
+                LoadedAssembly = "Model loaded from repository";
                 SaveModel.RaiseCanExecuteChanged();
                 Persister.Dispose();
                 InformationMessageTarget?.SendMessage("Loading completed", "Model was successfully loaded.");
@@ -333,8 +309,7 @@ namespace Library.Logic.ViewModel
                         }
                         catch (Exception e)
                         {
-                            Tracer?.LogFailure($"Caught and exception " +
-                                              $"during application closing process. {e.Message}");
+                            Tracer?.LogFailure($"Caught and exception during application closing process. {e.Message}");
                             Tracer?.Flush();
                         }
                         
