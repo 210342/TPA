@@ -51,8 +51,7 @@ namespace Library.Logic.ViewModel
 
         private void ImportTracer()
         {
-            TracingProvider tracingProvider =
-                new TracingProvider(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            tracingProvider = new TracingProvider(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
             try
             {
@@ -68,12 +67,11 @@ namespace Library.Logic.ViewModel
 
         private void ImportPersister()
         {
-            PersistanceProvider persistanceProvider =
-                new PersistanceProvider(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            persistenceProvider = new PersistenceProvider(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
             try
             {
-                if (Persister is null) Persister = persistanceProvider.ProvidePersister();
+                if (Persister is null) Persister = persistenceProvider.ProvidePersister();
             }
             catch (MEFLoaderException ex)
             {
@@ -300,6 +298,8 @@ namespace Library.Logic.ViewModel
         private TreeViewItem objectSelected;
         private string _loadedAssembly;
         private TreeViewItem _objectToDisplay;
+        private PersistenceProvider persistenceProvider;
+        private TracingProvider tracingProvider;
 
         #endregion
 
@@ -328,12 +328,14 @@ namespace Library.Logic.ViewModel
                         {
                             Persister.Dispose();
                             Tracer?.Dispose();
+                            persistenceProvider.Dispose();
+                            tracingProvider.Dispose();
                         }
                         catch (Exception e)
                         {
-                            Tracer.LogFailure($"Caught and exception " +
+                            Tracer?.LogFailure($"Caught and exception " +
                                               $"during application closing process. {e.Message}");
-                            Tracer.Flush();
+                            Tracer?.Flush();
                         }
                         
                     });

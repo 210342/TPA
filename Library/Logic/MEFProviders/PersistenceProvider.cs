@@ -6,7 +6,7 @@ using Persistance;
 
 namespace Library.Logic.MEFProviders
 {
-    public class PersistanceProvider
+    public class PersistenceProvider : IDisposable
     {
         private CompositionContainer _container;
 
@@ -15,11 +15,11 @@ namespace Library.Logic.MEFProviders
         private IPersister _persister;
         #pragma warning restore 0649
 
-        public PersistanceProvider()
+        public PersistenceProvider()
         {
         }
 
-        public PersistanceProvider(string assemblyPath)
+        public PersistenceProvider(string assemblyPath)
         {
             DirectoryCatalog = new DirectoryCatalog(assemblyPath);
         }
@@ -49,6 +49,11 @@ namespace Library.Logic.MEFProviders
 
             if (_persister is null) throw new MEFLoaderException("Couldn't compose persistance object");
             return _persister;
+        }
+
+        public void Dispose()
+        {
+            _container?.Dispose();
         }
     }
 }

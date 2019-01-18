@@ -6,7 +6,7 @@ using Tracing;
 
 namespace Library.Logic.MEFProviders
 {
-    public class TracingProvider
+    public class TracingProvider : IDisposable
     {
         private CompositionContainer _container;
 
@@ -50,6 +50,11 @@ namespace Library.Logic.MEFProviders
             if (_tracer is null)
                 throw new MEFLoaderException($"Could not load {typeof(ITracing)}");
             return _tracer;
+        }
+
+        public void Dispose()
+        {
+            _container?.Dispose();
         }
     }
 }

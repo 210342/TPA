@@ -9,7 +9,7 @@ namespace Library.Data.MEFProviders.Tests
     [ExcludeFromCodeCoverage]
     public class PersistanceProviderTests
     {
-        private readonly PersistanceProvider _sut = new PersistanceProvider();
+        private readonly PersistenceProvider _sut = new PersistenceProvider();
 
         [TestMethod]
         public void ProvidePersisterTest()

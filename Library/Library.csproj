@@ -57,7 +57,7 @@
   <ItemGroup>
     <Compile Include="Data\ModelMapper.cs" />
     <Compile Include="Logic\MEFProviders\Exceptions\MEFLoaderException.cs" />
-    <Compile Include="Logic\MEFProviders\PersistanceProvider.cs" />
+    <Compile Include="Logic\MEFProviders\PersistenceProvider.cs" />
     <Compile Include="Logic\MEFProviders\TracingProvider.cs" />
     <Compile Include="Logic\ViewModel\IErrorFlushTarget.cs" />
     <Compile Include="Logic\ViewModel\IInformationMessage.cs" />
