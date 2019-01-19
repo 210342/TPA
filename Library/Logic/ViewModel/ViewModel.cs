@@ -161,10 +161,11 @@ namespace Library.Logic.ViewModel
                         }
 
                         Persister.Access(target);
-                        IAssemblyMetadata graph = new ModelMapper().Map(
-                            root: ObjectsList.First().ModelObject as IAssemblyMetadata,
-                            model: Persister.GetType().Assembly
-                        );
+                        //IAssemblyMetadata graph = new ModelMapper().Map(
+                        //    root: ObjectsList.First().ModelObject as IAssemblyMetadata,
+                        //    model: Persister.GetType().Assembly
+                        //);
+                        IAssemblyMetadata graph = ObjectsList.First().ModelObject as IAssemblyMetadata;
                         Persister.Save(graph);
                         Persister.Dispose();
                         InformationMessageTarget.SendMessage("Saving completed", "Model was successfully saved.");
