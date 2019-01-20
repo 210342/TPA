@@ -11,14 +11,6 @@ namespace DatabasePersistence.DBModel.Tests
     [ExcludeFromCodeCoverage]
     public class DbAssemblyMetadataTests
     {
-        [TestInitialize]
-        public void NullifyDictionary()
-        {
-            FieldInfo field = typeof(AbstractMapper).GetField("<AlreadyMapped>k__BackingField",
-                BindingFlags.Static | BindingFlags.NonPublic);
-            field.SetValue(null, new Dictionary<int, IMetadata>());
-        }
-
         [TestMethod]
         public void DbAssemblyMetadataTest()
         {

@@ -62,14 +62,18 @@ namespace DatabasePersistence.DBModel
         [NotMapped]
         public IEnumerable<IMethodMetadata> Constructors
         {
-            get => EFMethodsAndConstructors.Where(m => m.Name.Equals(".ctor"));
-            set => EFMethodsAndConstructors = value?.Concat(Methods).Cast<DbMethodMetadata>().ToList();
+            get => EFMethodsAndConstructors?.Where(m => m.Name.Equals(".ctor"));
+            set => EFMethodsAndConstructors = value?.
+                Concat(Methods ?? Enumerable.Empty<IMethodMetadata>()).
+                Cast<DbMethodMetadata>().ToList();
         }
         [NotMapped]
         public IEnumerable<IMethodMetadata> Methods
         {
-            get => EFMethodsAndConstructors.Where(m => !m.Name.Equals(".ctor"));
-            set => EFMethodsAndConstructors = value?.Concat(Constructors).Cast<DbMethodMetadata>().ToList();
+            get => EFMethodsAndConstructors?.Where(m => !m.Name.Equals(".ctor"));
+            set => EFMethodsAndConstructors = value?.
+                Concat(Constructors ?? Enumerable.Empty<IMethodMetadata>())
+                .Cast<DbMethodMetadata>().ToList();
         }
         [NotMapped]
         public IEnumerable<IMetadata> Children => throw new NotImplementedException();
@@ -155,9 +159,12 @@ namespace DatabasePersistence.DBModel
 
             // Modifiers
             Modifiers = typeMetadata.Modifiers;
-            AccessLevel = Modifiers.Item1;
-            IsSealed = Modifiers.Item2.Equals(SealedEnum.Sealed);
-            IsAbstract = Modifiers.Item3.Equals(AbstractEnum.Abstract);
+            if (Modifiers != null)
+            {
+                AccessLevel = Modifiers.Item1;
+                IsSealed = Modifiers.Item2.Equals(SealedEnum.Sealed);
+                IsAbstract = Modifiers.Item3.Equals(AbstractEnum.Abstract);
+            }
 
             // Type kind
             TypeKind = typeMetadata.TypeKind;

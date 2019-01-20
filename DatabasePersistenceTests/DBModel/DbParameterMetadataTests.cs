@@ -18,9 +18,9 @@ namespace DatabasePersistence.DBModel.Tests
         [TestInitialize]
         public void NullifyDictionary()
         {
-            FieldInfo field = typeof(AbstractMapper).GetField("<AlreadyMapped>k__BackingField",
+            FieldInfo field = typeof(AbstractMapper).GetField("<AlreadyMappedParameters>k__BackingField",
                 BindingFlags.Static | BindingFlags.NonPublic);
-            field.SetValue(null, new Dictionary<int, IMetadata>());
+            field.SetValue(null, new Dictionary<int, DbParameterMetadata>());
         }
 
         [TestMethod]

@@ -3,7 +3,9 @@ using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ModelContract;
 
 namespace DatabasePersistence.DBModel
 {
@@ -129,7 +131,7 @@ namespace DatabasePersistence.DBModel
         }
 
         [TestMethod]
-        public void LoadTest()
+        public async Task LoadTest()
         {
             DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata { Name = "test0" };
             DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata { Name = "test1" };
@@ -141,8 +143,8 @@ namespace DatabasePersistence.DBModel
             namespaceMeta2.Types = new[] { type2 };
 
             persister.Access(_target);
-            persister.Save(assemblyMetadata);
-            object loaded = persister.Load();
+            await persister.Save(assemblyMetadata);
+            IAssemblyMetadata loaded = await Task.Run(async () => await persister.Load());
             DbAssemblyMetadata loadedAssembly = loaded as DbAssemblyMetadata;
             Assert.IsNotNull(loadedAssembly);
             Assert.AreEqual("test0", loadedAssembly.Name);

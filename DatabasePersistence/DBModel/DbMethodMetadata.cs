@@ -60,11 +60,14 @@ namespace DatabasePersistence.DBModel
 
             //Modifiers
             Modifiers = methodMetadata.Modifiers;
-            AccessLevel = Modifiers.Item1;
-            IsAbstract = Modifiers.Item2.Equals(AbstractEnum.Abstract);
-            IsStatic = Modifiers.Item3.Equals(StaticEnum.Static);
-            IsVirtual = Modifiers.Item4.Equals(VirtualEnum.Virtual);
-            IsExtension = methodMetadata.IsExtension;    
+            if (Modifiers != null)
+            {
+                AccessLevel = Modifiers.Item1;
+                IsAbstract = Modifiers.Item2.Equals(AbstractEnum.Abstract);
+                IsStatic = Modifiers.Item3.Equals(StaticEnum.Static);
+                IsVirtual = Modifiers.Item4.Equals(VirtualEnum.Virtual);
+                IsExtension = methodMetadata.IsExtension;
+            }
 
             // Generic Arguments
             if (methodMetadata.GenericArguments is null)
