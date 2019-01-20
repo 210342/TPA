@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
-using System.Reflection;
+using System.Threading.Tasks;
 using DatabasePersistence.DBModel;
 using ModelContract;
-using Persistance;
+using Persistence;
 
 namespace DatabasePersistence
 {
@@ -26,8 +26,8 @@ namespace DatabasePersistence
         public void Access(string target)
         {
             context?.Dispose();
-            context = string.IsNullOrEmpty(target) 
-                ? new DbModelAccessContext(_originalTarget) 
+            context = string.IsNullOrEmpty(target)
+                ? new DbModelAccessContext(_originalTarget)
                 : new DbModelAccessContext(target);
         }
 
@@ -37,48 +37,82 @@ namespace DatabasePersistence
             GC.SuppressFinalize(this);
         }
 
-        public IAssemblyMetadata Load()
+        public async Task<IAssemblyMetadata> Load()
         {
-            DbAssemblyMetadata result = context.Assemblies.OrderByDescending(n => n.Id).FirstOrDefault();
+            DbAssemblyMetadata result = await context.Assemblies
+                .OrderByDescending(n => n.Id).FirstOrDefaultAsync();
             ExplicitLoading(result);
+            InsertRedundantData(result);
             return result;
         }
 
-        public void Save(IAssemblyMetadata obj)
+        public Task Save(IAssemblyMetadata obj)
         {
             DbAssemblyMetadata root = obj as DbAssemblyMetadata ?? new DbAssemblyMetadata(obj);
             context.Assemblies.Add(root);
             context.SaveChanges();
+            return Task.FromResult(true);
         }
 
         private void ExplicitLoading(DbAssemblyMetadata loadedRoot)
         {
-            context.Entry(loadedRoot).Collection(a => a.NamespacesList).Load();
-            foreach (DbNamespaceMetadata _namespace in loadedRoot.NamespacesList)
+            context.Entry(loadedRoot).Collection(a => a.EFNamespaces).Load();
+            foreach(DbNamespaceMetadata _namespace in loadedRoot.EFNamespaces)
             {
-                context.Entry(_namespace).Collection(n => n.TypesList).Load();
-                foreach (DbTypeMetadata type in _namespace.TypesList)
+                context.Entry(_namespace).Collection(n => n.EFTypes).Load();
+                foreach(DbTypeMetadata type in _namespace.EFTypes)
                 {
-                    context.Entry(type).Collection(t => t.ImplementedInterfacesList).Load();
-                    context.Entry(type).Collection(t => t.MethodsList).Load();
-                    context.Entry(type).Collection(t => t.NestedTypesList).Load();
-                    context.Entry(type).Collection(t => t.ConstructorsList).Load();
-                    context.Entry(type).Collection(t => t.GenericArgumentsList).Load();
-                    context.Entry(type).Collection(t => t.PropertiesList).Load();
-                    context.Entry(type).Collection(t => t.AttributesList).Load();
-                    foreach (DbPropertyMetadata property in type.PropertiesList)
+                    context.Entry(type).Reference(t => t.EFDeclaringType)?.Load();
+                    context.Entry(type).Reference(t => t.EFBaseType)?.Load();
+                    context.Entry(type).Collection(t => t.EFAttributes)?.Load();
+                    context.Entry(type).Collection(t => t.EFGenericArguments)?.Load();
+                    context.Entry(type).Collection(t => t.EFImplementedInterfaces)?.Load();
+                    context.Entry(type).Collection(t => t.EFNestedTypes)?.Load();
+                    context.Entry(type).Collection(t => t.EFMethodsAndConstructors)?.Load();
+                    context.Entry(type).Collection(t => t.EFProperties)?.Load();
+                    foreach(DbPropertyMetadata property in type.EFProperties)
                     {
-                        context.Entry(property).Reference(p => p.DbMyType).Load();
+                        context.Entry(property).Reference(p => p.EFMyType).Load();
                     }
-                    foreach (DbMethodMetadata method in type.MethodsList)
+                    foreach(DbMethodMetadata method in type.EFMethodsAndConstructors)
                     {
-                        context.Entry(method).Reference(m => m.DbReturnType).Load();
-                        context.Entry(method).Collection(m => m.ParametersList).Load();
-                        context.Entry(method).Collection(m => m.GenericArgumentsList).Load();
-                        foreach (DbParameterMetadata parameter in method.ParametersList)
+                        context.Entry(method).Reference(m => m.EFReturnType).Load();
+                        context.Entry(method).Collection(m => m.EFParameters).Load();
+                        context.Entry(method).Collection(m => m.EFGenericArguments).Load();
+                        foreach(DbParameterMetadata parameter in method.EFParameters)
                         {
-                            context.Entry(parameter).Reference(p => p.DbMyType).Load();
+                            context.Entry(parameter).Reference(p => p.EFMyType).Load();
                         }
+                    }
+                }
+            }
+        }
+
+        private void InsertRedundantData(DbAssemblyMetadata loadedRoot)
+        {
+            foreach(DbNamespaceMetadata _namespace in loadedRoot.EFNamespaces)
+            {
+                foreach(DbTypeMetadata type in _namespace.EFTypes)
+                {
+                    type.NamespaceName = _namespace.Name;
+                    AbstractEnum isAbstract = AbstractEnum.NotAbstract;
+                    if (type.IsAbstract) isAbstract = AbstractEnum.Abstract;
+                    SealedEnum isSealed = SealedEnum.NotSealed;
+                    if (type.IsSealed) isSealed = SealedEnum.Sealed;
+
+                    type.Modifiers = new Tuple<AccessLevelEnum, SealedEnum, AbstractEnum>(
+                        type.AccessLevel, isSealed, isAbstract);
+                    foreach (DbMethodMetadata method in type.EFMethodsAndConstructors)
+                    {
+                        isAbstract = AbstractEnum.NotAbstract;
+                        if (method.IsAbstract) isAbstract = AbstractEnum.Abstract;
+                        StaticEnum isStatic = StaticEnum.NotStatic;
+                        if (method.IsStatic) isStatic = StaticEnum.Static;
+                        VirtualEnum isVirtual = VirtualEnum.NotVirtual;
+                        if (method.IsVirtual) isVirtual = VirtualEnum.Virtual;
+
+                        method.Modifiers = new Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum>(
+                            method.AccessLevel, isAbstract, isStatic, isVirtual);
                     }
                 }
             }

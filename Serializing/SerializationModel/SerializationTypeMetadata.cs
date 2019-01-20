@@ -13,7 +13,6 @@ namespace SerializationModel
         {
             SavedHash = hashCode;
             Name = name;
-            Mapped = false;
         }
 
         public SerializationTypeMetadata(ITypeMetadata typeMetadata)
@@ -217,10 +216,8 @@ namespace SerializationModel
             }
 
             FillChildren(new StreamingContext());
-            Mapped = true;
         }
 
-        public bool Mapped { get; }
         [DataMember(Name = "NamespaceName")] public string NamespaceName { get; private set; }
 
         [DataMember(Name = "BaseType")] public ITypeMetadata BaseType { get; private set; }
@@ -282,12 +279,12 @@ namespace SerializationModel
 
         public void MapTypes()
         {
-            if (BaseType != null && !BaseType.Mapped 
+            if (BaseType != null
                 && AlreadyMapped.TryGetValue(BaseType.SavedHash, out IMetadata item))
             {
                 BaseType = item as ITypeMetadata;
             }
-            if (DeclaringType != null && !DeclaringType.Mapped
+            if (DeclaringType != null
                 && AlreadyMapped.TryGetValue(DeclaringType.SavedHash, out item))
             {
                 DeclaringType = item as ITypeMetadata;
@@ -297,7 +294,7 @@ namespace SerializationModel
                 ICollection<ITypeMetadata> actualGenericArguments = new List<ITypeMetadata>();
                 foreach (ITypeMetadata type in GenericArguments)
                 {
-                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    if (AlreadyMapped.TryGetValue(type.SavedHash, out item))
                     {
                         actualGenericArguments.Add(item as ITypeMetadata);
                     }
@@ -313,7 +310,7 @@ namespace SerializationModel
                 ICollection<ITypeMetadata> actualImplementedInterfaces = new List<ITypeMetadata>();
                 foreach (ITypeMetadata type in ImplementedInterfaces)
                 {
-                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    if (AlreadyMapped.TryGetValue(type.SavedHash, out item))
                     {
                         actualImplementedInterfaces.Add(item as ITypeMetadata);
                     }
@@ -329,7 +326,7 @@ namespace SerializationModel
                 ICollection<ITypeMetadata> actualNestedTypes = new List<ITypeMetadata>();
                 foreach (ITypeMetadata type in NestedTypes)
                 {
-                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    if (AlreadyMapped.TryGetValue(type.SavedHash, out item))
                     {
                         actualNestedTypes.Add(item as ITypeMetadata);
                     }

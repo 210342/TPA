@@ -5,17 +5,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Threading;
 using GalaSoft.MvvmLight.Command;
 using Library.Data;
 using Library.Logic.MEFProviders;
 using Library.Logic.MEFProviders.Exceptions;
 using Library.Model;
 using ModelContract;
-using Persistance;
+using Persistence;
 using Tracing;
 
 namespace Library.Logic.ViewModel
@@ -34,9 +32,9 @@ namespace Library.Logic.ViewModel
             ObjectsList = new ObservableCollection<TreeViewItem> {null};
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
             OpenFileCommand = new RelayCommand(() => OpenFile(OpenFileSourceProvider));
-            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider),
+            SaveModel = new RelayCommand(async () => await Save(SaveFileSourceProvider),
                 () => Persister != null && !(ObjectsList.First() is null));
-            LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => Persister != null);
+            LoadModel = new RelayCommand(async () => await Load(OpenFileSourceProvider), () => Persister != null);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -136,7 +134,7 @@ namespace Library.Logic.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private async void Save(ISourceProvider targetPathProvider)
+        private async Task Save(ISourceProvider targetPathProvider)
         {
             if (targetPathProvider == null)
                 throw new ArgumentNullException(nameof(targetPathProvider), "SourceProvider can't be null.");
@@ -156,6 +154,10 @@ namespace Library.Logic.ViewModel
                             Tracer.Flush();
                         }
 
+                        Persister.Access(target);
+                        IAssemblyMetadata graph = ObjectsList.First().ModelObject as IAssemblyMetadata;
+                        Persister.Save(graph);
+                        Persister.Dispose();
                         (ObjectsList.First().ModelObject as AssemblyMetadata)?.Save(Persister, target);
                         InformationMessageTarget.SendMessage("Saving completed", "Model was successfully saved.");
 
@@ -178,7 +180,7 @@ namespace Library.Logic.ViewModel
                 }
         }
 
-        private void Load(ISourceProvider targetPathProvider)
+        private async Task Load(ISourceProvider targetPathProvider)
         {
             if (targetPathProvider == null)
                 throw new ArgumentNullException(nameof(targetPathProvider), "SourceProvider can't be null.");
@@ -191,13 +193,32 @@ namespace Library.Logic.ViewModel
                 try
                 {
                     string target = targetPathProvider.GetPath();
-                    if (SynchronizationContext.Current is null)
+                    IAssemblyMetadata result = await Task.Run(
+                        async () => await LoadRootAssembly(target));
+
+                    if (result is null)
                     {
-                        LoadRootAssembly(target);
+                        const string errorMessage = "Repository doesn't contain any elements";
+                        ErrorMessageTarget.SendMessage("Loading error", errorMessage);
+                        if (IsTracingEnabled)
+                        {
+                            Tracer.LogFailure($"{target}; {errorMessage}");
+                            Tracer.Flush();
+                        }
                     }
                     else
                     {
-                        Dispatcher.CurrentDispatcher.BeginInvoke((Action<string>)LoadRootAssembly, target);
+                        ObjectsList.Clear();
+                        ObjectsList.Add(new AssemblyItem(new AssemblyMetadata(result)));
+                        LoadedAssembly = "Model deserialized";
+                        SaveModel.RaiseCanExecuteChanged();
+                        InformationMessageTarget?.SendMessage("Loading completed", "Model was successfully loaded.");
+
+                        if (IsTracingEnabled)
+                        {
+                            Tracer.LogModelLoaded(target);
+                            Tracer.Flush();
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -217,7 +238,7 @@ namespace Library.Logic.ViewModel
             }
         }
 
-        private void LoadRootAssembly(string target)
+        private async Task<IAssemblyMetadata> LoadRootAssembly(string target)
         {
             if (IsTracingEnabled)
             {
@@ -239,23 +260,15 @@ namespace Library.Logic.ViewModel
                     Tracer.LogFailure($"{target}; {errorMessage}");
                     Tracer.Flush();
                 }
-            }
 
-            if (graph != null)
+                return null;
+            }
+            finally
             {
-                ObjectsList.Clear();
-                ObjectsList.Add(new AssemblyItem(graph));
-                LoadedAssembly = "Model loaded from repository";
-                SaveModel.RaiseCanExecuteChanged();
                 Persister.Dispose();
-                InformationMessageTarget?.SendMessage("Loading completed", "Model was successfully loaded.");
-
-                if (IsTracingEnabled)
-                {
-                    Tracer.LogModelLoaded(target);
-                    Tracer.Flush();
-                }
             }
+
+            return result;
         }
 
         private void OpenFile(ISourceProvider sourceProvider)
@@ -280,7 +293,6 @@ namespace Library.Logic.ViewModel
         #endregion
 
         #region Properties
-
         public ITracing Tracer { get; private set; }
         public IPersister Persister { get; private set; }
         public ICommand ShowCurrentObject { get; }
@@ -294,11 +306,8 @@ namespace Library.Logic.ViewModel
                 return new RelayCommand<CancelEventArgs>(
                     args =>
                     {
-                        if (Tracer != null)
-                        {
-                            Tracer.LogSuccess("shutting down system");
-                            Tracer.Flush();
-                        }
+                        Tracer?.LogSuccess("shutting down system");
+                        Tracer?.Flush();
 
                         try
                         {

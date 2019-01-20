@@ -34,7 +34,7 @@ namespace SerializationModel
 
         public void MapTypes()
         {
-            if (MyType.Mapped && AlreadyMapped.TryGetValue(MyType.SavedHash, out IMetadata item))
+            if (AlreadyMapped.TryGetValue(MyType.SavedHash, out IMetadata item))
             {
                 MyType = item as ITypeMetadata;
             }

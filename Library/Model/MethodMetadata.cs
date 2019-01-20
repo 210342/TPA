@@ -56,9 +56,13 @@ namespace Library.Model
 
                 GenericArguments = genericArguments;
             }
-
+            
             // Return type
-            if (AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out IMetadata item))
+            if(methodMetadata.ReturnType is null)
+            {
+                ReturnType = null;
+            }
+            else if (AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out IMetadata item))
             {
                 ReturnType = item as ITypeMetadata;
             }
@@ -76,7 +80,7 @@ namespace Library.Model
             {
                 List<IParameterMetadata> parameters = new List<IParameterMetadata>();
                 foreach (IParameterMetadata parameter in methodMetadata.Parameters)
-                    if (AlreadyMapped.TryGetValue(parameter.SavedHash, out item))
+                    if (AlreadyMapped.TryGetValue(parameter.SavedHash, out IMetadata item))
                     {
                         parameters.Add(item as IParameterMetadata);
                     }
@@ -165,23 +169,32 @@ namespace Library.Model
 
         public void MapTypes()
         {
-            if (ReturnType != null && string.IsNullOrEmpty(ReturnType.Name)
-                && AlreadyMapped.TryGetValue(ReturnType.SavedHash, out IMetadata item))
+            if (ReturnType != null)
             {
-                ReturnType = item as ITypeMetadata;
+                if (AlreadyMapped.TryGetValue(
+                    ReturnType.SavedHash, out IMetadata item))
+                {
+                    ReturnType = item as ITypeMetadata;
+                }
+                else
+                {
+                    AlreadyMapped.Add(ReturnType.SavedHash, ReturnType);
+                }
             }
+
             if (GenericArguments != null)
             {
                 ICollection<ITypeMetadata> actualGenericArguments = new List<ITypeMetadata>();
                 foreach (ITypeMetadata type in GenericArguments)
                 {
-                    if (string.IsNullOrEmpty(type.Name) && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    if (AlreadyMapped.TryGetValue(type.SavedHash, out IMetadata item))
                     {
                         actualGenericArguments.Add(item as ITypeMetadata);
                     }
                     else
                     {
                         actualGenericArguments.Add(type);
+                        AlreadyMapped.Add(type.SavedHash, type);
                     }
                 }
                 GenericArguments = actualGenericArguments;

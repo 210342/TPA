@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+using System;
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using DatabasePersistence.DBModel;
 using ModelContract;
 
@@ -15,26 +16,33 @@ namespace DatabasePersistence
         }
 
         public virtual DbSet<DbAssemblyMetadata> Assemblies { get; set; }
-        public virtual DbSet<DbAttributeMetadata> Attributes { get; set; }
-        public virtual DbSet<DbMethodMetadata> Methods { get; set; }
-        public virtual DbSet<DbNamespaceMetadata> Namespaces { get; set; }
-        public virtual DbSet<DbParameterMetadata> Parameters { get; set; }
-        public virtual DbSet<DbPropertyMetadata> Properties { get; set; }
-        public virtual DbSet<DbTypeMetadata> Types { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DbAssemblyMetadata>().Map(m =>
+            modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+
+            //------------------- ASSEMBLY -----------------------
+
+            modelBuilder.Entity<DbAssemblyMetadata>().Map(a =>
             {
-                m.MapInheritedProperties();
-                m.ToTable("Assemblies");
+                a.MapInheritedProperties();
+                a.ToTable("Assemblies");
+            });
+            modelBuilder.Entity<DbAssemblyMetadata>()
+                .HasMany(a => a.EFNamespaces)
+                .WithRequired()
+                .Map(x => x.MapKey("NamespaceAssemblyId"));
+
+            //------------------  ATTRIBUTES  --------------------
+
+            modelBuilder.Entity<DbAttributeMetadata>().Map(a =>
+            {
+                a.MapInheritedProperties();
+                a.ToTable("Attributes");
             });
 
-            modelBuilder.Entity<DbAttributeMetadata>().Map(m =>
-            {
-                m.MapInheritedProperties();
-                m.ToTable("Attributes");
-            });
+            //-------------------- METHODS -----------------------
 
             modelBuilder.Entity<DbMethodMetadata>().Map(m =>
             {
@@ -42,42 +50,119 @@ namespace DatabasePersistence
                 m.ToTable("Methods");
             });
             modelBuilder.Entity<DbMethodMetadata>()
-                .HasOptional(m => m.DbReturnType)
-                .WithOptionalPrincipal()
-                .Map(x => x.MapKey("ReturnTypeId"));
+                .HasOptional(m => m.EFReturnType)
+                .WithMany()
+                .Map(x => x.MapKey("MethodReturnTypeId"));
+            modelBuilder.Entity<DbMethodMetadata>()
+                .HasMany(m => m.EFGenericArguments)
+                .WithMany()
+                .Map(mg =>
+                {
+                    mg.MapLeftKey("MethodGenArgId");
+                    mg.MapRightKey("GenericArgMethId");
+                    mg.ToTable("MethodsGenericArguments");
+                });
+            modelBuilder.Entity<DbMethodMetadata>()
+                .HasMany(m => m.EFParameters)
+                .WithMany()
+                .Map(mp =>
+                {
+                    mp.MapLeftKey("MethodParamId");
+                    mp.MapRightKey("ParameterMethId");
+                    mp.ToTable("MethodsParameters");
+                });
+
+            //------------------  NAMESPACES  --------------------
 
             modelBuilder.Entity<DbNamespaceMetadata>().Map(m =>
             {
                 m.MapInheritedProperties();
                 m.ToTable("Namespaces");
             });
+            modelBuilder.Entity<DbNamespaceMetadata>()
+                .HasMany(n => n.EFTypes)
+                .WithOptional()
+                .Map(x => x.MapKey("TypeNamespaceId"));
 
-            modelBuilder.Entity<DbParameterMetadata>().Map(m =>
+            //------------------  PARAMETERS  --------------------
+
+            modelBuilder.Entity<DbParameterMetadata>().Map(p =>
             {
-                m.MapInheritedProperties();
-                m.ToTable("Parameters");
+                p.MapInheritedProperties();
+                p.ToTable("Parameters");
             });
             modelBuilder.Entity<DbParameterMetadata>()
-                .HasOptional(m => m.DbMyType)
-                .WithOptionalPrincipal()
+                .HasRequired(p => p.EFMyType)
+                .WithMany()
                 .Map(x => x.MapKey("ParameterTypeId"));
 
-            modelBuilder.Entity<DbPropertyMetadata>()
-                .Map(m =>
-                {
-                    m.MapInheritedProperties();
-                    m.ToTable("Properties");
-                });
-            modelBuilder.Entity<DbPropertyMetadata>()
-                .HasOptional(p => p.DbMyType)
-                .WithOptionalPrincipal()
-                .Map(m => m.MapKey("PropertyTypeId"));
+            //------------------  PROPERTIES  --------------------
 
-            modelBuilder.Entity<DbTypeMetadata>().Map(m =>
+            modelBuilder.Entity<DbPropertyMetadata>().Map(p =>
             {
-                m.MapInheritedProperties();
-                m.ToTable("Types");
+                p.MapInheritedProperties();
+                p.ToTable("Properties");
             });
+            modelBuilder.Entity<DbPropertyMetadata>()
+                .HasRequired(p => p.EFMyType)
+                .WithMany()
+                .Map(x => x.MapKey("PropertyTypeId"));
+
+            //---------------------  TYPES  -----------------------
+
+            modelBuilder.Entity<DbTypeMetadata>().Map(t =>
+            {
+                t.MapInheritedProperties();
+                t.ToTable("Types");
+            });
+            modelBuilder.Entity<DbTypeMetadata>()
+                .HasMany(t => t.EFAttributes)
+                .WithMany()
+                .Map(ta =>
+                {
+                    ta.MapLeftKey("TypeAttId");
+                    ta.MapRightKey("AttributeTypId");
+                    ta.ToTable("TypesAttributes");
+                });
+            modelBuilder.Entity<DbTypeMetadata>()
+                .HasMany(t => t.EFImplementedInterfaces)
+                .WithMany()
+                .Map(ti =>
+                {
+                    ti.MapLeftKey("TypeIntId");
+                    ti.MapRightKey("InterfaceTypId");
+                    ti.ToTable("TypesInterfaces");
+                });
+            modelBuilder.Entity<DbTypeMetadata>()
+                .HasOptional(t => t.EFBaseType)
+                .WithMany()
+                .Map(x => x.MapKey("BaseTypeId"));
+            modelBuilder.Entity<DbTypeMetadata>()
+                .HasMany(t => t.EFGenericArguments)
+                .WithMany()
+                .Map(tg =>
+                {
+                    tg.MapLeftKey("TypeGenId");
+                    tg.MapRightKey("GenericArgTypId");
+                    tg.ToTable("TypesGenericArguments");
+                });
+            modelBuilder.Entity<DbTypeMetadata>()
+                .HasOptional(t => t.EFDeclaringType)
+                .WithMany(t => t.EFNestedTypes)
+                .Map(x => x.MapKey("DeclaringTypeId"));
+            modelBuilder.Entity<DbTypeMetadata>()
+                .HasMany(t => t.EFProperties)
+                .WithMany()
+                .Map(tp =>
+                {
+                    tp.MapLeftKey("TypePropId");
+                    tp.MapRightKey("PropertyTypId");
+                    tp.ToTable("TypesProperties");
+                });
+            modelBuilder.Entity<DbTypeMetadata>()
+                .HasMany(t => t.EFMethodsAndConstructors)
+                .WithRequired()
+                .Map(x => x.MapKey("MethodTypId"));
         }
     }
 }

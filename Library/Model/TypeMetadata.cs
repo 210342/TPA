@@ -37,7 +37,6 @@ namespace Library.Model
 
         #region properties
 
-        public bool Mapped { get; }
         public string Name { get; }
         public string NamespaceName { get; }
         public ITypeMetadata BaseType { get; private set; }
@@ -82,13 +81,18 @@ namespace Library.Model
             FillChildren(new StreamingContext());
 
             SavedHash = type.GetHashCode();
-            Mapped = true;
         }
 
-        internal TypeMetadata()
+        private IEnumerable<IPropertyMetadata> EmitPropertiesAndFields(Type type)
         {
-            Mapped = false;
+            IEnumerable<IPropertyMetadata> fields = from FieldInfo field
+                                            in type.GetFields(
+                                                BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)
+                                            select new PropertyMetadata(field.Name, EmitReference(field.FieldType));
+            return fields.Concat(PropertyMetadata.EmitProperties(type.GetProperties()));
         }
+
+        internal TypeMetadata() { }
 
         public TypeMetadata(ITypeMetadata typeMetadata)
         {
@@ -286,7 +290,6 @@ namespace Library.Model
             }
 
             FillChildren(new StreamingContext());
-            Mapped = true;
         }
 
         private TypeMetadata(string typeName, string namespaceName, int hash)
@@ -296,7 +299,6 @@ namespace Library.Model
             Name = typeName;
             NamespaceName = namespaceName;
             SavedHash = hash;
-            Mapped = false;
         }
 
         private TypeMetadata(string typeName, string namespaceName, IEnumerable<TypeMetadata> genericArguments,
@@ -310,7 +312,6 @@ namespace Library.Model
         {
             SavedHash = hashCode;
             Name = name;
-            Mapped = false;
         }
 
         #endregion
@@ -405,12 +406,13 @@ namespace Library.Model
 
         public void MapTypes()
         {
-            if (BaseType != null && !BaseType.Mapped
-                && AlreadyMapped.TryGetValue(BaseType.SavedHash, out IMetadata item))
+            IMetadata item;
+            if (BaseType != null && AlreadyMapped.TryGetValue(
+                BaseType.SavedHash, out item))
             {
                 BaseType = item as ITypeMetadata;
             }
-            if (DeclaringType != null && !DeclaringType.Mapped
+            if (DeclaringType != null
                 && AlreadyMapped.TryGetValue(DeclaringType.SavedHash, out item))
             {
                 DeclaringType = item as ITypeMetadata;
@@ -420,13 +422,14 @@ namespace Library.Model
                 ICollection<ITypeMetadata> actualGenericArguments = new List<ITypeMetadata>();
                 foreach (ITypeMetadata type in GenericArguments)
                 {
-                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    if (AlreadyMapped.TryGetValue(type.SavedHash, out item))
                     {
                         actualGenericArguments.Add(item as ITypeMetadata);
                     }
                     else
                     {
                         actualGenericArguments.Add(type);
+                        AlreadyMapped.Add(type.SavedHash, type);
                     }
                 }
                 GenericArguments = actualGenericArguments;
@@ -436,29 +439,32 @@ namespace Library.Model
                 ICollection<ITypeMetadata> actualImplementedInterfaces = new List<ITypeMetadata>();
                 foreach (ITypeMetadata type in ImplementedInterfaces)
                 {
-                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    if (AlreadyMapped.TryGetValue(type.SavedHash, out item))
                     {
                         actualImplementedInterfaces.Add(item as ITypeMetadata);
                     }
                     else
                     {
                         actualImplementedInterfaces.Add(type);
+                        AlreadyMapped.Add(type.SavedHash, type);
                     }
                 }
                 ImplementedInterfaces = actualImplementedInterfaces;
             }
+
             if (NestedTypes != null)
             {
                 ICollection<ITypeMetadata> actualNestedTypes = new List<ITypeMetadata>();
                 foreach (ITypeMetadata type in NestedTypes)
                 {
-                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    if (AlreadyMapped.TryGetValue(type.SavedHash, out item))
                     {
                         actualNestedTypes.Add(item as ITypeMetadata);
                     }
                     else
                     {
                         actualNestedTypes.Add(type);
+                        AlreadyMapped.Add(type.SavedHash, type);
                     }
                 }
                 NestedTypes = actualNestedTypes;

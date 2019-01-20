@@ -17,12 +17,6 @@ namespace DatabasePersistence.Tests
         {
             Assert.IsNotNull(new DbModelAccessContext().Database);
             Assert.IsNotNull(new DbModelAccessContext().Assemblies);
-            Assert.IsNotNull(new DbModelAccessContext().Attributes);
-            Assert.IsNotNull(new DbModelAccessContext().Methods);
-            Assert.IsNotNull(new DbModelAccessContext().Namespaces);
-            Assert.IsNotNull(new DbModelAccessContext().Parameters);
-            Assert.IsNotNull(new DbModelAccessContext().Properties);
-            Assert.IsNotNull(new DbModelAccessContext().Types);
         }
     }
 }

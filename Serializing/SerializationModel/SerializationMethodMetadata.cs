@@ -105,7 +105,7 @@ namespace SerializationModel
 
         public void MapTypes()
         {
-            if (ReturnType != null && !ReturnType.Mapped
+            if (ReturnType != null
                 && AlreadyMapped.TryGetValue(ReturnType.SavedHash, out IMetadata item))
             {
                 ReturnType = item as ITypeMetadata;
@@ -115,7 +115,7 @@ namespace SerializationModel
                 ICollection<ITypeMetadata> actualGenericArguments = new List<ITypeMetadata>();
                 foreach(ITypeMetadata type in GenericArguments)
                 {
-                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    if (AlreadyMapped.TryGetValue(type.SavedHash, out item))
                     {
                         actualGenericArguments.Add(item as ITypeMetadata);
                     }

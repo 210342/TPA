@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using System.Xml;
 using ModelContract;
-using Persistance;
+using Persistence;
 using SerializationModel;
 
 namespace Serializing
@@ -16,8 +17,8 @@ namespace Serializing
         private readonly DataContractSerializer dataContractSerializer;
 
         public Stream SerializationStream { get; set; }
-        private Type NodeType { get; set; }
-        private IEnumerable<Type> KnownTypes { get; set; }
+        private Type NodeType { get; }
+        private IEnumerable<Type> KnownTypes { get; }
 
         public FileSystemDependency FileSystemDependency => FileSystemDependency.Dependent;
 
@@ -54,7 +55,7 @@ namespace Serializing
             }
         }
 
-        public void Save(IAssemblyMetadata toSave)
+        public async Task Save(IAssemblyMetadata toSave)
         {
             XmlWriterSettings settings = new XmlWriterSettings {Indent = true};
             if (SerializationStream != null)
@@ -65,11 +66,11 @@ namespace Serializing
                     dataContractSerializer.WriteObject(writer, toSave);
                 }
 
-                SerializationStream.FlushAsync();
+                await SerializationStream.FlushAsync();
             }
         }
 
-        public IAssemblyMetadata Load()
+        public Task<IAssemblyMetadata> Load()
         {
             object read = null;
             try
@@ -87,7 +88,7 @@ namespace Serializing
             {
                 return null;
             }
-            return read as IAssemblyMetadata;
+            return Task.FromResult(read as IAssemblyMetadata);
         }
 
         public void Dispose()

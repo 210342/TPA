@@ -1,65 +1,58 @@
-﻿using System.Collections.Generic;
+﻿using ModelContract;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using ModelContract;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DatabasePersistence.DBModel
 {
     public class DbPropertyMetadata : AbstractMapper, IPropertyMetadata
     {
+        #region IPropertyMetadata
+        public string Name { get; set; }
+        public int SavedHash { get; set; }
+        [NotMapped]
+        public ITypeMetadata MyType => EFMyType;
+        [NotMapped]
+        public IEnumerable<IMetadata> Children => throw new NotImplementedException();
+        #endregion
+
+        #region EF
+
+        public DbTypeMetadata EFMyType { get; set; }
+
+        #endregion
+
+        public DbPropertyMetadata() { }
+
         public DbPropertyMetadata(IPropertyMetadata propertyMetadata)
         {
             Name = propertyMetadata.Name;
             SavedHash = propertyMetadata.SavedHash;
-            if (AlreadyMapped.TryGetValue(propertyMetadata.MyType.SavedHash, out IMetadata item))
+
+            if (AlreadyMappedTypes.TryGetValue(
+                propertyMetadata.MyType.SavedHash, out DbTypeMetadata item))
             {
-                MyType = item as ITypeMetadata;
+                EFMyType = item;
             }
             else
             {
-                MyType = new DbTypeMetadata(propertyMetadata.MyType.SavedHash, propertyMetadata.MyType.Name);
+                EFMyType = new DbTypeMetadata(propertyMetadata.MyType.SavedHash, 
+                    propertyMetadata.MyType.Name);
             }
         }
-
-        public DbPropertyMetadata()
-        {
-        }
-
-        [NotMapped]
-        public virtual ITypeMetadata MyType
-        {
-            get => DbMyType;
-            internal set => DbMyType = value as DbTypeMetadata;
-        }
-        public virtual DbTypeMetadata DbMyType { get; set; }
-        public string Name { get; set; }
-        public int SavedHash { get; protected set; }
-
-        [NotMapped]
-        public IEnumerable<IMetadata> Children
-        {
-            get => new[] {MyType};
-            set
-            {
-                if (value != null)
-                    MyType = (ITypeMetadata) value.First();
-                else
-                    MyType = null;
-            }
-        }
-
-        #region EF
-
         public void MapTypes()
         {
-            if (MyType.Mapped && AlreadyMapped.TryGetValue(MyType.SavedHash, out IMetadata item))
+            if (AlreadyMappedTypes.TryGetValue(EFMyType.SavedHash, out DbTypeMetadata item))
             {
-                MyType = item as ITypeMetadata;
+                EFMyType = item;
+            }
+            else
+            {
+                AlreadyMappedTypes.Add(EFMyType.SavedHash, EFMyType);
             }
         }
-
-        public virtual ICollection<DbTypeMetadata> Types { get; set; }
-
-        #endregion
     }
 }
