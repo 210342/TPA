@@ -5,7 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Persistance;
+using Persistence;
 
 namespace Serializing.Tests
 {

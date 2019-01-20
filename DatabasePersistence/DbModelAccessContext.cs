@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using DatabasePersistence.DBModel;
@@ -24,7 +24,6 @@ namespace DatabasePersistence
 
             //------------------- ASSEMBLY -----------------------
 
-            modelBuilder.Entity<DbAssemblyMetadata>().HasKey(a => a.SavedHash);
             modelBuilder.Entity<DbAssemblyMetadata>().Map(a =>
             {
                 a.MapInheritedProperties();
@@ -37,7 +36,6 @@ namespace DatabasePersistence
 
             //------------------  ATTRIBUTES  --------------------
 
-            modelBuilder.Entity<DbAttributeMetadata>().HasKey(a => a.SavedHash);
             modelBuilder.Entity<DbAttributeMetadata>().Map(a =>
             {
                 a.MapInheritedProperties();
@@ -46,7 +44,6 @@ namespace DatabasePersistence
 
             //-------------------- METHODS -----------------------
 
-            modelBuilder.Entity<DbMethodMetadata>().HasKey(m => m.SavedHash);
             modelBuilder.Entity<DbMethodMetadata>().Map(m =>
             {
                 m.MapInheritedProperties();
@@ -77,7 +74,6 @@ namespace DatabasePersistence
 
             //------------------  NAMESPACES  --------------------
 
-            modelBuilder.Entity<DbNamespaceMetadata>().HasKey(a => a.SavedHash);
             modelBuilder.Entity<DbNamespaceMetadata>().Map(m =>
             {
                 m.MapInheritedProperties();
@@ -90,7 +86,6 @@ namespace DatabasePersistence
 
             //------------------  PARAMETERS  --------------------
 
-            modelBuilder.Entity<DbParameterMetadata>().HasKey(p => p.SavedHash);
             modelBuilder.Entity<DbParameterMetadata>().Map(p =>
             {
                 p.MapInheritedProperties();
@@ -103,7 +98,6 @@ namespace DatabasePersistence
 
             //------------------  PROPERTIES  --------------------
 
-            modelBuilder.Entity<DbPropertyMetadata>().HasKey(p => p.SavedHash);
             modelBuilder.Entity<DbPropertyMetadata>().Map(p =>
             {
                 p.MapInheritedProperties();
@@ -116,7 +110,6 @@ namespace DatabasePersistence
 
             //---------------------  TYPES  -----------------------
 
-            modelBuilder.Entity<DbTypeMetadata>().HasKey(t => t.SavedHash);
             modelBuilder.Entity<DbTypeMetadata>().Map(t =>
             {
                 t.MapInheritedProperties();

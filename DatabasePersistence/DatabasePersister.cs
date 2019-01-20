@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
-using System.Reflection;
+using System.Threading.Tasks;
 using DatabasePersistence.DBModel;
 using ModelContract;
-using Persistance;
+using Persistence;
 
 namespace DatabasePersistence
 {
@@ -37,19 +37,21 @@ namespace DatabasePersistence
             GC.SuppressFinalize(this);
         }
 
-        public IAssemblyMetadata Load()
+        public async Task<IAssemblyMetadata> Load()
         {
-            DbAssemblyMetadata result = context.Assemblies.FirstOrDefault();
+            DbAssemblyMetadata result = await context.Assemblies
+                .OrderByDescending(n => n.Id).FirstOrDefaultAsync();
             ExplicitLoading(result);
             InsertRedundantData(result);
-            return result as IAssemblyMetadata;
+            return result;
         }
 
-        public void Save(IAssemblyMetadata obj)
+        public Task Save(IAssemblyMetadata obj)
         {
             DbAssemblyMetadata root = obj as DbAssemblyMetadata ?? new DbAssemblyMetadata(obj);
             context.Assemblies.Add(root);
             context.SaveChanges();
+            return Task.FromResult(true);
         }
 
         private void ExplicitLoading(DbAssemblyMetadata loadedRoot)
@@ -88,11 +90,30 @@ namespace DatabasePersistence
 
         private void InsertRedundantData(DbAssemblyMetadata loadedRoot)
         {
-            foreach(DbNamespaceMetadata _namespace in loadedRoot.Namespaces)
+            foreach(DbNamespaceMetadata _namespace in loadedRoot.EFNamespaces)
             {
-                foreach(DbTypeMetadata type in _namespace.Types)
+                foreach(DbTypeMetadata type in _namespace.EFTypes)
                 {
                     type.NamespaceName = _namespace.Name;
+                    AbstractEnum isAbstract = AbstractEnum.NotAbstract;
+                    if (type.IsAbstract) isAbstract = AbstractEnum.Abstract;
+                    SealedEnum isSealed = SealedEnum.NotSealed;
+                    if (type.IsSealed) isSealed = SealedEnum.Sealed;
+
+                    type.Modifiers = new Tuple<AccessLevelEnum, SealedEnum, AbstractEnum>(
+                        type.AccessLevel, isSealed, isAbstract);
+                    foreach (DbMethodMetadata method in type.EFMethodsAndConstructors)
+                    {
+                        isAbstract = AbstractEnum.NotAbstract;
+                        if (method.IsAbstract) isAbstract = AbstractEnum.Abstract;
+                        StaticEnum isStatic = StaticEnum.NotStatic;
+                        if (method.IsStatic) isStatic = StaticEnum.Static;
+                        VirtualEnum isVirtual = VirtualEnum.NotVirtual;
+                        if (method.IsVirtual) isVirtual = VirtualEnum.Virtual;
+
+                        method.Modifiers = new Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum>(
+                            method.AccessLevel, isAbstract, isStatic, isVirtual);
+                    }
                 }
             }
         }

@@ -5,10 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Threading;
 using DatabasePersistence;
 using GalaSoft.MvvmLight.Command;
 using Library.Data;
@@ -16,7 +14,7 @@ using Library.Logic.MEFProviders;
 using Library.Logic.MEFProviders.Exceptions;
 using Library.Model;
 using ModelContract;
-using Persistance;
+using Persistence;
 using Tracing;
 
 namespace Library.Logic.ViewModel
@@ -36,9 +34,9 @@ namespace Library.Logic.ViewModel
             ObjectsList = new ObservableCollection<TreeViewItem> {null};
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
             OpenFileCommand = new RelayCommand(() => OpenFile(OpenFileSourceProvider));
-            SaveModel = new RelayCommand(() => Save(SaveFileSourceProvider),
+            SaveModel = new RelayCommand(async () => await Save(SaveFileSourceProvider),
                 () => Persister != null && !(ObjectsList.First() is null));
-            LoadModel = new RelayCommand(() => Load(OpenFileSourceProvider), () => Persister != null);
+            LoadModel = new RelayCommand(async () => await Load(OpenFileSourceProvider), () => Persister != null);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -140,7 +138,7 @@ namespace Library.Logic.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private async void Save(ISourceProvider targetPathProvider)
+        private async Task Save(ISourceProvider targetPathProvider)
         {
             if (targetPathProvider == null)
                 throw new ArgumentNullException(nameof(targetPathProvider), "SourceProvider can't be null.");
@@ -161,10 +159,6 @@ namespace Library.Logic.ViewModel
                         }
 
                         Persister.Access(target);
-                        //IAssemblyMetadata graph = new ModelMapper().Map(
-                        //    root: ObjectsList.First().ModelObject as IAssemblyMetadata,
-                        //    model: Persister.GetType().Assembly
-                        //);
                         IAssemblyMetadata graph = ObjectsList.First().ModelObject as IAssemblyMetadata;
                         Persister.Save(graph);
                         Persister.Dispose();
@@ -189,7 +183,7 @@ namespace Library.Logic.ViewModel
                 }
         }
 
-        private void Load(ISourceProvider targetPathProvider)
+        private async Task Load(ISourceProvider targetPathProvider)
         {
             if (targetPathProvider == null)
                 throw new ArgumentNullException(nameof(targetPathProvider), "SourceProvider can't be null.");
@@ -202,13 +196,32 @@ namespace Library.Logic.ViewModel
                 try
                 {
                     string target = targetPathProvider.GetPath();
-                    if (SynchronizationContext.Current is null)
+                    IAssemblyMetadata result = await Task.Run(
+                        async () => await LoadRootAssembly(target));
+
+                    if (result is null)
                     {
-                        LoadRootAssembly(target);
+                        const string errorMessage = "Repository doesn't contain any elements";
+                        ErrorMessageTarget.SendMessage("Loading error", errorMessage);
+                        if (IsTracingEnabled)
+                        {
+                            Tracer.LogFailure($"{target}; {errorMessage}");
+                            Tracer.Flush();
+                        }
                     }
                     else
                     {
-                        Dispatcher.CurrentDispatcher.BeginInvoke((Action<string>)LoadRootAssembly, target);
+                        ObjectsList.Clear();
+                        ObjectsList.Add(new AssemblyItem(new AssemblyMetadata(result)));
+                        LoadedAssembly = "Model deserialized";
+                        SaveModel.RaiseCanExecuteChanged();
+                        InformationMessageTarget?.SendMessage("Loading completed", "Model was successfully loaded.");
+
+                        if (IsTracingEnabled)
+                        {
+                            Tracer.LogModelLoaded(target);
+                            Tracer.Flush();
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -228,7 +241,7 @@ namespace Library.Logic.ViewModel
             }
         }
 
-        private void LoadRootAssembly(string target)
+        private async Task<IAssemblyMetadata> LoadRootAssembly(string target)
         {
             if (IsTracingEnabled)
             {
@@ -240,10 +253,10 @@ namespace Library.Logic.ViewModel
             IAssemblyMetadata result;
             try
             {
-                result = Persister.Load();
-            } catch (Exception e)
+                result = await Persister.Load();
+            }
+            catch (Exception e)
             {
-                result = null;
                 string errorMessage = $"Error during retrieval of elements from repository. {e.Message}";
                 ErrorMessageTarget.SendMessage("Loading error", errorMessage);
                 if (IsTracingEnabled)
@@ -251,35 +264,15 @@ namespace Library.Logic.ViewModel
                     Tracer.LogFailure($"{target}; {errorMessage}");
                     Tracer.Flush();
                 }
-                return;
-            }
 
-
-            if (result is null)
-            {
-                string errorMessage = "Database doesn't contain any elements";
-                ErrorMessageTarget.SendMessage("Loading error", errorMessage);
-                if (IsTracingEnabled)
-                {
-                    Tracer.LogFailure($"{target}; {errorMessage}");
-                    Tracer.Flush();
-                }
+                return null;
             }
-            else
+            finally
             {
-                ObjectsList.Clear();
-                ObjectsList.Add(new AssemblyItem(new AssemblyMetadata(result)));
-                LoadedAssembly = "Model deserialized";
-                SaveModel.RaiseCanExecuteChanged();
                 Persister.Dispose();
-                InformationMessageTarget?.SendMessage("Loading completed", "Model was successfully loaded.");
-
-                if (IsTracingEnabled)
-                {
-                    Tracer.LogModelLoaded(target);
-                    Tracer.Flush();
-                }
             }
+
+            return result;
         }
 
         private void OpenFile(ISourceProvider sourceProvider)
@@ -302,7 +295,6 @@ namespace Library.Logic.ViewModel
         #endregion
 
         #region Properties
-
         public ITracing Tracer { get; private set; }
         public IPersister Persister { get; private set; }
         public ICommand ShowCurrentObject { get; }
@@ -316,11 +308,8 @@ namespace Library.Logic.ViewModel
                 return new RelayCommand<CancelEventArgs>(
                     args =>
                     {
-                        if (Tracer != null)
-                        {
-                            Tracer.LogSuccess("shutting down system");
-                            Tracer.Flush();
-                        }
+                        Tracer?.LogSuccess("shutting down system");
+                        Tracer?.Flush();
 
                         try
                         {
@@ -329,9 +318,9 @@ namespace Library.Logic.ViewModel
                         }
                         catch (Exception e)
                         {
-                            Tracer.LogFailure($"Caught and exception " +
+                            Tracer?.LogFailure($"Caught and exception " +
                                               $"during application closing process. {e.Message}");
-                            Tracer.Flush();
+                            Tracer?.Flush();
                         }
                         
                     });

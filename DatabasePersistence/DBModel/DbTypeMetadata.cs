@@ -13,6 +13,8 @@ namespace DatabasePersistence.DBModel
         #region ITypeMetadata
         public string Name { get; set; }
         public int SavedHash { get; set; }
+        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; set; }
+        public TypeKindEnum TypeKind { get; }
         [NotMapped]
         public string NamespaceName { get; set; }
         [NotMapped]
@@ -69,8 +71,6 @@ namespace DatabasePersistence.DBModel
             get => EFMethodsAndConstructors.Where(m => !m.Name.Equals(".ctor"));
             set => EFMethodsAndConstructors = value?.Concat(Constructors).Cast<DbMethodMetadata>().ToList();
         }
-        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; }
-        public TypeKindEnum TypeKind { get; }
         [NotMapped]
         public IEnumerable<IMetadata> Children => throw new NotImplementedException();
 
@@ -78,6 +78,9 @@ namespace DatabasePersistence.DBModel
 
         #region EF
 
+        public bool IsAbstract { get; set; }
+        public bool IsSealed { get; set; }
+        public AccessLevelEnum AccessLevel { get; set; }
         public DbTypeMetadata EFBaseType { get; set; }
         public DbTypeMetadata EFDeclaringType { get; set; }
         public ICollection<DbAttributeMetadata> EFAttributes { get; set; }
@@ -152,6 +155,9 @@ namespace DatabasePersistence.DBModel
 
             // Modifiers
             Modifiers = typeMetadata.Modifiers;
+            AccessLevel = Modifiers.Item1;
+            IsSealed = Modifiers.Item2.Equals(SealedEnum.Sealed);
+            IsAbstract = Modifiers.Item3.Equals(AbstractEnum.Abstract);
 
             // Type kind
             TypeKind = typeMetadata.TypeKind;

@@ -16,7 +16,7 @@ namespace DatabasePersistence.DBModel
         public int SavedHash { get; set; }
         public bool IsExtension { get; set; }
         [NotMapped]
-        public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; }
+        public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; set; }
         [NotMapped]
         public ITypeMetadata ReturnType
         {
@@ -41,6 +41,10 @@ namespace DatabasePersistence.DBModel
 
         #region EF
 
+        public bool IsAbstract { get; set; }
+        public bool IsStatic { get; set; }
+        public bool IsVirtual { get; set; }
+        public AccessLevelEnum AccessLevel { get; set; }
         public DbTypeMetadata EFReturnType { get; set; }
         public ICollection<DbTypeMetadata> EFGenericArguments { get; set; }
         public ICollection<DbParameterMetadata> EFParameters { get; set; }
@@ -53,6 +57,14 @@ namespace DatabasePersistence.DBModel
         {
             Name = methodMetadata.Name;
             SavedHash = methodMetadata.SavedHash;
+
+            //Modifiers
+            Modifiers = methodMetadata.Modifiers;
+            AccessLevel = Modifiers.Item1;
+            IsAbstract = Modifiers.Item2.Equals(AbstractEnum.Abstract);
+            IsStatic = Modifiers.Item3.Equals(StaticEnum.Static);
+            IsVirtual = Modifiers.Item4.Equals(VirtualEnum.Virtual);
+            IsExtension = methodMetadata.IsExtension;    
 
             // Generic Arguments
             if (methodMetadata.GenericArguments is null)

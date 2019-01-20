@@ -1,13 +1,14 @@
 ﻿using ModelContract;
 using System;
+using System.Threading.Tasks;
 
-namespace Persistance
+namespace Persistence
 {
     public interface IPersister : IDisposable
     {
         FileSystemDependency FileSystemDependency { get; }
         void Access(string target);
-        void Save(IAssemblyMetadata obj);
-        IAssemblyMetadata Load();
+        Task Save(IAssemblyMetadata obj);
+        Task<IAssemblyMetadata> Load();
     }
 }

@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using Library.Logic.MEFProviders.Exceptions;
-using Persistance;
+using Persistence;
 
 namespace Library.Logic.MEFProviders
 {
