@@ -55,7 +55,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\ModelMapper.cs" />
     <Compile Include="Logic\ViewModel\IErrorFlushTarget.cs" />
     <Compile Include="Logic\MEFProviders\Exceptions\MEFLoaderException.cs" />
     <Compile Include="Logic\MEFProviders\PersistanceProvider.cs" />
@@ -86,9 +85,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dbp\Dbp.csproj">
-      <Project>{18809514-53db-49ef-94c8-358ece999ff4}</Project>
-      <Name>Dbp</Name>
+    <ProjectReference Include="..\DatabasePersistence\DatabasePersistence.csproj">
+      <Project>{5fb2eedc-c436-4005-ae5a-31f6e3219a56}</Project>
+      <Name>DatabasePersistence</Name>
     </ProjectReference>
     <ProjectReference Include="..\ModelContract\ModelContract.csproj">
       <Project>{3a99a3ea-c964-4cb2-8747-8f9a10689cc7}</Project>

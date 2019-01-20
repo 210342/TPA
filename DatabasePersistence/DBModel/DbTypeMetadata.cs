@@ -1,13 +1,98 @@
-﻿using System;
+﻿using ModelContract;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using ModelContract;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DatabasePersistence.DBModel
 {
     public class DbTypeMetadata : AbstractMapper, ITypeMetadata
     {
+        #region ITypeMetadata
+        public string Name { get; set; }
+        public int SavedHash { get; set; }
+        [NotMapped]
+        public string NamespaceName { get; set; }
+        [NotMapped]
+        public ITypeMetadata BaseType
+        {
+            get => EFBaseType;
+            set => EFBaseType = value as DbTypeMetadata;
+        }
+        [NotMapped]
+        public ITypeMetadata DeclaringType
+        {
+            get => EFDeclaringType;
+            set => EFDeclaringType = value as DbTypeMetadata;
+        }
+        [NotMapped]
+        public IEnumerable<IAttributeMetadata> Attributes
+        {
+            get => EFAttributes;
+            set => EFAttributes = value?.Cast<DbAttributeMetadata>().ToList();
+        }
+        [NotMapped]
+        public IEnumerable<ITypeMetadata> ImplementedInterfaces
+        {
+            get => EFImplementedInterfaces;
+            set => EFImplementedInterfaces = value?.Cast<DbTypeMetadata>().ToList();
+        }
+        [NotMapped]
+        public IEnumerable<ITypeMetadata> GenericArguments
+        {
+            get => EFGenericArguments;
+            set => EFGenericArguments = value?.Cast<DbTypeMetadata>().ToList();
+        }
+        [NotMapped]
+        public IEnumerable<ITypeMetadata> NestedTypes
+        {
+            get => EFNestedTypes;
+            set => EFNestedTypes = value?.Cast<DbTypeMetadata>().ToList();
+        }
+        [NotMapped]
+        public IEnumerable<IPropertyMetadata> Properties
+        {
+            get => EFProperties;
+            set => EFProperties = value?.Cast<DbPropertyMetadata>().ToList();
+        }
+        [NotMapped]
+        public IEnumerable<IMethodMetadata> Constructors
+        {
+            get => EFMethodsAndConstructors.Where(m => m.Name.Equals(".ctor"));
+            set => EFMethodsAndConstructors = value?.Concat(Methods).Cast<DbMethodMetadata>().ToList();
+        }
+        [NotMapped]
+        public IEnumerable<IMethodMetadata> Methods
+        {
+            get => EFMethodsAndConstructors.Where(m => !m.Name.Equals(".ctor"));
+            set => EFMethodsAndConstructors = value?.Concat(Constructors).Cast<DbMethodMetadata>().ToList();
+        }
+        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; }
+        public TypeKindEnum TypeKind { get; }
+        [NotMapped]
+        public IEnumerable<IMetadata> Children => throw new NotImplementedException();
+
+        #endregion
+
+        #region EF
+
+        public DbTypeMetadata EFBaseType { get; set; }
+        public DbTypeMetadata EFDeclaringType { get; set; }
+        public ICollection<DbAttributeMetadata> EFAttributes { get; set; }
+        public ICollection<DbTypeMetadata> EFImplementedInterfaces { get; set; }
+        public ICollection<DbTypeMetadata> EFGenericArguments { get; set; }
+        public ICollection<DbTypeMetadata> EFNestedTypes { get; set; }
+        public ICollection<DbPropertyMetadata> EFProperties { get; set; }
+        public ICollection<DbMethodMetadata> EFMethodsAndConstructors { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        public DbTypeMetadata() { }
+
         public DbTypeMetadata(ITypeMetadata typeMetadata)
         {
             Name = typeMetadata.Name;
@@ -17,36 +102,52 @@ namespace DatabasePersistence.DBModel
             // Base type
             if (typeMetadata.BaseType is null)
             {
-                BaseType = null;
+                EFBaseType = null;
             }
-            else if (AlreadyMapped.TryGetValue(typeMetadata.BaseType.SavedHash, out IMetadata item))
+            else if (AlreadyMappedTypes.TryGetValue(
+                typeMetadata.BaseType.SavedHash, out DbTypeMetadata item))
             {
-                BaseType = item as ITypeMetadata;
+                EFBaseType = item;
             }
             else
             {
-                BaseType = new DbTypeMetadata(typeMetadata.BaseType.SavedHash, typeMetadata.BaseType.Name);
+                EFBaseType = new DbTypeMetadata(typeMetadata.BaseType.SavedHash, typeMetadata.BaseType.Name);
+            }
+
+            //Declaring type
+            if (typeMetadata.DeclaringType is null)
+            {
+                EFDeclaringType = null;
+            }
+            else if (AlreadyMappedTypes.TryGetValue(
+                typeMetadata.DeclaringType.SavedHash, out DbTypeMetadata item))
+            {
+                EFDeclaringType = item;
+            }
+            else
+            {
+                EFDeclaringType = new DbTypeMetadata(typeMetadata.DeclaringType.SavedHash, typeMetadata.DeclaringType.Name);
             }
 
             // Generic Arguments
             if (typeMetadata.GenericArguments is null)
             {
-                GenericArguments = null;
+                EFGenericArguments = null;
             }
             else
             {
-                List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
+                List<DbTypeMetadata> genericArguments = new List<DbTypeMetadata>();
                 foreach (ITypeMetadata genericArgument in typeMetadata.GenericArguments)
-                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata item))
+                    if (AlreadyMappedTypes.TryGetValue(genericArgument.SavedHash, out DbTypeMetadata item))
                     {
-                        genericArguments.Add(item as ITypeMetadata);
+                        genericArguments.Add(item);
                     }
                     else
                     {
                         genericArguments.Add(new DbTypeMetadata(genericArgument.SavedHash, genericArgument.Name));
                     }
 
-                GenericArguments = genericArguments;
+                EFGenericArguments = genericArguments;
             }
 
             // Modifiers
@@ -58,360 +159,210 @@ namespace DatabasePersistence.DBModel
             // Attributes
             if (typeMetadata.Attributes is null)
             {
-                Attributes = Enumerable.Empty<IAttributeMetadata>();
+                EFAttributes = Enumerable.Empty<DbAttributeMetadata>().ToList();
             }
             else
             {
-                List<IAttributeMetadata> attributes = new List<IAttributeMetadata>();
+                List<DbAttributeMetadata> attributes = new List<DbAttributeMetadata>();
                 foreach (IAttributeMetadata attribute in typeMetadata.Attributes)
-                    if (AlreadyMapped.TryGetValue(attribute.SavedHash, out IMetadata item))
+                    if (AlreadyMappedAttributes.TryGetValue(attribute.SavedHash, out DbAttributeMetadata item))
                     {
-                        attributes.Add(item as IAttributeMetadata);
+                        attributes.Add(item);
                     }
                     else
                     {
-                        IAttributeMetadata newAttribute = new DbAttributeMetadata(attribute);
+                        DbAttributeMetadata newAttribute = new DbAttributeMetadata(attribute);
                         attributes.Add(newAttribute);
-                        AlreadyMapped.Add(newAttribute.SavedHash, newAttribute);
+                        AlreadyMappedAttributes.Add(newAttribute.SavedHash, newAttribute);
                     }
 
-                Attributes = attributes;
+                EFAttributes = attributes;
             }
 
             // Interfaces
             if (typeMetadata.ImplementedInterfaces is null)
             {
-                ImplementedInterfaces = Enumerable.Empty<ITypeMetadata>();
+                EFImplementedInterfaces = Enumerable.Empty<DbTypeMetadata>().ToList();
             }
             else
             {
-                List<ITypeMetadata> interfaces = new List<ITypeMetadata>();
+                List<DbTypeMetadata> interfaces = new List<DbTypeMetadata>();
                 foreach (ITypeMetadata implementedInterface in typeMetadata.ImplementedInterfaces)
-                    if (AlreadyMapped.TryGetValue(implementedInterface.SavedHash, out IMetadata item))
+                    if (AlreadyMappedTypes.TryGetValue(implementedInterface.SavedHash, out DbTypeMetadata item))
                     {
-                        interfaces.Add(item as ITypeMetadata);
+                        interfaces.Add(item);
                     }
                     else
                     {
                         interfaces.Add(new DbTypeMetadata(implementedInterface.SavedHash, implementedInterface.Name));
                     }
 
-                ImplementedInterfaces = interfaces;
+                EFImplementedInterfaces = interfaces;
             }
 
             // Nested Types
             if (typeMetadata.NestedTypes is null)
             {
-                NestedTypes = null;
+                EFNestedTypes = null;
             }
             else
             {
-                List<ITypeMetadata> nestedTypes = new List<ITypeMetadata>();
+                List<DbTypeMetadata> nestedTypes = new List<DbTypeMetadata>();
                 foreach (ITypeMetadata nestedType in typeMetadata.NestedTypes)
-                    if (AlreadyMapped.TryGetValue(nestedType.SavedHash, out IMetadata item))
+                    if (AlreadyMappedTypes.TryGetValue(nestedType.SavedHash, out DbTypeMetadata item))
                     {
-                        nestedTypes.Add(item as ITypeMetadata);
+                        nestedTypes.Add(item);
                     }
                     else
                     {
                         nestedTypes.Add(new DbTypeMetadata(nestedType.SavedHash, nestedType.Name));
                     }
 
-                NestedTypes = nestedTypes;
+                EFNestedTypes = nestedTypes;
             }
 
             // Properties
             if (typeMetadata.Properties is null)
             {
-                Properties = Enumerable.Empty<IPropertyMetadata>();
+                EFProperties = Enumerable.Empty<DbPropertyMetadata>().ToList();
             }
             else
             {
-                List<IPropertyMetadata> properties = new List<IPropertyMetadata>();
+                List<DbPropertyMetadata> properties = new List<DbPropertyMetadata>();
                 foreach (IPropertyMetadata property in typeMetadata.Properties)
-                    if (AlreadyMapped.TryGetValue(property.SavedHash, out IMetadata item))
+                    if (AlreadyMappedProperties.TryGetValue(
+                        property.SavedHash, out DbPropertyMetadata item))
                     {
-                        properties.Add(item as IPropertyMetadata);
+                        properties.Add(item);
                     }
                     else
                     {
-                        IPropertyMetadata newProperty = new DbPropertyMetadata(property);
+                        DbPropertyMetadata newProperty = new DbPropertyMetadata(property);
                         properties.Add(newProperty);
-                        AlreadyMapped.Add(newProperty.SavedHash, newProperty);
+                        AlreadyMappedProperties.Add(newProperty.SavedHash, newProperty);
                     }
 
-                Properties = properties;
+                EFProperties = properties;
             }
 
-            //Declaring type
-            if (typeMetadata.DeclaringType is null)
-            {
-                DeclaringType = null;
-            }
-            else if (AlreadyMapped.TryGetValue(typeMetadata.DeclaringType.SavedHash, out IMetadata item))
-            {
-                DeclaringType = item as ITypeMetadata;
-            }
-            else
-            {
-                DeclaringType = new DbTypeMetadata(typeMetadata.DeclaringType.SavedHash, typeMetadata.DeclaringType.Name);
-            }
 
+            List<DbMethodMetadata> methods = new List<DbMethodMetadata>();
             // Methods
-            if (typeMetadata.Methods is null)
+            if (typeMetadata.Methods != null)
             {
-                Methods = Enumerable.Empty<IMethodMetadata>();
-            }
-            else
-            {
-                List<IMethodMetadata> methods = new List<IMethodMetadata>();
                 foreach (IMethodMetadata method in typeMetadata.Methods)
-                    if (AlreadyMapped.TryGetValue(method.SavedHash, out IMetadata item))
+                    if (AlreadyMappedMethods.TryGetValue(method.SavedHash, out DbMethodMetadata item))
                     {
-                        methods.Add(item as IMethodMetadata);
+                        methods.Add(item);
                     }
                     else
                     {
-                        IMethodMetadata newMethod = new DbMethodMetadata(method);
+                        DbMethodMetadata newMethod = new DbMethodMetadata(method);
                         methods.Add(newMethod);
-                        AlreadyMapped.Add(newMethod.SavedHash, newMethod);
+                        AlreadyMappedMethods.Add(newMethod.SavedHash, newMethod);
                     }
 
-                Methods = methods;
             }
-
-            // Constructors
-            // Methods
-            if (typeMetadata.Methods is null)
+            
+            if(typeMetadata.Constructors != null)
             {
-                Constructors = Enumerable.Empty<IMethodMetadata>();
-            }
-            else
-            {
-                List<IMethodMetadata> constructors = new List<IMethodMetadata>();
-                foreach (IMethodMetadata constructor in typeMetadata.Methods)
-                    if (AlreadyMapped.TryGetValue(constructor.SavedHash, out IMetadata item))
+                foreach (IMethodMetadata constructor in typeMetadata.Constructors)
+                    if (AlreadyMappedMethods.TryGetValue(
+                        constructor.SavedHash, out DbMethodMetadata item))
                     {
-                        constructors.Add(item as IMethodMetadata);
+                        methods.Add(item);
                     }
                     else
                     {
-                        IMethodMetadata newMethod = new DbMethodMetadata(constructor);
-                        constructors.Add(newMethod);
-                        AlreadyMapped.Add(newMethod.SavedHash, newMethod);
+                        DbMethodMetadata newMethod = new DbMethodMetadata(constructor);
+                        methods.Add(newMethod);
+                        AlreadyMappedMethods.Add(newMethod.SavedHash, newMethod);
                     }
-
-                Constructors = constructors;
             }
-
-            FillChildren();
+            EFMethodsAndConstructors = methods;
         }
 
-        internal DbTypeMetadata()
+        public DbTypeMetadata(int hash, string name)
         {
-            SavedHash = 0;
-            TypeKind = TypeKindEnum.ClassType;
-        }
-
-        internal DbTypeMetadata(int hashCode, string name)
-        {
-            SavedHash = hashCode;
             Name = name;
-            Mapped = false;
+            SavedHash = hash;
         }
-
-        private void FillChildren()
-        {
-            List<IAttributeMetadata> amList = new List<IAttributeMetadata>();
-            if (Attributes != null)
-                amList.AddRange(Attributes.Select(n => n));
-            List<IMetadata> elems = new List<IMetadata>();
-            elems.AddRange(amList);
-            if (ImplementedInterfaces != null)
-                elems.AddRange(ImplementedInterfaces);
-            if (BaseType != null)
-                elems.Add(BaseType);
-            if (DeclaringType != null)
-                elems.Add(DeclaringType);
-            if (Properties != null)
-                elems.AddRange(Properties);
-            if (Constructors != null)
-                elems.AddRange(Constructors);
-            if (Methods != null)
-                elems.AddRange(Methods);
-            if (NestedTypes != null)
-                elems.AddRange(NestedTypes);
-            if (GenericArguments != null)
-                elems.AddRange(GenericArguments);
-            Children = elems;
-        }
-
-        #region EF
-
-        public virtual ICollection<DbTypeMetadata> GenericArgumentsList { get; set; }
-        public virtual ICollection<DbAttributeMetadata> AttributesList { get; set; }
-        public virtual ICollection<DbTypeMetadata> ImplementedInterfacesList { get; set; }
-        public virtual ICollection<DbTypeMetadata> NestedTypesList { get; set; }
-        public virtual ICollection<DbPropertyMetadata> PropertiesList { get; set; }
-        public virtual ICollection<DbMethodMetadata> MethodsList { get; set; }
-        public virtual ICollection<DbMethodMetadata> ConstructorsList { get; set; }
-        public virtual ICollection<DbTypeMetadata> TypesImplementingMe { get; set; }
-        public virtual DbTypeMetadata DbDeclaringType { get; set; }
-        public virtual DbTypeMetadata DbBaseType { get; set; }
 
         #endregion
 
-        #region ITypeMetadata
-
-        [NotMapped]
-        public bool Mapped { get; private set; }
-        public string Name { get; set; }
-        public int SavedHash { get; protected set; }
-        public string NamespaceName { get; }
-        public Tuple<AccessLevelEnum, SealedEnum, AbstractEnum> Modifiers { get; }
-        public virtual TypeKindEnum TypeKind { get; }
-
-        [NotMapped]
-        public virtual ITypeMetadata BaseType
-        {
-            get => DbBaseType;
-            private set => DbBaseType = value as DbTypeMetadata;
-        }
-
-        [NotMapped]
-        public virtual ITypeMetadata DeclaringType
-        {
-            get => DbDeclaringType;
-            private set => DbDeclaringType = value as DbTypeMetadata;
-        }
-
-        [NotMapped]
-        public IEnumerable<ITypeMetadata> GenericArguments
-        {
-            get => GenericArgumentsList;
-            private set => GenericArgumentsList = value?.Cast<DbTypeMetadata>().ToList();
-        }
-
-        [NotMapped]
-        public IEnumerable<IAttributeMetadata> Attributes
-        {
-            get => AttributesList;
-            internal set => AttributesList = value?.Cast<DbAttributeMetadata>().ToList();
-        }
-
-        [NotMapped]
-        public IEnumerable<ITypeMetadata> ImplementedInterfaces
-        {
-            get => ImplementedInterfacesList;
-            internal set => ImplementedInterfacesList = value?.Cast<DbTypeMetadata>().ToList();
-        }
-
-        [NotMapped]
-        public IEnumerable<ITypeMetadata> NestedTypes
-        {
-            get => NestedTypesList;
-            private set => NestedTypesList = value?.Cast<DbTypeMetadata>().ToList();
-        }
-
-        [NotMapped]
-        public IEnumerable<IPropertyMetadata> Properties
-        {
-            get => PropertiesList;
-            internal set => PropertiesList = value?.Cast<DbPropertyMetadata>().ToList();
-        }
-
-        [NotMapped]
-        public IEnumerable<IMethodMetadata> Methods
-        {
-            get => MethodsList;
-            internal set => MethodsList = value?.Cast<DbMethodMetadata>().ToList();
-        }
-
-        [NotMapped]
-        public IEnumerable<IMethodMetadata> Constructors
-        {
-            get => ConstructorsList;
-            private set => ConstructorsList = value?.Cast<DbMethodMetadata>().ToList();
-        }
-
-        [NotMapped]
-        public IEnumerable<IMetadata> Children { get; private set; }
-
         public void MapTypes()
         {
-            if (BaseType != null && !BaseType.Mapped
-                && AlreadyMapped.TryGetValue(BaseType.SavedHash, out IMetadata item))
+            if (EFBaseType != null && AlreadyMappedTypes.TryGetValue(
+                EFBaseType.SavedHash, out DbTypeMetadata item))
             {
-                BaseType = item as ITypeMetadata;
+                EFBaseType = item;
             }
-            if (DeclaringType != null && !DeclaringType.Mapped
-                && AlreadyMapped.TryGetValue(DeclaringType.SavedHash, out item))
+            if (EFDeclaringType != null 
+                && AlreadyMappedTypes.TryGetValue(EFDeclaringType.SavedHash, out item))
             {
-                DeclaringType = item as ITypeMetadata;
+                EFDeclaringType = item;
             }
-            if (GenericArguments != null)
+            if (EFGenericArguments != null)
             {
-                ICollection<ITypeMetadata> actualGenericArguments = new List<ITypeMetadata>();
-                foreach (ITypeMetadata type in GenericArguments)
+                ICollection<DbTypeMetadata> actualGenericArguments = new List<DbTypeMetadata>();
+                foreach (DbTypeMetadata type in EFGenericArguments)
                 {
-                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    if (AlreadyMappedTypes.TryGetValue(type.SavedHash, out item))
                     {
-                        actualGenericArguments.Add(item as ITypeMetadata);
+                        actualGenericArguments.Add(item);
                     }
                     else
                     {
                         actualGenericArguments.Add(type);
+                        AlreadyMappedTypes.Add(type.SavedHash, type);
                     }
                 }
-                GenericArguments = actualGenericArguments;
+                EFGenericArguments = actualGenericArguments;
             }
-            if (ImplementedInterfaces != null)
+            if (EFImplementedInterfaces != null)
             {
-                ICollection<ITypeMetadata> actualImplementedInterfaces = new List<ITypeMetadata>();
-                foreach (ITypeMetadata type in ImplementedInterfaces)
+                ICollection<DbTypeMetadata> actualImplementedInterfaces = new List<DbTypeMetadata>();
+                foreach (DbTypeMetadata type in EFImplementedInterfaces)
                 {
-                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    if (AlreadyMappedTypes.TryGetValue(type.SavedHash, out item))
                     {
-                        actualImplementedInterfaces.Add(item as ITypeMetadata);
+                        actualImplementedInterfaces.Add(item);
                     }
                     else
                     {
                         actualImplementedInterfaces.Add(type);
+                        AlreadyMappedTypes.Add(type.SavedHash, type);
                     }
                 }
-                ImplementedInterfaces = actualImplementedInterfaces;
+                EFImplementedInterfaces = actualImplementedInterfaces;
             }
-            if (NestedTypes != null)
+
+            if (EFNestedTypes != null)
             {
-                ICollection<ITypeMetadata> actualNestedTypes = new List<ITypeMetadata>();
-                foreach (ITypeMetadata type in NestedTypes)
+                ICollection<DbTypeMetadata> actualNestedTypes = new List<DbTypeMetadata>();
+                foreach (DbTypeMetadata type in EFNestedTypes)
                 {
-                    if (!type.Mapped && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    if (AlreadyMappedTypes.TryGetValue(type.SavedHash, out item))
                     {
-                        actualNestedTypes.Add(item as ITypeMetadata);
+                        actualNestedTypes.Add(item);
                     }
                     else
                     {
                         actualNestedTypes.Add(type);
+                        AlreadyMappedTypes.Add(type.SavedHash, type);
                     }
                 }
-                NestedTypes = actualNestedTypes;
+                EFNestedTypes = actualNestedTypes;
             }
 
-            foreach (IMethodMetadata method in Methods)
+            foreach (DbMethodMetadata method in EFMethodsAndConstructors)
             {
                 method.MapTypes();
             }
-            foreach (IMethodMetadata method in Constructors)
-            {
-                method.MapTypes();
-            }
-            foreach (IPropertyMetadata property in Properties)
+            foreach (DbPropertyMetadata property in EFProperties)
             {
                 property.MapTypes();
             }
-            Mapped = true;
         }
-        #endregion
     }
 }

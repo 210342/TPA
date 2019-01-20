@@ -7,11 +7,23 @@ namespace DatabasePersistence.DBModel
 {
     public abstract class AbstractMapper
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         [NotMapped]
-        protected static Dictionary<int, IMetadata> AlreadyMapped { get; } = new Dictionary<int, IMetadata>();
+        protected static Dictionary<int, DbNamespaceMetadata> AlreadyMappedNamespaces { get; }
+               = new Dictionary<int, DbNamespaceMetadata>();
+        [NotMapped]
+        protected static Dictionary<int, DbTypeMetadata> AlreadyMappedTypes { get; }
+            = new Dictionary<int, DbTypeMetadata>();
+        [NotMapped]
+        protected static Dictionary<int, DbAttributeMetadata> AlreadyMappedAttributes { get; }
+            = new Dictionary<int, DbAttributeMetadata>();
+        [NotMapped]
+        protected static Dictionary<int, DbPropertyMetadata> AlreadyMappedProperties { get; }
+            = new Dictionary<int, DbPropertyMetadata>();
+        [NotMapped]
+        protected static Dictionary<int, DbMethodMetadata> AlreadyMappedMethods { get; }
+            = new Dictionary<int, DbMethodMetadata>();
+        [NotMapped]
+        protected static Dictionary<int, DbParameterMetadata> AlreadyMappedParameters { get; }
+            = new Dictionary<int, DbParameterMetadata>();
     }
 }

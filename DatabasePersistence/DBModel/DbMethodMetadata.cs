@@ -1,152 +1,159 @@
-﻿using System;
+﻿using ModelContract;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using ModelContract;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DatabasePersistence.DBModel
 {
     public class DbMethodMetadata : AbstractMapper, IMethodMetadata
     {
+        #region IMethodMetadata
+
+        public string Name { get; set; }
+        public int SavedHash { get; set; }
+        public bool IsExtension { get; set; }
+        [NotMapped]
+        public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; }
+        [NotMapped]
+        public ITypeMetadata ReturnType
+        {
+            get => EFReturnType;
+            set => EFReturnType = value as DbTypeMetadata;
+        }
+        [NotMapped]
+        public IEnumerable<ITypeMetadata> GenericArguments
+        {
+            get => EFGenericArguments;
+            set => EFGenericArguments = value?.Cast<DbTypeMetadata>().ToList();
+        }
+        [NotMapped]
+        public IEnumerable<IParameterMetadata> Parameters
+        {
+            get => EFParameters;
+            set => EFParameters = value?.Cast<DbParameterMetadata>().ToList();
+        }
+        [NotMapped]
+        public IEnumerable<IMetadata> Children => throw new NotImplementedException();
+        #endregion
+
+        #region EF
+
+        public DbTypeMetadata EFReturnType { get; set; }
+        public ICollection<DbTypeMetadata> EFGenericArguments { get; set; }
+        public ICollection<DbParameterMetadata> EFParameters { get; set; }
+
+        #endregion
+
+        public DbMethodMetadata() { }
+
         public DbMethodMetadata(IMethodMetadata methodMetadata)
         {
             Name = methodMetadata.Name;
             SavedHash = methodMetadata.SavedHash;
-            IsExtension = methodMetadata.IsExtension;
-            Modifiers = methodMetadata.Modifiers;
 
             // Generic Arguments
             if (methodMetadata.GenericArguments is null)
             {
-                GenericArguments = null;
+                EFGenericArguments = null;
             }
             else
             {
-                List<ITypeMetadata> genericArguments = new List<ITypeMetadata>();
+                List<DbTypeMetadata> genericArguments = new List<DbTypeMetadata>();
                 foreach (ITypeMetadata genericArgument in methodMetadata.GenericArguments)
-                    if (AlreadyMapped.TryGetValue(genericArgument.SavedHash, out IMetadata mappedArgument))
+                    if (AlreadyMappedTypes.TryGetValue(
+                        genericArgument.SavedHash, out DbTypeMetadata mappedArgument))
                     {
-                        genericArguments.Add(mappedArgument as ITypeMetadata);
+                        genericArguments.Add(mappedArgument);
                     }
                     else
                     {
                         genericArguments.Add(new DbTypeMetadata(genericArgument.SavedHash, genericArgument.Name));
                     }
 
-                GenericArguments = genericArguments;
+                EFGenericArguments = genericArguments;
             }
 
             // Return type
-            if (AlreadyMapped.TryGetValue(methodMetadata.ReturnType.SavedHash, out IMetadata item))
+            if (methodMetadata.ReturnType is null)
             {
-                ReturnType = item as ITypeMetadata;
+                EFReturnType = null;
             }
             else
             {
-                ReturnType = new DbTypeMetadata(methodMetadata.ReturnType.SavedHash, methodMetadata.ReturnType.Name);
+                if (AlreadyMappedTypes.TryGetValue(
+                    methodMetadata.ReturnType.SavedHash, out DbTypeMetadata item))
+                {
+                    EFReturnType = item;
+                }
+                else
+                {
+                    EFReturnType = new DbTypeMetadata(methodMetadata.ReturnType.SavedHash, methodMetadata.ReturnType.Name);
+                }
             }
-
             // Parameters
             if (methodMetadata.Parameters is null)
             {
-                Parameters = Enumerable.Empty<IParameterMetadata>();
+                EFParameters = Enumerable.Empty<DbParameterMetadata>().ToList();
             }
             else
             {
-                List<IParameterMetadata> parameters = new List<IParameterMetadata>();
+                List<DbParameterMetadata> parameters = new List<DbParameterMetadata>();
                 foreach (IParameterMetadata parameter in methodMetadata.Parameters)
-                    if (AlreadyMapped.TryGetValue(parameter.SavedHash, out item))
+                    if (AlreadyMappedParameters.TryGetValue(
+                        parameter.SavedHash, out DbParameterMetadata item))
                     {
-                        parameters.Add(item as IParameterMetadata);
+                        parameters.Add(item);
                     }
                     else
                     {
-                        IParameterMetadata newParameter = new DbParameterMetadata(parameter);
+                        DbParameterMetadata newParameter = new DbParameterMetadata(parameter);
                         parameters.Add(newParameter);
-                        AlreadyMapped.Add(newParameter.SavedHash, newParameter);
+                        AlreadyMappedParameters.Add(newParameter.SavedHash, newParameter);
                     }
 
-                Parameters = parameters;
+                EFParameters = parameters;
             }
-
-            FillChildren();
         }
-
-        public DbMethodMetadata() { }
-
-        private void FillChildren()
-        {
-            List<IMetadata> elems = new List<IMetadata> {ReturnType};
-            elems.AddRange(Parameters);
-            Children = elems;
-        }
-
-        #region EF
-
-        public virtual ICollection<DbTypeMetadata> GenericArgumentsList { get; set; }
-        public virtual ICollection<DbParameterMetadata> ParametersList { get; set; }
-        public virtual DbTypeMetadata DbReturnType { get; set; }
-
-        #endregion
-
-        #region IMethodMetadata
-
-        [NotMapped]
-        public virtual ITypeMetadata ReturnType
-        {
-            get => DbReturnType;
-            private set => DbReturnType = value as DbTypeMetadata;
-        }
-        public bool IsExtension { get; }
-        public Tuple<AccessLevelEnum, AbstractEnum, StaticEnum, VirtualEnum> Modifiers { get; }
-        public string Name { get; set; }
-        public int SavedHash { get; protected set; }
-
-        [NotMapped]
-        public IEnumerable<ITypeMetadata> GenericArguments
-        {
-            get => GenericArgumentsList;
-            private set => GenericArgumentsList = value?.Cast<DbTypeMetadata>().ToList();
-        }
-
-        [NotMapped]
-        public IEnumerable<IParameterMetadata> Parameters
-        {
-            get => ParametersList;
-            internal set => ParametersList = value?.Cast<DbParameterMetadata>().ToList();
-        }
-
-        [NotMapped] public IEnumerable<IMetadata> Children { get; private set; }
 
         public void MapTypes()
         {
-            if (ReturnType != null && string.IsNullOrEmpty(ReturnType.Name)
-                && AlreadyMapped.TryGetValue(ReturnType.SavedHash, out IMetadata item))
+            if(EFReturnType != null)
             {
-                ReturnType = item as ITypeMetadata;
-            }
-            if (GenericArguments != null)
-            {
-                ICollection<ITypeMetadata> actualGenericArguments = new List<ITypeMetadata>();
-                foreach (ITypeMetadata type in GenericArguments)
+                if (AlreadyMappedTypes.TryGetValue(
+                    EFReturnType.SavedHash, out DbTypeMetadata item))
                 {
-                    if (string.IsNullOrEmpty(type.Name) && AlreadyMapped.TryGetValue(type.SavedHash, out item))
+                    EFReturnType = item;
+                }
+                else
+                {
+                    AlreadyMappedTypes.Add(EFReturnType.SavedHash, EFReturnType);
+                }
+            }
+
+            if (EFGenericArguments != null)
+            {
+                ICollection<DbTypeMetadata> actualGenericArguments = new List<DbTypeMetadata>();
+                foreach (DbTypeMetadata type in EFGenericArguments)
+                {
+                    if (AlreadyMappedTypes.TryGetValue(type.SavedHash, out DbTypeMetadata item))
                     {
-                        actualGenericArguments.Add(item as ITypeMetadata);
+                        actualGenericArguments.Add(item);
                     }
                     else
                     {
                         actualGenericArguments.Add(type);
+                        AlreadyMappedTypes.Add(type.SavedHash, type);
                     }
                 }
-                GenericArguments = actualGenericArguments;
+                EFGenericArguments = actualGenericArguments;
             }
-            foreach (IParameterMetadata parameter in Parameters)
+            foreach (DbParameterMetadata parameter in EFParameters)
             {
                 parameter.MapTypes();
             }
         }
-
-        #endregion
     }
 }

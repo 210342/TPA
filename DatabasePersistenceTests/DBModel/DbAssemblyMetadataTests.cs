@@ -32,8 +32,8 @@ namespace DatabasePersistence.DBModel.Tests
             {
                 Namespaces = new[] {new DbNamespaceMetadata {Name = "test1"}}
             };
-            Assert.IsNotNull(sut.NamespacesList);
-            Assert.AreEqual(1, sut.NamespacesList.Count);
+            Assert.IsNotNull(sut.EFNamespaces);
+            Assert.AreEqual(1, sut.EFNamespaces.Count);
         }
 
         [TestMethod]

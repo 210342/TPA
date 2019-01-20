@@ -5,7 +5,6 @@ namespace ModelContract
 {
     public interface ITypeMetadata : IMetadata
     {
-        bool Mapped { get; }
         string NamespaceName { get; }
         ITypeMetadata BaseType { get; }
         IEnumerable<ITypeMetadata> GenericArguments { get; }

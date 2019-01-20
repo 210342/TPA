@@ -43,8 +43,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabasePersistence", "Data
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabasePersistenceTests", "DatabasePersistenceTests\DatabasePersistenceTests.csproj", "{E14081C5-A0DB-4526-9664-10E1BB69575A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dbp", "Dbp\Dbp.csproj", "{18809514-53DB-49EF-94C8-358ECE999FF4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,10 +109,6 @@ Global
 		{E14081C5-A0DB-4526-9664-10E1BB69575A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E14081C5-A0DB-4526-9664-10E1BB69575A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E14081C5-A0DB-4526-9664-10E1BB69575A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{18809514-53DB-49EF-94C8-358ECE999FF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{18809514-53DB-49EF-94C8-358ECE999FF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{18809514-53DB-49EF-94C8-358ECE999FF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{18809514-53DB-49EF-94C8-358ECE999FF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -135,10 +129,9 @@ Global
 		{6B053141-3F5A-4F55-9EDE-C7E46EA0FFC8} = {37D34E22-0406-4181-B984-029C89C766E0}
 		{5FB2EEDC-C436-4005-AE5A-31F6E3219A56} = {B54794B4-8253-4700-A4F6-5DB3E4756EE1}
 		{E14081C5-A0DB-4526-9664-10E1BB69575A} = {B54794B4-8253-4700-A4F6-5DB3E4756EE1}
-		{18809514-53DB-49EF-94C8-358ECE999FF4} = {B54794B4-8253-4700-A4F6-5DB3E4756EE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {DF0BA247-769B-4BB6-8663-E3694B03C0F8}
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
+		SolutionGuid = {DF0BA247-769B-4BB6-8663-E3694B03C0F8}
 	EndGlobalSection
 EndGlobal

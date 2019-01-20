@@ -240,7 +240,6 @@ namespace Library.Logic.ViewModel
             IAssemblyMetadata result;
             try
             {
-
                 result = Persister.Load();
             } catch (Exception e)
             {
@@ -268,12 +267,8 @@ namespace Library.Logic.ViewModel
             }
             else
             {
-                IAssemblyMetadata graph = new ModelMapper().Map(
-                    root: result,
-                    model: typeof(AssemblyMetadata).Assembly
-                );
                 ObjectsList.Clear();
-                ObjectsList.Add(new AssemblyItem(graph as AssemblyMetadata));
+                ObjectsList.Add(new AssemblyItem(new AssemblyMetadata(result)));
                 LoadedAssembly = "Model deserialized";
                 SaveModel.RaiseCanExecuteChanged();
                 Persister.Dispose();

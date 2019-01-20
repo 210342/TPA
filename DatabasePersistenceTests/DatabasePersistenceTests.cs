@@ -74,7 +74,7 @@ namespace DatabasePersistence.DBModel
             DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata {Name = "test1"};
             DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata {Name = "test2"};
             DbTypeMetadata type1 = new DbTypeMetadata {Name = "Type1"};
-            type1.Properties = new[] {new DbPropertyMetadata {Name = "prop", MyType = type1}};
+            type1.Properties = new[] {new DbPropertyMetadata {Name = "prop", EFMyType = type1}};
             namespaceMeta1.Types = new[] {type1};
             assemblyMetadata.Namespaces = new[] {namespaceMeta1, namespaceMeta2};
 
@@ -97,13 +97,13 @@ namespace DatabasePersistence.DBModel
             DbTypeMetadata type3 = new DbTypeMetadata { Name = "type2" };
             type1.ImplementedInterfaces = new[] { type2 };
             type3.ImplementedInterfaces = new[] { type2 };
-            type1.Properties = new[] {new DbPropertyMetadata {Name = "prop", MyType = type1}};
+            type1.Properties = new[] {new DbPropertyMetadata {Name = "prop", EFMyType = type1}};
             type1.Attributes = new[] {new DbAttributeMetadata {Name = "attr"}};
-            DbParameterMetadata param1 = new DbParameterMetadata { Name = "param1", MyType = type1 };
+            DbParameterMetadata param1 = new DbParameterMetadata { Name = "param1", EFMyType = type1 };
             DbMethodMetadata method1 = new DbMethodMetadata
             {
                 Name = "method1",
-                Parameters = new[] {param1 , new DbParameterMetadata {Name = "param2", MyType = type3} }
+                Parameters = new[] {param1 , new DbParameterMetadata {Name = "param2", EFMyType = type3} }
             };
             DbMethodMetadata method2 = new DbMethodMetadata
             {
@@ -131,14 +131,14 @@ namespace DatabasePersistence.DBModel
         [TestMethod]
         public void LoadTest()
         {
-            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata {Name = "test0", Id = 100000};
-            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata {Name = "test1"};
-            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata {Name = "test2"};
-            assemblyMetadata.Namespaces = new[] {namespaceMeta1, namespaceMeta2};
-            DbTypeMetadata type1 = new DbTypeMetadata {Name = "Type1"};
-            DbTypeMetadata type2 = new DbTypeMetadata {Name = "Type2"};
-            namespaceMeta1.Types = new[] {type1};
-            namespaceMeta2.Types = new[] {type2};
+            DbAssemblyMetadata assemblyMetadata = new DbAssemblyMetadata { Name = "test0" };
+            DbNamespaceMetadata namespaceMeta1 = new DbNamespaceMetadata { Name = "test1" };
+            DbNamespaceMetadata namespaceMeta2 = new DbNamespaceMetadata { Name = "test2" };
+            assemblyMetadata.Namespaces = new[] { namespaceMeta1, namespaceMeta2 };
+            DbTypeMetadata type1 = new DbTypeMetadata { Name = "Type1" };
+            DbTypeMetadata type2 = new DbTypeMetadata { Name = "Type2" };
+            namespaceMeta1.Types = new[] { type1 };
+            namespaceMeta2.Types = new[] { type2 };
 
             persister.Access(_target);
             persister.Save(assemblyMetadata);
