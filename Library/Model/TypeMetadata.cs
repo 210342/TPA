@@ -83,15 +83,6 @@ namespace Library.Model
             SavedHash = type.GetHashCode();
         }
 
-        private IEnumerable<IPropertyMetadata> EmitPropertiesAndFields(Type type)
-        {
-            IEnumerable<IPropertyMetadata> fields = from FieldInfo field
-                                            in type.GetFields(
-                                                BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)
-                                            select new PropertyMetadata(field.Name, EmitReference(field.FieldType));
-            return fields.Concat(PropertyMetadata.EmitProperties(type.GetProperties()));
-        }
-
         internal TypeMetadata() { }
 
         public TypeMetadata(ITypeMetadata typeMetadata)

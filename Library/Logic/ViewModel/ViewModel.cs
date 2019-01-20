@@ -146,7 +146,7 @@ namespace Library.Logic.ViewModel
                 try
                 {
                     string target = targetPathProvider.GetPath();
-                    await Task.Run(() =>
+                    await Task.Run(async () =>
                     {
                         if (IsTracingEnabled)
                         {
@@ -155,10 +155,8 @@ namespace Library.Logic.ViewModel
                         }
 
                         Persister.Access(target);
-                        IAssemblyMetadata graph = ObjectsList.First().ModelObject as IAssemblyMetadata;
-                        Persister.Save(graph);
+                        await (ObjectsList?.FirstOrDefault().ModelObject as AssemblyMetadata)?.Save(Persister, target);
                         Persister.Dispose();
-                        (ObjectsList.First().ModelObject as AssemblyMetadata)?.Save(Persister, target);
                         InformationMessageTarget.SendMessage("Saving completed", "Model was successfully saved.");
 
                         if (IsTracingEnabled)
@@ -209,7 +207,7 @@ namespace Library.Logic.ViewModel
                     else
                     {
                         ObjectsList.Clear();
-                        ObjectsList.Add(new AssemblyItem(new AssemblyMetadata(result)));
+                        ObjectsList.Add(new AssemblyItem(result as AssemblyMetadata));
                         LoadedAssembly = "Model deserialized";
                         SaveModel.RaiseCanExecuteChanged();
                         InformationMessageTarget?.SendMessage("Loading completed", "Model was successfully loaded.");
@@ -249,7 +247,7 @@ namespace Library.Logic.ViewModel
             AssemblyMetadata graph = null;
             try
             {
-                graph = AssemblyMetadata.Load(Persister, target);
+                graph = await AssemblyMetadata.Load(Persister, target);
             }
             catch (Exception e)
             {
@@ -260,7 +258,6 @@ namespace Library.Logic.ViewModel
                     Tracer.LogFailure($"{target}; {errorMessage}");
                     Tracer.Flush();
                 }
-
                 return null;
             }
             finally
@@ -268,7 +265,7 @@ namespace Library.Logic.ViewModel
                 Persister.Dispose();
             }
 
-            return result;
+            return graph;
         }
 
         private void OpenFile(ISourceProvider sourceProvider)

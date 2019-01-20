@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Library.Data;
+using System.Threading.Tasks;
 using ModelContract;
-using Persistance;
+using Persistence;
 
 namespace Library.Model
 {
@@ -60,20 +60,18 @@ namespace Library.Model
 
         public IEnumerable<IMetadata> Children => Namespaces;
 
-        internal void Save(IPersister persister, string target)
+        internal async Task Save(IPersister persister, string target)
         {
             persister.Access(target);
-            IAssemblyMetadata graph = new ModelMapper().Map(this, persister.GetType().Assembly);
-            persister.Save(graph);
+            await persister.Save(this);
             persister.Dispose();
         }
 
-        internal static AssemblyMetadata Load(IPersister persister, string target)
+        internal static async Task<AssemblyMetadata> Load(IPersister persister, string target)
         {
             persister.Access(target);
-            IAssemblyMetadata result = persister.Load();
-            IAssemblyMetadata graph = new ModelMapper().Map(result, typeof(AssemblyMetadata).Assembly);
-            return graph as AssemblyMetadata;
+            IAssemblyMetadata result = await persister.Load();
+            return new AssemblyMetadata(result);
         }
 
         public override int GetHashCode()
