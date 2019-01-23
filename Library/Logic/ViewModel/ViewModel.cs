@@ -107,7 +107,17 @@ namespace Library.Logic.ViewModel
                     Tracer.LogFailure($"Failed when reading assembly {ex.Message}");
                     Tracer.Flush();
                 }
-                ErrorMessageTarget.SendMessage("Library reading error", ex.Message);
+                ErrorMessageTarget.SendMessage("Assembly reading error", ex.Message);
+                LoadedAssemblyRepresentation = null;
+            } catch (Exception ex)
+            {
+                if (IsTracingEnabled)
+                {
+                    Tracer.LogFailure($"Failed when reading assembly {ex.Message}");
+                    Tracer.Flush();
+                }
+                ErrorMessageTarget.SendMessage("Unknown assembly reading error", ex.Message);
+                LoadedAssemblyRepresentation = null;
             }
         }
 
