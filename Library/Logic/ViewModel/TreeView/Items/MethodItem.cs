@@ -28,10 +28,6 @@ namespace Library.Logic.ViewModel
             _details += $"Modifiers: {source.ModifiersString()}";
             if (source.Name.StartsWith(".ctor"))
                 FullName = $"[Constructor] " + Name;
-            else if (source.Name.StartsWith("set_"))
-                FullName = $"[Property Set Method] " + Name;
-            else if (source.Name.StartsWith("get_"))
-                FullName = $"[Property Get Method] " + Name;
             else
                 FullName = $"[Method] " + Name;
         }

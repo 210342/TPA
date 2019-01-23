@@ -23,11 +23,25 @@ namespace Library.Model
             if (DeclaringType != null)
                 elems.Add(DeclaringType);
             if (Properties != null)
-                elems.AddRange(Properties);
+            {
+                //filter out the backing fields for properties
+                List<IPropertyMetadata> filtered = Properties
+                    .Select(p => p)
+                    .Where(n => !n.Name.Contains("k__BackingField"))
+                    .ToList();
+                elems.AddRange(filtered);
+            }
             if (Constructors != null)
                 elems.AddRange(Constructors);
             if (Methods != null)
-                elems.AddRange(Methods);
+            {
+                //filter out the setters ang getters for properties
+                List<IMethodMetadata> filtered = Methods
+                    .Select(p => p)
+                    .Where(n => !n.Name.Contains("set_") && !n.Name.Contains("get_"))
+                    .ToList();
+                elems.AddRange(filtered);
+            }
             if (NestedTypes != null)
                 elems.AddRange(NestedTypes);
             if (GenericArguments != null)

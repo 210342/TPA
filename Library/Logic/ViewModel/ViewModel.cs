@@ -27,7 +27,7 @@ namespace Library.Logic.ViewModel
         public ViewModel(bool tracing)
         {
             IsTracingEnabled = tracing;
-            LoadedAssemblyRepresentation = new AssemblyMetadata(Assembly.GetAssembly(GetType()));
+            //LoadedAssemblyRepresentation = new AssemblyMetadata(Assembly.GetAssembly(GetType()));
             ShowCurrentObject = new RelayCommand(ChangeClassToDisplay, () => ObjectSelected != null);
             ObjectsList = new ObservableCollection<TreeViewItem> {null};
             ReloadAssemblyCommand = new RelayCommand(ReloadAssembly);
