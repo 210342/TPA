@@ -287,3 +287,4 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 /LibraryTests/asdf.xml
+/LibraryTests/new.xml

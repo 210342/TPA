@@ -57,13 +57,15 @@ namespace Serializing
 
         public async Task Save(IAssemblyMetadata toSave)
         {
+            SerializationAssemblyMetadata graph = toSave as SerializationAssemblyMetadata
+                    ?? new SerializationAssemblyMetadata(toSave);
             XmlWriterSettings settings = new XmlWriterSettings {Indent = true};
             if (SerializationStream != null)
             {
                 SerializationStream.Position = 0;
                 using (XmlWriter writer = XmlWriter.Create(SerializationStream, settings))
                 {
-                    dataContractSerializer.WriteObject(writer, toSave);
+                    dataContractSerializer.WriteObject(writer, graph);
                 }
 
                 await SerializationStream.FlushAsync();
